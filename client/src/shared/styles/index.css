@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply m-0 flex items-center justify-center min-w-[320px] min-h-screen;
+  }
+
+  #root {
+    @apply max-w-5xl mx-auto p-8 text-center;
+  }
+}
+
+@layer components {
+  .app {
+    @apply flex flex-col items-center gap-8;
+  }
+
+  .counter {
+    @apply flex flex-col items-center gap-4 p-8 border border-gray-200 rounded-xl bg-white/5 backdrop-blur-sm;
+  }
+
+  .counter h2 {
+    @apply m-0 text-3xl font-bold text-blue-600;
+  }
+
+  .counter-controls {
+    @apply flex gap-4 flex-wrap justify-center;
+  }
+}
