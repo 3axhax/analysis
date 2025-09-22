@@ -6,6 +6,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 
+import { agesInitialData } from './ages.initialData';
+
 interface AgesCreationAttrs {
   description: string;
 }
@@ -19,23 +21,20 @@ export class Age extends Model<Age, AgesCreationAttrs> {
     unique: true,
     allowNull: false,
   })
-  description: string;
+  declare name: string;
+
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
+  declare description: string;
 
   @AfterSync
   static async addInitialData() {
     const count = await Age.count();
     if (count === 0) {
-      await Age.bulkCreate([
-        { description: '0-1 мес.' },
-        { description: '1-3 мес.' },
-        { description: '3-6 мес.' },
-        { description: '1-3 года' },
-        { description: '3-6 лет' },
-        { description: '6-9 лет' },
-        { description: '9-15 лет' },
-        { description: '15-18 лет' },
-        { description: 'старше 18 лет' },
-      ]);
+      await Age.bulkCreate(agesInitialData);
       console.log('Initial age data added');
     }
   }

@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { Age } from './ages/ages.model';
+import { AgesModule } from './ages/ages.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { Age } from './ages/ages.model';
       models: [Age],
       autoLoadModels: true,
     }),
+    AgesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

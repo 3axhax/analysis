@@ -1,10 +1,10 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AgesService } from './ages.service';
 
-@Controller('roles')
+@Controller('ages')
 export class AgesController {
   constructor(private AgesService: AgesService) {}
-  @Get('')
+  @Get()
   getAll() {
     return this.AgesService.getAll();
   }
