@@ -1,29 +1,24 @@
 import React, { useState } from "react";
 import RadioGroup, { RadioOption } from "@entities/ui/RadioGroup.tsx";
-import SelectUI, { SelectUIOption } from "@entities/ui/SelectUI.tsx";
+import SelectUI from "@entities/ui/SelectUI.tsx";
 import useDocumentTitle from "@entities/hooks/useDocumentTitle.tsx";
+import { useAppSelector } from "@shared/store/hooks.ts";
+import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
 
 export type GenderType = "m" | "f";
 export const AnalyzesPage = () => {
   useDocumentTitle("Загрузить анализы");
+  useAgesLoad();
+
   const genderOptions: RadioOption<GenderType>[] = [
     { value: "m", label: "М" },
     { value: "f", label: "Ж" },
   ];
-  const ageOptions: SelectUIOption<number>[] = [
-    { value: 1, label: "0-1 мес." },
-    { value: 2, label: "1-3 мес." },
-    { value: 3, label: "3-6 мес." },
-    { value: 4, label: "1-3 года" },
-    { value: 5, label: "3-6 лет" },
-    { value: 6, label: "6-9 лет" },
-    { value: 7, label: "9-15 лет" },
-    { value: 8, label: "15-18 лет" },
-    { value: 9, label: "старше 18 лет" },
-  ];
+
+  const ageOptions = useAppSelector(selectAgesListForSelect);
 
   const [gender, setGender] = useState<GenderType>("m");
-  const [age, setAge] = useState<number>(0);
+  const [age, setAge] = useState<string>("");
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +50,7 @@ export const AnalyzesPage = () => {
               onChange={(value) => setGender(value)}
               orientation="vertical"
             />
-            <SelectUI<number>
+            <SelectUI<string>
               label="Возрастная группа"
               name={"age"}
               options={ageOptions}
