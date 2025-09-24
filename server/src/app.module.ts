@@ -5,6 +5,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { Age } from './ages/ages.model';
 import { AgesModule } from './ages/ages.module';
+import { AnalysisPoint } from './analysisPoint/analysisPoint.model';
+import { AnalysisPointModule } from './analysisPoint/analysisPoint.module';
 
 @Module({
   imports: [
@@ -18,10 +20,11 @@ import { AgesModule } from './ages/ages.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Age],
+      models: [Age, AnalysisPoint],
       autoLoadModels: true,
     }),
     AgesModule,
+    AnalysisPointModule,
   ],
   controllers: [AppController],
   providers: [AppService],
