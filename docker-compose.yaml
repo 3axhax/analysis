@@ -1,6 +1,6 @@
 services:
-  server_analyzes:
-    container_name: serverAnalyzes
+  server_analysis:
+    container_name: serverAnalysis
     build:
       context: ./server
       dockerfile: DockerfileServer
@@ -13,11 +13,11 @@ services:
       - "5050:5050"
       - "9229:9229"
     depends_on:
-      postgres_analyzes:
+      postgres_analysis:
         condition: service_healthy
 
-  postgres_analyzes:
-    container_name: postgresAnalyzes
+  postgres_analysis:
+    container_name: postgresAnalysis
     image: postgres:12
     env_file:
       - ./.postgres.env
@@ -31,8 +31,8 @@ services:
       timeout: 5s
       retries: 5
 
-  client_analyzes:
-    container_name: clientAnalyzes
+  client_analysis:
+    container_name: clientAnalysis
     build:
       context: ./client
       dockerfile: DockerfileClient

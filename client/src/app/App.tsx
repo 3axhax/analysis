@@ -6,7 +6,7 @@ import { TestPage } from "@pages/test";
 import { AboutPage } from "@pages/about/AboutPage.tsx";
 import { ContactsPage } from "@pages/contacts/ContactsPage.tsx";
 import { Navigation } from "@widgets/navigation";
-import { AnalyzesPage } from "@pages/analyzes/AnalyzesPage.tsx";
+import { AnalysisPage } from "@pages/analysis/AnalysisPage.tsx";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/test" element={<TestPage />} />
-          <Route path="/analyzes" element={<AnalyzesPage />} />
+          <Route path="/analysis" element={<AnalysisPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="*" element={<NotFoundPage />} />

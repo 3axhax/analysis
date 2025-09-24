@@ -4,11 +4,13 @@ import SelectUI from "@shared/ui/SelectUI.tsx";
 import useDocumentTitle from "@entities/hooks/useDocumentTitle.tsx";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
+import {selectAnalysisPointListForSelect, useAnalysisPointLoad} from "@entities/analysisPoint";
 
 export type GenderType = "m" | "f";
-export const AnalyzesPage = () => {
+export const AnalysisPage = () => {
   useDocumentTitle("Загрузить анализы");
   useAgesLoad();
+  useAnalysisPointLoad();
 
   const genderOptions: RadioOption<GenderType>[] = [
     { value: "m", label: "М" },
@@ -16,9 +18,11 @@ export const AnalyzesPage = () => {
   ];
 
   const ageOptions = useAppSelector(selectAgesListForSelect);
+  const analysisPointOptions = useAppSelector(selectAnalysisPointListForSelect);
 
   const [gender, setGender] = useState<GenderType>("m");
   const [age, setAge] = useState<string>("");
+  const [analysisPoint, setAnalysisPoint] = useState<number>(0);
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,6 +59,15 @@ export const AnalyzesPage = () => {
               options={ageOptions}
               value={age}
               onChange={(value) => setAge(value)}
+              placeholder="Выберите возраст"
+              className="max-w-xs"
+            />
+            <SelectUI<number>
+              label="Возрастная группа"
+              name={"age"}
+              options={analysisPointOptions}
+              value={analysisPoint}
+              onChange={(value) => setAnalysisPoint(value)}
               placeholder="Выберите возраст"
               className="max-w-xs"
             />

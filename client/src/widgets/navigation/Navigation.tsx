@@ -5,7 +5,7 @@ export const Navigation = () => {
 
   const navItems = [
     { path: "/", label: "Главная" },
-    { path: "/analyzes", label: "Загрузить анализы" },
+    { path: "/analysis", label: "Загрузить анализы" },
     { path: "/about", label: "О проекте" },
     { path: "/contacts", label: "Контакты" },
   ];
