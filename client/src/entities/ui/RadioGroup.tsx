@@ -33,14 +33,14 @@ const RadioGroup = <T = string,>({
       </label>
 
       <div
-        className={`radio-options flex gap-[10px] ${orientation === "vertical" ? "vertical-layout" : "horizontal-layout"}`}
+        className={`radio-options flex gap-[15px] ${orientation === "vertical" ? "vertical-layout" : "horizontal-layout"}`}
         role="radiogroup"
         aria-labelledby={`${name}-label`}
       >
         {options.map((option) => (
           <label
             key={option.value as string}
-            className={`radio-label cursor-pointer ${option.disabled ? "disabled" : ""}`}
+            className={`radio-label cursor-pointer flex gap-[3px] ${option.disabled ? "disabled" : ""}`}
           >
             <input
               type="radio"
