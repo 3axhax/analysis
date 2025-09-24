@@ -10,7 +10,6 @@ interface RadioGroupProps<T = string> {
   options: RadioOption<T>[];
   value: T;
   onChange: (value: T) => void;
-  orientation?: "horizontal" | "vertical";
   required?: boolean;
 }
 
@@ -20,20 +19,17 @@ const RadioGroup = <T = string,>({
   options,
   value,
   onChange,
-  orientation = "horizontal",
   required = false,
 }: RadioGroupProps<T>) => {
   return (
-    <div
-      className={`radio-group-container flex justify-between ${orientation === "vertical" ? "vertical" : "horizontal"}`}
-    >
+    <div className={`radio-group-container flex justify-between horizontal`}>
       <label className="group-label">
         {label}
         {required && <span className="required-asterisk">*</span>}
       </label>
 
       <div
-        className={`radio-options flex gap-[15px] ${orientation === "vertical" ? "vertical-layout" : "horizontal-layout"}`}
+        className={`radio-options flex gap-[15px] horizontal-layout`}
         role="radiogroup"
         aria-labelledby={`${name}-label`}
       >

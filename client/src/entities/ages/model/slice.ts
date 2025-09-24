@@ -9,7 +9,7 @@ import Request from "@shared/transport/RestAPI";
 import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
-import { SelectUIOption } from "@entities/ui/SelectUI.tsx";
+import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
 
 interface AgesListItem {
   id: number;

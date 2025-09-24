@@ -13,7 +13,6 @@ interface SelectUIProps<T = string> {
   value: T;
   onChange: (value: T) => void;
   required?: boolean;
-  disabled?: boolean;
   placeholder?: string;
   className?: string;
 }
@@ -25,9 +24,9 @@ const SelectUI = <T = string,>({
   value,
   onChange,
   required = false,
-  disabled = false,
   placeholder = "Выберите вариант",
   className = "",
+  ...other
 }: SelectUIProps<T>) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(event.target.value as T);
@@ -42,7 +41,6 @@ const SelectUI = <T = string,>({
       <select
         value={value as string}
         onChange={handleChange}
-        disabled={disabled}
         id={name}
         className={`
           w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
@@ -51,6 +49,7 @@ const SelectUI = <T = string,>({
           transition-colors
         `}
         aria-required={required}
+        {...other}
       >
         <option value="" disabled className="text-gray-400">
           {placeholder}

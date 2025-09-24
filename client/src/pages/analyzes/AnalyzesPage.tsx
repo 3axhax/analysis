@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import RadioGroup, { RadioOption } from "@entities/ui/RadioGroup.tsx";
-import SelectUI from "@entities/ui/SelectUI.tsx";
+import RadioGroup, { RadioOption } from "@shared/ui/RadioGroup.tsx";
+import SelectUI from "@shared/ui/SelectUI.tsx";
 import useDocumentTitle from "@entities/hooks/useDocumentTitle.tsx";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
@@ -48,7 +48,6 @@ export const AnalyzesPage = () => {
               options={genderOptions}
               value={gender}
               onChange={(value) => setGender(value)}
-              orientation="vertical"
             />
             <SelectUI<string>
               label="Возрастная группа"
