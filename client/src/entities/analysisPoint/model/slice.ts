@@ -11,13 +11,10 @@ import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
 import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
 
-type TestType = "BLOOD_TEST" | "URINE_TEST" | "STOOL_TEST";
-
 interface AnalysisPointListItem {
   id: number;
   name: string;
   description: string;
-  testType: TestType;
 }
 
 interface AnalysisPointState {
@@ -25,6 +22,7 @@ interface AnalysisPointState {
   pending: boolean;
   error: string;
   list: AnalysisPointListItem[];
+  selectedList: number[];
 }
 
 const initialState: AnalysisPointState = {
@@ -32,13 +30,14 @@ const initialState: AnalysisPointState = {
   pending: false,
   error: "",
   list: [],
+  selectedList: [],
 };
 
 export const getAnalysisPointList = createAsyncThunk(
   "analysisPoint/getList",
   async (_, { getState }) => {
     const state = getState() as RootState;
-    if (!state.ages.loaded) {
+    if (!state.analysisPoint.loaded) {
       try {
         const response = await Request.get("/analysisPoint");
         return response.data;
@@ -50,9 +49,24 @@ export const getAnalysisPointList = createAsyncThunk(
 );
 
 export const analysisPointSlice = createSlice({
-  name: "ages",
+  name: "analysisPoint",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedPoint: (
+      state: WritableDraft<AnalysisPointState>,
+      action: PayloadAction<number[]>,
+    ) => {
+      state.selectedList = action.payload;
+    },
+    removeSelectedPoint: (
+      state: WritableDraft<AnalysisPointState>,
+      action: PayloadAction<number>,
+    ) => {
+      state.selectedList = state.selectedList.filter(
+        (point) => point !== action.payload,
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -85,11 +99,17 @@ export const analysisPointSlice = createSlice({
   },
 });
 
-//export const {  } = agesSlice.actions;
+export const { setSelectedPoint, removeSelectedPoint } =
+  analysisPointSlice.actions;
 
 const selectAnalysisPointList = (state: RootState) => state.analysisPoint.list;
+export const selectAnalysisPointSelectedList = (state: RootState) =>
+  state.analysisPoint.selectedList;
 export const selectAnalysisPointPending = (state: RootState) =>
   state.analysisPoint.pending;
+
+export const selectAnalysisPointById = (state: RootState, pointId: number) =>
+  state.analysisPoint.list.find((point) => point.id === pointId);
 
 export const selectAnalysisPointListForSelect = createSelector(
   [selectAnalysisPointList],

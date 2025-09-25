@@ -1,6 +1,10 @@
 export {
   analysisPointSlice,
   getAnalysisPointList,
-  selectAnalysisPointPending,
+  removeSelectedPoint,
+  setSelectedPoint,
   selectAnalysisPointListForSelect,
+  selectAnalysisPointPending,
+  selectAnalysisPointSelectedList,
+  selectAnalysisPointById,
 } from "./slice";

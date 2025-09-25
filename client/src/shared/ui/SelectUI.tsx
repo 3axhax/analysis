@@ -17,7 +17,7 @@ interface SelectUIProps<T = string> {
   className?: string;
 }
 
-const SelectUI = <T = string,>({
+const SelectUI = <T extends string | number = string>({
   label,
   name,
   options,
@@ -29,7 +29,13 @@ const SelectUI = <T = string,>({
   ...other
 }: SelectUIProps<T>) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(event.target.value as T);
+    const selectedValue = event.target.value;
+    const value = (
+      typeof options[0]?.value === "number"
+        ? Number(selectedValue)
+        : selectedValue
+    ) as T;
+    onChange(value);
   };
 
   return (
@@ -39,7 +45,7 @@ const SelectUI = <T = string,>({
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <select
-        value={value as string}
+        value={value}
         onChange={handleChange}
         id={name}
         className={`
@@ -51,13 +57,17 @@ const SelectUI = <T = string,>({
         aria-required={required}
         {...other}
       >
-        <option value="" disabled className="text-gray-400">
+        <option
+          value={typeof value === "string" ? "" : 0}
+          disabled
+          className="text-gray-400"
+        >
           {placeholder}
         </option>
         {options.map((option) => (
           <option
-            key={option.value as string}
-            value={option.value as string}
+            key={option.value}
+            value={option.value}
             disabled={option.disabled}
             className={option.disabled ? "text-gray-400" : ""}
           >

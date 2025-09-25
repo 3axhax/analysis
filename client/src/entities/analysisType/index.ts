@@ -1,6 +1,7 @@
 export {
-  analysisPointSlice,
-  selectAnalysisPointListForSelect,
-  selectAnalysisPointPending,
+  analysisTypeSlice,
+  selectAnalysisType,
+  selectAnalysisTypeListForSelect,
+  selectAnalysisTypePending,
 } from "./model";
-export { useAnalysisPointLoad } from "./analysisType.hooks.ts";
+export { useAnalysisTypeLoad } from "./analysisType.hooks.ts";

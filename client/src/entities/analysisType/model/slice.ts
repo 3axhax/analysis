@@ -10,12 +10,18 @@ import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
 import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
+import { setSelectedPoint } from "@entities/analysisPoint";
+
+interface AnalysisPointItem {
+  id: number;
+  name: string;
+}
 
 interface AnalysisTypeListItem {
   id: number;
   name: string;
   description: string;
-  analysisPointList: number[];
+  analysisPoint: AnalysisPointItem[];
 }
 
 interface AnalysisTypeState {
@@ -36,7 +42,7 @@ export const getAnalysisTypeList = createAsyncThunk(
   "analysisType/getList",
   async (_, { getState }) => {
     const state = getState() as RootState;
-    if (!state.ages.loaded) {
+    if (!state.analysisType.loaded) {
       try {
         const response = await Request.get("/analysisType");
         return response.data;
@@ -47,8 +53,21 @@ export const getAnalysisTypeList = createAsyncThunk(
   },
 );
 
+export const selectAnalysisType = createAsyncThunk(
+  "analysisType/getList",
+  async (action: number, { getState, dispatch }) => {
+    if (action > 0) {
+      const state = getState() as RootState;
+      const type = state.analysisType.list.find((item) => item.id === action);
+      if (type) {
+        dispatch(setSelectedPoint(type.analysisPoint.map((item) => item.id)));
+      }
+    }
+  },
+);
+
 export const analysisTypeSlice = createSlice({
-  name: "ages",
+  name: "analysisType",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -83,7 +102,7 @@ export const analysisTypeSlice = createSlice({
   },
 });
 
-//export const {  } = agesSlice.actions;
+//export const { } = analysisTypeSlice.actions;
 
 const selectAnalysisTypeList = (state: RootState) => state.analysisType.list;
 export const selectAnalysisTypePending = (state: RootState) =>

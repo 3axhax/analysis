@@ -1,25 +1,15 @@
 import React, { useState } from "react";
-import SelectUI from "@shared/ui/SelectUI.tsx";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
-import { useAppSelector } from "@shared/store/hooks.ts";
-import { useTranslation } from "react-i18next";
 import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
-import { useAnalysisTypeLoad } from "@entities/analysisType/analysisType.hooks.ts";
-import { selectAnalysisTypeListForSelect } from "@entities/analysisType/model/slice.ts";
+import { AnalysisPointList } from "@widgets/analysisPointList";
 
 export type GenderType = "m" | "f";
 export const AnalysisPage = () => {
   useDocumentTitle("Загрузить анализы");
 
-  useAnalysisTypeLoad();
-
-  const { t } = useTranslation();
-  const analysisTypeOptions = useAppSelector(selectAnalysisTypeListForSelect);
-
   const [gender, setGender] = useState<GenderType>("m");
   const [age, setAge] = useState<string>("");
-  const [analysisType, setAnalysisType] = useState<number>(0);
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,19 +35,9 @@ export const AnalysisPage = () => {
           >
             <GenderSelector value={gender} onChange={setGender} />
             <AgeSelector value={age} onChange={setAge} />
+            <hr />
+            <AnalysisPointList />
 
-            <SelectUI<number>
-              label="Тип анализов"
-              name={"age"}
-              options={analysisTypeOptions.map((item) => ({
-                ...item,
-                label: t(`analysisType.${item.label}`),
-              }))}
-              value={analysisType}
-              onChange={(value) => setAnalysisType(value)}
-              placeholder="Выберите тип анализов"
-              className="max-w-xs"
-            />
             <button
               type={"submit"}
               className={

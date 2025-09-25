@@ -36,7 +36,7 @@ export const analysisPointInitialData: AnalysisPointCreationAttrs[] = [
   },
   {
     id: 7,
-    name: 'Glucose',
+    name: 'glucose',
     description: '',
   },
 ];
