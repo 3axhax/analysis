@@ -89,6 +89,6 @@ export const selectAgesListForSelect = createSelector(
   (agesList): SelectUIOption<string>[] =>
     agesList.map((item) => ({
       value: item.name,
-      label: item.description,
+      label: item.name,
     })),
 );

@@ -9,7 +9,7 @@ import {
 import { agesInitialData } from './ages.initialData';
 
 interface AgesCreationAttrs {
-  description: string;
+  name: string;
 }
 @Table({
   tableName: 'ages',
@@ -22,13 +22,6 @@ export class Age extends Model<Age, AgesCreationAttrs> {
     allowNull: false,
   })
   declare name: string;
-
-  @Column({
-    type: DataType.STRING,
-    unique: true,
-    allowNull: false,
-  })
-  declare description: string;
 
   @AfterSync
   static async addInitialData() {

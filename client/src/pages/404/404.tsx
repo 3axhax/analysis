@@ -1,5 +1,5 @@
 import React from "react";
-import useDocumentTitle from "@entities/hooks/useDocumentTitle.tsx";
+import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 
 const NotFoundPage: React.FC = () => {
   useDocumentTitle("404");

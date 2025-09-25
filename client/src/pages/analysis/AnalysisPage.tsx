@@ -1,23 +1,22 @@
 import React, { useState } from "react";
-import RadioGroup, { RadioOption } from "@shared/ui/RadioGroup.tsx";
 import SelectUI from "@shared/ui/SelectUI.tsx";
-import useDocumentTitle from "@entities/hooks/useDocumentTitle.tsx";
+import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
-import {selectAnalysisPointListForSelect, useAnalysisPointLoad} from "@entities/analysisPoint";
+import {
+  selectAnalysisPointListForSelect,
+  useAnalysisPointLoad,
+} from "@entities/analysisPoint";
+import { useTranslation } from "react-i18next";
+import { GenderSelector } from "@features/genderSelector";
+import { AgeSelector } from "@features/ageSelector";
 
 export type GenderType = "m" | "f";
 export const AnalysisPage = () => {
   useDocumentTitle("Загрузить анализы");
-  useAgesLoad();
+
   useAnalysisPointLoad();
 
-  const genderOptions: RadioOption<GenderType>[] = [
-    { value: "m", label: "М" },
-    { value: "f", label: "Ж" },
-  ];
-
-  const ageOptions = useAppSelector(selectAgesListForSelect);
+  const { t } = useTranslation();
   const analysisPointOptions = useAppSelector(selectAnalysisPointListForSelect);
 
   const [gender, setGender] = useState<GenderType>("m");
@@ -46,26 +45,16 @@ export const AnalysisPage = () => {
             className="space-y-2 text-gray-600 dark:text-gray-300"
             onSubmit={handlerSubmit}
           >
-            <RadioGroup<GenderType>
-              label="Пол"
-              name="gender"
-              options={genderOptions}
-              value={gender}
-              onChange={(value) => setGender(value)}
-            />
-            <SelectUI<string>
-              label="Возрастная группа"
-              name={"age"}
-              options={ageOptions}
-              value={age}
-              onChange={(value) => setAge(value)}
-              placeholder="Выберите возраст"
-              className="max-w-xs"
-            />
+            <GenderSelector value={gender} onChange={setGender} />
+            <AgeSelector value={age} onChange={setAge} />
+
             <SelectUI<number>
               label="Возрастная группа"
               name={"age"}
-              options={analysisPointOptions}
+              options={analysisPointOptions.map((item) => ({
+                ...item,
+                label: t(`analysisPoint.${item.label}`),
+              }))}
               value={analysisPoint}
               onChange={(value) => setAnalysisPoint(value)}
               placeholder="Выберите возраст"

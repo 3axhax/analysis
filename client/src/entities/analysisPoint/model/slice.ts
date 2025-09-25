@@ -11,13 +11,13 @@ import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
 import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
 
-type TestType = 'BLOOD_TEST' | 'URINE_TEST' | 'STOOL_TEST';
+type TestType = "BLOOD_TEST" | "URINE_TEST" | "STOOL_TEST";
 
 interface AnalysisPointListItem {
   id: number;
   name: string;
   description: string;
-    testType: TestType;
+  testType: TestType;
 }
 
 interface AnalysisPointState {
@@ -56,7 +56,7 @@ export const analysisPointSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(
-          getAnalysisPointList.fulfilled,
+        getAnalysisPointList.fulfilled,
         (
           state: WritableDraft<AnalysisPointState>,
           action: PayloadAction<AnalysisPointListItem[]>,
@@ -69,23 +69,27 @@ export const analysisPointSlice = createSlice({
         },
       )
       .addCase(
-          getAnalysisPointList.rejected,
+        getAnalysisPointList.rejected,
         (state: WritableDraft<AnalysisPointState>, action) => {
           state.pending = false;
           state.error = action.error.message ? action.error.message : "";
         },
       )
-      .addCase(getAnalysisPointList.pending, (state: WritableDraft<AnalysisPointState>) => {
-        state.pending = true;
-        state.error = "";
-      });
+      .addCase(
+        getAnalysisPointList.pending,
+        (state: WritableDraft<AnalysisPointState>) => {
+          state.pending = true;
+          state.error = "";
+        },
+      );
   },
 });
 
 //export const {  } = agesSlice.actions;
 
 const selectAnalysisPointList = (state: RootState) => state.analysisPoint.list;
-export const selectAnalysisPointPending = (state: RootState) => state.analysisPoint.pending;
+export const selectAnalysisPointPending = (state: RootState) =>
+  state.analysisPoint.pending;
 
 export const selectAnalysisPointListForSelect = createSelector(
   [selectAnalysisPointList],

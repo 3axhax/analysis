@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
       react(),
@@ -17,6 +16,7 @@ export default defineConfig({
       '@features': '/src/features',
       '@entities': '/src/entities',
       '@shared': '/src/shared',
+      '@locales': '/src/locales',
     },
   },
   server: {
