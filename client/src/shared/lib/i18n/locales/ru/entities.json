@@ -1,4 +1,9 @@
 {
+  "analysisType": {
+    "general_blood_test": "Общий анализ крови",
+    "protein_fractions": "Белковые фракции",
+    "general_urine_test": "Общий анализ мочи"
+  },
   "analysisPoint": {
     "hemoglobin": "Гемоглобин (HGB)",
     "erythrocyte": "Эритроциты (RBC)",

@@ -1,4 +1,6 @@
 declare module "*.json" {
-  const value: Record<string, any>;
+  const value: {
+    [key: string]: string | { [key: string]: string } | string[];
+  };
   export default value;
 }

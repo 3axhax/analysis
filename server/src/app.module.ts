@@ -7,6 +7,9 @@ import { Age } from './ages/ages.model';
 import { AgesModule } from './ages/ages.module';
 import { AnalysisPoint } from './analysisPoint/analysisPoint.model';
 import { AnalysisPointModule } from './analysisPoint/analysisPoint.module';
+import { AnalysisType } from './analysisType/analysisType.model';
+import { AnalysisTypePoint } from './analysisPoint/analysisType-Point.model';
+import { AnalysisTypeModule } from './analysisType/analysisType.module';
 
 @Module({
   imports: [
@@ -20,11 +23,12 @@ import { AnalysisPointModule } from './analysisPoint/analysisPoint.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Age, AnalysisPoint],
+      models: [Age, AnalysisPoint, AnalysisType, AnalysisTypePoint],
       autoLoadModels: true,
     }),
     AgesModule,
     AnalysisPointModule,
+    AnalysisTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

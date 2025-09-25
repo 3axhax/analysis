@@ -2,26 +2,24 @@ import React, { useState } from "react";
 import SelectUI from "@shared/ui/SelectUI.tsx";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import {
-  selectAnalysisPointListForSelect,
-  useAnalysisPointLoad,
-} from "@entities/analysisPoint";
 import { useTranslation } from "react-i18next";
 import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
+import { useAnalysisTypeLoad } from "@entities/analysisType/analysisType.hooks.ts";
+import { selectAnalysisTypeListForSelect } from "@entities/analysisType/model/slice.ts";
 
 export type GenderType = "m" | "f";
 export const AnalysisPage = () => {
   useDocumentTitle("Загрузить анализы");
 
-  useAnalysisPointLoad();
+  useAnalysisTypeLoad();
 
   const { t } = useTranslation();
-  const analysisPointOptions = useAppSelector(selectAnalysisPointListForSelect);
+  const analysisTypeOptions = useAppSelector(selectAnalysisTypeListForSelect);
 
   const [gender, setGender] = useState<GenderType>("m");
   const [age, setAge] = useState<string>("");
-  const [analysisPoint, setAnalysisPoint] = useState<number>(0);
+  const [analysisType, setAnalysisType] = useState<number>(0);
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,15 +47,15 @@ export const AnalysisPage = () => {
             <AgeSelector value={age} onChange={setAge} />
 
             <SelectUI<number>
-              label="Возрастная группа"
+              label="Тип анализов"
               name={"age"}
-              options={analysisPointOptions.map((item) => ({
+              options={analysisTypeOptions.map((item) => ({
                 ...item,
-                label: t(`analysisPoint.${item.label}`),
+                label: t(`analysisType.${item.label}`),
               }))}
-              value={analysisPoint}
-              onChange={(value) => setAnalysisPoint(value)}
-              placeholder="Выберите возраст"
+              value={analysisType}
+              onChange={(value) => setAnalysisType(value)}
+              placeholder="Выберите тип анализов"
               className="max-w-xs"
             />
             <button

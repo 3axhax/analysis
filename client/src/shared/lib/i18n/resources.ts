@@ -1,4 +1,4 @@
-import entitiesRU from "@locales/ru/entities.json";
+import entitiesRU from "@shared/lib/i18n/locales/ru/entities.json";
 
 export const resources = {
   ru: {

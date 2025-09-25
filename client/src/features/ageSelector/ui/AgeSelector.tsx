@@ -1,7 +1,7 @@
 import SelectUI from "@shared/ui/SelectUI.tsx";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 interface AgeSelectorProps {
   value: string;
@@ -16,7 +16,7 @@ export const AgeSelector = ({ value, onChange }: AgeSelectorProps) => {
     <SelectUI<string>
       label="Возрастная группа"
       name={"age"}
-      options={ageOptions.map(item => ({
+      options={ageOptions.map((item) => ({
         ...item,
         label: t(`ages.${item.label}`),
       }))}
