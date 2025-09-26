@@ -14,7 +14,7 @@ import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
 interface AnalysisPointListItem {
   id: number;
   name: string;
-  description: string;
+  units: string[];
 }
 
 interface AnalysisPointState {

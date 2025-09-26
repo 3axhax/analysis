@@ -10,7 +10,8 @@ import { analysisPointInitialData } from './analysisPoint.initialData';
 
 export interface AnalysisPointCreationAttrs {
   name: string;
-  description: string;
+  units: string;
+  alt_units?: string;
   id?: number;
 }
 
@@ -23,6 +24,14 @@ export class AnalysisPoint extends Model<
   AnalysisPointCreationAttrs
 > {
   @Column({
+    type: DataType.INTEGER,
+    unique: true,
+    autoIncrement: true,
+    primaryKey: true,
+  })
+  declare id: number;
+
+  @Column({
     type: DataType.STRING,
     unique: true,
     allowNull: false,
@@ -30,9 +39,15 @@ export class AnalysisPoint extends Model<
   declare name: string;
 
   @Column({
-    type: DataType.TEXT,
+    type: DataType.STRING,
+    allowNull: false,
   })
-  declare description: string;
+  declare units: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare alt_units: string;
 
   @AfterSync
   static async addInitialData() {

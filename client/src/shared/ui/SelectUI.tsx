@@ -7,7 +7,7 @@ export interface SelectUIOption<T = string> {
 }
 
 interface SelectUIProps<T = string> {
-  label: string;
+  label?: string;
   name: string;
   options: SelectUIOption<T>[];
   value: T;
@@ -39,11 +39,16 @@ const SelectUI = <T extends string | number = string>({
   };
 
   return (
-    <div className={`mb-4 flex justify-between ${className}`}>
-      <label htmlFor={name} className="text-sm font-medium text-gray-700 mb-1">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
+    <div className={`flex justify-between ${className}`}>
+      {label ? (
+        <label
+          htmlFor={name}
+          className="text-sm font-medium text-gray-700 mb-1"
+        >
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+      ) : null}
       <select
         value={value}
         onChange={handleChange}

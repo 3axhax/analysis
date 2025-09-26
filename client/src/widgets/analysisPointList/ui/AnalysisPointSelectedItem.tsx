@@ -6,6 +6,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import { TrashIcon } from "@heroicons/react/16/solid";
+import SelectUI from "@shared/ui/SelectUI.tsx";
+import { useEffect, useState } from "react";
 
 interface AnalysisPointSelectedItemProps {
   pointId: number;
@@ -20,9 +22,17 @@ export const AnalysisPointSelectedItem = ({
     selectAnalysisPointById(state, pointId),
   );
 
+  const [units, setUnits] = useState<string>("");
+
   const handlerClear = () => {
     dispatch(removeSelectedPoint(pointId));
   };
+
+  useEffect(() => {
+    if (analysisPoint && analysisPoint.units.length > 0) {
+      setUnits(analysisPoint.units[0]);
+    }
+  }, [analysisPoint]);
 
   return (
     <>
@@ -51,6 +61,27 @@ export const AnalysisPointSelectedItem = ({
                 }
               />
             </label>
+            {analysisPoint.units.length == 1 ? (
+              <span className={"ml-[10px]"}>
+                {t(`units.${analysisPoint.units[0]}`)}
+              </span>
+            ) : analysisPoint.units.length > 1 ? (
+              /*<select className={"ml-[10px]"}>
+                {analysisPoint.units.map((unit) => (
+                  <option>{unit}</option>
+                ))}
+              </select>*/
+              <SelectUI<string>
+                name={"unitSelect"}
+                onChange={setUnits}
+                placeholder={"ед. изм."}
+                options={analysisPoint.units.map((unit) => ({
+                  label: t(`units.${unit}`),
+                  value: unit,
+                }))}
+                value={units}
+              />
+            ) : null}
             <TrashIcon
               className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]"
               onClick={handlerClear}

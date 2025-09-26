@@ -9,8 +9,19 @@ export class AnalysisPointService {
     private analysisPointRepository: typeof AnalysisPoint,
   ) {}
   async getAll() {
-    return this.analysisPointRepository.findAll({
+    const points = await this.analysisPointRepository.findAll({
       include: { all: true },
+    });
+    return points.map((point) => {
+      const units = [point.units];
+      if (point.alt_units) {
+        units.push(point.alt_units);
+      }
+      return {
+        id: point.id,
+        name: point.name,
+        units: units,
+      };
     });
   }
 }
