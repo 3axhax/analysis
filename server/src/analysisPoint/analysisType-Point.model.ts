@@ -8,7 +8,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { AnalysisPoint } from './analysisPoint.model';
-import { analysisPointInitialData } from './analysisType-Point.initialData';
+import { analysisTypePointInitialData } from './analysisType-Point.initialData';
 
 export interface AnalysisTypePointCreationAttrs {
   typeId: number;
@@ -41,7 +41,7 @@ export class AnalysisTypePoint extends Model<
   static async addInitialData() {
     const count = await AnalysisTypePoint.count();
     if (count === 0) {
-      await AnalysisTypePoint.bulkCreate(analysisPointInitialData);
+      await AnalysisTypePoint.bulkCreate(analysisTypePointInitialData);
       console.log('Initial Analysis Type Point data added');
     }
   }

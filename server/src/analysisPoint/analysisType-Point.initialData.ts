@@ -1,6 +1,6 @@
 import { AnalysisTypePointCreationAttrs } from './analysisType-Point.model';
 
-export const analysisPointInitialData: AnalysisTypePointCreationAttrs[] = [
+export const analysisTypePointInitialData: AnalysisTypePointCreationAttrs[] = [
   {
     typeId: 1,
     pointId: 1,

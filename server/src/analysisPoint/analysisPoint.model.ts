@@ -1,5 +1,6 @@
 import {
   AfterSync,
+  BelongsToMany,
   Column,
   DataType,
   Model,
@@ -7,11 +8,11 @@ import {
 } from 'sequelize-typescript';
 
 import { analysisPointInitialData } from './analysisPoint.initialData';
+import { AnalysisPointsUnits } from './analysisPoint-Units.model';
+import { AnalysisPointUnits } from './analysisPointUnits.model';
 
 export interface AnalysisPointCreationAttrs {
   name: string;
-  units: string;
-  alt_units?: string;
   id?: number;
 }
 
@@ -38,17 +39,6 @@ export class AnalysisPoint extends Model<
   })
   declare name: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  declare units: string;
-
-  @Column({
-    type: DataType.STRING,
-  })
-  declare alt_units: string;
-
   @AfterSync
   static async addInitialData() {
     const count = await AnalysisPoint.count();
@@ -57,4 +47,7 @@ export class AnalysisPoint extends Model<
       console.log('Initial Analysis Point data added');
     }
   }
+
+  @BelongsToMany(() => AnalysisPointUnits, () => AnalysisPointsUnits)
+  declare units: AnalysisPointUnits[];
 }

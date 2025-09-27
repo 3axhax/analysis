@@ -13,14 +13,10 @@ export class AnalysisPointService {
       include: { all: true },
     });
     return points.map((point) => {
-      const units = [point.units];
-      if (point.alt_units) {
-        units.push(point.alt_units);
-      }
       return {
         id: point.id,
         name: point.name,
-        units: units,
+        units: point.units.map((unit) => unit.name),
       };
     });
   }
