@@ -12,6 +12,11 @@ import { AnalysisTypePoint } from './analysisPoint/analysisType-Point.model';
 import { AnalysisTypeModule } from './analysisType/analysisType.module';
 import { AnalysisPointUnits } from './analysisPoint/analysisPointUnits.model';
 import { AnalysisPointsUnits } from './analysisPoint/analysisPoint-Units.model';
+import { AnalysisResult } from './analysisResult/analysisResult.model';
+import { AnalysisResultPointData } from './analysisResult/analysisResultPointData.model';
+import { AnalysisResultModule } from './analysisResult/analysisResult.module';
+import { Gender } from './gender/gender.model';
+import { GenderModule } from './gender/gender.module';
 
 @Module({
   imports: [
@@ -32,12 +37,17 @@ import { AnalysisPointsUnits } from './analysisPoint/analysisPoint-Units.model';
         AnalysisTypePoint,
         AnalysisPointUnits,
         AnalysisPointsUnits,
+        AnalysisResult,
+        AnalysisResultPointData,
+        Gender,
       ],
       autoLoadModels: true,
     }),
     AgesModule,
     AnalysisPointModule,
     AnalysisTypeModule,
+    AnalysisResultModule,
+    GenderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

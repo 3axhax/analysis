@@ -8,9 +8,15 @@ export class AgesService {
     @InjectModel(Age)
     private ageRepository: typeof Age,
   ) {}
-  async getAll() {
+  async getAll(): Promise<Age[] | null> {
     return this.ageRepository.findAll({
       include: { all: true },
+    });
+  }
+
+  async getAgeByName(ageName: string): Promise<Age | null> {
+    return this.ageRepository.findOne({
+      where: { name: ageName },
     });
   }
 }

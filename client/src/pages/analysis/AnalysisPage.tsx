@@ -3,6 +3,7 @@ import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
 import { AnalysisPointList } from "@widgets/analysisPointList";
+import Request from "@shared/transport/RestAPI.ts";
 
 export type GenderType = "m" | "f";
 export const AnalysisPage = () => {
@@ -11,9 +12,11 @@ export const AnalysisPage = () => {
   const [gender, setGender] = useState<GenderType>("m");
   const [age, setAge] = useState<string>("");
 
-  const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log({ gender, age });
+    const response = await Request.post("/result/save", { gender, age });
+    console.log(response.data);
   };
 
   return (
