@@ -4,8 +4,8 @@ import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
 import { AnalysisPointList } from "@widgets/analysisPointList";
 import Request from "@shared/transport/RestAPI.ts";
+import { GenderType } from "@entities/gender";
 
-export type GenderType = "m" | "f";
 export const AnalysisPage = () => {
   useDocumentTitle("Загрузить анализы");
 

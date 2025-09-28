@@ -1,5 +1,8 @@
-import RadioGroup, { RadioOption } from "@shared/ui/RadioGroup.tsx";
-import { GenderType } from "@pages/analysis/AnalysisPage.tsx";
+import RadioGroup from "@shared/ui/RadioGroup.tsx";
+import { GenderType, useGenderLoad } from "@entities/gender";
+import { selectGenderListForSelect } from "@entities/gender";
+import { useAppSelector } from "@shared/store/hooks.ts";
+import { useTranslation } from "react-i18next";
 
 interface GenderSelectorProps {
   value: GenderType;
@@ -7,16 +10,19 @@ interface GenderSelectorProps {
 }
 
 export const GenderSelector = ({ value, onChange }: GenderSelectorProps) => {
-  const genderOptions: RadioOption<GenderType>[] = [
-    { value: "m", label: "М" },
-    { value: "f", label: "Ж" },
-  ];
+  useGenderLoad();
+  const { t } = useTranslation();
+
+  const genderOptions = useAppSelector(selectGenderListForSelect);
 
   return (
     <RadioGroup<GenderType>
       label="Пол"
       name="gender"
-      options={genderOptions}
+      options={genderOptions.map((item) => ({
+        ...item,
+        label: t(`gender.${item.label}`),
+      }))}
       value={value}
       onChange={(value) => onChange(value)}
     />

@@ -6,7 +6,6 @@ import {
 
 @Controller('result')
 export class AnalysisResultController {
-
   constructor(private AnalysisResultService: AnalysisResultService) {}
   @Post('/save')
   async saveResult(
