@@ -14,7 +14,6 @@ export const AnalysisPage = () => {
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ gender, age });
     const response = await Request.post("/result/save", { gender, age });
     console.log(response.data);
   };

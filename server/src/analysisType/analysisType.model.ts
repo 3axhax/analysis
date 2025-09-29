@@ -13,7 +13,6 @@ import { AnalysisTypePoint } from '../analysisPoint/analysisType-Point.model';
 
 export interface AnalysisTypeCreationAttrs {
   name: string;
-  description: string;
   id?: number;
 }
 @Table({
@@ -30,12 +29,6 @@ export class AnalysisType extends Model<
     allowNull: false,
   })
   declare name: string;
-
-  @Column({
-    type: DataType.TEXT,
-    allowNull: false,
-  })
-  declare description: string;
 
   @AfterSync
   static async addInitialData() {
