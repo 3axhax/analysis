@@ -9,7 +9,7 @@ import {
 
 import { analysisPointInitialData } from './analysisPoint.initialData';
 import { AnalysisPointsUnits } from './analysisPoint-Units.model';
-import { AnalysisPointUnits } from './analysisPointUnits.model';
+import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 
 export interface AnalysisPointCreationAttrs {
   name: string;
@@ -44,7 +44,6 @@ export class AnalysisPoint extends Model<
     const count = await AnalysisPoint.count();
     if (count === 0) {
       await AnalysisPoint.bulkCreate(analysisPointInitialData);
-      console.log('Initial Analysis Point data added');
     }
   }
 

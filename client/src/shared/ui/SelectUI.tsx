@@ -1,4 +1,4 @@
-import React from "react";
+import { ChangeEvent } from "react";
 
 export interface SelectUIOption<T = string> {
   value: T;
@@ -28,7 +28,7 @@ const SelectUI = <T extends string | number = string>({
   className = "",
   ...other
 }: SelectUIProps<T>) => {
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     const value = (
       typeof options[0]?.value === "number"

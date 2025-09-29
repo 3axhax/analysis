@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
 import { AnalysisPointList } from "@widgets/analysisPointList";
-import Request from "@shared/transport/RestAPI.ts";
-import { GenderType } from "@entities/gender";
+import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
+import { resetPrepareData, sendAnalysisData } from "@entities/analysisResult";
+import { SelectAnalysisResultPending } from "@entities/analysisResult/model/slice.ts";
 
 export const AnalysisPage = () => {
   useDocumentTitle("Загрузить анализы");
+  const dispatch = useAppDispatch();
 
-  const [gender, setGender] = useState<GenderType>("m");
-  const [age, setAge] = useState<string>("");
+  const pending = useAppSelector(SelectAnalysisResultPending);
+
+  useEffect(() => {
+    dispatch(resetPrepareData());
+  }, [dispatch]);
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await Request.post("/result/save", { gender, age });
-    console.log(response.data);
+    dispatch(sendAnalysisData());
   };
 
   return (
@@ -35,16 +39,17 @@ export const AnalysisPage = () => {
             className="space-y-2 text-gray-600 dark:text-gray-300"
             onSubmit={handlerSubmit}
           >
-            <GenderSelector value={gender} onChange={setGender} />
-            <AgeSelector value={age} onChange={setAge} />
+            <GenderSelector />
+            <AgeSelector />
             <hr />
             <AnalysisPointList />
 
             <button
               type={"submit"}
               className={
-                "bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-400"
+                "bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
               }
+              disabled={pending}
             >
               Отправить
             </button>

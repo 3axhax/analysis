@@ -8,7 +8,7 @@ import {
 } from 'sequelize-typescript';
 import { AnalysisPoint } from './analysisPoint.model';
 import { analysisPointsUnitsInitialData } from './analysisPoint-Units.initialData';
-import { AnalysisPointUnits } from './analysisPointUnits.model';
+import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 
 export interface AnalysisPointsUnitsCreationAttrs {
   pointId: number;
@@ -49,7 +49,6 @@ export class AnalysisPointsUnits extends Model<
     const count = await AnalysisPointsUnits.count();
     if (count === 0) {
       await AnalysisPointsUnits.bulkCreate(analysisPointsUnitsInitialData);
-      console.log('Initial Analysis Points Units data added');
     }
   }
 }

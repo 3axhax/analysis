@@ -9,6 +9,7 @@ import {
 } from "@entities/analysisType";
 import { useAnalysisPointLoad } from "@entities/analysisPoint";
 import { AnalysisPointSelectedList } from "@widgets/analysisPointList/ui/AnalysisPointSelectedList.tsx";
+import { clearAllPointData } from "@entities/analysisResult";
 
 export const AnalysisPointList = () => {
   const dispatch = useAppDispatch();
@@ -21,6 +22,7 @@ export const AnalysisPointList = () => {
 
   useEffect(() => {
     dispatch(selectAnalysisType(analysisType));
+    dispatch(clearAllPointData());
   }, [analysisType, dispatch]);
 
   return (

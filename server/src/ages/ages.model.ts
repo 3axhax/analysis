@@ -28,7 +28,6 @@ export class Age extends Model<Age, AgesCreationAttrs> {
     const count = await Age.count();
     if (count === 0) {
       await Age.bulkCreate(agesInitialData);
-      console.log('Initial age data added');
     }
   }
 }

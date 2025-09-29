@@ -3,7 +3,7 @@ import { AnalysisPointController } from './analysisPoint.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AnalysisPoint } from './analysisPoint.model';
 import { AnalysisPointService } from './analysisPoint.service';
-import { AnalysisPointUnits } from './analysisPointUnits.model';
+import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 import { AnalysisPointsUnits } from './analysisPoint-Units.model';
 
 @Module({

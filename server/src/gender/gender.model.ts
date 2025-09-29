@@ -27,7 +27,6 @@ export class Gender extends Model<Gender, GenderAttrs> {
     const count = await Gender.count();
     if (count === 0) {
       await Gender.bulkCreate(genderInitialData);
-      console.log('Initial Gender data added');
     }
   }
 }

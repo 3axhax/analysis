@@ -35,7 +35,6 @@ export class AnalysisType extends Model<
     const count = await AnalysisType.count();
     if (count === 0) {
       await AnalysisType.bulkCreate(analysisTypeInitialData);
-      console.log('Initial Analysis Type data added');
     }
   }
 

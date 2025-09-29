@@ -7,7 +7,8 @@ import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import SelectUI from "@shared/ui/SelectUI.tsx";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { addPointData, removePointData } from "@entities/analysisResult";
 
 interface AnalysisPointSelectedItemProps {
   pointId: number;
@@ -23,9 +24,13 @@ export const AnalysisPointSelectedItem = ({
   );
 
   const [units, setUnits] = useState<string>("");
+  const [pointValue, setPointValue] = useState<string>("");
 
   const handlerClear = () => {
     dispatch(removeSelectedPoint(pointId));
+    if (analysisPoint) {
+      dispatch(removePointData(analysisPoint.name));
+    }
   };
 
   useEffect(() => {
@@ -33,6 +38,32 @@ export const AnalysisPointSelectedItem = ({
       setUnits(analysisPoint.units[0]);
     }
   }, [analysisPoint]);
+
+  const handlerOnInput = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setPointValue(e.target.value.replace(",", "."));
+    if (analysisPoint) {
+      dispatch(
+        addPointData({
+          name: analysisPoint.name,
+          value: parseFloat(e.target.value.replace(",", ".")),
+          units,
+        }),
+      );
+    }
+  };
+  const handlerOnUnitsSelect = (value: string) => {
+    setUnits(value);
+    if (analysisPoint) {
+      dispatch(
+        addPointData({
+          name: analysisPoint.name,
+          value: parseFloat(pointValue),
+          units: value,
+        }),
+      );
+    }
+  };
 
   return (
     <>
@@ -59,6 +90,8 @@ export const AnalysisPointSelectedItem = ({
                 className={
                   "px-4 py-2 ml-[10px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 }
+                value={pointValue}
+                onInput={handlerOnInput}
               />
             </label>
             {analysisPoint.units.length == 1 ? (
@@ -66,14 +99,9 @@ export const AnalysisPointSelectedItem = ({
                 {t(`units.${analysisPoint.units[0]}`)}
               </span>
             ) : analysisPoint.units.length > 1 ? (
-              /*<select className={"ml-[10px]"}>
-                {analysisPoint.units.map((unit) => (
-                  <option>{unit}</option>
-                ))}
-              </select>*/
               <SelectUI<string>
                 name={"unitSelect"}
-                onChange={setUnits}
+                onChange={handlerOnUnitsSelect}
                 placeholder={"ед. изм."}
                 options={analysisPoint.units.map((unit) => ({
                   label: t(`units.${unit}`),

@@ -1,17 +1,23 @@
 import SelectUI from "@shared/ui/SelectUI.tsx";
-import { useAppSelector } from "@shared/store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { setPrepareDataAge } from "@entities/analysisResult";
 
-interface AgeSelectorProps {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-export const AgeSelector = ({ value, onChange }: AgeSelectorProps) => {
+export const AgeSelector = () => {
   const ageOptions = useAppSelector(selectAgesListForSelect);
   useAgesLoad();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
+  const [age, setAge] = useState<string>("");
+
+  const handlerOnChange = (value: string) => {
+    setAge(value);
+    dispatch(setPrepareDataAge(value));
+  };
+
   return (
     <SelectUI<string>
       label="Возрастная группа"
@@ -20,8 +26,8 @@ export const AgeSelector = ({ value, onChange }: AgeSelectorProps) => {
         ...item,
         label: t(`ages.${item.label}`),
       }))}
-      value={value}
-      onChange={onChange}
+      value={age}
+      onChange={handlerOnChange}
       placeholder="Выберите возраст"
       className="max-w-xs"
     />

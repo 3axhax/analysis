@@ -1,6 +1,6 @@
 import { useAppDispatch } from "@shared/store/hooks.ts";
 import { useEffect } from "react";
-import { getAgesList } from "@entities/ages/model";
+import { getAgesList } from "@entities/ages";
 
 export const useAgesLoad = () => {
   const dispatch = useAppDispatch();

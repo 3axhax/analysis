@@ -5,10 +5,12 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { AnalysisResult } from './analysisResult.model';
+import { AnalysisResult } from '../analysisResult/analysisResult.model';
+import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
+import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 
 export interface AnalysisResultPointDataAttrs {
-  resultId: string;
+  resultId: number;
   pointId: number;
   value: number;
   unitId: number;
@@ -28,6 +30,7 @@ export class AnalysisResultPointData extends Model<
   })
   declare resultId: number;
 
+  @ForeignKey(() => AnalysisPoint)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -40,6 +43,7 @@ export class AnalysisResultPointData extends Model<
   })
   declare value: number;
 
+  @ForeignKey(() => AnalysisPointUnits)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,

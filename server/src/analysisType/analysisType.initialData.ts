@@ -4,7 +4,7 @@ export const analysisTypeInitialData: AnalysisTypeCreationAttrs[] = [
   {
     id: 1,
     name: 'general_blood_test',
-    },
+  },
   {
     id: 2,
     name: 'protein_fractions',

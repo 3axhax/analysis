@@ -20,4 +20,9 @@ export class AnalysisPointService {
       };
     });
   }
+  async getAnalysisPointByName(name: string): Promise<AnalysisPoint | null> {
+    return this.analysisPointRepository.findOne({
+      where: { name },
+    });
+  }
 }

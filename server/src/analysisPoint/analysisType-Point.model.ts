@@ -42,7 +42,6 @@ export class AnalysisTypePoint extends Model<
     const count = await AnalysisTypePoint.count();
     if (count === 0) {
       await AnalysisTypePoint.bulkCreate(analysisTypePointInitialData);
-      console.log('Initial Analysis Type Point data added');
     }
   }
 }

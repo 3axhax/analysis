@@ -4,6 +4,9 @@ import { AnalysisResult } from './analysisResult.model';
 import * as crypto from 'crypto';
 import { AgesService } from '../ages/ages.service';
 import { GenderService } from '../gender/gender.service';
+import { AnalysisPointService } from '../analysisPoint/analysisPoint.service';
+import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
+import { AnalysisResultPointDataService } from '../analysisResultPointData/analysisResultPointData.service';
 
 export interface SaveResultResponse {
   resultId?: string;
@@ -17,16 +20,20 @@ export class AnalysisResultService {
     private analysisResultRepository: typeof AnalysisResult,
     private agesService: AgesService,
     private genderService: GenderService,
+    private analysisPointService: AnalysisPointService,
+    private analysisPointUnitsService: AnalysisPointUnitsService,
+    private analysisResultPointDataService: AnalysisResultPointDataService,
   ) {}
   saveResult = async ({
     age: ageName,
     gender: genderName,
+    pointData,
   }: {
     age: string;
     gender: string;
+    pointData: { name: string; value: number; units: string }[];
   }): Promise<SaveResultResponse> => {
     const resultId = crypto.randomBytes(20).toString('hex');
-    console.log('resultId', resultId);
     const age = await this.agesService.getAgeByName(ageName);
     if (!age) {
       return { error: 'Invalid age' };
@@ -35,11 +42,32 @@ export class AnalysisResultService {
     if (!gender) {
       return { error: 'Invalid gender' };
     }
-    const result = await this.analysisResultRepository.create({
+    const result: AnalysisResult = await this.analysisResultRepository.create({
       resultId,
       ageId: age.id as number,
       genderId: gender.id as number,
     });
+
+    await Promise.all(
+      pointData.map(async (item) => {
+        const point = await this.analysisPointService.getAnalysisPointByName(
+          item.name,
+        );
+        const units =
+          await this.analysisPointUnitsService.getAnalysisPointUnitsByName(
+            item.units,
+          );
+        if (point && units && item.value > 0) {
+          await this.analysisResultPointDataService.savePointData({
+            resultId: result.id,
+            pointId: point.id,
+            value: item.value,
+            unitId: units.id,
+          });
+        }
+      }),
+    );
+
     return { resultId: result.resultId };
   };
 }

@@ -8,7 +8,7 @@ import {
 } from 'sequelize-typescript';
 import { Age } from '../ages/ages.model';
 import { Gender } from '../gender/gender.model';
-import { AnalysisResultPointData } from './analysisResultPointData.model';
+import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 
 export interface AnalysisResultAttrs {
   resultId: string;
@@ -19,6 +19,14 @@ export interface AnalysisResultAttrs {
   tableName: 'analysisResult',
 })
 export class AnalysisResult extends Model<AnalysisResult, AnalysisResultAttrs> {
+  @Column({
+    type: DataType.INTEGER,
+    unique: true,
+    autoIncrement: true,
+    primaryKey: true,
+  })
+  declare id: number;
+
   @Column({
     type: DataType.STRING,
     allowNull: false,

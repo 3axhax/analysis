@@ -11,10 +11,11 @@ export class AnalysisResultController {
   async saveResult(
     @Body('age') age: string,
     @Body('gender') gender: string,
+    @Body('pointData') pointData: [],
   ): Promise<SaveResultResponse> {
     if (!age || !gender) {
       return { error: 'No required parameters: age, gender' };
     }
-    return this.AnalysisResultService.saveResult({ age, gender });
+    return this.AnalysisResultService.saveResult({ age, gender, pointData });
   }
 }
