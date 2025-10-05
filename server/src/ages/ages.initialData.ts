@@ -1,11 +1,18 @@
-export const agesInitialData = [
-  { name: '0_1m', description: '0-1 мес.' },
-  { name: '1_3m', description: '1-3 мес.' },
-  { name: '3_6m', description: '3-6 мес.' },
-  { name: '1_3y', description: '1-3 года' },
-  { name: '3_6y', description: '3-6 лет' },
-  { name: '6_9y', description: '6-9 лет' },
-  { name: '9_15y', description: '9-15 лет' },
-  { name: '15_18y', description: '15-18 лет' },
-  { name: 'u18y', description: 'старше 18 лет' },
+import { AgesCreationAttrs } from './ages.model';
+
+export const agesInitialData: AgesCreationAttrs[] = [
+  { id: 1, name: '0_1m' },
+  { id: 2, name: '1_2m' },
+  { id: 3, name: '2_3m' },
+  { id: 4, name: '3_6m' },
+  { id: 5, name: '6_12m' },
+  { id: 6, name: '1_3y' },
+  { id: 7, name: '3_5y' },
+  { id: 8, name: '5_6y' },
+  { id: 9, name: '6_9y' },
+  { id: 10, name: '9_10y' },
+  { id: 11, name: '10_12y' },
+  { id: 12, name: '12_15y' },
+  { id: 13, name: '15_18y' },
+  { id: 14, name: 'u18y' },
 ];

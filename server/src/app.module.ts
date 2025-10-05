@@ -18,6 +18,10 @@ import { AnalysisResultModule } from './analysisResult/analysisResult.module';
 import { Gender } from './gender/gender.model';
 import { GenderModule } from './gender/gender.module';
 import { AnalysisResultPointDataModule } from './analysisResultPointData/analysisResultPointData.module';
+import { AnalysisPointMinValue } from './analysisPointMinValue/analysisPointMinValue.model';
+import { AnalysisPointMinValueModule } from './analysisPointMinValue/analysisPointMinValue.module';
+import { AnalysisPointMaxValue } from './analysisPointMaxValue/analysisPointMaxValue.model';
+import { AnalysisPointMaxValueModule } from './analysisPointMaxValue/analysisPointMaxValue.module';
 
 @Module({
   imports: [
@@ -41,6 +45,8 @@ import { AnalysisResultPointDataModule } from './analysisResultPointData/analysi
         AnalysisResult,
         AnalysisResultPointData,
         Gender,
+        AnalysisPointMinValue,
+        AnalysisPointMaxValue,
       ],
       autoLoadModels: true,
     }),
@@ -51,6 +57,8 @@ import { AnalysisResultPointDataModule } from './analysisResultPointData/analysi
     AnalysisResultModule,
     AnalysisResultPointDataModule,
     GenderModule,
+    AnalysisPointMinValueModule,
+    AnalysisPointMaxValueModule,
   ],
   controllers: [AppController],
   providers: [AppService],

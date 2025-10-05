@@ -8,7 +8,8 @@ import {
 
 import { agesInitialData } from './ages.initialData';
 
-interface AgesCreationAttrs {
+export interface AgesCreationAttrs {
+  id?: number;
   name: string;
 }
 @Table({

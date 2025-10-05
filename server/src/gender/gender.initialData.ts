@@ -8,9 +8,9 @@ export const genderInitialData: GenderAttrs[] = [
   {
     id: 2,
     name: 'f',
-  },
+  } /*
   {
     id: 3,
     name: 'fp',
-  },
+  },*/,
 ];
