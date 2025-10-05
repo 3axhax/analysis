@@ -13,6 +13,11 @@ export interface SaveResultResponse {
   error?: string;
 }
 
+export interface GetResultResponse {
+  resultId?: string;
+  error?: string;
+}
+
 @Injectable()
 export class AnalysisResultService {
   constructor(
@@ -69,5 +74,16 @@ export class AnalysisResultService {
     );
 
     return { resultId: result.resultId };
+  };
+
+  getResultByResultId = async ({
+    resultId,
+  }: {
+    resultId: string;
+  }): Promise<GetResultResponse> => {
+    const result = await this.analysisResultRepository.findOne({
+      where: { resultId },
+    });
+    return { resultId: result?.resultId };
   };
 }

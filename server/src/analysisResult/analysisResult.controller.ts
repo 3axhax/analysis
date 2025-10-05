@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import {
   AnalysisResultService,
+  GetResultResponse,
   SaveResultResponse,
 } from './analysisResult.service';
 
@@ -17,5 +18,22 @@ export class AnalysisResultController {
       return { error: 'No required parameters: age, gender' };
     }
     return this.AnalysisResultService.saveResult({ age, gender, pointData });
+  }
+
+  @Post('/get')
+  async getResult(
+    @Body('resultId') resultId: string,
+  ): Promise<GetResultResponse> {
+    if (!resultId) {
+      return { error: 'No required parameters: resultId' };
+    }
+    const analysisResult = this.AnalysisResultService.getResultByResultId({
+      resultId,
+    });
+    if (analysisResult === null) {
+      return { error: 'No result found' };
+    } else {
+      return await analysisResult;
+    }
   }
 }

@@ -48,6 +48,26 @@ export const sendAnalysisData = createAsyncThunk(
   },
 );
 
+export const getAnalysisResult = createAsyncThunk(
+  "analysisResult/getData",
+  async (resultId: string, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    if (!state.analysisResult.pending && resultId !== "") {
+      try {
+        dispatch(setPending(true));
+        const response = await Request.post("/result/get", {
+          resultId,
+        });
+        dispatch(setPending(false));
+        return response.data;
+      } catch (e) {
+        dispatch(setPending(false));
+        HandlerAxiosError(e);
+      }
+    }
+  },
+);
+
 export const analysisResultSlice = createSlice({
   name: "analysisResult",
   initialState,
@@ -60,7 +80,6 @@ export const analysisResultSlice = createSlice({
           state: WritableDraft<AnalysisResultState>,
           action: PayloadAction<AnalysisResult>,
         ) => {
-          console.log(action.payload);
           state.results[action.payload.resultId] = action.payload;
         },
       )
@@ -72,6 +91,30 @@ export const analysisResultSlice = createSlice({
       )
       .addCase(
         sendAnalysisData.pending,
+        (state: WritableDraft<AnalysisResultState>) => {
+          state.error = "";
+        },
+      )
+      .addCase(
+        getAnalysisResult.fulfilled,
+        (
+          state: WritableDraft<AnalysisResultState>,
+          action: PayloadAction<AnalysisResult>,
+        ) => {
+          console.log("getAnalysisResult.fulfilled", action.payload);
+          if (action?.payload?.resultId) {
+            state.results[action.payload.resultId] = action.payload;
+          }
+        },
+      )
+      .addCase(
+        getAnalysisResult.rejected,
+        (state: WritableDraft<AnalysisResultState>, action) => {
+          state.error = action.error.message ? action.error.message : "";
+        },
+      )
+      .addCase(
+        getAnalysisResult.pending,
         (state: WritableDraft<AnalysisResultState>) => {
           state.error = "";
         },
@@ -91,3 +134,6 @@ export const {
 
 export const SelectAnalysisResultPending = (state: RootState) =>
   state.analysisResult.pending;
+
+export const SelectAnalysisResultData = (state: RootState, resultId: string) =>
+  state.analysisResult.results[resultId];

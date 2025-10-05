@@ -8,4 +8,5 @@ export {
   addPointData,
   removePointData,
   clearAllPointData,
+  SelectAnalysisResultData,
 } from "./model";

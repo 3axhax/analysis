@@ -5,7 +5,9 @@ export {
   setPrepareDataAge,
   resetPrepareData,
   sendAnalysisData,
+  getAnalysisResult,
   addPointData,
   removePointData,
   clearAllPointData,
+  SelectAnalysisResultData,
 } from "./slice";
