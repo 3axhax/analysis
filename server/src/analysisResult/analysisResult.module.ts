@@ -13,6 +13,14 @@ import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
 import { AnalysisPointService } from '../analysisPoint/analysisPoint.service';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 import { AnalysisResultPointDataService } from '../analysisResultPointData/analysisResultPointData.service';
+import { AnalysisResultDescription } from '../analysisResultDescription/analysisResultDescription.model';
+import { AnalysisResultDescriptionService } from '../analysisResultDescription/analysisResultDescription.service';
+import { AnalysisPointMinValueService } from '../analysisPointMinValue/analysisPointMinValue.service';
+import { AnalysisPointMaxValueService } from '../analysisPointMaxValue/analysisPointMaxValue.service';
+import { AnalysisResultDescriptionConditionService } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.service';
+import { AnalysisResultDescriptionCondition } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
+import { AnalysisPointMaxValue } from '../analysisPointMaxValue/analysisPointMaxValue.model';
+import { AnalysisPointMinValue } from '../analysisPointMinValue/analysisPointMinValue.model';
 
 @Module({
   providers: [
@@ -22,6 +30,10 @@ import { AnalysisResultPointDataService } from '../analysisResultPointData/analy
     AnalysisPointService,
     AnalysisPointUnitsService,
     AnalysisResultPointDataService,
+    AnalysisResultDescriptionService,
+    AnalysisResultDescriptionConditionService,
+    AnalysisPointMinValueService,
+    AnalysisPointMaxValueService,
   ],
   controllers: [AnalysisResultController],
   imports: [
@@ -32,6 +44,10 @@ import { AnalysisResultPointDataService } from '../analysisResultPointData/analy
       Age,
       AnalysisPoint,
       AnalysisPointUnits,
+      AnalysisResultDescription,
+      AnalysisResultDescriptionCondition,
+      AnalysisPointMinValue,
+      AnalysisPointMaxValue,
     ]),
   ],
   exports: [AnalysisResultService],

@@ -22,6 +22,10 @@ import { AnalysisPointMinValue } from './analysisPointMinValue/analysisPointMinV
 import { AnalysisPointMinValueModule } from './analysisPointMinValue/analysisPointMinValue.module';
 import { AnalysisPointMaxValue } from './analysisPointMaxValue/analysisPointMaxValue.model';
 import { AnalysisPointMaxValueModule } from './analysisPointMaxValue/analysisPointMaxValue.module';
+import { AnalysisResultDescriptionCondition } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
+import { AnalysisResultDescription } from './analysisResultDescription/analysisResultDescription.model';
+import { AnalysisResultDescriptionModule } from './analysisResultDescription/analysisResultDescription.module';
+import { AnalysisResultDescriptionConditionModule } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.module';
 
 @Module({
   imports: [
@@ -47,6 +51,8 @@ import { AnalysisPointMaxValueModule } from './analysisPointMaxValue/analysisPoi
         Gender,
         AnalysisPointMinValue,
         AnalysisPointMaxValue,
+        AnalysisResultDescription,
+        AnalysisResultDescriptionCondition,
       ],
       autoLoadModels: true,
     }),
@@ -59,6 +65,8 @@ import { AnalysisPointMaxValueModule } from './analysisPointMaxValue/analysisPoi
     GenderModule,
     AnalysisPointMinValueModule,
     AnalysisPointMaxValueModule,
+    AnalysisResultDescriptionModule,
+    AnalysisResultDescriptionConditionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,6 +7,8 @@ import { GenderService } from '../gender/gender.service';
 import { AnalysisPointService } from '../analysisPoint/analysisPoint.service';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 import { AnalysisResultPointDataService } from '../analysisResultPointData/analysisResultPointData.service';
+import { AnalysisResultDescriptionService } from '../analysisResultDescription/analysisResultDescription.service';
+import { AnalysisResultDescription } from '../analysisResultDescription/analysisResultDescription.model';
 
 export interface SaveResultResponse {
   resultId?: string;
@@ -16,6 +18,8 @@ export interface SaveResultResponse {
 export interface GetResultResponse {
   resultId?: string;
   error?: string;
+  result?: AnalysisResult | null;
+  descriptions?: AnalysisResultDescription[];
 }
 
 @Injectable()
@@ -28,6 +32,7 @@ export class AnalysisResultService {
     private analysisPointService: AnalysisPointService,
     private analysisPointUnitsService: AnalysisPointUnitsService,
     private analysisResultPointDataService: AnalysisResultPointDataService,
+    private analysisResultDescriptionService: AnalysisResultDescriptionService,
   ) {}
   saveResult = async ({
     age: ageName,
@@ -83,7 +88,14 @@ export class AnalysisResultService {
   }): Promise<GetResultResponse> => {
     const result = await this.analysisResultRepository.findOne({
       where: { resultId },
+      include: { all: true },
     });
-    return { resultId: result?.resultId };
+    const descriptions = result
+      ? await this.analysisResultDescriptionService.getDescriptionByResult(
+          result,
+        )
+      : [];
+
+    return { resultId: result?.resultId, result, descriptions };
   };
 }

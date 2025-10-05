@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -23,6 +24,14 @@ export class AnalysisResultPointData extends Model<
   AnalysisResultPointData,
   AnalysisResultPointDataAttrs
 > {
+  @Column({
+    type: DataType.INTEGER,
+    unique: true,
+    autoIncrement: true,
+    primaryKey: true,
+  })
+  declare id: number;
+
   @ForeignKey(() => AnalysisResult)
   @Column({
     type: DataType.INTEGER,
@@ -49,4 +58,7 @@ export class AnalysisResultPointData extends Model<
     allowNull: false,
   })
   declare unitId: number;
+
+  @BelongsTo(() => AnalysisResult)
+  analysisResult: AnalysisResult;
 }
