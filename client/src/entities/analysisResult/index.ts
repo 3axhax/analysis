@@ -9,4 +9,5 @@ export {
   removePointData,
   clearAllPointData,
   SelectAnalysisResultData,
+  clearRedirect,
 } from "./model";

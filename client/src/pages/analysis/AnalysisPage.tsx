@@ -4,18 +4,35 @@ import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
 import { AnalysisPointList } from "@widgets/analysisPointList";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
-import { resetPrepareData, sendAnalysisData } from "@entities/analysisResult";
-import { SelectAnalysisResultPending } from "@entities/analysisResult/model/slice.ts";
+import {
+  clearRedirect,
+  resetPrepareData,
+  sendAnalysisData,
+} from "@entities/analysisResult";
+import {
+  SelectAnalysisResultPending,
+  SelectAnalysisResultRedirectTo,
+} from "@entities/analysisResult/model/slice.ts";
+import { useNavigate } from "react-router-dom";
 
 export const AnalysisPage = () => {
   useDocumentTitle("Загрузить анализы");
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const pending = useAppSelector(SelectAnalysisResultPending);
+  const redirectTo = useAppSelector(SelectAnalysisResultRedirectTo);
 
   useEffect(() => {
     dispatch(resetPrepareData());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (redirectTo) {
+      navigate(redirectTo);
+      dispatch(clearRedirect());
+    }
+  }, [dispatch, navigate, redirectTo]);
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

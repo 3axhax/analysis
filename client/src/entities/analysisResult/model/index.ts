@@ -4,10 +4,11 @@ export {
   setPrepareDataGender,
   setPrepareDataAge,
   resetPrepareData,
-  sendAnalysisData,
-  getAnalysisResult,
   addPointData,
   removePointData,
   clearAllPointData,
   SelectAnalysisResultData,
+  clearRedirect,
 } from "./slice";
+
+export { sendAnalysisData, getAnalysisResult } from "./extraReducers";

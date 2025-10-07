@@ -46,4 +46,7 @@ export const AnalysisResultReducers = {
   clearAllPointData: (state: WritableDraft<AnalysisResultState>) => {
     state.preparedData.pointData = {};
   },
+  clearRedirect: (state: WritableDraft<AnalysisResultState>) => {
+    state.redirectTo = "";
+  },
 };

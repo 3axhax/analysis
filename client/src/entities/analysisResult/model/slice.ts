@@ -1,7 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@shared/store";
-import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
-import Request from "@shared/transport/RestAPI";
 import {
   AnalysisResult,
   AnalysisResultState,
@@ -9,6 +7,10 @@ import {
 } from "@entities/analysisResult/model/types.ts";
 import { AnalysisResultReducers } from "@entities/analysisResult/model/reducers.ts";
 import type { WritableDraft } from "immer";
+import {
+  getAnalysisResult,
+  sendAnalysisData,
+} from "@entities/analysisResult/model/extraReducers.ts";
 
 export const initialPrepareData: PreparedData = {
   gender: "m",
@@ -23,51 +25,6 @@ const initialState: AnalysisResultState = {
   results: {},
 };
 
-export const sendAnalysisData = createAsyncThunk(
-  "analysisResult/sendData",
-  async (_, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!state.analysisResult.pending) {
-      try {
-        dispatch(setPending(true));
-        const gender = state.analysisResult.preparedData.gender;
-        const age = state.analysisResult.preparedData.age;
-        const pointData = state.analysisResult.preparedData.pointData;
-        const response = await Request.post("/result/save", {
-          gender,
-          age,
-          pointData: Object.values(pointData),
-        });
-        dispatch(setPending(false));
-        return response.data;
-      } catch (e) {
-        dispatch(setPending(false));
-        HandlerAxiosError(e);
-      }
-    }
-  },
-);
-
-export const getAnalysisResult = createAsyncThunk(
-  "analysisResult/getData",
-  async (resultId: string, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!state.analysisResult.pending && resultId !== "") {
-      try {
-        dispatch(setPending(true));
-        const response = await Request.post("/result/get", {
-          resultId,
-        });
-        dispatch(setPending(false));
-        return response.data;
-      } catch (e) {
-        dispatch(setPending(false));
-        HandlerAxiosError(e);
-      }
-    }
-  },
-);
-
 export const analysisResultSlice = createSlice({
   name: "analysisResult",
   initialState,
@@ -80,7 +37,11 @@ export const analysisResultSlice = createSlice({
           state: WritableDraft<AnalysisResultState>,
           action: PayloadAction<AnalysisResult>,
         ) => {
+          console.log(action.payload);
           state.results[action.payload.resultId] = action.payload;
+          if (action.payload.resultId) {
+            state.redirectTo = `/result/${action.payload.resultId}`;
+          }
         },
       )
       .addCase(
@@ -130,10 +91,14 @@ export const {
   removePointData,
   clearAllPointData,
   setPending,
+  clearRedirect,
 } = analysisResultSlice.actions;
 
 export const SelectAnalysisResultPending = (state: RootState) =>
   state.analysisResult.pending;
+
+export const SelectAnalysisResultRedirectTo = (state: RootState) =>
+  state.analysisResult.redirectTo;
 
 export const SelectAnalysisResultData = (state: RootState, resultId: string) =>
   state.analysisResult.results[resultId];

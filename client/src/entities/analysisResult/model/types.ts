@@ -25,4 +25,5 @@ export interface AnalysisResultState {
   results: {
     [key: string]: AnalysisResult;
   };
+  redirectTo?: string;
 }
