@@ -57,6 +57,9 @@ export class AnalysisResultDescriptionCondition extends Model<
   @BelongsTo(() => AnalysisResultDescription)
   description: AnalysisResultDescription;
 
+  @BelongsTo(() => AnalysisPoint)
+  analysisPoint: AnalysisPoint;
+
   @AfterSync
   static async addInitialData() {
     const count = await AnalysisResultDescriptionCondition.count();

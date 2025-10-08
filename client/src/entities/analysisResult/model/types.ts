@@ -6,8 +6,29 @@ export interface PointData {
   units: string;
 }
 
+export enum StatusValue {
+  LOW = "0",
+  HIGH = "1",
+}
+
+export interface AnalysisResultDescriptionCondition {
+  id: number;
+  analysisPoint: {
+    id: number;
+    name: string;
+  };
+  status: StatusValue;
+}
+
+export interface ResultDescription {
+  id: number;
+  description_ru: string;
+  analysisResultDescriptionConditions: AnalysisResultDescriptionCondition[];
+}
+
 export interface AnalysisResult {
   resultId: string;
+  descriptions: ResultDescription[];
 }
 
 export interface PreparedData {

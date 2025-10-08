@@ -8,6 +8,7 @@ export {
   removePointData,
   clearAllPointData,
   SelectAnalysisResultData,
+  SelectAnalysisResultDescriptionData,
   clearRedirect,
 } from "./slice";
 

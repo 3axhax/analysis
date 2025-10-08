@@ -8,7 +8,7 @@ import { setPrepareDataAge } from "@entities/analysisResult";
 export const AgeSelector = () => {
   const ageOptions = useAppSelector(selectAgesListForSelect);
   useAgesLoad();
-  const { t } = useTranslation();
+  const { t } = useTranslation("entities");
   const dispatch = useAppDispatch();
 
   const [age, setAge] = useState<string>("");

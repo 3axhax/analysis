@@ -18,7 +18,7 @@ export const AnalysisPointSelectedItem = ({
   pointId,
 }: AnalysisPointSelectedItemProps) => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
+  const { t } = useTranslation("entities");
   const analysisPoint = useAppSelector((state) =>
     selectAnalysisPointById(state, pointId),
   );

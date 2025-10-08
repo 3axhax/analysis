@@ -37,8 +37,6 @@ export const analysisResultSlice = createSlice({
           state: WritableDraft<AnalysisResultState>,
           action: PayloadAction<AnalysisResult>,
         ) => {
-          console.log(action.payload);
-          state.results[action.payload.resultId] = action.payload;
           if (action.payload.resultId) {
             state.redirectTo = `/result/${action.payload.resultId}`;
           }
@@ -62,7 +60,6 @@ export const analysisResultSlice = createSlice({
           state: WritableDraft<AnalysisResultState>,
           action: PayloadAction<AnalysisResult>,
         ) => {
-          console.log("getAnalysisResult.fulfilled", action.payload);
           if (action?.payload?.resultId) {
             state.results[action.payload.resultId] = action.payload;
           }
@@ -102,3 +99,8 @@ export const SelectAnalysisResultRedirectTo = (state: RootState) =>
 
 export const SelectAnalysisResultData = (state: RootState, resultId: string) =>
   state.analysisResult.results[resultId];
+
+export const SelectAnalysisResultDescriptionData = (
+  state: RootState,
+  resultId: string,
+) => state.analysisResult.results[resultId].descriptions;

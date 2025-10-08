@@ -15,7 +15,7 @@ export const AnalysisPointList = () => {
   const dispatch = useAppDispatch();
   useAnalysisTypeLoad();
   useAnalysisPointLoad();
-  const { t } = useTranslation();
+  const { t } = useTranslation("entities");
   const analysisTypeOptions = useAppSelector(selectAnalysisTypeListForSelect);
 
   const [analysisType, setAnalysisType] = useState<number>(0);

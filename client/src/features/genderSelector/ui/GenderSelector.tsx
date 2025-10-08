@@ -9,7 +9,7 @@ import { setPrepareDataGender } from "@entities/analysisResult";
 export const GenderSelector = () => {
   useGenderLoad();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
+  const { t } = useTranslation("entities");
   const [gender, setGender] = useState<GenderType>("m");
 
   const genderOptions = useAppSelector(selectGenderListForSelect);

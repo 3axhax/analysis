@@ -6,6 +6,8 @@ import { AnalysisPointMaxValueService } from '../analysisPointMaxValue/analysisP
 import { AnalysisResult } from '../analysisResult/analysisResult.model';
 import { StatusValue } from '../analysisResultDescriptionCondition/status-value.enum';
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
+import { AnalysisResultDescriptionCondition } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
+import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
 
 type DescriptionConditions = {
   [key: number]: StatusValue;
@@ -68,7 +70,8 @@ export class AnalysisResultDescriptionService {
   getAllDescription = async () => {
     return await this.analysisResultDescriptionRepository.findAll({
       include: {
-        all: true,
+        model: AnalysisResultDescriptionCondition,
+        include: [AnalysisPoint],
       },
     });
   };

@@ -2,7 +2,7 @@ import { InitOptions } from "i18next";
 export const i18nConfig: InitOptions = {
   supportedLngs: ["ru"],
   fallbackLng: "ru",
-  defaultNS: "entities",
+  defaultNS: "common",
   interpolation: {
     escapeValue: false,
   },

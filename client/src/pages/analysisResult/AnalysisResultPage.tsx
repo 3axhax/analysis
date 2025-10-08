@@ -3,6 +3,7 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 import { useParams } from "react-router-dom";
 import { SelectAnalysisResultData } from "@entities/analysisResult";
 import { useAnalysisResultsLoad } from "@entities/analysisResult/analysisResults.hooks.ts";
+import { AnalysisDescriptionList } from "@widgets/analysisDescriptionList";
 
 export const AnalysisResultPage = () => {
   const { resultId } = useParams();
@@ -27,9 +28,7 @@ export const AnalysisResultPage = () => {
       {analysisResult ? (
         <div className="mx-auto text-left">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              {analysisResult.resultId}
-            </h2>
+            <AnalysisDescriptionList resultId={analysisResult.resultId} />
           </div>
         </div>
       ) : null}
