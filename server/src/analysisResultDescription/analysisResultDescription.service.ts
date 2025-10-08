@@ -35,7 +35,7 @@ export class AnalysisResultDescriptionService {
               genderId: result.genderId,
             })
           ) {
-            pointStatus[data.id] = StatusValue.LOW;
+            pointStatus[data.pointId] = StatusValue.LOW;
           } else if (
             await this.analysisPointMaxValueService.checkMaxValue({
               pointData: data,
@@ -43,7 +43,7 @@ export class AnalysisResultDescriptionService {
               genderId: result.genderId,
             })
           ) {
-            pointStatus[data.id] = StatusValue.HIGH;
+            pointStatus[data.pointId] = StatusValue.HIGH;
           }
         },
       ),
