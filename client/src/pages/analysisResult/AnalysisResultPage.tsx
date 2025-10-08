@@ -16,8 +16,6 @@ export const AnalysisResultPage = () => {
     SelectAnalysisResultData(state, resultId || ""),
   );
 
-  console.log(analysisResult);
-
   return (
     <div className="app">
       <div className="mb-8">

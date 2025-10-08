@@ -10,7 +10,6 @@ export const AnalysisDescriptionList = ({ resultId }: { resultId: string }) => {
   const descriptionList = useAppSelector((state) =>
     SelectAnalysisResultDescriptionData(state, resultId),
   );
-  console.log(descriptionList);
 
   return (
     <table className="min-w-full border border-gray-300">
