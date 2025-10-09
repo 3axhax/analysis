@@ -40,11 +40,15 @@ export const AnalysisResultPage = () => {
                 {tEntities(`ages.${analysisResult.result.Age.name}`)}
               </div>
             </div>
+            {analysisResult.descriptions.length > 0 &&
             <AnalysisDescriptionList
               resultId={analysisResult.resultId}
               className={"mb-4"}
             />
+            }
+            {analysisResult.result.analysisResultPointData.length > 0 &&
             <AnalysisPointDataList resultId={analysisResult.resultId} />
+            }
           </div>
         </div>
       ) : null}
