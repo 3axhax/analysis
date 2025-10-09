@@ -1,12 +1,13 @@
 import { GenderType } from "@entities/gender";
 
-export interface PointData {
+interface PreparePointData {
   name: string;
   value: number;
   units: string;
 }
 
 export enum StatusValue {
+  NORMAL = "-1",
   LOW = "0",
   HIGH = "1",
 }
@@ -26,16 +27,33 @@ export interface ResultDescription {
   analysisResultDescriptionConditions: AnalysisResultDescriptionCondition[];
 }
 
+export interface PointData {
+  id: number;
+  point: { id: number; name: string };
+  pointUnit: { id: number; name: string };
+  value: number;
+  minValue: number;
+  maxValue: number;
+  pointDataStatus: StatusValue;
+}
+
+interface Result {
+  Age: { id: number; name: string };
+  Gender: { id: number; name: string };
+  analysisResultPointData: PointData[];
+}
+
 export interface AnalysisResult {
   resultId: string;
   descriptions: ResultDescription[];
+  result: Result;
 }
 
 export interface PreparedData {
   gender: GenderType;
   age: string;
   pointData: {
-    [key: string]: PointData;
+    [key: string]: PreparePointData;
   };
 }
 

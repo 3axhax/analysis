@@ -9,6 +9,14 @@ import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUn
 import { AnalysisResultPointDataService } from '../analysisResultPointData/analysisResultPointData.service';
 import { AnalysisResultDescriptionService } from '../analysisResultDescription/analysisResultDescription.service';
 import { AnalysisResultDescription } from '../analysisResultDescription/analysisResultDescription.model';
+import { Age } from '../ages/ages.model';
+import { Gender } from '../gender/gender.model';
+import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
+import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
+import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
+import { AnalysisPointMinValueService } from '../analysisPointMinValue/analysisPointMinValue.service';
+import { AnalysisPointMaxValueService } from '../analysisPointMaxValue/analysisPointMaxValue.service';
+import { StatusValue } from '../analysisResultDescriptionCondition/status-value.enum';
 
 export interface SaveResultResponse {
   resultId?: string;
@@ -33,6 +41,8 @@ export class AnalysisResultService {
     private analysisPointUnitsService: AnalysisPointUnitsService,
     private analysisResultPointDataService: AnalysisResultPointDataService,
     private analysisResultDescriptionService: AnalysisResultDescriptionService,
+    private analysisPointMinValueService: AnalysisPointMinValueService,
+    private analysisPointMaxValueService: AnalysisPointMaxValueService,
   ) {}
   saveResult = async ({
     age: ageName,
@@ -88,14 +98,49 @@ export class AnalysisResultService {
   }): Promise<GetResultResponse> => {
     const result = await this.analysisResultRepository.findOne({
       where: { resultId },
-      include: { all: true },
+      include: [
+        {
+          model: AnalysisResultPointData,
+          include: [{ model: AnalysisPoint }, { model: AnalysisPointUnits }],
+        },
+        { model: Age },
+        { model: Gender },
+      ],
     });
+    if (!result) {
+      return { resultId, result: null, descriptions: [] };
+    }
+    const plainResult = result.get({ plain: true });
+    plainResult.analysisResultPointData = await Promise.all(
+      plainResult.analysisResultPointData.map(async (pointData) => {
+        pointData.minValue =
+          await this.analysisPointMinValueService.getMinValueByPointGenderAge({
+            pointId: pointData.pointId,
+            ageId: plainResult.ageId,
+            genderId: plainResult.genderId,
+          });
+        pointData.maxValue =
+          await this.analysisPointMaxValueService.getMaxValueByPointGenderAge({
+            pointId: pointData.pointId,
+            ageId: plainResult.ageId,
+            genderId: plainResult.genderId,
+          });
+        pointData.pointDataStatus =
+          pointData.value > pointData.maxValue
+            ? StatusValue.HIGH
+            : pointData.value < pointData.minValue
+              ? StatusValue.LOW
+              : StatusValue.NORMAL;
+        return pointData;
+      }),
+    );
+
     const descriptions = result
       ? await this.analysisResultDescriptionService.getDescriptionByResult(
           result,
         )
       : [];
 
-    return { resultId: result?.resultId, result, descriptions };
+    return { resultId: result?.resultId, result: plainResult, descriptions };
   };
 }

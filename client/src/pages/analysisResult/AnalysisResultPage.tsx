@@ -4,9 +4,13 @@ import { useParams } from "react-router-dom";
 import { SelectAnalysisResultData } from "@entities/analysisResult";
 import { useAnalysisResultsLoad } from "@entities/analysisResult/analysisResults.hooks.ts";
 import { AnalysisDescriptionList } from "@widgets/analysisDescriptionList";
+import { AnalysisPointDataList } from "@widgets/analysisPointdataList";
+import { useTranslation } from "react-i18next";
 
 export const AnalysisResultPage = () => {
   const { resultId } = useParams();
+  const { t } = useTranslation();
+  const { t: tEntities } = useTranslation("entities");
 
   const title = `Результат ${resultId}`;
   useDocumentTitle(title);
@@ -26,7 +30,21 @@ export const AnalysisResultPage = () => {
       {analysisResult ? (
         <div className="mx-auto text-left">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
-            <AnalysisDescriptionList resultId={analysisResult.resultId} />
+            <div className={"flex gap-3 mb-2 border-b-1 border-gray-300"}>
+              <div>
+                {t("gender")}:{" "}
+                {tEntities(`gender.${analysisResult.result.Gender.name}`)}
+              </div>
+              <div>
+                {t("age")}:{" "}
+                {tEntities(`ages.${analysisResult.result.Age.name}`)}
+              </div>
+            </div>
+            <AnalysisDescriptionList
+              resultId={analysisResult.resultId}
+              className={"mb-4"}
+            />
+            <AnalysisPointDataList resultId={analysisResult.resultId} />
           </div>
         </div>
       ) : null}

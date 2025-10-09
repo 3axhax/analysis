@@ -33,4 +33,20 @@ export class AnalysisPointMaxValueService {
     });
     return !!existMax;
   };
+
+  getMaxValueByPointGenderAge = async ({
+    pointId,
+    ageId,
+    genderId,
+  }: {
+    pointId: number;
+    ageId: number;
+    genderId: number;
+  }): Promise<number> => {
+    const foundValue = await this.analysisPointMaxValueRepository.findOne({
+      where: { pointId, ageId, genderId },
+    });
+
+    return foundValue ? foundValue.value : 0;
+  };
 }

@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -50,4 +51,10 @@ export class AnalysisResult extends Model<AnalysisResult, AnalysisResultAttrs> {
 
   @HasMany(() => AnalysisResultPointData)
   analysisResultPointData: AnalysisResultPointData[];
+
+  @BelongsTo(() => Age)
+  Age: Age;
+
+  @BelongsTo(() => Gender)
+  Gender: Gender;
 }

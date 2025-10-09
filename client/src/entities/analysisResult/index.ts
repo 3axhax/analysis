@@ -12,3 +12,4 @@ export {
   SelectAnalysisResultDescriptionData,
   clearRedirect,
 } from "./model";
+export type { PointData, ResultDescription } from "./model";

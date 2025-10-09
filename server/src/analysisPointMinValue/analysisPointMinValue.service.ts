@@ -34,4 +34,20 @@ export class AnalysisPointMinValueService {
 
     return !!existMin;
   };
+
+  getMinValueByPointGenderAge = async ({
+    pointId,
+    ageId,
+    genderId,
+  }: {
+    pointId: number;
+    ageId: number;
+    genderId: number;
+  }): Promise<number> => {
+    const foundValue = await this.analysisPointMinValueRepository.findOne({
+      where: { pointId, ageId, genderId },
+    });
+
+    return foundValue ? foundValue.value : 0;
+  };
 }

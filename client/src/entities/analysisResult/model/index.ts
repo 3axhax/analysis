@@ -13,3 +13,5 @@ export {
 } from "./slice";
 
 export { sendAnalysisData, getAnalysisResult } from "./extraReducers";
+
+export type { PointData, ResultDescription } from "./types.ts";

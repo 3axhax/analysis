@@ -104,3 +104,8 @@ export const SelectAnalysisResultDescriptionData = (
   state: RootState,
   resultId: string,
 ) => state.analysisResult.results[resultId].descriptions;
+
+export const SelectAnalysisResultPointData = (
+  state: RootState,
+  resultId: string,
+) => state.analysisResult.results[resultId].result.analysisResultPointData;

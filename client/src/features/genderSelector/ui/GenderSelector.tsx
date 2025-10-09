@@ -9,7 +9,9 @@ import { setPrepareDataGender } from "@entities/analysisResult";
 export const GenderSelector = () => {
   useGenderLoad();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation("entities");
+  const { t } = useTranslation("common");
+
+  const { t: tEntities } = useTranslation("entities");
   const [gender, setGender] = useState<GenderType>("m");
 
   const genderOptions = useAppSelector(selectGenderListForSelect);
@@ -21,11 +23,11 @@ export const GenderSelector = () => {
 
   return (
     <RadioGroup<GenderType>
-      label="Пол"
+      label={t("gender")}
       name="gender"
       options={genderOptions.map((item) => ({
         ...item,
-        label: t(`gender.${item.label}`),
+        label: tEntities(`gender.${item.label}`),
       }))}
       value={gender}
       onChange={(value) => handlerOnChange(value)}

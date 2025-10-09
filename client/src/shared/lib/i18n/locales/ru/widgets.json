@@ -2,5 +2,10 @@
   "analysisDescriptionList": {
     "description": "Описание",
     "reasons": "Причины"
+  },
+  "analysisPointDataList": {
+    "name": "Наименование",
+    "value": "Значение",
+    "interval": "Диапазон"
   }
 }
