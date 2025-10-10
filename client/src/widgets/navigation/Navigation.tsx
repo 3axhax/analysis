@@ -3,12 +3,24 @@ import { Link, useLocation } from "react-router-dom";
 export const Navigation = () => {
   const location = useLocation();
 
-  const navItems = [
+  const isAdmin = location.pathname.startsWith("/admin");
+
+  const mainNavItems = [
     { path: "/", label: "Главная" },
     { path: "/analysis", label: "Загрузить анализы" },
+    { path: "/admin", label: "Админ панель" },
     { path: "/about", label: "О проекте" },
     { path: "/contacts", label: "Контакты" },
   ];
+
+  const adminNavItems = [
+    { path: "/", label: "Главная" },
+    { path: "/admin/analysis", label: "Управление анализами" },
+    { path: "/admin/users", label: "Пользователи" },
+    { path: "/admin/settings", label: "Настройки" },
+  ];
+
+  const navItems = isAdmin ? adminNavItems : mainNavItems;
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 mb-8">
