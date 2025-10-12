@@ -1,7 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAppSelector } from "@shared/store/hooks.ts";
+import { selectIsUserAuthorized, selectUserName } from "@entities/user";
 
 export const Navigation = () => {
   const location = useLocation();
+
+  const isUserAuthorized = useAppSelector(selectIsUserAuthorized);
+  console.log("isUserAuthorized", isUserAuthorized);
+  const userName = useAppSelector(selectUserName);
 
   const isAdmin = location.pathname.startsWith("/admin");
 
@@ -12,6 +18,12 @@ export const Navigation = () => {
     { path: "/about", label: "О проекте" },
     { path: "/contacts", label: "Контакты" },
   ];
+
+  if (!isUserAuthorized) {
+    mainNavItems.push({ path: "/login", label: "Войти" });
+  } else {
+    mainNavItems.push({ path: "/logout", label: `${userName} (Выйти)` });
+  }
 
   const adminNavItems = [
     { path: "/", label: "Главная" },

@@ -14,4 +14,8 @@ export {
 
 export { sendAnalysisData, getAnalysisResult } from "./extraReducers";
 
-export type { PointData, ResultDescription } from "./types.ts";
+export type {
+  PointData,
+  ResultDescription,
+  PreparePointData,
+} from "./types.ts";

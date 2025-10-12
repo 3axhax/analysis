@@ -26,6 +26,14 @@ import { AnalysisResultDescriptionCondition } from './analysisResultDescriptionC
 import { AnalysisResultDescription } from './analysisResultDescription/analysisResultDescription.model';
 import { AnalysisResultDescriptionModule } from './analysisResultDescription/analysisResultDescription.module';
 import { AnalysisResultDescriptionConditionModule } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.module';
+import { UsersModule } from './users/users.module';
+import { RolesModule } from './roles/roles.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersSessionsModule } from './users/usersSessions/usersSessions.module';
+import { User } from './users/users.model';
+import { Role } from './roles/roles.model';
+import { UserRole } from './roles/users-roles.model';
+import { UsersSessions } from './users/usersSessions/usersSessions.model';
 
 @Module({
   imports: [
@@ -40,6 +48,10 @@ import { AnalysisResultDescriptionConditionModule } from './analysisResultDescri
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       models: [
+        User,
+        Role,
+        UserRole,
+        UsersSessions,
         Age,
         AnalysisPoint,
         AnalysisType,
@@ -56,6 +68,10 @@ import { AnalysisResultDescriptionConditionModule } from './analysisResultDescri
       ],
       autoLoadModels: true,
     }),
+    UsersModule,
+    RolesModule,
+    AuthModule,
+    UsersSessionsModule,
     AgesModule,
     AnalysisPointModule,
     AnalysisPointUnits,

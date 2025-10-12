@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from "axios";
+import { USER_LS_KEY } from "@entities/user/model/constants.ts";
 
 type method = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -7,8 +8,17 @@ class RestAPI {
   target: string = "";
   baseUrl: string = import.meta.env.VITE_BASE_API_URL;
   data: object = {};
+  token: string = "";
 
   constructor() {}
+
+  _checkToken = () => {
+    const userLS = localStorage.getItem(USER_LS_KEY);
+    if (userLS) {
+      this.token =
+        userLS && JSON.parse(userLS) ? JSON.parse(userLS).token : null;
+    }
+  };
 
   _setTarget = (url: string = "") => {
     if (url) {
@@ -17,11 +27,23 @@ class RestAPI {
   };
 
   _send = (): Promise<AxiosResponse> => {
-    return axios({
+    this._checkToken();
+    const data: {
+      url: string;
+      method: string;
+      data: object;
+      headers?: object;
+    } = {
       url: this.baseUrl + this.target,
       method: this.method,
       data: this.data,
-    });
+    };
+    if (this.token) {
+      data.headers = {
+        Authorization: `Bearer ${this.token}`,
+      };
+    }
+    return axios(data);
   };
 
   get = (url: string = ""): Promise<AxiosResponse> => {

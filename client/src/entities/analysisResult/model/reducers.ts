@@ -1,7 +1,7 @@
 import type { WritableDraft } from "immer";
 import {
   AnalysisResultState,
-  PointData,
+  PreparePointData,
 } from "@entities/analysisResult/model/types.ts";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { GenderType } from "@entities/gender";
@@ -31,7 +31,7 @@ export const AnalysisResultReducers = {
   },
   addPointData: (
     state: WritableDraft<AnalysisResultState>,
-    action: PayloadAction<PointData>,
+    action: PayloadAction<PreparePointData>,
   ) => {
     state.preparedData.pointData[action.payload.name] = action.payload;
   },

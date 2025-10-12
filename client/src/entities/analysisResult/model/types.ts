@@ -1,6 +1,6 @@
 import { GenderType } from "@entities/gender";
 
-interface PreparePointData {
+export interface PreparePointData {
   name: string;
   value: number;
   units: string;
