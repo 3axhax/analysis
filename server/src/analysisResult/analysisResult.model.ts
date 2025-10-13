@@ -10,11 +10,13 @@ import {
 import { Age } from '../ages/ages.model';
 import { Gender } from '../gender/gender.model';
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
+import { User } from '../users/users.model';
 
 export interface AnalysisResultAttrs {
   resultId: string;
   ageId: number;
   genderId: number;
+  userId?: number | null;
 }
 @Table({
   tableName: 'analysisResult',
@@ -48,6 +50,13 @@ export class AnalysisResult extends Model<AnalysisResult, AnalysisResultAttrs> {
     allowNull: false,
   })
   declare genderId: number;
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  declare userId: number;
 
   @HasMany(() => AnalysisResultPointData)
   analysisResultPointData: AnalysisResultPointData[];

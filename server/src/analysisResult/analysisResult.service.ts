@@ -17,6 +17,7 @@ import { AnalysisResultPointData } from '../analysisResultPointData/analysisResu
 import { AnalysisPointMinValueService } from '../analysisPointMinValue/analysisPointMinValue.service';
 import { AnalysisPointMaxValueService } from '../analysisPointMaxValue/analysisPointMaxValue.service';
 import { StatusValue } from '../analysisResultDescriptionCondition/status-value.enum';
+import { User } from '../users/users.model';
 
 export interface SaveResultResponse {
   resultId?: string;
@@ -48,10 +49,12 @@ export class AnalysisResultService {
     age: ageName,
     gender: genderName,
     pointData,
+    user,
   }: {
     age: string;
     gender: string;
     pointData: { name: string; value: number; units: string }[];
+    user: User | undefined;
   }): Promise<SaveResultResponse> => {
     const resultId = crypto.randomBytes(20).toString('hex');
     const age = await this.agesService.getAgeByName(ageName);
@@ -62,10 +65,12 @@ export class AnalysisResultService {
     if (!gender) {
       return { error: 'Invalid gender' };
     }
+
     const result: AnalysisResult = await this.analysisResultRepository.create({
       resultId,
       ageId: age.id as number,
       genderId: gender.id as number,
+      userId: user ? user.id : null,
     });
 
     await Promise.all(

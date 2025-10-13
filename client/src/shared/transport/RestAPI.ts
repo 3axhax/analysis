@@ -17,6 +17,8 @@ class RestAPI {
     if (userLS) {
       this.token =
         userLS && JSON.parse(userLS) ? JSON.parse(userLS).token : null;
+    } else {
+      this.token = "";
     }
   };
 

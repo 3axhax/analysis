@@ -4,6 +4,8 @@ import {
   GetResultResponse,
   SaveResultResponse,
 } from './analysisResult.service';
+import { User } from '../decorators/user.decorator';
+import { User as UserModel } from '../users/users.model';
 
 @Controller('result')
 export class AnalysisResultController {
@@ -13,11 +15,17 @@ export class AnalysisResultController {
     @Body('age') age: string,
     @Body('gender') gender: string,
     @Body('pointData') pointData: [],
+    @User() user: UserModel | undefined,
   ): Promise<SaveResultResponse> {
     if (!age || !gender) {
       return { error: 'No required parameters: age, gender' };
     }
-    return this.AnalysisResultService.saveResult({ age, gender, pointData });
+    return this.AnalysisResultService.saveResult({
+      age,
+      gender,
+      pointData,
+      user,
+    });
   }
 
   @Post('/get')

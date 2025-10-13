@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './users.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RolesService } from '../roles/roles.service';
+import { UsersSessionsService } from './usersSessions/usersSessions.service';
 
 @Injectable()
 export class UsersService {
@@ -10,6 +11,7 @@ export class UsersService {
     @InjectModel(User)
     private userRepository: typeof User,
     private roleService: RolesService,
+    private userSessionsService: UsersSessionsService,
   ) {}
 
   async createUser(dto: CreateUserDto) {
@@ -32,5 +34,13 @@ export class UsersService {
       where: { id },
       include: { all: true },
     });
+  }
+
+  async getUserByToken(token: string) {
+    const session = await this.userSessionsService.checkUser({ token });
+    if (session) {
+      return await this.getUserById(session.userId);
+    }
+    return null;
   }
 }

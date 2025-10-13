@@ -34,6 +34,8 @@ import { User } from './users/users.model';
 import { Role } from './roles/roles.model';
 import { UserRole } from './roles/users-roles.model';
 import { UsersSessions } from './users/usersSessions/usersSessions.model';
+import { AuthGuard } from './auth/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -85,6 +87,12 @@ import { UsersSessions } from './users/usersSessions/usersSessions.model';
     AnalysisResultDescriptionConditionModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
