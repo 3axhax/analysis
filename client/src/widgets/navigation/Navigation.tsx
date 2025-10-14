@@ -35,7 +35,7 @@ export const Navigation = () => {
   const navItems = isAdmin ? adminNavItems : mainNavItems;
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 mb-8">
+    <nav className="navigation">
       <ul className="flex space-x-6 justify-center">
         {navItems.map((item) => (
           <li key={item.path}>
