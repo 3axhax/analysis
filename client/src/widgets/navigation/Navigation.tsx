@@ -1,6 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectIsUserAuthorized, selectUserName } from "@entities/user";
+import { UserIcon } from "@heroicons/react/24/outline";
+import {JSX} from "react";
+
+interface NavItem {
+  path: string;
+  label: string;
+  iconLink?: JSX.Element
+}
 
 export const Navigation = () => {
   const location = useLocation();
@@ -11,7 +19,7 @@ export const Navigation = () => {
 
   const isAdmin = location.pathname.startsWith("/admin");
 
-  const mainNavItems = [
+  const mainNavItems: NavItem[] = [
     { path: "/", label: "Главная" },
     { path: "/analysis", label: "Загрузить анализы" },
     { path: "/admin", label: "Админ панель" },
@@ -20,12 +28,13 @@ export const Navigation = () => {
   ];
 
   if (!isUserAuthorized) {
-    mainNavItems.push({ path: "/login", label: "Войти" });
+    mainNavItems.push({ path: "/login", label: "Войти", iconLink:
+    <UserIcon className="inline-flex h-5 w-5 mr-2 text-gray-500" />});
   } else {
     mainNavItems.push({ path: "/logout", label: `${userName} (Выйти)` });
   }
 
-  const adminNavItems = [
+  const adminNavItems: NavItem[] = [
     { path: "/", label: "Главная" },
     { path: "/admin/analysis", label: "Управление анализами" },
     { path: "/admin/users", label: "Пользователи" },
@@ -41,12 +50,13 @@ export const Navigation = () => {
           <li key={item.path}>
             <Link
               to={item.path}
-              className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+              className={`flex items-center flex-gap-2 px-4 py-2 rounded-lg transition-colors duration-200${
                 location.pathname === item.path
-                  ? "bg-blue-600 text-white"
+                  ? "bg-green-900 text-white"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
+              {item.iconLink && item.iconLink}
               {item.label}
             </Link>
           </li>
