@@ -40,10 +40,10 @@ export const AnalysisPage = () => {
   };
 
   return (
-    <div className="app">
+    <div className="app w-full">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Загрузите свои данные
+          Загрузите свои данные!
         </h1>
       </div>
 
