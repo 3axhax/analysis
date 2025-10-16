@@ -6,7 +6,7 @@ export const AnalysisPointDataListItem = ({
 }: {
   pointData: PointData;
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const { t: tEntities } = useTranslation("entities");
 
   return (

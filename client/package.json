@@ -17,6 +17,7 @@
     "axios": "^1.11.0",
     "classnames": "^2.5.1",
     "i18next": "^25.5.2",
+    "i18next-http-backend": "^3.0.2",
     "prettier": "^3.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

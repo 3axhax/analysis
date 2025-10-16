@@ -1,4 +1,5 @@
 import { InitOptions } from "i18next";
+
 export const i18nConfig: InitOptions = {
   supportedLngs: ["ru"],
   fallbackLng: "ru",
@@ -8,4 +9,15 @@ export const i18nConfig: InitOptions = {
   },
   debug: false,
   load: "languageOnly",
+
+  backend: {
+    loadPath: `${import.meta.env.VITE_BASE_API_URL}/i18n/{{lng}}/{{ns}}`,
+    crossDomain: true,
+    withCredentials: true,
+    requestOptions: {
+      cache: "no-cache",
+    },
+  },
+
+  partialBundledLanguages: true,
 };

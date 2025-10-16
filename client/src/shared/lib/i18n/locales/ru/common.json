@@ -1,9 +1,0 @@
-{
-  "analysisDescriptionConditionStatus": {
-    "0": "Пониженный",
-    "1": "Повышенный",
-    "-1": "Норма"
-  },
-  "gender": "Пол",
-  "age": "Возраст"
-}

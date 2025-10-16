@@ -6,7 +6,6 @@ export const Navigation = () => {
   const location = useLocation();
 
   const isUserAuthorized = useAppSelector(selectIsUserAuthorized);
-  console.log("isUserAuthorized", isUserAuthorized);
   const userName = useAppSelector(selectUserName);
 
   const isAdmin = location.pathname.startsWith("/admin");

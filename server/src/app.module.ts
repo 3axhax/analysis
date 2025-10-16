@@ -36,6 +36,8 @@ import { UserRole } from './roles/users-roles.model';
 import { UsersSessions } from './users/usersSessions/usersSessions.model';
 import { AuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { TranslationModule } from './translation/translation.module';
+import { Translation } from './translation/translation.model';
 
 @Module({
   imports: [
@@ -50,6 +52,7 @@ import { APP_GUARD } from '@nestjs/core';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       models: [
+        Translation,
         User,
         Role,
         UserRole,
@@ -70,6 +73,7 @@ import { APP_GUARD } from '@nestjs/core';
       ],
       autoLoadModels: true,
     }),
+    TranslationModule,
     UsersModule,
     RolesModule,
     AuthModule,
