@@ -8,18 +8,18 @@ export const MainPage = () => {
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. NullamΩ
           pharetra massa ipsum, vitae interdum turpis commodo ac. NuncÏ
-          ullamcorper sem nec lectus viverra, sit amet ultricies risus faucibus.Ï
-          Donec dui urna, commodo ullamcorper enim vitae, commodo gravida ex.
-          Sed tempus mattis arcu at faucibus. Ut vitae mi ut magna ullamcorper
-          viverra. In laoreet justo a luctus ullamcorper. Mauris gravida leo ac
-          fringilla bibendum. Nulla accumsan sem vel enim faucibus vestibulum.
-          Morbi auctor nisl tellus, ut dapibus sem congue at. Fusce eget mi id
-          metus eleifend bibendum. Vestibulum aliquet cursus ex, sit amet
-          condimentum augue sollicitudin a. Duis vehicula urna orci, non
-          consequat sem semper et. Curabitur ac sapien et libero interdum
-          placerat. Suspendisse leo nibh, tincidunt a tellus ut, efficitur
-          fermentum eros. Aliquam ultrices gravida massa, ut porta urna dapibus
-          a. Aliquam a malesuada tellus.
+          ullamcorper sem nec lectus viverra, sit amet ultricies risus
+          faucibus.Ï Donec dui urna, commodo ullamcorper enim vitae, commodo
+          gravida ex. Sed tempus mattis arcu at faucibus. Ut vitae mi ut magna
+          ullamcorper viverra. In laoreet justo a luctus ullamcorper. Mauris
+          gravida leo ac fringilla bibendum. Nulla accumsan sem vel enim
+          faucibus vestibulum. Morbi auctor nisl tellus, ut dapibus sem congue
+          at. Fusce eget mi id metus eleifend bibendum. Vestibulum aliquet
+          cursus ex, sit amet condimentum augue sollicitudin a. Duis vehicula
+          urna orci, non consequat sem semper et. Curabitur ac sapien et libero
+          interdum placerat. Suspendisse leo nibh, tincidunt a tellus ut,
+          efficitur fermentum eros. Aliquam ultrices gravida massa, ut porta
+          urna dapibus a. Aliquam a malesuada tellus.
         </p>
 
         <p>
@@ -69,18 +69,18 @@ export const MainPage = () => {
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. NullamΩ
           pharetra massa ipsum, vitae interdum turpis commodo ac. NuncÏ
-          ullamcorper sem nec lectus viverra, sit amet ultricies risus faucibus.Ï
-          Donec dui urna, commodo ullamcorper enim vitae, commodo gravida ex.
-          Sed tempus mattis arcu at faucibus. Ut vitae mi ut magna ullamcorper
-          viverra. In laoreet justo a luctus ullamcorper. Mauris gravida leo ac
-          fringilla bibendum. Nulla accumsan sem vel enim faucibus vestibulum.
-          Morbi auctor nisl tellus, ut dapibus sem congue at. Fusce eget mi id
-          metus eleifend bibendum. Vestibulum aliquet cursus ex, sit amet
-          condimentum augue sollicitudin a. Duis vehicula urna orci, non
-          consequat sem semper et. Curabitur ac sapien et libero interdum
-          placerat. Suspendisse leo nibh, tincidunt a tellus ut, efficitur
-          fermentum eros. Aliquam ultrices gravida massa, ut porta urna dapibus
-          a. Aliquam a malesuada tellus.
+          ullamcorper sem nec lectus viverra, sit amet ultricies risus
+          faucibus.Ï Donec dui urna, commodo ullamcorper enim vitae, commodo
+          gravida ex. Sed tempus mattis arcu at faucibus. Ut vitae mi ut magna
+          ullamcorper viverra. In laoreet justo a luctus ullamcorper. Mauris
+          gravida leo ac fringilla bibendum. Nulla accumsan sem vel enim
+          faucibus vestibulum. Morbi auctor nisl tellus, ut dapibus sem congue
+          at. Fusce eget mi id metus eleifend bibendum. Vestibulum aliquet
+          cursus ex, sit amet condimentum augue sollicitudin a. Duis vehicula
+          urna orci, non consequat sem semper et. Curabitur ac sapien et libero
+          interdum placerat. Suspendisse leo nibh, tincidunt a tellus ut,
+          efficitur fermentum eros. Aliquam ultrices gravida massa, ut porta
+          urna dapibus a. Aliquam a malesuada tellus.
         </p>
 
         <p>
@@ -130,18 +130,18 @@ export const MainPage = () => {
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. NullamΩ
           pharetra massa ipsum, vitae interdum turpis commodo ac. NuncÏ
-          ullamcorper sem nec lectus viverra, sit amet ultricies risus faucibus.Ï
-          Donec dui urna, commodo ullamcorper enim vitae, commodo gravida ex.
-          Sed tempus mattis arcu at faucibus. Ut vitae mi ut magna ullamcorper
-          viverra. In laoreet justo a luctus ullamcorper. Mauris gravida leo ac
-          fringilla bibendum. Nulla accumsan sem vel enim faucibus vestibulum.
-          Morbi auctor nisl tellus, ut dapibus sem congue at. Fusce eget mi id
-          metus eleifend bibendum. Vestibulum aliquet cursus ex, sit amet
-          condimentum augue sollicitudin a. Duis vehicula urna orci, non
-          consequat sem semper et. Curabitur ac sapien et libero interdum
-          placerat. Suspendisse leo nibh, tincidunt a tellus ut, efficitur
-          fermentum eros. Aliquam ultrices gravida massa, ut porta urna dapibus
-          a. Aliquam a malesuada tellus.
+          ullamcorper sem nec lectus viverra, sit amet ultricies risus
+          faucibus.Ï Donec dui urna, commodo ullamcorper enim vitae, commodo
+          gravida ex. Sed tempus mattis arcu at faucibus. Ut vitae mi ut magna
+          ullamcorper viverra. In laoreet justo a luctus ullamcorper. Mauris
+          gravida leo ac fringilla bibendum. Nulla accumsan sem vel enim
+          faucibus vestibulum. Morbi auctor nisl tellus, ut dapibus sem congue
+          at. Fusce eget mi id metus eleifend bibendum. Vestibulum aliquet
+          cursus ex, sit amet condimentum augue sollicitudin a. Duis vehicula
+          urna orci, non consequat sem semper et. Curabitur ac sapien et libero
+          interdum placerat. Suspendisse leo nibh, tincidunt a tellus ut,
+          efficitur fermentum eros. Aliquam ultrices gravida massa, ut porta
+          urna dapibus a. Aliquam a malesuada tellus.
         </p>
 
         <p>

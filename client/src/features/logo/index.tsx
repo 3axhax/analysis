@@ -1,8 +1,6 @@
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export const Logo = () => {
-    const {t} = useTranslation()
-    return (
-        <p className={"logo"}>{t('logo')}</p>
-    )
+  const { t } = useTranslation();
+  return <p className={"logo"}>{t("logo")}</p>;
 };

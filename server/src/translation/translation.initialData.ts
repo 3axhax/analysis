@@ -39,6 +39,13 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     submodule: null,
     value: 'Возраст',
   },
+  {
+    lang: LangValue.RU,
+    namespace: 'common',
+    module: 'logo',
+    submodule: null,
+    value: 'Clinical Analise Transcription',
+  },
   //entities
   {
     lang: LangValue.RU,
@@ -309,7 +316,7 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'ages',
-    submodule: '18y',
+    submodule: 'u18y',
     value: 'старше 18 лет',
   },
   //widgets
