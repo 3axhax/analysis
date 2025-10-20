@@ -3,6 +3,7 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectIsUserAuthorized, selectUserName } from "@entities/user";
 import { UserIcon } from "@heroicons/react/24/outline";
 import {JSX} from "react";
+import {Logo} from "@features/logo";
 
 interface NavItem {
   path: string;
@@ -45,7 +46,8 @@ export const Navigation = () => {
 
   return (
     <nav className="navigation">
-      <ul className="flex space-x-6 justify-center">
+      <Logo />
+      <ul className="inline-flex space-x-6 justify-center">
         {navItems.map((item) => (
           <li key={item.path}>
             <Link
