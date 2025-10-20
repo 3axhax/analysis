@@ -7,5 +7,6 @@ export {
   selectPendingUser,
   selectErrorUser,
   selectIsUserAuthorized,
+  selectIsUserAdmin,
   selectUserName,
 } from "./slice";

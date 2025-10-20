@@ -54,6 +54,7 @@ export const LoginPage = () => {
               <label>
                 E-mail:
                 <input
+                  autoComplete={"on"}
                   type={"email"}
                   placeholder={"mail@mail.com"}
                   className={
@@ -71,6 +72,7 @@ export const LoginPage = () => {
               <label>
                 Password:
                 <input
+                  autoComplete={"on"}
                   type={"password"}
                   placeholder={"*****"}
                   className={
