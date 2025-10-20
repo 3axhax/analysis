@@ -9,9 +9,7 @@ import { AnalysisResultPointData } from '../analysisResultPointData/analysisResu
 import { AnalysisResultDescriptionCondition } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
 import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
 
-type DescriptionConditions = {
-  [key: number]: StatusValue;
-};
+type DescriptionConditions = Record<number, StatusValue>;
 
 @Injectable()
 export class AnalysisResultDescriptionService {

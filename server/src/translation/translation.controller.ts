@@ -1,19 +1,17 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { TranslationService } from './translation.service';
 import { LangValue } from '../gender/lang-value.enum';
+import { GetTranslationsListQueryDto } from './dto/translations.dto';
 
-export interface TranslationsResponse {
-  [key: string]:
-    | string
-    | {
-        [key: string]: string;
-      };
-}
+export type TranslationsResponse = Record<
+  string,
+  string | Record<string, string>
+>;
 
-@Controller('i18n')
+@Controller()
 export class TranslationController {
   constructor(private translationService: TranslationService) {}
-  @Get(':lng/:ns')
+  @Get('i18n/:lng/:ns')
   async getTranslations(
     @Param('lng') language: LangValue,
     @Param('ns') namespace: string,
@@ -22,5 +20,10 @@ export class TranslationController {
       language,
       namespace,
     });
+  }
+
+  @Get('translations')
+  getTranslationsList(@Query() query: GetTranslationsListQueryDto) {
+    console.log(query);
   }
 }

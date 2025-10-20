@@ -3,6 +3,10 @@ import { USER_LS_KEY } from "@entities/user/model/constants.ts";
 
 type method = "GET" | "POST" | "PUT" | "DELETE";
 
+type QueryValue = string | number | boolean | null | undefined;
+type QueryParam = QueryValue | QueryValue[] | Record<string, unknown>;
+type QueryParams = Record<string, QueryParam>;
+
 class RestAPI {
   method: method = "GET";
   target: string = "";
@@ -48,18 +52,47 @@ class RestAPI {
     return axios(data);
   };
 
-  get = (url: string = ""): Promise<AxiosResponse> => {
+  get = (url: string = "", data: QueryParams = {}): Promise<AxiosResponse> => {
     this.method = "GET";
+    if (Object.keys(data).length > 0) {
+      const queryString = this._buildGetQueryString(data).toString();
+      url += `?${queryString}`;
+    }
     this._setTarget(url);
     return this._send();
   };
 
-  post = (url: string = "", data: object = {}): Promise<AxiosResponse> => {
+  post = <T extends object>(
+    url: string = "",
+    data: T = {} as T,
+  ): Promise<AxiosResponse> => {
     this.method = "POST";
     this._setTarget(url);
     this.data = data;
     return this._send();
   };
+
+  _buildGetQueryString(params: QueryParams): string {
+    const searchParams = new URLSearchParams();
+
+    const appendParam = (key: string, value: QueryValue): void => {
+      if (value !== null && value !== undefined) {
+        searchParams.append(key, String(value));
+      }
+    };
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => appendParam(key, item));
+      } else if (typeof value === "object" && value !== null) {
+        appendParam(key, JSON.stringify(value));
+      } else {
+        appendParam(key, value as QueryValue);
+      }
+    });
+
+    return searchParams.toString();
+  }
 }
 
 export default new RestAPI();

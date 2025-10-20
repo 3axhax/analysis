@@ -8,13 +8,15 @@ import { Navigation } from "@widgets/navigation";
 import { AnalysisPage } from "@pages/analysis";
 import { AnalysisResultPage } from "@pages/analysisResult";
 import { LoginPage } from "@pages/login";
-import { useAppDispatch } from "@shared/store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { useEffect } from "react";
-import { checkLSUser } from "@entities/user";
+import { checkLSUser, selectIsUserAdmin } from "@entities/user";
 import { LogoutPage } from "@pages/logout";
+import { Translations } from "@pages/Admin/translations";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
+  const isUserAdmin = useAppSelector(selectIsUserAdmin);
 
   useEffect(() => {
     dispatch(checkLSUser());
@@ -32,6 +34,9 @@ function AppContainer() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
+        {isUserAdmin && (
+          <Route path="/admin/translations" element={<Translations />} />
+        )}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>

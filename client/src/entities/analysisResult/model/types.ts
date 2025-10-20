@@ -52,17 +52,13 @@ export interface AnalysisResult {
 export interface PreparedData {
   gender: GenderType;
   age: string;
-  pointData: {
-    [key: string]: PreparePointData;
-  };
+  pointData: Record<string, PreparePointData>;
 }
 
 export interface AnalysisResultState {
   pending: boolean;
   error: string;
   preparedData: PreparedData;
-  results: {
-    [key: string]: AnalysisResult;
-  };
+  results: Record<string, AnalysisResult>;
   redirectTo?: string;
 }
