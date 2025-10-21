@@ -14,9 +14,11 @@ import {
   SelectAnalysisResultRedirectTo,
 } from "@entities/analysisResult/model/slice.ts";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const AnalysisPage = () => {
-  useDocumentTitle("Загрузить анализы");
+  const { t } = useTranslation("common");
+  useDocumentTitle(t("pageTitle.analysis"));
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -43,7 +45,7 @@ export const AnalysisPage = () => {
     <div className="app w-full">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Загрузите свои данные!
+          {t("pageTitle.analysis")}
         </h1>
       </div>
 
