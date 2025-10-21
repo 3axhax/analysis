@@ -5,7 +5,7 @@ import { TranslationsListItem } from "@widgets/Admin/translationList/ui/Translat
 
 export const TranslationsList = () => {
   const { t } = useTranslation("entities");
-  const { t: tCommon } = useTranslation("widgets");
+  const { t: tCommon } = useTranslation("common");
 
   const translationList = useAppSelector(selectTranslationsList);
 
