@@ -24,6 +24,7 @@ export const getTranslationsList = createAsyncThunk(
   "translations/getList",
   async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
+    console.log(state.translations);
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
@@ -50,6 +51,17 @@ export const translationsSlice = createSlice({
       action: PayloadAction<boolean>,
     ) => {
       state.pending = action.payload;
+    },
+    setCurrentPage: (
+      state: WritableDraft<TranslationsState>,
+      action: PayloadAction<number>,
+    ) => {
+      if (
+        action.payload > 0 &&
+        action.payload <= Math.ceil(state.totalRecord / state.recordPerPage)
+      ) {
+        state.currentPage = action.payload;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -89,7 +101,12 @@ export const translationsSlice = createSlice({
   },
 });
 
-export const { setPending } = translationsSlice.actions;
+export const { setPending, setCurrentPage } = translationsSlice.actions;
 
 export const selectTranslationsList = (state: RootState) =>
   state.translations.list;
+
+export const selectTranslationsCurrentPage = (state: RootState) =>
+  state.translations.currentPage;
+export const selectTranslationsTotalPage = (state: RootState) =>
+  Math.ceil(state.translations.totalRecord / state.translations.recordPerPage);

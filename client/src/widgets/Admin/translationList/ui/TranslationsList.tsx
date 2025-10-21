@@ -5,11 +5,12 @@ import { TranslationsListItem } from "@widgets/Admin/translationList/ui/Translat
 
 export const TranslationsList = () => {
   const { t } = useTranslation("entities");
+  const { t: tCommon } = useTranslation("widgets");
 
   const translationList = useAppSelector(selectTranslationsList);
 
   return (
-    <table className={`min-w-full border border-gray-300`}>
+    <table className={`max-w-[90%] m-auto border border-gray-300`}>
       <thead>
         <tr className="bg-gray-800 text-white">
           <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
@@ -29,6 +30,9 @@ export const TranslationsList = () => {
           </th>
           <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
             {t("translation.value")}
+          </th>
+          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
+            {tCommon("translationsList.action")}
           </th>
         </tr>
       </thead>
