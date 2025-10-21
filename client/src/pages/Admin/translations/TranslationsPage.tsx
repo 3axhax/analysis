@@ -3,8 +3,8 @@ import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
 import { useTranslationsLoad } from "@entities/translations";
 import { TranslationsList } from "@widgets/Admin/translationList";
-import { TranslationsListPagination } from "@features/Admin/TranslationsListPagination";
-import { AddNewTranslation } from "@features/Admin/AddNewTranslation";
+import { TranslationsListPagination } from "@features/Admin/translationsListPagination";
+import { AddNewTranslation } from "@features/Admin/addNewTranslation";
 
 export const TranslationsPage: React.FC = () => {
   const { t } = useTranslation("common");

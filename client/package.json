@@ -11,6 +11,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,scss,md,json}\""
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.12",
@@ -40,6 +41,6 @@
     "tailwindcss": "^4.1.13",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2"
+    "vite": "^7.1.11"
   }
 }

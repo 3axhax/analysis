@@ -24,7 +24,6 @@ export const getTranslationsList = createAsyncThunk(
   "translations/getList",
   async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
-    console.log(state.translations);
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
