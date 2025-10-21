@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { useEffect } from "react";
 import { checkLSUser, selectIsUserAdmin } from "@entities/user";
 import { LogoutPage } from "@pages/logout";
-import { Translations } from "@pages/Admin/translations";
+import { TranslationsPage } from "@pages/Admin/translations";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ function AppContainer() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
         {isUserAdmin && (
-          <Route path="/admin/translations" element={<Translations />} />
+          <Route path="/admin/translations" element={<TranslationsPage />} />
         )}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

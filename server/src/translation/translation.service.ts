@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Translation } from './translation.model';
 import { LangValue } from '../gender/lang-value.enum';
-import { TranslationsResponse } from './translation.controller';
+import {
+  TranslationsListResponse,
+  TranslationsResponse,
+} from './translation.controller';
+import { GetTranslationsListQueryDto } from './dto/translations.dto';
 
 @Injectable()
 export class TranslationService {
@@ -41,5 +45,19 @@ export class TranslationService {
       }
     });
     return translation;
+  }
+
+  async getTranslationsByParameters(
+    parameters: GetTranslationsListQueryDto,
+  ): Promise<TranslationsListResponse> {
+    const { count, rows } = await this.translationRepository.findAndCountAll({
+      offset: (parameters.currentPage - 1) * parameters.recordPerPage,
+      limit: parameters.recordPerPage,
+    });
+    return {
+      totalRecord: count,
+      currentPage: parameters.currentPage,
+      rows,
+    };
   }
 }

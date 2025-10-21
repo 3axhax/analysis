@@ -1,6 +1,6 @@
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAnalysisPointSelectedList } from "@entities/analysisPoint";
-import { AnalysisPointSelectedItem } from "@widgets/analysisPointList/ui/AnalysisPointSelectedItem.tsx";
+import { AnalysisPointSelectedItem } from "@features/analysisPointList/ui/AnalysisPointSelectedItem.tsx";
 
 export const AnalysisPointSelectedList = () => {
   const analysisPointSelectedList = useAppSelector(

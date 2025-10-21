@@ -8,7 +8,7 @@ import {
   useAnalysisTypeLoad,
 } from "@entities/analysisType";
 import { useAnalysisPointLoad } from "@entities/analysisPoint";
-import { AnalysisPointSelectedList } from "@widgets/analysisPointList/ui/AnalysisPointSelectedList.tsx";
+import { AnalysisPointSelectedList } from "@features/analysisPointList/ui/AnalysisPointSelectedList.tsx";
 import { clearAllPointData } from "@entities/analysisResult";
 
 export const AnalysisPointList = () => {

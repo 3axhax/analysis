@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
-import { AnalysisPointList } from "@widgets/analysisPointList";
+import { AnalysisPointList } from "@features/analysisPointList";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import {
   clearRedirect,

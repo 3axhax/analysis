@@ -4,23 +4,10 @@ import Request from "@shared/transport/RestAPI";
 import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
-
-interface TranslationsListItem {
-  id: number;
-  name: string;
-  description: string;
-}
-
-interface TranslationsState {
-  loaded: boolean;
-  pending: boolean;
-  error: string;
-  list: TranslationsListItem[];
-  currentPage: number;
-  totalRecord: number;
-  recordPerPage: number;
-  filters: Record<string, string | number>;
-}
+import {
+  TranslationsListItem,
+  TranslationsState,
+} from "@entities/translations";
 
 const initialState: TranslationsState = {
   loaded: false,
@@ -30,12 +17,7 @@ const initialState: TranslationsState = {
   currentPage: 1,
   totalRecord: 0,
   recordPerPage: 20,
-  filters: {
-    name: "test",
-    name1: "test1",
-    name2: "test2",
-    name3: "test3",
-  },
+  filters: {},
 };
 
 export const getTranslationsList = createAsyncThunk(
@@ -76,10 +58,15 @@ export const translationsSlice = createSlice({
         getTranslationsList.fulfilled,
         (
           state: WritableDraft<TranslationsState>,
-          action: PayloadAction<TranslationsListItem[]>,
+          action: PayloadAction<{
+            totalRecord: number;
+            currentPage: number;
+            rows: TranslationsListItem[];
+          }>,
         ) => {
           if (action.payload) {
-            state.list = action.payload;
+            state.list = action.payload.rows;
+            state.totalRecord = action.payload.totalRecord;
             state.loaded = true;
           }
           state.pending = false;

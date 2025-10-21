@@ -1,3 +1,1 @@
-import Translations from "./Translations.tsx";
-
-export { Translations };
+export { TranslationsPage } from "./TranslationsPage.tsx";
