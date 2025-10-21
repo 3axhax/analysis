@@ -34,7 +34,6 @@ export const AddNewTranslationModal = ({
   };
 
   const handlerOnSubmit = () => {
-    console.log(formValue);
     dispatch(addNewTranslation(formValue)).then((res) => {
       if (res) {
         dispatch(getTranslationsList());
