@@ -1,6 +1,8 @@
+export type TranslationLangType = "ru" | "en";
+
 export interface TranslationsListItem {
-  id: number;
-  lang: string;
+  id?: number;
+  lang: TranslationLangType;
   namespace: string;
   module: string;
   submodule: string | null;

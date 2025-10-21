@@ -1,7 +1,10 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { TranslationService } from './translation.service';
 import { LangValue } from '../gender/lang-value.enum';
-import { GetTranslationsListQueryDto } from './dto/translations.dto';
+import {
+  AddNewTranslationQueryDto,
+  GetTranslationsListQueryDto,
+} from './dto/translations.dto';
 import { Translation } from './translation.model';
 
 export type TranslationsResponse = Record<
@@ -34,5 +37,12 @@ export class TranslationController {
     @Query() query: GetTranslationsListQueryDto,
   ): Promise<TranslationsListResponse> {
     return await this.translationService.getTranslationsByParameters(query);
+  }
+
+  @Post('translations/add')
+  async addNewTranslation(
+    @Body() param: AddNewTranslationQueryDto,
+  ): Promise<Translation> {
+    return this.translationService.addNewTranslation(param);
   }
 }

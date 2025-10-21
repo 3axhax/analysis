@@ -11,9 +11,9 @@ i18n
 
     fallbackNS: ["common", "entities", "widgets"],
 
-    parseMissingKeyHandler: (key: string) => {
-      console.warn(`Missing translation: ${key}`);
-      return key;
+    parseMissingKeyHandler: (key: string, _, options: { ns: string }) => {
+      //console.warn(`Missing translation: ${options?.ns}.${key}`);
+      return `${options?.ns}.${key}`;
     },
   });
 

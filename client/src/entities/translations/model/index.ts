@@ -1,8 +1,12 @@
 export {
   translationsSlice,
-  getTranslationsList,
   selectTranslationsCurrentPage,
   selectTranslationsTotalPage,
   setCurrentPage,
 } from "./slice";
-export type { TranslationsListItem, TranslationsState } from "./types.ts";
+export type {
+  TranslationsListItem,
+  TranslationsState,
+  TranslationLangType,
+} from "./types.ts";
+export { getTranslationsList, addNewTranslation } from "./extraReducers.ts";

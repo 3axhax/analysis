@@ -1,5 +1,6 @@
 import { Transform, TransformFnParams } from 'class-transformer';
-import { IsNumber, IsObject, IsOptional, Min } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString, Min } from 'class-validator';
+import { LangValue } from '../../gender/lang-value.enum';
 
 interface TranslationsFilters {
   lang?: string;
@@ -15,7 +16,6 @@ function isValidTranslationsFilters(obj: unknown): obj is TranslationsFilters {
   const allowedKeys = ['lang', 'namespace', 'module', 'submodule', 'value'];
   const objKeys = Object.keys(obj);
 
-  // Проверяем что все ключи допустимы и значения - строки
   return objKeys.every(
     (key) =>
       allowedKeys.includes(key) &&
@@ -55,4 +55,21 @@ export class GetTranslationsListQueryDto {
   @IsObject()
   @IsOptional()
   filters: TranslationsFilters = {};
+}
+
+export class AddNewTranslationQueryDto {
+  @IsString()
+  lang: LangValue;
+
+  @IsString()
+  namespace: string;
+
+  @IsString()
+  module: string;
+
+  @IsString()
+  submodule: string;
+
+  @IsString()
+  value: string;
 }

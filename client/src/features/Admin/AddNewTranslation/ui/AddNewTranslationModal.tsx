@@ -1,5 +1,13 @@
 import { Modal } from "@widgets/modal";
 import { useTranslation } from "react-i18next";
+import { AddNewTranslationForm } from "@features/Admin/addNewTranslation/ui/AddNewTranslationForm.tsx";
+import { useState } from "react";
+import {
+  addNewTranslation,
+  getTranslationsList,
+  TranslationsListItem,
+} from "@entities/translations";
+import { useAppDispatch } from "@shared/store/hooks.ts";
 
 interface AddNewTranslationModalProps {
   open: boolean;
@@ -11,18 +19,41 @@ export const AddNewTranslationModal = ({
   setOpen,
 }: AddNewTranslationModalProps) => {
   const { t } = useTranslation("features");
+  const dispatch = useAppDispatch();
+
+  const [formValue, setFormValue] = useState<TranslationsListItem>({
+    lang: "ru",
+    namespace: "",
+    module: "",
+    submodule: "",
+    value: "",
+  });
+
+  const handlerInput = ({ name, value }: { name: string; value: string }) => {
+    setFormValue({ ...formValue, [name]: value });
+  };
+
+  const handlerOnSubmit = () => {
+    console.log(formValue);
+    dispatch(addNewTranslation(formValue)).then((res) => {
+      if (res) {
+        dispatch(getTranslationsList());
+      }
+    });
+  };
+
   return (
     <Modal
       open={open}
+      className={"min-w-[600px]"}
       setOpen={setOpen}
-      body={<h1>HI</h1>}
+      body={
+        <AddNewTranslationForm handlerInput={handlerInput} values={formValue} />
+      }
       buttons={[
         {
           label: t("addNewTranslation.add"),
-          onClick: () => {
-            console.log("Add Translation");
-          },
-          type: "warning",
+          onClick: handlerOnSubmit,
         },
       ]}
     />

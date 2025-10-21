@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Translation } from './translation.model';
+import { Translation, TranslationCreationAttrs } from './translation.model';
 import { LangValue } from '../gender/lang-value.enum';
 import {
   TranslationsListResponse,
@@ -59,5 +59,9 @@ export class TranslationService {
       currentPage: parameters.currentPage,
       rows,
     };
+  }
+
+  async addNewTranslation(parameters: TranslationCreationAttrs) {
+    return await this.translationRepository.create(parameters);
   }
 }

@@ -98,7 +98,10 @@ export const Navigation = () => {
                                 {dropdownItem.label}
                               </Link>
                             ) : (
-                              <hr className="text-gray-300" />
+                              <hr
+                                key={dropdownItem.path}
+                                className="text-gray-300"
+                              />
                             ),
                           )}
                         </div>
