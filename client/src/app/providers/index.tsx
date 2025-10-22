@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { store } from "@shared/store";
+import { InfoModalProvider } from "@app/providers/infoModalProvider";
 
 interface AppProviderProps {
   children: ReactNode;
@@ -16,7 +17,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
           v7_relativeSplatPath: true,
         }}
       >
-        {children}
+        <InfoModalProvider>{children}</InfoModalProvider>
       </BrowserRouter>
     </Provider>
   );

@@ -453,4 +453,18 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     submodule: 'analysis',
     value: 'Загрузите анализы',
   },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'editTranslation',
+    submodule: 'edit',
+    value: 'Изменить',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'infoModal',
+    submodule: 'delete',
+    value: 'Удалить',
+  },
 ];

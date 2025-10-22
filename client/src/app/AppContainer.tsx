@@ -2,8 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { MainPage } from "@pages/main";
 import { NotFoundPage } from "@pages/404";
 import { TestPage } from "@pages/test";
-import { AboutPage } from "@pages/about/AboutPage.tsx";
-import { ContactsPage } from "@pages/contacts/ContactsPage.tsx";
+import { AboutPage } from "@pages/about";
+import { ContactsPage } from "@pages/contacts";
 import { Navigation } from "@widgets/navigation";
 import { AnalysisPage } from "@pages/analysis";
 import { AnalysisResultPage } from "@pages/analysisResult";
@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { checkLSUser, selectIsUserAdmin } from "@entities/user";
 import { LogoutPage } from "@pages/logout";
 import { TranslationsPage } from "@pages/Admin/translations";
+import { InfoModal } from "@features/infoModal";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ function AppContainer() {
         )}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <InfoModal />
     </div>
   );
 }

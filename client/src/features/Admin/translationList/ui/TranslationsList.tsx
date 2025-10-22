@@ -8,6 +8,7 @@ import {
   TranslationsListItem,
 } from "@entities/translations";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { useInfoModalData } from "@app/providers/infoModalProvider";
 
 interface TranslationsListProps {
   handlerEditRecord: (id: number) => void;
@@ -21,8 +22,18 @@ export const TranslationsList = ({
 
   const dispatch = useAppDispatch();
 
+  const { openModal } = useInfoModalData();
+
   const handlerDeleteRecord = (id: number) => {
-    dispatch(deleteTranslation(id)).then(() => dispatch(getTranslationsList()));
+    openModal({
+      onAccess: () => {
+        dispatch(deleteTranslation(id)).then(() =>
+          dispatch(getTranslationsList()),
+        );
+      },
+      title: `Удалить запись ID: ${id}?`,
+      type: "danger",
+    });
   };
 
   const translationList: TranslationsListItem[] = useAppSelector(
