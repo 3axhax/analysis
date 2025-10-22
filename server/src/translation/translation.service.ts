@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Translation, TranslationCreationAttrs } from './translation.model';
+import { Translation } from './translation.model';
 import { LangValue } from '../gender/lang-value.enum';
 import {
   TranslationsListResponse,
   TranslationsResponse,
 } from './translation.controller';
-import { GetTranslationsListQueryDto } from './dto/translations.dto';
+import {
+  AddNewTranslationQueryDto,
+  editTranslationQueryDto,
+  GetTranslationsListQueryDto,
+} from './dto/translations.dto';
 
 @Injectable()
 export class TranslationService {
@@ -53,6 +57,7 @@ export class TranslationService {
     const { count, rows } = await this.translationRepository.findAndCountAll({
       offset: (parameters.currentPage - 1) * parameters.recordPerPage,
       limit: parameters.recordPerPage,
+      order: [['id', 'ASC']],
     });
     return {
       totalRecord: count,
@@ -61,7 +66,18 @@ export class TranslationService {
     };
   }
 
-  async addNewTranslation(parameters: TranslationCreationAttrs) {
+  async addNewTranslation(parameters: AddNewTranslationQueryDto) {
     return await this.translationRepository.create(parameters);
+  }
+  async editTranslation(parameters: editTranslationQueryDto) {
+    const id = parameters.id;
+    const translation = await this.translationRepository.findByPk(id);
+
+    if (!translation) {
+      throw new Error('Translation not found');
+    }
+
+    Object.assign(translation, parameters);
+    return await translation.save();
   }
 }

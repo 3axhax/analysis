@@ -7,15 +7,15 @@ import {
 import React from "react";
 import { InputWithLabel } from "@shared/ui/InputWithLabel";
 
-interface AddNewTranslationFormProps {
+interface EditTranslationFormProps {
   values: TranslationsListItem;
   handlerInput: ({ name, value }: { name: string; value: string }) => void;
 }
 
-export const AddNewTranslationForm = ({
+export const EditTranslationForm = ({
   values,
   handlerInput,
-}: AddNewTranslationFormProps) => {
+}: EditTranslationFormProps) => {
   const { t } = useTranslation("features");
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ export const AddNewTranslationForm = ({
       className={"space-y-2 text-gray-600 dark:text-gray-300"}
     >
       <RadioGroup<TranslationLangType>
-        label={t("addNewTranslationForm.lang")}
+        label={t("editTranslationForm.lang")}
         name="lang"
         options={[
           { label: "ru", value: "ru" },
@@ -38,7 +38,7 @@ export const AddNewTranslationForm = ({
         }}
       />
       <InputWithLabel
-        label={t("addNewTranslationForm.namespace")}
+        label={t("editTranslationForm.namespace")}
         name={"namespace"}
         placeholder={"entities"}
         onChange={(value) => {
@@ -48,7 +48,7 @@ export const AddNewTranslationForm = ({
         value={values.namespace}
       />
       <InputWithLabel
-        label={t("addNewTranslationForm.module")}
+        label={t("editTranslationForm.module")}
         name={"module"}
         placeholder={"analysisPoint"}
         onChange={(value) => {
@@ -58,17 +58,17 @@ export const AddNewTranslationForm = ({
         value={values.module}
       />
       <InputWithLabel
-        label={t("addNewTranslationForm.submodule")}
+        label={t("editTranslationForm.submodule")}
         name={"submodule"}
         placeholder={"hemoglobin"}
         onChange={(value) => {
           handlerInput({ name: "submodule", value });
         }}
         className={"justify-between"}
-        value={values.submodule as string}
+        value={values.submodule ?? ""}
       />
       <InputWithLabel
-        label={t("addNewTranslationForm.value")}
+        label={t("editTranslationForm.value")}
         name={"value"}
         placeholder={"Hemoglobin (HGB)"}
         onChange={(value) => {

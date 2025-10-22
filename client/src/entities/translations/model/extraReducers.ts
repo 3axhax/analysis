@@ -29,12 +29,28 @@ export const getTranslationsList = createAsyncThunk(
 export const addNewTranslation = createAsyncThunk(
   "translations/addNew",
   async (data: TranslationsListItem, { getState, dispatch }) => {
-    console.log(data);
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
         const response = await Request.post("/translations/add", data);
+        return response.data;
+      } catch (e) {
+        HandlerAxiosError(e);
+      }
+      dispatch(setPending(false));
+    }
+  },
+);
+
+export const editTranslation = createAsyncThunk(
+  "translations/addNew",
+  async (data: TranslationsListItem, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    if (!state.ages.pending) {
+      dispatch(setPending(true));
+      try {
+        const response = await Request.post("/translations/edit", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);

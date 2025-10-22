@@ -73,3 +73,13 @@ export class AddNewTranslationQueryDto {
   @IsString()
   value: string;
 }
+
+export class editTranslationQueryDto extends AddNewTranslationQueryDto {
+  @Transform(({ value }: TransformFnParams) => {
+    const num = value ? parseInt(value as string, 10) : 1;
+    return isNaN(num) || num < 1 ? 1 : num;
+  })
+  @IsNumber()
+  @Min(1)
+  id: number;
+}

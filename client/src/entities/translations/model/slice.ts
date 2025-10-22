@@ -87,3 +87,6 @@ export const selectTranslationsCurrentPage = (state: RootState) =>
   state.translations.currentPage;
 export const selectTranslationsTotalPage = (state: RootState) =>
   Math.ceil(state.translations.totalRecord / state.translations.recordPerPage);
+
+export const selectTranslationById = (state: RootState, id: number) =>
+  state.translations.list.find((item) => item.id === id) ?? null;

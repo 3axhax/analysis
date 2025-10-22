@@ -2,6 +2,7 @@ export {
   translationsSlice,
   getTranslationsList,
   addNewTranslation,
+  editTranslation,
   selectTranslationsCurrentPage,
   selectTranslationsTotalPage,
   setCurrentPage,

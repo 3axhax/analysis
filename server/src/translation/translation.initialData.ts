@@ -355,102 +355,102 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     submodule: 'interval',
     value: 'Диапазон',
   },
-    {
-      lang: LangValue.RU,
-      namespace: "common",
-      module: "pageTitle",
-      submodule: "translations",
-      value: "Переводы"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "features",
-      module: "addNewTranslationForm",
-      submodule: "lang",
-      value: "Язык"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "features",
-      module: "addNewTranslationForm",
-      submodule: "namespace",
-      value: "Область имён"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "features",
-      module: "addNewTranslationForm",
-      submodule: "module",
-      value: "Модуль"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "features",
-      module: "addNewTranslationForm",
-      submodule: "submodule",
-      value: "Подмодуль"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "features",
-      module: "addNewTranslationForm",
-      submodule: "value",
-      value: "Перевод"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "features",
-      module: "addNewTranslation",
-      submodule: "add",
-      value: "Добавить перевод"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "entities",
-      module: "translation",
-      submodule: "lang",
-      value: "Язык"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "entities",
-      module: "translation",
-      submodule: "namespace",
-      value: "Область имён"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "entities",
-      module: "translation",
-      submodule: "module",
-      value: "Модуль"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "entities",
-      module: "translation",
-      submodule: "submodule",
-      value: "Подмодуль"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "entities",
-      module: "translation",
-      submodule: "value",
-      value: "Перевод"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "common",
-      module: "translation",
-      submodule: "action",
-      value: "Действия"
-    },
-    {
-      lang: LangValue.RU,
-      namespace: "common",
-      module: "pageTitle",
-      submodule: "analysis",
-      value: "Загрузите анализы"
-    }
+  {
+    lang: LangValue.RU,
+    namespace: 'common',
+    module: 'pageTitle',
+    submodule: 'translations',
+    value: 'Переводы',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'editTranslationForm',
+    submodule: 'lang',
+    value: 'Язык',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'editTranslationForm',
+    submodule: 'namespace',
+    value: 'Область имён',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'editTranslationForm',
+    submodule: 'module',
+    value: 'Модуль',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'editTranslationForm',
+    submodule: 'submodule',
+    value: 'Подмодуль',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'editTranslationForm',
+    submodule: 'value',
+    value: 'Перевод',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'features',
+    module: 'editTranslation',
+    submodule: 'add',
+    value: 'Добавить перевод',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'translation',
+    submodule: 'lang',
+    value: 'Язык',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'translation',
+    submodule: 'namespace',
+    value: 'Область имён',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'translation',
+    submodule: 'module',
+    value: 'Модуль',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'translation',
+    submodule: 'submodule',
+    value: 'Подмодуль',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'translation',
+    submodule: 'value',
+    value: 'Перевод',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'common',
+    module: 'translation',
+    submodule: 'action',
+    value: 'Действия',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'common',
+    module: 'pageTitle',
+    submodule: 'analysis',
+    value: 'Загрузите анализы',
+  },
 ];

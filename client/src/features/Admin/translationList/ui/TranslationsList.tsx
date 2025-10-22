@@ -5,7 +5,13 @@ import { Table, TableData, TableDataRow } from "@widgets/table";
 import { TranslationsListItem } from "@entities/translations";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
 
-export const TranslationsList = () => {
+interface TranslationsListProps {
+  handlerEditRecord: (id: number) => void;
+}
+
+export const TranslationsList = ({
+  handlerEditRecord,
+}: TranslationsListProps) => {
   const { t } = useTranslation("entities");
   const { t: tCommon } = useTranslation("common");
 
@@ -38,7 +44,10 @@ export const TranslationsList = () => {
         name: "action",
         data: (
           <>
-            <PencilSquareIcon className="w-5 h-5 text-blue-500 cursor-pointer ml-[10px]" />
+            <PencilSquareIcon
+              className="w-5 h-5 text-blue-500 cursor-pointer ml-[10px]"
+              onClick={() => handlerEditRecord(row.id)}
+            />
             <TrashIcon className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]" />
           </>
         ),

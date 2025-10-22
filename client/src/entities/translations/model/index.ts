@@ -9,4 +9,8 @@ export type {
   TranslationsState,
   TranslationLangType,
 } from "./types.ts";
-export { getTranslationsList, addNewTranslation } from "./extraReducers.ts";
+export {
+  getTranslationsList,
+  addNewTranslation,
+  editTranslation,
+} from "./extraReducers.ts";

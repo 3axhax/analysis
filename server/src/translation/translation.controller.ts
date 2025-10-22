@@ -3,6 +3,7 @@ import { TranslationService } from './translation.service';
 import { LangValue } from '../gender/lang-value.enum';
 import {
   AddNewTranslationQueryDto,
+  editTranslationQueryDto,
   GetTranslationsListQueryDto,
 } from './dto/translations.dto';
 import { Translation } from './translation.model';
@@ -44,5 +45,10 @@ export class TranslationController {
     @Body() param: AddNewTranslationQueryDto,
   ): Promise<Translation> {
     return this.translationService.addNewTranslation(param);
+  }
+
+  @Post('translations/edit')
+  async editTranslation(@Body() param: editTranslationQueryDto): Promise<any> {
+    return this.translationService.editTranslation(param);
   }
 }
