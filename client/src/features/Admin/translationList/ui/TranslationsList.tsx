@@ -1,8 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "@shared/store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { selectTranslationsList } from "@entities/translations/model/slice.ts";
 import { Table, TableData, TableDataRow } from "@widgets/table";
-import { TranslationsListItem } from "@entities/translations";
+import {
+  deleteTranslation,
+  getTranslationsList,
+  TranslationsListItem,
+} from "@entities/translations";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
 
 interface TranslationsListProps {
@@ -15,8 +19,10 @@ export const TranslationsList = ({
   const { t } = useTranslation("entities");
   const { t: tCommon } = useTranslation("common");
 
+  const dispatch = useAppDispatch();
+
   const handlerDeleteRecord = (id: number) => {
-    console.log("handlerDeleteRecord", id);
+    dispatch(deleteTranslation(id)).then(() => dispatch(getTranslationsList()));
   };
 
   const translationList: TranslationsListItem[] = useAppSelector(

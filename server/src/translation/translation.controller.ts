@@ -64,7 +64,16 @@ export class TranslationController {
   @Post('translations/edit')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  async editTranslation(@Body() param: editTranslationQueryDto): Promise<any> {
+  async editTranslation(
+    @Body() param: editTranslationQueryDto,
+  ): Promise<Translation> {
     return this.translationService.editTranslation(param);
+  }
+
+  @Post('translations/delete')
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  async deleteTranslation(@Body('id') id: number): Promise<any> {
+    return this.translationService.deleteTranslation(id);
   }
 }

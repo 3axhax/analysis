@@ -3,6 +3,7 @@ export {
   getTranslationsList,
   addNewTranslation,
   editTranslation,
+  deleteTranslation,
   selectTranslationsCurrentPage,
   selectTranslationsTotalPage,
   setCurrentPage,

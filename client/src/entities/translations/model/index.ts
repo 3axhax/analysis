@@ -13,4 +13,5 @@ export {
   getTranslationsList,
   addNewTranslation,
   editTranslation,
+  deleteTranslation,
 } from "./extraReducers.ts";

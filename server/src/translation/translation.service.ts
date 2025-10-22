@@ -80,4 +80,12 @@ export class TranslationService {
     Object.assign(translation, parameters);
     return await translation.save();
   }
+
+  async deleteTranslation(id: number) {
+    const deletedCount = await this.translationRepository.destroy({
+      where: { id },
+    });
+
+    return deletedCount > 0;
+  }
 }
