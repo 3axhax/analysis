@@ -60,7 +60,7 @@
   }
 
   .form-control:focus + .form-label,
-  .form-control:not(:placeholder-shown) + .form-label{
+  .form-control:not(:placeholder-shown) + .form-label {
     @apply -top-3 text-xs/5;
   }
 
@@ -71,6 +71,13 @@
     -webkit-box-shadow: 0 0 0 30px white inset !important;
     -webkit-text-fill-color: var(--color-green-800) !important;
     transition: background-color 5000s ease-in-out 0s;
+  }
+
+  .form-control:-webkit-autofill + .form-label,
+  .form-control:-webkit-autofill:hover + .form-label,
+  .form-control:-webkit-autofill:focus + .form-label,
+  .form-control:-webkit-autofill:active + .form-label {
+    @apply -top-3 text-xs/5;
   }
 
   .page-title {
