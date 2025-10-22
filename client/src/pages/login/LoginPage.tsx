@@ -85,9 +85,7 @@ export const LoginPage = () => {
 
                     <button
                         type={"submit"}
-                        className={
-                            "bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
-                        }
+                        className={"btn btn-primary"}
                         disabled={pending}
                     >
                         Войти
