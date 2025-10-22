@@ -12,7 +12,8 @@ type ModalButtons = {
 export const InfoModal = () => {
   const { t } = useTranslation("features");
 
-  const { open, closeModal, onAccess, title, type } = useInfoModalData();
+  const { open, closeModal, onAccess, title, type, body, hasButtons } =
+    useInfoModalData();
 
   const [buttons, setButtons] = useState<ModalButtons>([]);
 
@@ -34,7 +35,16 @@ export const InfoModal = () => {
     );
   }, [onAccess, t, type]);
 
+  console.log("hasButtons", hasButtons);
+
   return (
-    <Modal open={open} setOpen={closeModal} title={title} buttons={buttons} />
+    <Modal
+      open={open}
+      setOpen={closeModal}
+      title={title}
+      body={body}
+      hasButtons={hasButtons}
+      buttons={buttons}
+    />
   );
 };

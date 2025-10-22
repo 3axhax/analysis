@@ -10,12 +10,16 @@ import { JSX, useState } from "react";
 import { Logo } from "@features/logo";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { ChevronUpIcon } from "@heroicons/react/16/solid";
+import { useInfoModalData } from "@app/providers/infoModalProvider";
+import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
 
 interface NavItem {
   path: string;
   label: string;
   iconLink?: JSX.Element;
   isDropdown?: boolean;
+  isButton?: boolean;
+  onClick?: () => void;
   items?: { path: string; label?: string }[];
 }
 
@@ -26,6 +30,7 @@ export const Navigation = () => {
   const isUserAuthorized = useAppSelector(selectIsUserAuthorized);
   const isUserAdmin = useAppSelector(selectIsUserAdmin);
   const userName = useAppSelector(selectUserName);
+  const { openModal } = useInfoModalData();
 
   const navItems: NavItem[] = [
     { path: "/analysis", label: "Загрузить анализы" },
@@ -47,6 +52,20 @@ export const Navigation = () => {
         { path: "" },
         { path: "/admin/translations", label: "Переводы" },
       ],
+    });
+  } else {
+    navItems.push({
+      path: "login",
+      label: "Вход (модалка)",
+      isButton: true,
+      onClick: () => {
+        openModal({
+          title: "Войти",
+          type: "standard",
+          hasButtons: false,
+          body: <LoginForm />,
+        });
+      },
     });
   }
 
@@ -108,6 +127,14 @@ export const Navigation = () => {
                       )}
                     </div>
                   </>
+                ) : item.isButton ? (
+                  <button
+                    className={"cursor-pointer"}
+                    key={item.path}
+                    onClick={item.onClick}
+                  >
+                    {item.label}
+                  </button>
                 ) : (
                   <Link
                     to={item.path}

@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, JSX, useContext } from "react";
 
 export type InfoModalType = "standard" | "warning" | "danger";
 
@@ -6,6 +6,8 @@ export interface InfoModalConstructor {
   onAccess?: () => void;
   title?: string;
   type?: InfoModalType;
+  body?: JSX.Element | string;
+  hasButtons?: boolean;
 }
 
 interface InfoModalContextType {
@@ -15,6 +17,8 @@ interface InfoModalContextType {
   onAccess: (() => void) | null;
   title: string;
   type: InfoModalType;
+  body: JSX.Element | string;
+  hasButtons: boolean;
 }
 
 export const InfoModalContext = createContext<InfoModalContextType | undefined>(

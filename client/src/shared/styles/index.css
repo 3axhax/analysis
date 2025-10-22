@@ -85,6 +85,6 @@
   }
 
   .btn {
-    @apply w-full bg-green-800 text-white text-lg/5 border border-green-800 rounded-md px-5 py-3 cursor-pointer hover:bg-white hover:text-green-800 disabled:cursor-not-allowed disabled:bg-blue-300
+    @apply w-full bg-green-800 text-white text-lg/5 border border-green-800 rounded-md px-5 py-3 cursor-pointer hover:bg-white hover:text-green-800 disabled:cursor-not-allowed disabled:bg-blue-300;
   }
 }
