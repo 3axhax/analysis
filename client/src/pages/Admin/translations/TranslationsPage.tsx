@@ -2,7 +2,7 @@ import React from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
 import { useTranslationsLoad } from "@entities/translations";
-import { TranslationsList } from "@widgets/Admin/translationList";
+import { TranslationsList } from "@features/Admin/translationList";
 import { TranslationsListPagination } from "@features/Admin/translationsListPagination";
 import { AddNewTranslation } from "@features/Admin/addNewTranslation";
 

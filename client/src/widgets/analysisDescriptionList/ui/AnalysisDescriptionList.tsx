@@ -2,7 +2,7 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 import { SelectAnalysisResultDescriptionData } from "@entities/analysisResult";
 import { useTranslation } from "react-i18next";
 import { ResultDescription } from "@entities/analysisResult";
-import { AnalysisDescriptionListItem } from "@widgets/analysisDescriptionList/ui/AnalysisDescriptionListItem.tsx";
+import { Table, TableData, TableDataRow } from "@widgets/table";
 
 export const AnalysisDescriptionList = ({
   resultId,
@@ -11,40 +11,48 @@ export const AnalysisDescriptionList = ({
   resultId: string;
   className?: string;
 }) => {
+  const { t } = useTranslation("common");
   const { t: tWidgets } = useTranslation("widgets");
-  const descriptionList = useAppSelector((state) =>
+  const { t: tEntities } = useTranslation("entities");
+  const descriptionList: ResultDescription[] = useAppSelector((state) =>
     SelectAnalysisResultDescriptionData(state, resultId),
   );
 
-  return (
-    <table
-      className={`min-w-full border border-gray-300${className ? " " + className : ""}`}
-    >
-      <thead>
-        <tr className="bg-gray-800 text-white">
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {tWidgets("analysisDescriptionList.description")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {tWidgets("analysisDescriptionList.reasons")}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {descriptionList &&
-          [...descriptionList]
-            .sort(
-              (a, b) =>
-                b.analysisResultDescriptionConditions.length -
-                a.analysisResultDescriptionConditions.length,
-            )
-            .map((description: ResultDescription) => (
-              <AnalysisDescriptionListItem
-                key={description.id}
-                description={description}
-              />
-            ))}
-      </tbody>
-    </table>
-  );
+  const tableData: TableData = {
+    header: [
+      {
+        name: "description",
+        label: tWidgets("analysisDescriptionList.description"),
+      },
+      { name: "reasons", label: tWidgets("analysisDescriptionList.reasons") },
+    ],
+    rows: [] as TableDataRow[][],
+  };
+
+  if (descriptionList?.length > 0) {
+    tableData.rows = [...descriptionList]
+      .sort(
+        (a, b) =>
+          b.analysisResultDescriptionConditions.length -
+          a.analysisResultDescriptionConditions.length,
+      )
+      .map((row: ResultDescription) => [
+        { name: "description", data: row.description_ru },
+        {
+          name: "reasons",
+          data: (
+            <ul>
+              {row.analysisResultDescriptionConditions.map((condition) => (
+                <li key={condition.id}>
+                  {tEntities(`analysisPoint.${condition.analysisPoint.name}`)} -{" "}
+                  {t(`analysisDescriptionConditionStatus.${condition.status}`)}
+                </li>
+              ))}
+            </ul>
+          ),
+        },
+      ]);
+  }
+
+  return <Table tableData={tableData} className={className} />;
 };

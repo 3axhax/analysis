@@ -1,46 +1,39 @@
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { useTranslation } from "react-i18next";
 import { SelectAnalysisResultPointData } from "@entities/analysisResult/model/slice.ts";
-import { AnalysisPointDataListItem } from "@widgets/analysisPointdataList/ui/AnalysisPointDataListItem.tsx";
+import { Table, TableData, TableDataRow } from "@widgets/table";
+import { PointData } from "@entities/analysisResult";
 
-export const AnalysisPointDataList = ({
-  resultId,
-  className,
-}: {
-  resultId: string;
-  className?: string;
-}) => {
+export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
+  const { t } = useTranslation("common");
   const { t: tWidgets } = useTranslation("widgets");
+  const { t: tEntities } = useTranslation("entities");
   const pointDataList = useAppSelector((state) =>
     SelectAnalysisResultPointData(state, resultId),
   );
 
-  return (
-    <table
-      className={`min-w-full border border-gray-300${className ? " " + className : ""}`}
-    >
-      <thead>
-        <tr className="bg-gray-800 text-white">
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {tWidgets("analysisPointDataList.name")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {tWidgets("analysisPointDataList.interval")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {tWidgets("analysisPointDataList.value")}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {pointDataList &&
-          pointDataList.map((pointData) => (
-            <AnalysisPointDataListItem
-              pointData={pointData}
-              key={pointData.id}
-            />
-          ))}
-      </tbody>
-    </table>
-  );
+  const tableData: TableData = {
+    header: [
+      { name: "name", label: tWidgets("analysisPointDataList.name") },
+      { name: "interval", label: tWidgets("analysisPointDataList.interval") },
+      { name: "value", label: tWidgets("analysisPointDataList.value") },
+    ],
+    rows: [] as TableDataRow[][],
+  };
+
+  if (pointDataList?.length > 0) {
+    tableData.rows = pointDataList.map((row: PointData) => [
+      { name: "name", data: tEntities(`analysisPoint.${row.point.name}`) },
+      {
+        name: "interval",
+        data: `${row.minValue} - ${row.maxValue} ${tEntities(`units.${row.pointUnit.name}`)}`,
+      },
+      {
+        name: "value",
+        data: `${row.value} ${tEntities(`units.${row.pointUnit.name}`)} ${t(`analysisDescriptionConditionStatus.${row.pointDataStatus}`)}`,
+      },
+    ]);
+  }
+
+  return <Table tableData={tableData} />;
 };
