@@ -1,7 +1,7 @@
 export type TranslationLangType = "ru" | "en";
 
 export interface TranslationsListItem {
-  id?: number;
+  id: number;
   lang: TranslationLangType;
   namespace: string;
   module: string;

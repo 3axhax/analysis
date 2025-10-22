@@ -1,52 +1,51 @@
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectTranslationsList } from "@entities/translations/model/slice.ts";
-import { TranslationsListItem } from "@widgets/Admin/translationList/ui/TranslationsListItem.tsx";
+import { Table, TableData, TableDataRow } from "@widgets/table";
+import { TranslationsListItem } from "@entities/translations";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
 
 export const TranslationsList = () => {
   const { t } = useTranslation("entities");
   const { t: tCommon } = useTranslation("common");
 
-  const translationList = useAppSelector(selectTranslationsList);
-
-  return (
-    <table className={`max-w-[90%] m-auto border border-gray-300`}>
-      <thead>
-        <tr className="bg-gray-800 text-white">
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            ID
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {t("translation.lang")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {t("translation.namespace")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {t("translation.module")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {t("translation.submodule")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {t("translation.value")}
-          </th>
-          <th className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium">
-            {tCommon("translationsList.action")}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {translationList ? (
-          translationList.map((item) => (
-            <TranslationsListItem key={item.id} item={item} />
-          ))
-        ) : (
-          <tr>
-            <td colSpan={6}>Empty list</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+  const translationList: TranslationsListItem[] = useAppSelector(
+    selectTranslationsList,
   );
+
+  const tableData: TableData = {
+    header: [
+      { name: "id", label: "ID" },
+      { name: "lang", label: t("translation.lang") },
+      { name: "namespace", label: t("translation.namespace") },
+      { name: "module", label: t("translation.module") },
+      { name: "submodule", label: t("translation.submodule") },
+      { name: "value", label: t("translation.value") },
+      { name: "action", label: tCommon("translationsList.action") },
+    ],
+    rows: [] as TableDataRow[][],
+  };
+
+  if (translationList?.length > 0) {
+    tableData.rows = translationList.map((row: TranslationsListItem) => [
+      { name: "id", data: row.id.toString() },
+      { name: "lang", data: row.lang },
+      { name: "namespace", data: row.namespace },
+      { name: "module", data: row.module },
+      { name: "submodule", data: row.submodule ? row.submodule : "" },
+      { name: "value", data: row.value },
+      {
+        name: "action",
+        data: (
+          <>
+            <PencilSquareIcon className="w-5 h-5 text-blue-500 cursor-pointer ml-[10px]" />
+            <TrashIcon className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]" />
+          </>
+        ),
+        className: "flex justify-center",
+      },
+    ]);
+  }
+
+  return <Table tableData={tableData} className={"max-w-[90%]"} />;
 };
