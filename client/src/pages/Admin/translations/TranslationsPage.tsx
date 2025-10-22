@@ -18,8 +18,6 @@ export const TranslationsPage: React.FC = () => {
     setEditTranslationId(id);
   };
 
-  console.log("editTranslationId", editTranslationId);
-
   return (
     <div>
       <div className={"relative"}>

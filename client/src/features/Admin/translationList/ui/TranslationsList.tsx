@@ -15,6 +15,10 @@ export const TranslationsList = ({
   const { t } = useTranslation("entities");
   const { t: tCommon } = useTranslation("common");
 
+  const handlerDeleteRecord = (id: number) => {
+    console.log("handlerDeleteRecord", id);
+  };
+
   const translationList: TranslationsListItem[] = useAppSelector(
     selectTranslationsList,
   );
@@ -48,7 +52,10 @@ export const TranslationsList = ({
               className="w-5 h-5 text-blue-500 cursor-pointer ml-[10px]"
               onClick={() => handlerEditRecord(row.id)}
             />
-            <TrashIcon className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]" />
+            <TrashIcon
+              className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]"
+              onClick={() => handlerDeleteRecord(row.id)}
+            />
           </>
         ),
         className: "flex justify-center",

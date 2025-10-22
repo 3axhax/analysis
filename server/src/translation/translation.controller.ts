@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { TranslationService } from './translation.service';
 import { LangValue } from '../gender/lang-value.enum';
 import {
@@ -7,6 +15,8 @@ import {
   GetTranslationsListQueryDto,
 } from './dto/translations.dto';
 import { Translation } from './translation.model';
+import { Roles } from '../auth/roles-auth.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 export type TranslationsResponse = Record<
   string,
@@ -34,6 +44,8 @@ export class TranslationController {
   }
 
   @Get('translations')
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   async getTranslationsList(
     @Query() query: GetTranslationsListQueryDto,
   ): Promise<TranslationsListResponse> {
@@ -41,6 +53,8 @@ export class TranslationController {
   }
 
   @Post('translations/add')
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   async addNewTranslation(
     @Body() param: AddNewTranslationQueryDto,
   ): Promise<Translation> {
@@ -48,6 +62,8 @@ export class TranslationController {
   }
 
   @Post('translations/edit')
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   async editTranslation(@Body() param: editTranslationQueryDto): Promise<any> {
     return this.translationService.editTranslation(param);
   }

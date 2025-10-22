@@ -49,6 +49,7 @@ export class RolesGuard implements CanActivate {
       const token = authHeader.split(' ')[1];
       if (bearer !== 'Bearer' || !token) {
         this.unauthorizedError();
+        return false;
       }
       const session = await this.userSessionsService.checkUser({ token });
       if (!session) {
@@ -62,7 +63,10 @@ export class RolesGuard implements CanActivate {
         return false;
       }
       req.user = userDB;
-      return userDB.roles.some((role) => requiredRoles.includes(role.value));
+      const plainUserDB = userDB.get({ plain: true });
+      return plainUserDB.roles.some((role) =>
+        requiredRoles.includes(role.value),
+      );
     } catch (e) {
       console.log(e);
       throw new HttpException('Request Forbidden', HttpStatus.FORBIDDEN);
@@ -75,6 +79,5 @@ export class RolesGuard implements CanActivate {
       error: 'User unauthorized',
       statusCode: 401,
     });
-    //throw new UnauthorizedException('User unauthorized');
   }
 }
