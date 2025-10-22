@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { JSX } from "react";
-import { InfoModalType } from "@app/providers/infoModalProvider/InfoModalProvider.tsx";
+import { InfoModalType } from "@app/providers/infoModalProvider";
 
 interface ModalProps {
   open?: boolean;
@@ -35,8 +35,6 @@ export const Modal = ({
       setOpenProps(state);
     }
   };
-
-  console.log(buttons);
 
   return (
     <Dialog open={open} onClose={setOpen} className={`relative z-10`}>
