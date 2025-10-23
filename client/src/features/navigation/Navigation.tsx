@@ -5,7 +5,6 @@ import {
   selectUserName,
   selectIsUserAdmin,
 } from "@entities/user";
-import { UserIcon } from "@heroicons/react/24/outline";
 import { JSX, useState } from "react";
 import { Logo } from "@features/logo";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
@@ -69,13 +68,7 @@ export const Navigation = () => {
     });
   }
 
-  if (!isUserAuthorized) {
-    navItems.push({
-      path: "/login",
-      label: "Войти",
-      iconLink: <UserIcon className="inline-flex h-5 w-5 mr-2 text-gray-500" />,
-    });
-  } else {
+  if (isUserAuthorized) {
     navItems.push({ path: "/logout", label: `${userName} (Выйти)` });
   }
 

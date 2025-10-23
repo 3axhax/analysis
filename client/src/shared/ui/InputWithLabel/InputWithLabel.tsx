@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, HTMLInputTypeAttribute } from "react";
 
 interface InputWithLabelProps {
   name: string;
@@ -7,6 +7,7 @@ interface InputWithLabelProps {
   onChange?: (value: string) => void;
   className?: string;
   value?: string;
+  type?: HTMLInputTypeAttribute;
 }
 
 export const InputWithLabel = ({
@@ -16,6 +17,7 @@ export const InputWithLabel = ({
   onChange,
   className,
   value,
+  type = "text",
 }: InputWithLabelProps) => {
   const handlerOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
@@ -23,18 +25,20 @@ export const InputWithLabel = ({
     }
   };
   return (
-    <label className={`flex items-center${className ? ` ${className}` : ``}`}>
-      <span>{label}: </span>
+    <div className={`relative mb-5${className ? ` ${className}` : ``}`}>
       <input
-        type={"text"}
-        name={name}
-        value={value}
-        className={
-          "px-4 py-2 ml-[10px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        }
+        autoComplete={"on"}
+        type={type}
         placeholder={placeholder}
+        name={name}
+        id={name}
+        className={"form-control"}
+        value={value}
         onChange={handlerOnChange}
       />
-    </label>
+      <label className={"form-label"} htmlFor={name}>
+        {label}
+      </label>
+    </div>
   );
 };

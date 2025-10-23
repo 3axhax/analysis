@@ -35,8 +35,6 @@ export const InfoModal = () => {
     );
   }, [onAccess, t, type]);
 
-  console.log("hasButtons", hasButtons);
-
   return (
     <Modal
       open={open}

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,8 +9,11 @@ import {
   selectPendingUser,
 } from "@entities/user";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
+import { InputWithLabel } from "@shared/ui/InputWithLabel";
+import { useTranslation } from "react-i18next";
 
 export const LoginForm = () => {
+  const { t } = useTranslation("common");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -43,33 +46,22 @@ export const LoginForm = () => {
         className="space-y-2 text-gray-600 dark:text-gray-300"
         onSubmit={handlerSubmit}
       >
-        <div className={"relative mb-5"}>
-          <input
-            autoComplete={"on"}
-            type={"email"}
-            placeholder={"mail@mail.com"}
-            className={"form-control"}
-            value={email}
-            onInput={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
-          />
-          <label className={"form-label"}>E-mail</label>
-        </div>
-
-        <div className={"relative mb-5"}>
-          <input
-            autoComplete={"on"}
-            type={"password"}
-            placeholder={"*****"}
-            className={"form-control"}
-            value={password}
-            onInput={(e: ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
-          />
-          <label className={"form-label"}>Password</label>
-        </div>
+        <InputWithLabel
+          type={"email"}
+          name={"email"}
+          placeholder={"mail@mail.com"}
+          value={email}
+          onChange={setEmail}
+          label={t("email")}
+        />
+        <InputWithLabel
+          type={"password"}
+          name={"password"}
+          placeholder={"*****"}
+          value={password}
+          onChange={setPassword}
+          label={t("password")}
+        />
 
         {error && (
           <div className={"bg-red-200 border-1 rounded-md px-4 py-2"}>

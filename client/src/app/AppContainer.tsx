@@ -4,10 +4,9 @@ import { NotFoundPage } from "@pages/404";
 import { TestPage } from "@pages/test";
 import { AboutPage } from "@pages/about";
 import { ContactsPage } from "@pages/contacts";
-import { Navigation } from "@widgets/navigation";
+import { Navigation } from "@features/navigation";
 import { AnalysisPage } from "@pages/analysis";
 import { AnalysisResultPage } from "@pages/analysisResult";
-import { LoginPage } from "@pages/login";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { useEffect } from "react";
 import { checkLSUser, selectIsUserAdmin } from "@entities/user";
@@ -31,7 +30,6 @@ function AppContainer() {
         <Route path="/test" element={<TestPage />} />
         <Route path="/analysis" element={<AnalysisPage />} />
         <Route path="/result/:resultId" element={<AnalysisResultPage />} />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contacts" element={<ContactsPage />} />

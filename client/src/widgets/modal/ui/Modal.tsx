@@ -29,7 +29,7 @@ export const Modal = ({
   icon,
   body,
   className,
-  hasButtons,
+  hasButtons = true,
   buttons,
 }: ModalProps) => {
   const setOpen = (state: boolean) => {

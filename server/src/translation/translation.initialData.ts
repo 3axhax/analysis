@@ -467,4 +467,18 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     submodule: 'delete',
     value: 'Удалить',
   },
+  {
+    lang: LangValue.RU,
+    namespace: 'common',
+    module: 'email',
+    submodule: null,
+    value: 'Почта',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'common',
+    module: 'password',
+    submodule: null,
+    value: 'Пароль',
+  },
 ];
