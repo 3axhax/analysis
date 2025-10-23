@@ -1,22 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
-import { selectTranslationsList } from "@entities/translations/model/slice.ts";
+import { selectUnitsList } from "@entities/units/model/slice.ts";
 import { Table, TableData, TableDataRow } from "@widgets/table";
-import {
-  deleteTranslation,
-  getTranslationsList,
-  TranslationsListItem,
-} from "@entities/translations";
+import { deleteUnit, getUnitsList, UnitsListItem } from "@entities/units";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
 
-interface TranslationsListProps {
+interface UnitsListProps {
   handlerEditRecord: (id: number) => void;
 }
 
-export const TranslationsList = ({
-  handlerEditRecord,
-}: TranslationsListProps) => {
+export const UnitsList = ({ handlerEditRecord }: UnitsListProps) => {
   const { t } = useTranslation("entities");
   const { t: tCommon } = useTranslation("common");
 
@@ -27,40 +21,32 @@ export const TranslationsList = ({
   const handlerDeleteRecord = (id: number) => {
     openModal({
       onAccess: () => {
-        dispatch(deleteTranslation(id)).then(() =>
-          dispatch(getTranslationsList()),
-        );
+        dispatch(deleteUnit(id)).then(() => dispatch(getUnitsList()));
       },
       title: `Удалить запись ID: ${id}?`,
       type: "danger",
     });
   };
 
-  const translationList: TranslationsListItem[] = useAppSelector(
-    selectTranslationsList,
-  );
+  const unitList: UnitsListItem[] = useAppSelector(selectUnitsList);
 
   const tableData: TableData = {
     header: [
       { name: "id", label: "ID" },
-      { name: "lang", label: t("translation.lang") },
-      { name: "namespace", label: t("translation.namespace") },
-      { name: "module", label: t("translation.module") },
-      { name: "submodule", label: t("translation.submodule") },
-      { name: "value", label: t("translation.value") },
-      { name: "action", label: tCommon("translationsList.action") },
+      { name: "name", label: t("unit.name") },
+      { name: "translationRu", label: t("unit.translationRu") },
+      { name: "translationEn", label: t("unit.translationEn") },
+      { name: "action", label: tCommon("table.action") },
     ],
     rows: [] as TableDataRow[][],
   };
 
-  if (translationList?.length > 0) {
-    tableData.rows = translationList.map((row: TranslationsListItem) => [
+  if (unitList?.length > 0) {
+    tableData.rows = unitList.map((row: UnitsListItem) => [
       { name: "id", data: row.id.toString() },
-      { name: "lang", data: row.lang },
-      { name: "namespace", data: row.namespace },
-      { name: "module", data: row.module },
-      { name: "submodule", data: row.submodule ? row.submodule : "" },
-      { name: "value", data: row.value },
+      { name: "name", data: row.name },
+      { name: "translationRu", data: row.translationRu },
+      { name: "translationEn", data: row.translationEn },
       {
         name: "action",
         data: (

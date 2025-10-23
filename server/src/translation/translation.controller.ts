@@ -49,7 +49,7 @@ export class TranslationController {
   async getTranslationsList(
     @Query() query: GetTranslationsListQueryDto,
   ): Promise<TranslationsListResponse> {
-    return await this.translationService.getTranslationsByParameters(query);
+    return await this.translationService.getTranslationsByQuery(query);
   }
 
   @Post('translations/add')

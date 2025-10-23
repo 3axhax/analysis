@@ -1,6 +1,6 @@
 import { Modal } from "@widgets/modal";
 import { useTranslation } from "react-i18next";
-import { EditTranslationForm } from "@features/Admin/editTranslation/ui/EditTranslationForm.tsx";
+import { EditTranslationForm } from "@features/Admin/translations/editTranslation/ui/EditTranslationForm.tsx";
 import { useEffect, useState } from "react";
 import {
   addNewTranslation,

@@ -6,9 +6,11 @@ import {
 } from "@entities/user";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
 import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
-import {NavigationUI, NavItem} from "@widgets/navigation";
+import { NavigationUI, NavItem } from "@widgets/navigation";
+import { useTranslation } from "react-i18next";
 
 export const Navigation = () => {
+  const { t } = useTranslation("common");
 
   const isUserAuthorized = useAppSelector(selectIsUserAuthorized);
   const isUserAdmin = useAppSelector(selectIsUserAdmin);
@@ -31,10 +33,10 @@ export const Navigation = () => {
         { path: "/admin/analysisType", label: "Типы анализов" },
         { path: "/admin/analysisPoint", label: "Параметры анализов" },
         { path: "/admin/descriptions", label: "Описания" },
-        { path: "/admin/units", label: "Единицы измерений" },
+        { path: "/admin/units", label: t("pageTitle.units") },
         { path: "/admin/ages", label: "Возрастные группы" },
         { path: "" },
-        { path: "/admin/translations", label: "Переводы" },
+        { path: "/admin/translations", label: t("pageTitle.translations") },
       ],
     });
   } else {
@@ -55,10 +57,12 @@ export const Navigation = () => {
   }
 
   if (isUserAuthorized) {
-    navItems.push({ key: "logout", path: "/logout", label: `${userName} (Выйти)` });
+    navItems.push({
+      key: "logout",
+      path: "/logout",
+      label: `${userName} (Выйти)`,
+    });
   }
 
-  return (
-    <NavigationUI navItems={navItems}/>
-  );
+  return <NavigationUI navItems={navItems} />;
 };

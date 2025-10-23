@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './users.model';
@@ -8,6 +8,7 @@ import { RolesModule } from '../roles/roles.module';
 import { AuthModule } from '../auth/auth.module';
 import { UsersSessionsModule } from './usersSessions/usersSessions.module';
 
+@Global()
 @Module({
   providers: [UsersService],
   imports: [

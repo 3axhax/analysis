@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
 import { useTranslationsLoad } from "@entities/translations";
-import { TranslationsList } from "@features/Admin/translationList";
-import { TranslationsListPagination } from "@features/Admin/translationsListPagination";
-import { EditTranslation } from "@features/Admin/editTranslation";
+import { TranslationsList } from "@features/Admin/translations/translationsList";
+import { TranslationsListPagination } from "@features/Admin/translations/translationsListPagination";
+import { EditTranslation } from "@features/Admin/translations/editTranslation";
 
 export const TranslationsPage: React.FC = () => {
   const { t } = useTranslation("common");

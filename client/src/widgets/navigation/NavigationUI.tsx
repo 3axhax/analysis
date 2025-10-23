@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { ChevronUpIcon } from "@heroicons/react/16/solid";
 
 export interface NavItem {
-  key: string
+  key: string;
   path: string;
   label: string;
   iconLink?: JSX.Element;
@@ -15,9 +15,9 @@ export interface NavItem {
   items?: { path: string; label?: string }[];
 }
 
-export const NavigationUI = ({navItems}: {navItems: NavItem[]}) => {
+export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
   const location = useLocation();
-  const [isDropdownOpen, setIsDropdownOpen] = useState<string>('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState<string>("");
 
   return (
     <header className="header">
@@ -47,7 +47,7 @@ export const NavigationUI = ({navItems}: {navItems: NavItem[]}) => {
                               <Link
                                 key={dropdownItem.path}
                                 to={dropdownItem.path}
-                                onClick={() => setIsDropdownOpen('')}
+                                onClick={() => setIsDropdownOpen("")}
                                 className={`block px-4 py-2 text-sm transition-colors${
                                   location.pathname === dropdownItem.path
                                     ? " bg-green-900 text-white"
@@ -91,10 +91,10 @@ export const NavigationUI = ({navItems}: {navItems: NavItem[]}) => {
               </li>
             ))}
           </ul>
-          {isDropdownOpen !== '' && (
+          {isDropdownOpen !== "" && (
             <div
               className="fixed inset-0 z-0"
-              onClick={() => setIsDropdownOpen('')}
+              onClick={() => setIsDropdownOpen("")}
             />
           )}
         </nav>

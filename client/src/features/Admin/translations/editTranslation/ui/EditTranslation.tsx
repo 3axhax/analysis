@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { EditTranslationModal } from "@features/Admin/editTranslation/ui/EditTranslationModal.tsx";
+import { EditTranslationModal } from "@features/Admin/translations/editTranslation/ui/EditTranslationModal.tsx";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectTranslationById } from "@entities/translations/model/slice.ts";

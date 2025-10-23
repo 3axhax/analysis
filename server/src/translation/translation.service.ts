@@ -51,7 +51,7 @@ export class TranslationService {
     return translation;
   }
 
-  async getTranslationsByParameters(
+  async getTranslationsByQuery(
     parameters: GetTranslationsListQueryDto,
   ): Promise<TranslationsListResponse> {
     const { count, rows } = await this.translationRepository.findAndCountAll({
@@ -87,5 +87,13 @@ export class TranslationService {
     });
 
     return deletedCount > 0;
+  }
+
+  async getTranslationsByParameters(
+    parameters: Partial<Translation>,
+  ): Promise<Translation[]> {
+    return await this.translationRepository.findAll({
+      where: parameters,
+    });
   }
 }

@@ -14,7 +14,7 @@ interface ModalProps {
   icon?: JSX.Element;
   body?: JSX.Element | string;
   className?: string;
-  hasButtons: boolean;
+  hasButtons?: boolean;
   buttons?: {
     onClick?: () => void;
     label: string;

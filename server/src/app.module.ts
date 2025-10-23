@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -11,31 +12,31 @@ import { AnalysisType } from './analysisType/analysisType.model';
 import { AnalysisTypePoint } from './analysisPoint/analysisType-Point.model';
 import { AnalysisTypeModule } from './analysisType/analysisType.module';
 import { AnalysisPointUnits } from './analysisPointUnits/analysisPointUnits.model';
+import { AnalysisPointUnitsModule } from './analysisPointUnits/analysisPointUnits.module';
 import { AnalysisPointsUnits } from './analysisPoint/analysisPoint-Units.model';
 import { AnalysisResult } from './analysisResult/analysisResult.model';
-import { AnalysisResultPointData } from './analysisResultPointData/analysisResultPointData.model';
 import { AnalysisResultModule } from './analysisResult/analysisResult.module';
+import { AnalysisResultPointData } from './analysisResultPointData/analysisResultPointData.model';
+import { AnalysisResultPointDataModule } from './analysisResultPointData/analysisResultPointData.module';
 import { Gender } from './gender/gender.model';
 import { GenderModule } from './gender/gender.module';
-import { AnalysisResultPointDataModule } from './analysisResultPointData/analysisResultPointData.module';
 import { AnalysisPointMinValue } from './analysisPointMinValue/analysisPointMinValue.model';
 import { AnalysisPointMinValueModule } from './analysisPointMinValue/analysisPointMinValue.module';
 import { AnalysisPointMaxValue } from './analysisPointMaxValue/analysisPointMaxValue.model';
 import { AnalysisPointMaxValueModule } from './analysisPointMaxValue/analysisPointMaxValue.module';
 import { AnalysisResultDescriptionCondition } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
+import { AnalysisResultDescriptionConditionModule } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.module';
 import { AnalysisResultDescription } from './analysisResultDescription/analysisResultDescription.model';
 import { AnalysisResultDescriptionModule } from './analysisResultDescription/analysisResultDescription.module';
-import { AnalysisResultDescriptionConditionModule } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.module';
+import { User } from './users/users.model';
 import { UsersModule } from './users/users.module';
+import { Role } from './roles/roles.model';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersSessionsModule } from './users/usersSessions/usersSessions.module';
-import { User } from './users/users.model';
-import { Role } from './roles/roles.model';
 import { UserRole } from './roles/users-roles.model';
 import { UsersSessions } from './users/usersSessions/usersSessions.model';
 import { AuthGuard } from './auth/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
 import { TranslationModule } from './translation/translation.module';
 import { Translation } from './translation/translation.model';
 
@@ -80,7 +81,7 @@ import { Translation } from './translation/translation.model';
     UsersSessionsModule,
     AgesModule,
     AnalysisPointModule,
-    AnalysisPointUnits,
+    AnalysisPointUnitsModule,
     AnalysisTypeModule,
     AnalysisResultModule,
     AnalysisResultPointDataModule,

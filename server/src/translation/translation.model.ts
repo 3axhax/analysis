@@ -26,7 +26,7 @@ export class Translation extends Model<Translation, TranslationCreationAttrs> {
     type: DataType.ENUM(...Object.values(LangValue)),
     allowNull: false,
   })
-  declare lang: string;
+  declare lang: LangValue;
 
   @Column({
     type: DataType.STRING,
