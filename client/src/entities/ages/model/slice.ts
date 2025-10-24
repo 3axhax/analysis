@@ -18,7 +18,7 @@ const initialState: AgesState = {
   list: [],
   currentPage: 1,
   totalRecord: 0,
-  recordPerPage: 5,
+  recordPerPage: 20,
   filters: {},
 };
 
