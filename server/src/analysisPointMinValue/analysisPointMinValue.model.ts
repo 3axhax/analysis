@@ -73,9 +73,39 @@ export class AnalysisPointMinValue extends Model<
 
   @AfterSync
   static async addInitialData() {
-    const count = await AnalysisPointMinValue.count();
-    if (count === 0) {
-      await AnalysisPointMinValue.bulkCreate(analysisPointMinValueInitialData);
+    try {
+      const count = await AnalysisPointMinValue.count();
+      if (count === 0) {
+        await AnalysisPointMinValue.bulkCreate(
+          analysisPointMinValueInitialData,
+        );
+      }
+      await this.updateSequence();
+    } catch (error) {
+      console.error('Error in AnalysisPointMinValue.addInitialData:', error);
+    }
+  }
+
+  private static async updateSequence(): Promise<void> {
+    try {
+      if (!AnalysisPointMinValue.sequelize) {
+        console.warn('Sequelize instance is not available');
+        return;
+      }
+
+      const maxId = await AnalysisPointMinValue.max('id');
+
+      if (maxId !== null && maxId !== undefined) {
+        const maxIdNumber = Number(maxId);
+        if (!isNaN(maxIdNumber)) {
+          await AnalysisPointMinValue.sequelize.query(
+            `SELECT setval('"analysisPointMinValue_id_seq"', ${maxIdNumber}, true)`,
+          );
+          console.log(`Sequence updated to ${maxIdNumber}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating sequence:', error);
     }
   }
 }

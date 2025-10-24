@@ -32,9 +32,37 @@ export class AnalysisType extends Model<
 
   @AfterSync
   static async addInitialData() {
-    const count = await AnalysisType.count();
-    if (count === 0) {
-      await AnalysisType.bulkCreate(analysisTypeInitialData);
+    try {
+      const count = await AnalysisType.count();
+      if (count === 0) {
+        await AnalysisType.bulkCreate(analysisTypeInitialData);
+      }
+      await this.updateSequence();
+    } catch (error) {
+      console.error('Error in AnalysisType.addInitialData:', error);
+    }
+  }
+
+  private static async updateSequence(): Promise<void> {
+    try {
+      if (!AnalysisType.sequelize) {
+        console.warn('Sequelize instance is not available');
+        return;
+      }
+
+      const maxId = await AnalysisType.max('id');
+
+      if (maxId !== null && maxId !== undefined) {
+        const maxIdNumber = Number(maxId);
+        if (!isNaN(maxIdNumber)) {
+          await AnalysisType.sequelize.query(
+            `SELECT setval('"analysisType_id_seq"', ${maxIdNumber}, true)`,
+          );
+          console.log(`Sequence updated to ${maxIdNumber}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating sequence:', error);
     }
   }
 

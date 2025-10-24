@@ -400,9 +400,9 @@ export const translationInitialData: TranslationCreationAttrs[] = [
   {
     lang: LangValue.RU,
     namespace: 'features',
-    module: 'editTranslation',
+    module: 'editDialog',
     submodule: 'add',
-    value: 'Добавить перевод',
+    value: 'Добавить',
   },
   {
     lang: LangValue.RU,
@@ -456,7 +456,7 @@ export const translationInitialData: TranslationCreationAttrs[] = [
   {
     lang: LangValue.RU,
     namespace: 'features',
-    module: 'editTranslation',
+    module: 'editDialog',
     submodule: 'edit',
     value: 'Изменить',
   },

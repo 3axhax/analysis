@@ -69,6 +69,7 @@ export class TranslationService {
   async addNewTranslation(parameters: AddNewTranslationQueryDto) {
     return await this.translationRepository.create(parameters);
   }
+
   async editTranslation(parameters: editTranslationQueryDto) {
     const id = parameters.id;
     const translation = await this.translationRepository.findByPk(id);
@@ -95,5 +96,39 @@ export class TranslationService {
     return await this.translationRepository.findAll({
       where: parameters,
     });
+  }
+
+  async editTranslationByParameters(
+    parameters: Partial<Translation>,
+  ): Promise<Translation> {
+    const findExistParameters = { ...parameters };
+    delete findExistParameters.value;
+
+    const translation = await this.translationRepository.findOne({
+      where: findExistParameters,
+    });
+
+    if (!translation) {
+      return await this.translationRepository.create({
+        lang: parameters.lang ?? LangValue.RU,
+        namespace: parameters.namespace ?? '',
+        module: parameters.module ?? '',
+        submodule: parameters.submodule ?? null,
+        value: parameters.value ?? '',
+      });
+    }
+
+    translation.value = parameters.value ?? '';
+    return await translation.save();
+  }
+
+  async deleteTranslationByParameters(
+    parameters: Partial<Translation>,
+  ): Promise<boolean> {
+    const deletedCount = await this.translationRepository.destroy({
+      where: parameters,
+    });
+
+    return deletedCount > 0;
   }
 }

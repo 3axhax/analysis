@@ -1,18 +1,24 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Query, Body, UseGuards } from '@nestjs/common';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { AnalysisPointUnitsService } from './analysisPointUnits.service';
-import { GetAnalysisPointUnitsListQueryDto } from './dto/analysisPointUnits.dto';
+import {
+  AddNewAnalysisPointUnitsQueryDto,
+  EditAnalysisPointUnitsQueryDto,
+  GetAnalysisPointUnitsListQueryDto,
+} from './dto/analysisPointUnits.dto';
+
+export interface AnalysisPointUnitResponse {
+  id: number;
+  name: string;
+  translationRu: string;
+  translationEn: string;
+}
 
 export interface AnalysisPointUnitsListResponse {
   totalRecord: number;
   currentPage: number;
-  rows: {
-    id: number;
-    name: string;
-    translationRu: string;
-    translationEn: string;
-  }[];
+  rows: AnalysisPointUnitResponse[];
 }
 
 @Controller()
@@ -30,28 +36,28 @@ export class AnalysisPointUnitsController {
     );
   }
 
-  /*  @Post('translations/add')
+  @Post('units/add')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  async addNewTranslation(
-    @Body() param: AddNewTranslationQueryDto,
-  ): Promise<Translation> {
-    return this.translationService.addNewTranslation(param);
+  async addNewAnalysisPointUnits(
+    @Body() param: AddNewAnalysisPointUnitsQueryDto,
+  ): Promise<AnalysisPointUnitResponse> {
+    return this.analysisPointUnitsService.addNewAnalysisPointUnits(param);
   }
 
-  @Post('translations/edit')
+  @Post('units/edit')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  async editTranslation(
-    @Body() param: editTranslationQueryDto,
-  ): Promise<Translation> {
-    return this.translationService.editTranslation(param);
+  async editAnalysisPointUnits(
+    @Body() param: EditAnalysisPointUnitsQueryDto,
+  ): Promise<AnalysisPointUnitResponse> {
+    return this.analysisPointUnitsService.editAnalysisPointUnits(param);
   }
 
-  @Post('translations/delete')
+  @Post('units/delete')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  async deleteTranslation(@Body('id') id: number): Promise<any> {
-    return this.translationService.deleteTranslation(id);
-  }*/
+  async deleteAnalysisPointUnits(@Body('id') id: number): Promise<boolean> {
+    return this.analysisPointUnitsService.deleteAnalysisPointUnits(id);
+  }
 }

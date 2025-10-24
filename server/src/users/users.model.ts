@@ -49,9 +49,37 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @AfterSync
   static async addInitialData() {
-    const count = await User.count();
-    if (count === 0) {
-      await User.bulkCreate(userInitialData);
+    try {
+      const count = await User.count();
+      if (count === 0) {
+        await User.bulkCreate(userInitialData);
+      }
+      await this.updateSequence();
+    } catch (error) {
+      console.error('Error in User.addInitialData:', error);
+    }
+  }
+
+  private static async updateSequence(): Promise<void> {
+    try {
+      if (!User.sequelize) {
+        console.warn('Sequelize instance is not available');
+        return;
+      }
+
+      const maxId = await User.max('id');
+
+      if (maxId !== null && maxId !== undefined) {
+        const maxIdNumber = Number(maxId);
+        if (!isNaN(maxIdNumber)) {
+          await User.sequelize.query(
+            `SELECT setval('"users_id_seq"', ${maxIdNumber}, true)`,
+          );
+          console.log(`Sequence updated to ${maxIdNumber}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating sequence:', error);
     }
   }
 }

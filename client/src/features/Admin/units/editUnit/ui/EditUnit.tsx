@@ -1,32 +1,32 @@
 import { useTranslation } from "react-i18next";
-import { EditTranslationModal } from "@features/Admin/translations/editTranslation/ui/EditTranslationModal.tsx";
+import { EditUnitModal } from "@features/Admin/units/editUnit/ui/EditUnitModal.tsx";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { selectTranslationById } from "@entities/translations/model/slice.ts";
+import { selectUnitById } from "@entities/units/model/slice.ts";
 
-interface EditTranslationProps {
+interface EditUnitProps {
   className?: string;
-  editTranslationId?: number;
+  editUnitId?: number;
   resetEdit: () => void;
 }
 
-export const EditTranslation = ({
+export const EditUnit = ({
   className,
-  editTranslationId,
+  editUnitId,
   resetEdit,
-}: EditTranslationProps) => {
+}: EditUnitProps) => {
   const { t } = useTranslation("features");
-  const [openModal, setOpenModal] = useState<boolean>(!!editTranslationId);
+  const [openModal, setOpenModal] = useState<boolean>(!!editUnitId);
 
-  const editableTranslation = useAppSelector((state) =>
-    selectTranslationById(state, Number(editTranslationId)),
+  const editableUnit = useAppSelector((state) =>
+    selectUnitById(state, Number(editUnitId)),
   );
 
   useEffect(() => {
-    if (editTranslationId && editTranslationId > 0) {
+    if (editUnitId && editUnitId > 0) {
       setOpenModal(true);
     }
-  }, [editTranslationId]);
+  }, [editUnitId]);
 
   return (
     <>
@@ -39,10 +39,10 @@ export const EditTranslation = ({
       >
         {t("editDialog.add")}
       </button>
-      <EditTranslationModal
+      <EditUnitModal
         open={openModal}
         setOpen={setOpenModal}
-        editableTranslation={editableTranslation}
+        editableUnit={editableUnit}
       />
     </>
   );

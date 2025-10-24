@@ -2,6 +2,7 @@ import { getUnitsList, UnitsListItem, UnitsState } from "@entities/units";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
+import { ErrorActionType } from "@shared/lib/types/errorActionType.ts";
 
 const initialState: UnitsState = {
   loaded: false,
@@ -35,6 +36,9 @@ export const unitsSlice = createSlice({
         state.currentPage = action.payload;
       }
     },
+    resetError: (state: WritableDraft<UnitsState>) => {
+      state.error = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -56,23 +60,28 @@ export const unitsSlice = createSlice({
           state.pending = false;
         },
       )
-      .addCase(
-        getUnitsList.rejected,
-        (state: WritableDraft<UnitsState>, action) => {
+      .addMatcher(
+        (action) => action.type.endsWith("/rejected"),
+        (state: WritableDraft<UnitsState>, action: ErrorActionType) => {
           state.pending = false;
           state.error = action.error.message ? action.error.message : "";
         },
       )
-      .addCase(getUnitsList.pending, (state: WritableDraft<UnitsState>) => {
-        state.pending = true;
-        state.error = "";
-      });
+      .addMatcher(
+        (action) => action.type.endsWith("/pending"),
+        (state: WritableDraft<UnitsState>) => {
+          state.pending = true;
+          state.error = "";
+        },
+      );
   },
 });
 
-export const { setPending, setCurrentPage } = unitsSlice.actions;
+export const { setPending, setCurrentPage, resetError } = unitsSlice.actions;
 
 export const selectUnitsList = (state: RootState) => state.units.list;
+
+export const selectUnitsError = (state: RootState) => state.units.error;
 
 export const selectUnitsCurrentPage = (state: RootState) =>
   state.units.currentPage;

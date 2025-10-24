@@ -46,9 +46,37 @@ export class AnalysisPointsUnits extends Model<
 
   @AfterSync
   static async addInitialData() {
-    const count = await AnalysisPointsUnits.count();
-    if (count === 0) {
-      await AnalysisPointsUnits.bulkCreate(analysisPointsUnitsInitialData);
+    try {
+      const count = await AnalysisPointsUnits.count();
+      if (count === 0) {
+        await AnalysisPointsUnits.bulkCreate(analysisPointsUnitsInitialData);
+      }
+      await this.updateSequence();
+    } catch (error) {
+      console.error('Error in AnalysisPointsUnits.addInitialData:', error);
+    }
+  }
+
+  private static async updateSequence(): Promise<void> {
+    try {
+      if (!AnalysisPointsUnits.sequelize) {
+        console.warn('Sequelize instance is not available');
+        return;
+      }
+
+      const maxId = await AnalysisPointsUnits.max('id');
+
+      if (maxId !== null && maxId !== undefined) {
+        const maxIdNumber = Number(maxId);
+        if (!isNaN(maxIdNumber)) {
+          await AnalysisPointsUnits.sequelize.query(
+            `SELECT setval('"analysis_point_units_id_seq"', ${maxIdNumber}, true)`,
+          );
+          console.log(`Sequence updated to ${maxIdNumber}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating sequence:', error);
     }
   }
 }

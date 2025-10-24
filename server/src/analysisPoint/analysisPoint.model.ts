@@ -41,9 +41,37 @@ export class AnalysisPoint extends Model<
 
   @AfterSync
   static async addInitialData() {
-    const count = await AnalysisPoint.count();
-    if (count === 0) {
-      await AnalysisPoint.bulkCreate(analysisPointInitialData);
+    try {
+      const count = await AnalysisPoint.count();
+      if (count === 0) {
+        await AnalysisPoint.bulkCreate(analysisPointInitialData);
+      }
+      await this.updateSequence();
+    } catch (error) {
+      console.error('Error in AnalysisPoint.addInitialData:', error);
+    }
+  }
+
+  private static async updateSequence(): Promise<void> {
+    try {
+      if (!AnalysisPoint.sequelize) {
+        console.warn('Sequelize instance is not available');
+        return;
+      }
+
+      const maxId = await AnalysisPoint.max('id');
+
+      if (maxId !== null && maxId !== undefined) {
+        const maxIdNumber = Number(maxId);
+        if (!isNaN(maxIdNumber)) {
+          await AnalysisPoint.sequelize.query(
+            `SELECT setval('"analysisPoint_id_seq"', ${maxIdNumber}, true)`,
+          );
+          console.log(`Sequence updated to ${maxIdNumber}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating sequence:', error);
     }
   }
 

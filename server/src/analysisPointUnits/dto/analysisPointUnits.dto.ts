@@ -1,5 +1,5 @@
 import { Transform, TransformFnParams } from 'class-transformer';
-import { IsNumber, IsObject, IsOptional, Min } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString, Min } from 'class-validator';
 
 interface AnalysisPointUnitsFilters {
   name?: string;
@@ -54,4 +54,25 @@ export class GetAnalysisPointUnitsListQueryDto {
   @IsObject()
   @IsOptional()
   filters: AnalysisPointUnitsFilters = {};
+}
+
+export class AddNewAnalysisPointUnitsQueryDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  translationRu: string;
+
+  @IsString()
+  translationEn: string;
+}
+
+export class EditAnalysisPointUnitsQueryDto extends AddNewAnalysisPointUnitsQueryDto {
+  @Transform(({ value }: TransformFnParams) => {
+    const num = value ? parseInt(value as string, 10) : 1;
+    return isNaN(num) || num < 1 ? 1 : num;
+  })
+  @IsNumber()
+  @Min(1)
+  id: number;
 }

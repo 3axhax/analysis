@@ -74,8 +74,8 @@ export const EditTranslationModal = ({
       buttons={[
         {
           label: !editableTranslation
-            ? t("editTranslation.add")
-            : t("editTranslation.edit"),
+            ? t("editDialog.add")
+            : t("editDialog.edit"),
           onClick: handlerOnSubmit,
         },
       ]}

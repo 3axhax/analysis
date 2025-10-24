@@ -44,9 +44,37 @@ export class UserRole extends Model<UserRole, UsersRolesCreationAttrs> {
 
   @AfterSync
   static async addInitialData() {
-    const count = await UserRole.count();
-    if (count === 0) {
-      await UserRole.bulkCreate(usersRolesInitialData);
+    try {
+      const count = await UserRole.count();
+      if (count === 0) {
+        await UserRole.bulkCreate(usersRolesInitialData);
+      }
+      await this.updateSequence();
+    } catch (error) {
+      console.error('Error in UserRole.addInitialData:', error);
+    }
+  }
+
+  private static async updateSequence(): Promise<void> {
+    try {
+      if (!UserRole.sequelize) {
+        console.warn('Sequelize instance is not available');
+        return;
+      }
+
+      const maxId = await UserRole.max('id');
+
+      if (maxId !== null && maxId !== undefined) {
+        const maxIdNumber = Number(maxId);
+        if (!isNaN(maxIdNumber)) {
+          await UserRole.sequelize.query(
+            `SELECT setval('"users-roles_id_seq"', ${maxIdNumber}, true)`,
+          );
+          console.log(`Sequence updated to ${maxIdNumber}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating sequence:', error);
     }
   }
 }

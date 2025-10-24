@@ -2,6 +2,8 @@ export {
   unitsSlice,
   setPending,
   setCurrentPage,
+  resetError,
+  selectUnitsError,
   selectUnitsCurrentPage,
   selectUnitsList,
   selectUnitsTotalPage,
