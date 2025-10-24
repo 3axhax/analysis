@@ -9,6 +9,7 @@ export const getUnitsList = createAsyncThunk(
   "units/getList",
   async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
+    console.log("getUnitsList", state.ages.pending);
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
@@ -20,8 +21,9 @@ export const getUnitsList = createAsyncThunk(
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
       }
-      dispatch(setPending(false));
     }
   },
 );
@@ -37,8 +39,9 @@ export const addNewUnit = createAsyncThunk(
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
       }
-      dispatch(setPending(false));
     }
   },
 );
@@ -54,8 +57,9 @@ export const editUnit = createAsyncThunk(
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
       }
-      dispatch(setPending(false));
     }
   },
 );
@@ -71,8 +75,9 @@ export const deleteUnit = createAsyncThunk(
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
       }
-      dispatch(setPending(false));
     }
   },
 );

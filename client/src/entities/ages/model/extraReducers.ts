@@ -2,20 +2,34 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@shared/store";
 import Request from "@shared/transport/RestAPI.ts";
 import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
-import { setPending } from "@entities/translations/model/slice.ts";
-import { TranslationsListItem } from "@entities/translations";
+import { setPending, AgesListItem } from "@entities/ages";
 
-export const getTranslationsList = createAsyncThunk(
-  "translations/getList",
+export const getAgesList = createAsyncThunk(
+  "ages/getList",
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    if (!state.ages.loaded) {
+      try {
+        const response = await Request.get("/ages");
+        return response.data;
+      } catch (e) {
+        HandlerAxiosError(e);
+      }
+    }
+  },
+);
+
+export const getAgesListWithTranslate = createAsyncThunk(
+  "ages/getListWithTranslate",
   async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.get("/translations", {
-          currentPage: state.translations.currentPage,
-          recordPerPage: state.translations.recordPerPage,
-          filters: state.translations.filters,
+        const response = await Request.get("/ages/withTranslations", {
+          currentPage: state.ages.currentPage,
+          recordPerPage: state.ages.recordPerPage,
+          filters: state.ages.filters,
         });
         return response.data;
       } catch (e) {
@@ -27,14 +41,14 @@ export const getTranslationsList = createAsyncThunk(
   },
 );
 
-export const addNewTranslation = createAsyncThunk(
-  "translations/addNew",
-  async (data: TranslationsListItem, { getState, dispatch }) => {
+export const addNewAge = createAsyncThunk(
+  "ages/addNew",
+  async (data: AgesListItem, { getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/translations/add", data);
+        const response = await Request.post("/ages/add", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -45,14 +59,14 @@ export const addNewTranslation = createAsyncThunk(
   },
 );
 
-export const editTranslation = createAsyncThunk(
-  "translations/edit",
-  async (data: TranslationsListItem, { getState, dispatch }) => {
+export const editAge = createAsyncThunk(
+  "ages/edit",
+  async (data: AgesListItem, { getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/translations/edit", data);
+        const response = await Request.post("/ages/edit", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -63,14 +77,14 @@ export const editTranslation = createAsyncThunk(
   },
 );
 
-export const deleteTranslation = createAsyncThunk(
-  "translations/delete",
+export const deleteAge = createAsyncThunk(
+  "ages/delete",
   async (id: number, { getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/translations/delete", { id });
+        const response = await Request.post("/ages/delete", { id });
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);

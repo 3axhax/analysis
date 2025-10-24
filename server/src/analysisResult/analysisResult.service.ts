@@ -68,7 +68,7 @@ export class AnalysisResultService {
 
     const result: AnalysisResult = await this.analysisResultRepository.create({
       resultId,
-      ageId: age.id as number,
+      ageId: age.id,
       genderId: gender.id as number,
       userId: user ? user.id : null,
     });

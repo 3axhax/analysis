@@ -12,7 +12,8 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 
 export const TranslationsPage: React.FC = () => {
   const { t } = useTranslation("common");
-  useDocumentTitle(t("pageTitle.translations"));
+  const title = t("pageTitle.translations");
+  useDocumentTitle(title);
 
   const [editTranslationId, setEditTranslationId] = useState<number>(0);
 
@@ -27,7 +28,7 @@ export const TranslationsPage: React.FC = () => {
   return (
     <div>
       <div className={"relative"}>
-        <h1 className={"p-4 text-3xl"}>{t("pageTitle.translations")}</h1>
+        <h1 className={"p-4 text-3xl"}>{title}</h1>
         <EditTranslation
           className={"absolute right-[5%] top-[calc(50%-20px)]"}
           editTranslationId={editTranslationId}

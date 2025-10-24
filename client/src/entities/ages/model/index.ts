@@ -1,6 +1,20 @@
 export {
   agesSlice,
-  getAgesList,
   selectAgesPending,
+  selectAgesError,
+  selectAgesList,
   selectAgesListForSelect,
+  selectAgesCurrentPage,
+  selectAgesTotalPage,
+  setPending,
+  setCurrentPage,
+  resetError,
 } from "./slice";
+export type { AgesListItem, AgesState } from "./types";
+export {
+  getAgesList,
+  getAgesListWithTranslate,
+  addNewAge,
+  editAge,
+  deleteAge,
+} from "./extraReducers";

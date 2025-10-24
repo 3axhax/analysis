@@ -14,6 +14,7 @@ import { LogoutPage } from "@pages/logout";
 import { checkLSUser, selectIsUserAdmin } from "@entities/user";
 import { TranslationsPage } from "@pages/Admin/translations";
 import { UnitsPage } from "@pages/Admin/units";
+import { AgesPage } from "@pages/Admin/ages";
 
 function AppContainer() {
   const dispatch = useAppDispatch();

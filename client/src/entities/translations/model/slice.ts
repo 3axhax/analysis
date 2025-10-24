@@ -63,16 +63,18 @@ export const translationsSlice = createSlice({
         },
       )
       .addMatcher(
-        (action) => action.type.endsWith("/rejected"),
+        (action) =>
+          action.type.endsWith("/rejected") &&
+          action.type.startsWith("translations"),
         (state: WritableDraft<TranslationsState>, action: ErrorActionType) => {
-          state.pending = false;
           state.error = action.error.message ? action.error.message : "";
         },
       )
       .addMatcher(
-        (action) => action.type.endsWith("/pending"),
+        (action) =>
+          action.type.endsWith("/pending") &&
+          action.type.startsWith("translations"),
         (state: WritableDraft<TranslationsState>) => {
-          state.pending = true;
           state.error = "";
         },
       );

@@ -61,16 +61,16 @@ export const unitsSlice = createSlice({
         },
       )
       .addMatcher(
-        (action) => action.type.endsWith("/rejected"),
+        (action) =>
+          action.type.endsWith("/rejected") && action.type.startsWith("units"),
         (state: WritableDraft<UnitsState>, action: ErrorActionType) => {
-          state.pending = false;
           state.error = action.error.message ? action.error.message : "";
         },
       )
       .addMatcher(
-        (action) => action.type.endsWith("/pending"),
+        (action) =>
+          action.type.endsWith("/pending") && action.type.startsWith("units"),
         (state: WritableDraft<UnitsState>) => {
-          state.pending = true;
           state.error = "";
         },
       );

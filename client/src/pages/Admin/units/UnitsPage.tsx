@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
-import { UnitsList } from "@features/Admin/units/unitsList";
 import { selectUnitsError, useUnitsLoad } from "@entities/units";
+import { UnitsList } from "@features/Admin/units/unitsList";
 import { UnitsListPagination } from "@features/Admin/units/unitsListPagination";
 import { EditUnit } from "@features/Admin/units/editUnit";
 import { useAppSelector } from "@shared/store/hooks.ts";
 
 export const UnitsPage: React.FC = () => {
   const { t } = useTranslation("common");
-  useDocumentTitle(t("pageTitle.units"));
+  const title = t("pageTitle.units");
+  useDocumentTitle(title);
 
   const [editUnitId, setEditUnitId] = useState<number>(0);
 
@@ -24,7 +25,7 @@ export const UnitsPage: React.FC = () => {
   return (
     <div>
       <div className={"relative"}>
-        <h1 className={"p-4 text-3xl"}>{t("pageTitle.units")}</h1>
+        <h1 className={"p-4 text-3xl"}>{title}</h1>
         <EditUnit
           className={"absolute right-[5%] top-[calc(50%-20px)]"}
           editUnitId={editUnitId}
