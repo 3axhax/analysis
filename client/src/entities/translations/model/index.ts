@@ -2,6 +2,7 @@ export {
   translationsSlice,
   selectTranslationsCurrentPage,
   selectTranslationsTotalPage,
+  selectTranslationsError,
   setCurrentPage,
 } from "./slice";
 export type {

@@ -38,6 +38,7 @@ function AppContainer() {
           <>
             <Route path="/admin/translations" element={<TranslationsPage />} />
             <Route path="/admin/units" element={<UnitsPage />} />
+            <Route path="/admin/ages" element={<AgesPage />} />
           </>
         )}
         <Route path="*" element={<NotFoundPage />} />

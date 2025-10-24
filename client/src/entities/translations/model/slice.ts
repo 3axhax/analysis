@@ -7,6 +7,7 @@ import {
   TranslationsListItem,
   TranslationsState,
 } from "@entities/translations";
+import { ErrorActionType } from "@shared/lib/types/errorActionType.ts";
 
 const initialState: TranslationsState = {
   loaded: false,
@@ -61,15 +62,15 @@ export const translationsSlice = createSlice({
           state.pending = false;
         },
       )
-      .addCase(
-        getTranslationsList.rejected,
-        (state: WritableDraft<TranslationsState>, action) => {
+      .addMatcher(
+        (action) => action.type.endsWith("/rejected"),
+        (state: WritableDraft<TranslationsState>, action: ErrorActionType) => {
           state.pending = false;
           state.error = action.error.message ? action.error.message : "";
         },
       )
-      .addCase(
-        getTranslationsList.pending,
+      .addMatcher(
+        (action) => action.type.endsWith("/pending"),
         (state: WritableDraft<TranslationsState>) => {
           state.pending = true;
           state.error = "";
@@ -82,6 +83,9 @@ export const { setPending, setCurrentPage } = translationsSlice.actions;
 
 export const selectTranslationsList = (state: RootState) =>
   state.translations.list;
+
+export const selectTranslationsError = (state: RootState) =>
+  state.translations.error;
 
 export const selectTranslationsCurrentPage = (state: RootState) =>
   state.translations.currentPage;

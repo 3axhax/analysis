@@ -1,1 +1,1 @@
-export { UnitsPage } from "./UnitsPage.tsx";
+export { UnitsPage } from "./UnitsPage";
