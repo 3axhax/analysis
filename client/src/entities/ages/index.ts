@@ -8,6 +8,7 @@ export {
   selectAgesListForSelect,
   selectAgesCurrentPage,
   selectAgesTotalPage,
+  selectAgeById,
   setPending,
   setCurrentPage,
   resetError,

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { EditUnitModal } from "@features/Admin/units/editUnit/ui/EditUnitModal.tsx";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { selectUnitById } from "@entities/units/model/slice.ts";
+import { selectUnitById } from "@entities/units";
 
 interface EditUnitProps {
   className?: string;

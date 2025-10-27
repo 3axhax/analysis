@@ -178,17 +178,14 @@ export class AnalysisPointUnitsService {
       where: { id },
     });
 
-    console.log(existingUnit);
-    console.log(existingUnit?.name);
-
     await Promise.all([
-      this.translationService.editTranslationByParameters({
+      this.translationService.deleteTranslationByParameters({
         lang: LangValue.RU,
         namespace: this.namespace,
         module: this.module,
         submodule: existingUnit?.name,
       }),
-      this.translationService.editTranslationByParameters({
+      this.translationService.deleteTranslationByParameters({
         lang: LangValue.EN,
         namespace: this.namespace,
         module: this.module,

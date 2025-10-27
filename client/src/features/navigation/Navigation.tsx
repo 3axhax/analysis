@@ -34,7 +34,7 @@ export const Navigation = () => {
         { path: "/admin/analysisPoint", label: "Параметры анализов" },
         { path: "/admin/descriptions", label: "Описания" },
         { path: "/admin/units", label: t("pageTitle.units") },
-        { path: "/admin/ages", label: "Возрастные группы" },
+        { path: "/admin/ages", label: t("pageTitle.ages") },
         { path: "" },
         { path: "/admin/translations", label: t("pageTitle.translations") },
       ],

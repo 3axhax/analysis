@@ -1,14 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { UnitsListItem } from "@entities/units";
+import { AgesListItem } from "@entities/ages";
 import React from "react";
 import { InputWithLabel } from "@shared/ui/InputWithLabel";
 
-interface EditUnitFormProps {
-  values: UnitsListItem;
+interface EditAgeFormProps {
+  values: AgesListItem;
   handlerInput: ({ name, value }: { name: string; value: string }) => void;
 }
 
-export const EditAgeForm = ({ values, handlerInput }: EditUnitFormProps) => {
+export const EditAgeForm = ({ values, handlerInput }: EditAgeFormProps) => {
   const { t } = useTranslation("entities");
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,9 +19,9 @@ export const EditAgeForm = ({ values, handlerInput }: EditUnitFormProps) => {
       className={"space-y-2 text-gray-600 dark:text-gray-300"}
     >
       <InputWithLabel
-        label={t("unit.name")}
+        label={t("age.name")}
         name={"name"}
-        placeholder={"g/l"}
+        placeholder={"2_3m"}
         onChange={(value) => {
           handlerInput({ name: "name", value });
         }}
@@ -29,9 +29,9 @@ export const EditAgeForm = ({ values, handlerInput }: EditUnitFormProps) => {
         value={values.name}
       />
       <InputWithLabel
-        label={t("unit.translationRu")}
+        label={t("age.translationRu")}
         name={"translationRu"}
-        placeholder={"г/л"}
+        placeholder={"2-3 мес."}
         onChange={(value) => {
           handlerInput({ name: "translationRu", value });
         }}
@@ -39,9 +39,9 @@ export const EditAgeForm = ({ values, handlerInput }: EditUnitFormProps) => {
         value={values.translationRu}
       />
       <InputWithLabel
-        label={t("unit.translationEn")}
+        label={t("age.translationEn")}
         name={"translationEu"}
-        placeholder={"g/l"}
+        placeholder={"2-3 month"}
         onChange={(value) => {
           handlerInput({ name: "translationEn", value });
         }}

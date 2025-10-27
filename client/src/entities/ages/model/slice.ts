@@ -118,3 +118,6 @@ export const selectAgesCurrentPage = (state: RootState) =>
 
 export const selectAgesTotalPage = (state: RootState) =>
   Math.ceil(state.ages.totalRecord / state.ages.recordPerPage);
+
+export const selectAgeById = (state: RootState, id: number) =>
+  state.ages.list.find((item) => item.id === id) ?? null;

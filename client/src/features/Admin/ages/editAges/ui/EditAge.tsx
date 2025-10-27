@@ -1,32 +1,28 @@
 import { useTranslation } from "react-i18next";
-import { EditUnitModal } from "@features/Admin/units/editUnit/ui/EditUnitModal.tsx";
+import { EditAgeModal } from "@features/Admin/ages/editAges/ui/EditAgeModal.tsx";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { selectUnitById } from "@entities/units/model/slice.ts";
+import { selectAgeById } from "@entities/ages";
 
-interface EditUnitProps {
+interface EditAgeProps {
   className?: string;
-  editUnitId?: number;
+  editAgeId?: number;
   resetEdit: () => void;
 }
 
-export const EditAge = ({
-  className,
-  editUnitId,
-  resetEdit,
-}: EditUnitProps) => {
+export const EditAge = ({ className, editAgeId, resetEdit }: EditAgeProps) => {
   const { t } = useTranslation("features");
-  const [openModal, setOpenModal] = useState<boolean>(!!editUnitId);
+  const [openModal, setOpenModal] = useState<boolean>(!!editAgeId);
 
-  const editableUnit = useAppSelector((state) =>
-    selectUnitById(state, Number(editUnitId)),
+  const editableAge = useAppSelector((state) =>
+    selectAgeById(state, Number(editAgeId)),
   );
 
   useEffect(() => {
-    if (editUnitId && editUnitId > 0) {
+    if (editAgeId && editAgeId > 0) {
       setOpenModal(true);
     }
-  }, [editUnitId]);
+  }, [editAgeId]);
 
   return (
     <>
@@ -39,10 +35,10 @@ export const EditAge = ({
       >
         {t("editDialog.add")}
       </button>
-      <EditUnitModal
+      <EditAgeModal
         open={openModal}
         setOpen={setOpenModal}
-        editableUnit={editableUnit}
+        editableAge={editableAge}
       />
     </>
   );

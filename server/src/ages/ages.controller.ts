@@ -1,8 +1,10 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Query, Body, UseGuards } from '@nestjs/common';
 import { AgesService } from './ages.service';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import {
+  AddNewAgesQueryDto,
+  EditAgesQueryDto,
   //AddNewAgesQueryDto, EditAgesQueryDto,
   GetAgesListQueryDto,
 } from './dto/ages.dto';
@@ -22,10 +24,10 @@ export interface AgesListResponse {
 
 @Controller('ages')
 export class AgesController {
-  constructor(private AgesService: AgesService) {}
+  constructor(private agesService: AgesService) {}
   @Get()
   getAll() {
-    return this.AgesService.getAll();
+    return this.agesService.getAll();
   }
 
   @Get('/withTranslations')
@@ -34,24 +36,20 @@ export class AgesController {
   async getAgesList(
     @Query() query: GetAgesListQueryDto,
   ): Promise<AgesListResponse> {
-    return await this.AgesService.getAgesByQuery(query);
+    return await this.agesService.getAgesByQuery(query);
   }
 
-  /*@Post('add')
+  @Post('add')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  async addNewAges(
-      @Body() param: AddNewAgesQueryDto,
-  ): Promise<AgeResponse> {
+  async addNewAges(@Body() param: AddNewAgesQueryDto): Promise<AgeResponse> {
     return this.agesService.addNewAges(param);
   }
 
   @Post('edit')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  async editAges(
-      @Body() param: EditAgesQueryDto,
-  ): Promise<AgeResponse> {
+  async editAges(@Body() param: EditAgesQueryDto): Promise<AgeResponse> {
     return this.agesService.editAges(param);
   }
 
@@ -60,5 +58,5 @@ export class AgesController {
   @UseGuards(RolesGuard)
   async deleteAges(@Body('id') id: number): Promise<boolean> {
     return this.agesService.deleteAges(id);
-  }*/
+  }
 }
