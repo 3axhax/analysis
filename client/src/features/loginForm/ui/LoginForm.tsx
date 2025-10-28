@@ -41,7 +41,6 @@ export const LoginForm = () => {
   }, [navigate, isUserAuthorized, closeModal]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
       <form
         className="space-y-2 text-gray-600 dark:text-gray-300"
         onSubmit={handlerSubmit}
@@ -77,6 +76,5 @@ export const LoginForm = () => {
           Войти
         </button>
       </form>
-    </div>
   );
 };

@@ -61,7 +61,7 @@ export const Modal = ({
                 <div className="mt-3 text-center w-full">
                   <DialogTitle
                     as="h3"
-                    className="text-base font-semibold text-gray-900"
+                    className="text-xl font-bold mb-5"
                   >
                     {title}
                   </DialogTitle>
