@@ -53,7 +53,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                                 className={`block px-4 py-2 text-sm transition-colors${
                                   location.pathname === dropdownItem.path
                                     ? " bg-green-900 text-white"
-                                    : " text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    : " text-gray-700 dark:text-gray-300 hover:bg-green-800/10 dark:hover:bg-gray-700"
                                 }`}
                               >
                                 {dropdownItem.label}
@@ -71,20 +71,20 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   </>
                 ) : item.isButton ? (
                   <button
-                    className={"cursor-pointer"}
+                    className={"cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 ml-20 transition-all"}
                     key={item.key}
                     onClick={item.onClick}
                   >
-                    <ArrowRightEndOnRectangleIcon className="inline-flex h-6 w-6 mr-2 h-6 w-6 text-gray-500" />
+                    <ArrowRightEndOnRectangleIcon className="inline-flex h-5 w-5 mr-1" />
                     {item.label}
                   </button>
                 ) : (
                   <Link
                     to={item.key}
-                    className={`flex items-center flex-gap-2 px-4 py-2 rounded-lg transition-colors duration-200${
+                    className={`flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-white  ${
                       location.pathname === item.path
                         ? " bg-green-900 text-white"
-                        : " text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : " text-gray-600 dark:text-gray-300 hover:text-green-800 hover:border-green-800 hover:bg-green-600/10 dark:hover:bg-gray-700"
                     }`}
                   >
                     {item.iconLink && item.iconLink}
