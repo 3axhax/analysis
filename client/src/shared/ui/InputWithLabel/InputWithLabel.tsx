@@ -25,7 +25,7 @@ export const InputWithLabel = ({
     }
   };
   return (
-    <div className={`relative mb-5${className ? ` ${className}` : ``}`}>
+    <div className={`relative mb-5 ${className ? ` ${className}` : ``}`}>
       <input
         autoComplete={"on"}
         type={type}
