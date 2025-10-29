@@ -3,7 +3,6 @@ import { JSX, useState } from "react";
 import { Logo } from "@features/logo";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { ChevronUpIcon } from "@heroicons/react/16/solid";
-import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export interface NavItem {
@@ -28,7 +27,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
         <nav className="navigation ml-auto">
           <ul className="inline-flex space-x-6 justify-center">
             {navItems.map((item) => (
-              <li key={item.key} className={'inline-flex justify-center'}>
+              <li key={item.key} className={"inline-flex justify-center"}>
                 {item.isDropdown ? (
                   <>
                     <div
@@ -71,7 +70,9 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   </>
                 ) : item.isButton ? (
                   <button
-                    className={"cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 ml-20 transition-all"}
+                    className={
+                      "cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 ml-20 transition-all"
+                    }
                     key={item.key}
                     onClick={item.onClick}
                   >

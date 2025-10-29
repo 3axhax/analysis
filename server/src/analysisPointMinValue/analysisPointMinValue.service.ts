@@ -3,6 +3,9 @@ import { InjectModel } from '@nestjs/sequelize';
 import { AnalysisPointMinValue } from './analysisPointMinValue.model';
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 import { Op } from 'sequelize';
+import { Gender } from '../gender/gender.model';
+import { Age } from '../ages/ages.model';
+import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 
 @Injectable()
 export class AnalysisPointMinValueService {
@@ -49,5 +52,14 @@ export class AnalysisPointMinValueService {
     });
 
     return foundValue ? foundValue.value : 0;
+  };
+
+  getMinValueByParameters = async (
+    parameters: Partial<AnalysisPointMinValue>,
+  ): Promise<AnalysisPointMinValue[]> => {
+    return this.analysisPointMinValueRepository.findAll({
+      where: parameters,
+      include: [Gender, Age, AnalysisPointUnits],
+    });
   };
 }

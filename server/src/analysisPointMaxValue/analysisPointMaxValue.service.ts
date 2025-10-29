@@ -3,6 +3,9 @@ import { InjectModel } from '@nestjs/sequelize';
 import { AnalysisPointMaxValue } from './analysisPointMaxValue.model';
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 import { Op } from 'sequelize';
+import { Gender } from '../gender/gender.model';
+import { Age } from '../ages/ages.model';
+import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 
 @Injectable()
 export class AnalysisPointMaxValueService {
@@ -48,5 +51,14 @@ export class AnalysisPointMaxValueService {
     });
 
     return foundValue ? foundValue.value : 0;
+  };
+
+  getMaxValueByParameters = async (
+    parameters: Partial<AnalysisPointMaxValue>,
+  ): Promise<AnalysisPointMaxValue[]> => {
+    return this.analysisPointMaxValueRepository.findAll({
+      where: parameters,
+      include: [Gender, Age, AnalysisPointUnits],
+    });
   };
 }

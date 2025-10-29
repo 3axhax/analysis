@@ -5,6 +5,7 @@ import {
   ForeignKey,
   Model,
   Table,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { analysisPointMinValueInitialData } from './analysisPointMinValue.initialData';
 import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
@@ -108,4 +109,16 @@ export class AnalysisPointMinValue extends Model<
       console.error('Error updating sequence:', error);
     }
   }
+
+  @BelongsTo(() => Gender)
+  declare gender: Gender;
+
+  @BelongsTo(() => Age)
+  declare age: Age;
+
+  @BelongsTo(() => AnalysisPoint)
+  declare analysisPoint: AnalysisPoint;
+
+  @BelongsTo(() => AnalysisPointUnits)
+  declare unit: AnalysisPointUnits;
 }

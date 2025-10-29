@@ -5,6 +5,8 @@ import { AnalysisPoint } from './analysisPoint.model';
 import { AnalysisPointService } from './analysisPoint.service';
 import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 import { AnalysisPointsUnits } from './analysisPoint-Units.model';
+import { AnalysisPointMaxValueModule } from '../analysisPointMaxValue/analysisPointMaxValue.module';
+import { AnalysisPointMinValueModule } from '../analysisPointMinValue/analysisPointMinValue.module';
 
 @Module({
   providers: [AnalysisPointService],
@@ -15,6 +17,8 @@ import { AnalysisPointsUnits } from './analysisPoint-Units.model';
       AnalysisPointUnits,
       AnalysisPointsUnits,
     ]),
+    AnalysisPointMaxValueModule,
+    AnalysisPointMinValueModule,
   ],
   exports: [AnalysisPointService],
 })
