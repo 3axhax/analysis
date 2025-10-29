@@ -37,7 +37,9 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                       <WrenchScrewdriverIcon className="h-5 w-5 text-red-800 mr-2" />
                       {item.iconLink && item.iconLink}
                       {item.label}
-                      <ChevronDownIcon className={`inline-flex h-4 w-4 ml-2 text-gray-600 transition-transform group-hover:text-red-800 duration-200 ${isDropdownOpen === item.key ? 'rotate-180' : ''}`} />
+                      <ChevronDownIcon
+                        className={`inline-flex h-4 w-4 ml-2 text-gray-600 transition-transform group-hover:text-red-800 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
+                      />
                       {isDropdownOpen === item.key && (
                         <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-10 border border-gray-200 dark:border-gray-700">
                           {item.items?.map((dropdownItem) =>
