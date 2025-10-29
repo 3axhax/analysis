@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { JSX, useState } from "react";
 import { Logo } from "@features/logo";
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
-import { ChevronUpIcon } from "@heroicons/react/16/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
+import { WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
 
 export interface NavItem {
   key: string;
@@ -31,16 +31,13 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                 {item.isDropdown ? (
                   <>
                     <div
-                      className={`relative flex items-center flex-gap-2 px-4 py-2 rounded-lg transition-colors duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:cursor-pointer`}
+                      className={`relative flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-red-800 hover:cursor-pointer text-gray-600 dark:text-gray-300 group hover:text-red-800 hover:bg-red-600/10 hover:text-red-800 dark:hover:bg-gray-700`}
                       onClick={() => setIsDropdownOpen(item.key)}
                     >
+                      <WrenchScrewdriverIcon className="h-5 w-5 text-red-800 mr-2" />
                       {item.iconLink && item.iconLink}
                       {item.label}
-                      {isDropdownOpen === item.key ? (
-                        <ChevronUpIcon className="inline-flex h-5 w-5 mr-2 text-gray-500" />
-                      ) : (
-                        <ChevronDownIcon className="inline-flex h-5 w-5 mr-2 text-gray-500" />
-                      )}
+                      <ChevronDownIcon className={`inline-flex h-4 w-4 ml-2 text-gray-600 transition-transform group-hover:text-red-800 duration-200 ${isDropdownOpen === item.key ? 'rotate-180' : ''}`} />
                       {isDropdownOpen === item.key && (
                         <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-10 border border-gray-200 dark:border-gray-700">
                           {item.items?.map((dropdownItem) =>
