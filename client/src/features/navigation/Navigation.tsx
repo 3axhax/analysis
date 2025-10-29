@@ -58,9 +58,15 @@ export const Navigation = () => {
 
   if (isUserAuthorized) {
     navItems.push({
-      key: "logout",
-      path: "/logout",
-      label: `${userName} (Выйти)`,
+      key: "userMenu",
+      path: "#",
+      label: `${userName}`,
+      isDropdown: true,
+      items: [
+        { path: "/user/profile", label: "Профиль" },
+        { path: "/user/analysis", label: "Мои анализы" },
+        { path: "/logout", label: "Выход" },
+      ],
     });
   }
 

@@ -39,14 +39,14 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                       {item.label}
                       <ChevronDownIcon className={`inline-flex h-4 w-4 ml-2 text-gray-600 transition-transform group-hover:text-red-800 duration-200 ${isDropdownOpen === item.key ? 'rotate-180' : ''}`} />
                       {isDropdownOpen === item.key && (
-                        <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-10 border border-gray-200 dark:border-gray-700">
+                        <div className="absolute top-full left-0 mt-4 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 border border-gray-200 dark:border-gray-700">
                           {item.items?.map((dropdownItem) =>
                             dropdownItem.label ? (
                               <Link
                                 key={dropdownItem.path}
                                 to={dropdownItem.path}
                                 onClick={() => setIsDropdownOpen("")}
-                                className={`block px-4 py-2 text-sm transition-colors${
+                                className={`block text-left px-4 py-2 text-sm transition-colors${
                                   location.pathname === dropdownItem.path
                                     ? " bg-green-900 text-white"
                                     : " text-gray-700 dark:text-gray-300 hover:bg-green-800/10 dark:hover:bg-gray-700"
