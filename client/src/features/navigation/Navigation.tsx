@@ -8,6 +8,8 @@ import { useInfoModalData } from "@app/providers/infoModalProvider";
 import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
 import { NavigationUI, NavItem } from "@widgets/navigation";
 import { useTranslation } from "react-i18next";
+import {WrenchScrewdriverIcon} from "@heroicons/react/24/outline";
+import {UserIcon} from "@heroicons/react/16/solid";
 
 export const Navigation = () => {
   const { t } = useTranslation("common");
@@ -29,6 +31,7 @@ export const Navigation = () => {
       path: "#",
       label: "Управление",
       isDropdown: true,
+      iconLink: <WrenchScrewdriverIcon className="h-5 w-5 text-green-800 mr-2" />,
       items: [
         { path: "/admin/analysisType", label: "Типы анализов" },
         { path: "/admin/analysisPoints", label: t("pageTitle.analysisPoints") },
@@ -62,6 +65,7 @@ export const Navigation = () => {
       path: "#",
       label: `${userName}`,
       isDropdown: true,
+      iconLink: <UserIcon className="h-5 w-5 text-green-800 mr-2" />,
       items: [
         { path: "/user/profile", label: "Профиль" },
         { path: "/user/analysis", label: "Мои анализы" },
