@@ -70,7 +70,7 @@
   }
 
   .form-control:focus + .form-label,
-  .form-control:placeholder-shown + .form-label {
+  .form-control:not(placeholder-shown) + .form-label {
     @apply -top-3 text-xs/5;
   }
 
@@ -95,7 +95,7 @@
   }
 
   .btn {
-    @apply relative overflow-hidden w-full text-white text-lg/5 transition-all duration-400 mt-2 font-medium rounded-md px-5 py-4 cursor-pointer
+    @apply relative overflow-hidden text-white text-lg/5 transition-all duration-400 mt-2 font-medium rounded-md px-5 py-4 cursor-pointer
     bg-gradient-to-r
     from-[var(--color-green-800)]
     via-[var(--color-green-500)]
@@ -108,31 +108,6 @@
     shadow-lg shadow-green-800/75;
   }
 
-  /*.btn:before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(0deg, transparent, transparent 30%, var(--color-white));
-    transform: rotate(-45deg);
-    transition: all 0.5s
-    ease;
-    opacity: 0;
-  }
-
-
-  .btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-  }
-
-  .btn:hover:before {
-    opacity: 1;
-    transform: rotate(-45deg) translateY(100%);
-  }
-  */
   .b-border {
     position: absolute;
     inset: 0;
@@ -172,8 +147,6 @@
     border: calc(var(--border-width) * 1px) solid transparent;
     border-radius: calc(var(--border-radius) * 1px);
     padding: clamp(1rem, 3vmin + 1rem, 6rem);
-    display: grid;
-    gap: clamp(1rem, 3vmin + 1rem, 4rem);
   }
 
   .radio-input {

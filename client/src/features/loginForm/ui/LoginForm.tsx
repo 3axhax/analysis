@@ -68,7 +68,7 @@ export const LoginForm = () => {
         </div>
       )}
 
-      <button type={"submit"} className={"btn mb-5"} disabled={pending}>
+      <button type={"submit"} className={"btn w-full mb-5"} disabled={pending}>
         Войти
       </button>
     </form>

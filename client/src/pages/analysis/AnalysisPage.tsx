@@ -55,7 +55,7 @@ export const AnalysisPage = () => {
           </div>
           <div className="b-border__content">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Сведения по пациенте
+            Введите данные
           </h2>
           <form
               className="space-y-2 text-gray-600 dark:text-gray-300"
@@ -68,9 +68,7 @@ export const AnalysisPage = () => {
 
             <button
                 type={"submit"}
-                className={
-                  "bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
-                }
+                className={"btn w-full"}
                 disabled={pending}
             >
               Отправить
