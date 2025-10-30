@@ -19,6 +19,8 @@
     --border-width: 3;
     --trail-size: 25;
     --speed: 12s;
+
+    --secondaryColor: var(--color-green-800);
   }
 
   body {
@@ -137,5 +139,23 @@
     padding: clamp(1rem, 3vmin + 1rem, 6rem);
     display: grid;
     gap: clamp(1rem, 3vmin + 1rem, 4rem);
+  }
+
+  .radio-input {
+    @apply relative mr-1 cursor-pointer;
+  }
+
+  .radio-input:before {
+      @apply w-3 h-3 absolute top-0.5 left-0.5 rounded-full z-1 bg-green-800 content-[''] transform scale-0   transition-transform duration-400 ease-[cubic-bezier(.45,1.8,.5,.75)];
+    }
+
+  .radio-label {
+    @apply relative;
+  }
+  .radio-input:checked:before {
+    @apply transform scale-100;
+  }
+  .radio-input:after {
+    @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white border-2 border-green-800;
   }
 }
