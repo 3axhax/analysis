@@ -49,8 +49,7 @@ export const AnalysisPage = () => {
         </h1>
       </div>
 
-      <div className="mx-auto text-left">
-        <div className="relative">
+      <div className="mx-auto text-left relative">
           <div className="b-border">
             <div className="trail"></div>
           </div>
@@ -79,7 +78,6 @@ export const AnalysisPage = () => {
           </form>
           </div>
         </div>
-      </div>
     </div>
   );
 };
