@@ -1,16 +1,20 @@
+export interface AnalysisPointLimit {
+  age: string;
+  unit: string;
+  gender: string;
+  minValue: number;
+  maxValue: number;
+  skipGender?: boolean;
+  skipAge?: boolean;
+}
+
 export interface AnalysisPointListItem {
   id: number;
   name: string;
   units: string[];
   translationRu: string;
   translationEn: string;
-  limits: {
-    age: string;
-    unit: string;
-    gender: string;
-    minValue: number;
-    maxValue: number;
-  }[];
+  limits: AnalysisPointLimit[];
 }
 
 export interface AnalysisPointState {

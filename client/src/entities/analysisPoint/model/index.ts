@@ -16,6 +16,7 @@ export {
   selectAnalysisPointsError,
   selectAnalysisPointsCurrentPage,
   selectAnalysisPointsTotalPage,
+  selectAnalysisPointLimits,
 } from "./selectors";
 
 export {
@@ -24,4 +25,8 @@ export {
   deleteAnalysisPoint,
 } from "./extraReducers";
 
-export type { AnalysisPointListItem, AnalysisPointState } from "./types";
+export type {
+  AnalysisPointListItem,
+  AnalysisPointState,
+  AnalysisPointLimit,
+} from "./types";

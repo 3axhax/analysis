@@ -9,6 +9,7 @@ import {
 } from "@entities/analysisPoint";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
+import { AnalysisPointDataLimits } from "@widgets/Admin/analysisPointDataLimits";
 
 interface AnalysisPointsListProps {
   handlerEditRecord: (id: number) => void;
@@ -40,8 +41,6 @@ export const AnalysisPointsList = ({
     selectAnalysisPointList,
   );
 
-  console.log(analysisPointList);
-
   const tableData: TableData = {
     header: [
       { name: "id", label: "ID" },
@@ -56,31 +55,16 @@ export const AnalysisPointsList = ({
 
   if (analysisPointList?.length > 0) {
     tableData.rows = analysisPointList.map((row: AnalysisPointListItem) => {
-      console.log(row.limits);
-      const limits =
-        row.limits.length > 0 ? (
-          <ul>
-            {row.limits.map((limit, i) => (
-              <li key={i}>
-                {t(`gender.${limit.gender}`)}, {t(`ages.${limit.age}`)}:{" "}
-                {limit.minValue === 0
-                  ? ` < ${limit.maxValue}`
-                  : limit.maxValue === 0
-                    ? ` > ${limit.minValue}`
-                    : `${limit.minValue} - ${limit.maxValue}`}{" "}
-                {t(`units.${limit.unit}`)}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          ""
-        );
       return [
         { name: "id", data: row.id.toString() },
         { name: "name", data: row.name },
         { name: "translationRu", data: row.translationRu },
         { name: "translationEn", data: row.translationEn },
-        { name: "limits", data: limits, className: "text-start" },
+        {
+          name: "limits",
+          data: <AnalysisPointDataLimits analysisPointId={row.id} />,
+          className: "text-start",
+        },
         {
           name: "action",
           data: (

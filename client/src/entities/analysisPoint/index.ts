@@ -16,8 +16,13 @@ export {
   selectAnalysisPointsError,
   selectAnalysisPointsCurrentPage,
   selectAnalysisPointsTotalPage,
+  selectAnalysisPointLimits,
 } from "./model";
-export type { AnalysisPointListItem, AnalysisPointState } from "./model";
+export type {
+  AnalysisPointListItem,
+  AnalysisPointState,
+  AnalysisPointLimit,
+} from "./model";
 export {
   useAnalysisPointsLoad,
   useFullAnalysisPointsLoad,
