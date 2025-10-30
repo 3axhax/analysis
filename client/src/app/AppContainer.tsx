@@ -15,6 +15,7 @@ import { checkLSUser, selectIsUserAdmin } from "@entities/user";
 import { TranslationsPage } from "@pages/Admin/translations";
 import { UnitsPage } from "@pages/Admin/units";
 import { AgesPage } from "@pages/Admin/ages";
+import { AnalysisPointsPage } from "@pages/Admin/analysisPoints";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,10 @@ function AppContainer() {
             <Route path="/admin/translations" element={<TranslationsPage />} />
             <Route path="/admin/units" element={<UnitsPage />} />
             <Route path="/admin/ages" element={<AgesPage />} />
+            <Route
+              path="/admin/analysisPoints"
+              element={<AnalysisPointsPage />}
+            />
           </>
         )}
         <Route path="*" element={<NotFoundPage />} />

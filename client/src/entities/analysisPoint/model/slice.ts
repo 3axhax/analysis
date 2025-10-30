@@ -1,29 +1,12 @@
-import {
-  createAsyncThunk,
-  createSelector,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
-
-import Request from "@shared/transport/RestAPI";
-import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { WritableDraft } from "immer";
-import { RootState } from "@shared/store";
-import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
-
-interface AnalysisPointListItem {
-  id: number;
-  name: string;
-  units: string[];
-}
-
-interface AnalysisPointState {
-  loaded: boolean;
-  pending: boolean;
-  error: string;
-  list: AnalysisPointListItem[];
-  selectedList: number[];
-}
+import { ErrorActionType } from "@shared/lib/types/errorActionType.ts";
+import {
+  AnalysisPointListItem,
+  AnalysisPointState,
+  getAnalysisPointList,
+} from "@entities/analysisPoint";
+import { getFullAnalysisPointList } from "@entities/analysisPoint/model/extraReducers.ts";
 
 const initialState: AnalysisPointState = {
   loaded: false,
@@ -31,22 +14,11 @@ const initialState: AnalysisPointState = {
   error: "",
   list: [],
   selectedList: [],
+  currentPage: 1,
+  totalRecord: 0,
+  recordPerPage: 20,
+  filters: {},
 };
-
-export const getAnalysisPointList = createAsyncThunk(
-  "analysisPoint/getList",
-  async (_, { getState }) => {
-    const state = getState() as RootState;
-    if (!state.analysisPoint.loaded) {
-      try {
-        const response = await Request.get("/analysisPoint");
-        return response.data;
-      } catch (e) {
-        HandlerAxiosError(e);
-      }
-    }
-  },
-);
 
 export const analysisPointSlice = createSlice({
   name: "analysisPoint",
@@ -66,6 +38,26 @@ export const analysisPointSlice = createSlice({
         (point) => point !== action.payload,
       );
     },
+    setPending: (
+      state: WritableDraft<AnalysisPointState>,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.pending = action.payload;
+    },
+    setCurrentPage: (
+      state: WritableDraft<AnalysisPointState>,
+      action: PayloadAction<number>,
+    ) => {
+      if (
+        action.payload > 0 &&
+        action.payload <= Math.ceil(state.totalRecord / state.recordPerPage)
+      ) {
+        state.currentPage = action.payload;
+      }
+    },
+    resetError: (state: WritableDraft<AnalysisPointState>) => {
+      state.error = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -83,39 +75,46 @@ export const analysisPointSlice = createSlice({
         },
       )
       .addCase(
-        getAnalysisPointList.rejected,
-        (state: WritableDraft<AnalysisPointState>, action) => {
+        getFullAnalysisPointList.fulfilled,
+        (
+          state: WritableDraft<AnalysisPointState>,
+          action: PayloadAction<{
+            totalRecord: number;
+            currentPage: number;
+            rows: AnalysisPointListItem[];
+          }>,
+        ) => {
+          if (action.payload) {
+            state.list = action.payload.rows;
+            state.totalRecord = action.payload.totalRecord;
+            state.loaded = true;
+          }
           state.pending = false;
+        },
+      )
+      .addMatcher(
+        (action) =>
+          action.type.endsWith("/rejected") &&
+          action.type.startsWith("analysisPoint"),
+        (state: WritableDraft<AnalysisPointState>, action: ErrorActionType) => {
           state.error = action.error.message ? action.error.message : "";
         },
       )
-      .addCase(
-        getAnalysisPointList.pending,
+      .addMatcher(
+        (action) =>
+          action.type.endsWith("/pending") &&
+          action.type.startsWith("analysisPoint"),
         (state: WritableDraft<AnalysisPointState>) => {
-          state.pending = true;
           state.error = "";
         },
       );
   },
 });
 
-export const { setSelectedPoint, removeSelectedPoint } =
-  analysisPointSlice.actions;
-
-const selectAnalysisPointList = (state: RootState) => state.analysisPoint.list;
-export const selectAnalysisPointSelectedList = (state: RootState) =>
-  state.analysisPoint.selectedList;
-export const selectAnalysisPointPending = (state: RootState) =>
-  state.analysisPoint.pending;
-
-export const selectAnalysisPointById = (state: RootState, pointId: number) =>
-  state.analysisPoint.list.find((point) => point.id === pointId);
-
-export const selectAnalysisPointListForSelect = createSelector(
-  [selectAnalysisPointList],
-  (agesList): SelectUIOption<number>[] =>
-    agesList.map((item) => ({
-      value: item.id,
-      label: item.name,
-    })),
-);
+export const {
+  setSelectedPoint,
+  removeSelectedPoint,
+  setPending,
+  setCurrentPage,
+  resetError,
+} = analysisPointSlice.actions;

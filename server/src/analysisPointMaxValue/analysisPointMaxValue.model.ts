@@ -1,5 +1,6 @@
 import {
   AfterSync,
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -108,4 +109,16 @@ export class AnalysisPointMaxValue extends Model<
       console.error('Error updating sequence:', error);
     }
   }
+
+  @BelongsTo(() => Gender)
+  declare gender: Gender;
+
+  @BelongsTo(() => Age)
+  declare age: Age;
+
+  @BelongsTo(() => AnalysisPoint)
+  declare analysisPoint: AnalysisPoint;
+
+  @BelongsTo(() => AnalysisPointUnits)
+  declare unit: AnalysisPointUnits;
 }

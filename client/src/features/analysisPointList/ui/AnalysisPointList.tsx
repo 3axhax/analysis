@@ -7,14 +7,14 @@ import {
   selectAnalysisTypeListForSelect,
   useAnalysisTypeLoad,
 } from "@entities/analysisType";
-import { useAnalysisPointLoad } from "@entities/analysisPoint";
+import { useAnalysisPointsLoad } from "@entities/analysisPoint";
 import { AnalysisPointSelectedList } from "@features/analysisPointList/ui/AnalysisPointSelectedList.tsx";
 import { clearAllPointData } from "@entities/analysisResult";
 
 export const AnalysisPointList = () => {
   const dispatch = useAppDispatch();
   useAnalysisTypeLoad();
-  useAnalysisPointLoad();
+  useAnalysisPointsLoad();
   const { t } = useTranslation("entities");
   const analysisTypeOptions = useAppSelector(selectAnalysisTypeListForSelect);
 

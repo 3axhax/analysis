@@ -31,7 +31,7 @@ export const Navigation = () => {
       isDropdown: true,
       items: [
         { path: "/admin/analysisType", label: "Типы анализов" },
-        { path: "/admin/analysisPoint", label: "Параметры анализов" },
+        { path: "/admin/analysisPoints", label: t("pageTitle.analysisPoints") },
         { path: "/admin/descriptions", label: "Описания" },
         { path: "/admin/units", label: t("pageTitle.units") },
         { path: "/admin/ages", label: t("pageTitle.ages") },

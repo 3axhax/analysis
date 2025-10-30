@@ -41,40 +41,36 @@ export const LoginForm = () => {
   }, [navigate, isUserAuthorized, closeModal]);
 
   return (
-      <form
-        className="space-y-2 text-gray-600 dark:text-gray-300"
-        onSubmit={handlerSubmit}
-      >
-        <InputWithLabel
-          type={"email"}
-          name={"email"}
-          placeholder={"mail@mail.com"}
-          value={email}
-          onChange={setEmail}
-          label={t("email")}
-        />
-        <InputWithLabel
-          type={"password"}
-          name={"password"}
-          placeholder={"*****"}
-          value={password}
-          onChange={setPassword}
-          label={t("password")}
-        />
+    <form
+      className="space-y-2 text-gray-600 dark:text-gray-300"
+      onSubmit={handlerSubmit}
+    >
+      <InputWithLabel
+        type={"email"}
+        name={"email"}
+        placeholder={"mail@mail.com"}
+        value={email}
+        onChange={setEmail}
+        label={t("email")}
+      />
+      <InputWithLabel
+        type={"password"}
+        name={"password"}
+        placeholder={"*****"}
+        value={password}
+        onChange={setPassword}
+        label={t("password")}
+      />
 
-        {error && (
-          <div className={"bg-red-200 border-1 rounded-md px-4 py-2"}>
-            {error}
-          </div>
-        )}
+      {error && (
+        <div className={"bg-red-200 border-1 rounded-md px-4 py-2"}>
+          {error}
+        </div>
+      )}
 
-        <button
-          type={"submit"}
-          className={"btn btn-primary"}
-          disabled={pending}
-        >
-          Войти
-        </button>
-      </form>
+      <button type={"submit"} className={"btn btn-primary"} disabled={pending}>
+        Войти
+      </button>
+    </form>
   );
 };

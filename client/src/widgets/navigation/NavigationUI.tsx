@@ -27,7 +27,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
         <nav className="navigation ml-auto">
           <ul className="inline-flex space-x-6 justify-center">
             {navItems.map((item) => (
-              <li key={item.key} className={'inline-flex justify-center'}>
+              <li key={item.key} className={"inline-flex justify-center"}>
                 {item.isDropdown ? (
                   <>
                     <div
@@ -37,7 +37,9 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                       <WrenchScrewdriverIcon className="h-5 w-5 text-red-800 mr-2" />
                       {item.iconLink && item.iconLink}
                       {item.label}
-                      <ChevronDownIcon className={`inline-flex h-4 w-4 ml-2 text-gray-600 transition-transform group-hover:text-red-800 duration-200 ${isDropdownOpen === item.key ? 'rotate-180' : ''}`} />
+                      <ChevronDownIcon
+                        className={`inline-flex h-4 w-4 ml-2 text-gray-600 transition-transform group-hover:text-red-800 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
+                      />
                       {isDropdownOpen === item.key && (
                         <div className="absolute top-full left-0 mt-4 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 border border-gray-200 dark:border-gray-700">
                           {item.items?.map((dropdownItem) =>
@@ -67,7 +69,9 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   </>
                 ) : item.isButton ? (
                   <button
-                    className={"cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 ml-20 transition-all"}
+                    className={
+                      "cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 ml-20 transition-all"
+                    }
                     key={item.key}
                     onClick={item.onClick}
                   >
