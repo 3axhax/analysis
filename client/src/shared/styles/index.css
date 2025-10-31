@@ -1,9 +1,28 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@font-face {
+  font-family: 'Sofia Sans';
+  src: url('../fonts/SofiaSans.woff2') format('woff2-variations');
+  font-weight: 1 1000;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sofia Sans';
+  src: url('../fonts/SofiaSans-Italic.woff2') format('woff2-variations');
+  font-weight: 1 1000;
+  font-stretch: 75% 125%;
+  font-style: italic;
+  font-display: swap;
+}
+
 @import "tailwindcss";
+
 
 @layer base {
   :root {
-    font-family: "Roboto", "Arial Black", sans-serif;
+    font-family: i-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
     font-weight: 300;
     line-height: 1.5;
     font-synthesis: none;
@@ -29,6 +48,33 @@
 
   #root {
     @apply mx-auto text-center w-full;
+  }
+}
+
+@layer utilities {
+  /* Кастомные классы для точного контроля variable font */
+  .font-sofia-variable {
+    font-family: 'Sofia Sans', sans-serif;
+    font-variation-settings:
+            'wght' 400,
+            'wdth' 100;
+  }
+
+  .font-weight-350 {
+    font-variation-settings: 'wght' 350;
+  }
+
+  .font-weight-450 {
+    font-variation-settings: 'wght' 450;
+  }
+
+  .font-width-110 {
+    font-variation-settings: 'wdth' 110;
+  }
+
+  /* Плавные переходы для variable font */
+  .font-transition {
+    transition: font-variation-settings 0.3s ease;
   }
 }
 

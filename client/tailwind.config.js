@@ -7,10 +7,19 @@ export const content = [
 export const theme = {
   extend: {
     fontFamily: {
-      'sans': ['Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-      'serif': ['Roboto Slab', 'Georgia', 'serif'],
-      'mono': ['Roboto Mono', 'Monaco', 'monospace'],
+      'sofia': ['Sofia Sans', 'sans-serif'],
     },
+    fontWeight: {
+      'thin': 100,
+      'extralight': 200,
+      'light': 300,
+      'normal': 400,
+      'medium': 500,
+      'semibold': 600,
+      'bold': 700,
+      'extrabold': 800,
+      'black': 900,
+    }
   },
 };
 

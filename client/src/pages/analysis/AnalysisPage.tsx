@@ -54,7 +54,7 @@ export const AnalysisPage = () => {
             <div className="trail"></div>
           </div>
           <div className="b-border__content">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-2xl font-sofia font-weight-450 text-gray-900 dark:text-white mb-4">
             Введите данные
           </h2>
           <form
