@@ -69,6 +69,7 @@ export const EditAgeModal = ({
         {
           label: !editableAge ? t("editDialog.add") : t("editDialog.edit"),
           onClick: handlerOnSubmit,
+          type: 'danger',
         },
       ]}
     />
