@@ -44,37 +44,38 @@ export const AnalysisPage = () => {
   return (
     <div className="app w-full">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 className="text-4xl font-sans  text-gray-900 dark:text-white mb-4">
           {t("pageTitle.analysis")}
         </h1>
       </div>
 
-      <div className="mx-auto text-left">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+      <div className="mx-auto text-left relative">
+          <div className="b-border">
+            <div className="trail"></div>
+          </div>
+          <div className="b-border__content">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Сведения по пациенте
+            Введите данные
           </h2>
           <form
-            className="space-y-2 text-gray-600 dark:text-gray-300"
-            onSubmit={handlerSubmit}
+              className="space-y-2 text-gray-600 dark:text-gray-300"
+              onSubmit={handlerSubmit}
           >
-            <GenderSelector />
-            <AgeSelector />
-            <hr />
-            <AnalysisPointList />
+            <GenderSelector/>
+            <AgeSelector/>
+            <hr/>
+            <AnalysisPointList/>
 
             <button
-              type={"submit"}
-              className={
-                "bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
-              }
-              disabled={pending}
+                type={"submit"}
+                className={"btn w-full"}
+                disabled={pending}
             >
               Отправить
             </button>
           </form>
+          </div>
         </div>
-      </div>
     </div>
   );
 };

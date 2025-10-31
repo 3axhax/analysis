@@ -11,6 +11,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+    --accent: black;
+    --canvas: color-mix(in lch, canvas, canvasText 1%);
+    --border: color-mix(in lch, canvas, canvasText 10%);
+    --text: color-mix(in lch, canvasText, canvas 25%);
+    --border-radius: 24;
+    --border-width: 3;
+    --trail-size: 25;
+    --speed: 12s;
+
+    --secondaryColor: var(--color-green-800);
   }
 
   body {
@@ -24,7 +34,7 @@
 
 @layer components {
   .app {
-    @apply flex flex-col items-center gap-8;
+    @apply flex flex-col items-center;
   }
 
   .logo {
@@ -60,7 +70,7 @@
   }
 
   .form-control:focus + .form-label,
-  .form-control:placeholder-shown + .form-label {
+  .form-control:not(placeholder-shown) + .form-label {
     @apply -top-3 text-xs/5;
   }
 
@@ -85,6 +95,75 @@
   }
 
   .btn {
-    @apply w-full bg-green-800 text-white text-lg/5 border border-green-800 transition-all mt-2 rounded-md px-5 py-3 cursor-pointer hover:bg-white hover:text-green-800 disabled:cursor-not-allowed disabled:bg-blue-300;
+    @apply relative overflow-hidden text-white text-lg/5 transition-all duration-400 mt-2 font-medium rounded-md px-5 py-4 cursor-pointer
+    bg-gradient-to-r
+    from-[var(--color-green-800)]
+    via-[var(--color-green-500)]
+    via-[var(--color-green-400)]
+    to-[var(--color-green-800)]
+    bg-[length:300%_100%]
+    hover:bg-right-top
+    disabled:cursor-not-allowed
+    disabled:bg-blue-300
+    shadow-lg shadow-green-800/75;
+  }
+
+  .b-border {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 0 0 0 round calc(var(--border-radius) * 1px));
+    border-radius: calc(var(--border-radius) * 1px);
+    background: var(--border);
+    z-index: -1;
+    border: 0;
+    container-type: inline-size;
+    transition: -webkit-clip-path var(1s);
+    transition: clip-path var(1s);
+    transition: clip-path var(1s), -webkit-clip-path var(1s);
+  }
+
+  .trail {
+    width: calc(var(--trail-size) * 1cqmin);
+    aspect-ratio: 2 / 1;
+    position: absolute;
+    background: radial-gradient(
+            100% 100% at right,
+            var(--accent, red),
+            transparent 50%
+    );
+    offset-path: border-box;
+    offset-anchor: 100% 50%;
+    animation: journey var(--speed, 6s) infinite linear;
+  }
+
+  @keyframes journey {
+    to {
+      offset-distance: 100%;
+    }
+  }
+
+  .b-border__content {
+    background: linear-gradient(var(--canvas), var(--canvas)) padding-box, transparent;
+    border: calc(var(--border-width) * 1px) solid transparent;
+    border-radius: calc(var(--border-radius) * 1px);
+    padding: clamp(1rem, 3vmin + 1rem, 6rem);
+  }
+
+  .radio-input {
+    @apply relative mr-1 cursor-pointer;
+  }
+
+  .radio-input:before {
+      @apply w-3 h-3 absolute top-0.5 left-0.5 rounded-full z-1 bg-green-800 content-[''] transform scale-0   transition-transform duration-400 ease-[cubic-bezier(.45,1.8,.5,.75)];
+    }
+
+  .radio-label {
+    @apply relative;
+  }
+  .radio-input:checked:before {
+    @apply transform scale-100;
+  }
+  .radio-input:after {
+    @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white border-2 border-green-800;
   }
 }
