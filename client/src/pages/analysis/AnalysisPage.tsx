@@ -50,32 +50,28 @@ export const AnalysisPage = () => {
       </div>
 
       <div className="mx-auto text-left relative">
-          <div className="b-border">
-            <div className="trail"></div>
-          </div>
-          <div className="b-border__content">
+        <div className="b-border">
+          <div className="trail"></div>
+        </div>
+        <div className="b-border__content">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Введите данные
           </h2>
           <form
-              className="space-y-2 text-gray-600 dark:text-gray-300"
-              onSubmit={handlerSubmit}
+            className="space-y-2 text-gray-600 dark:text-gray-300"
+            onSubmit={handlerSubmit}
           >
-            <GenderSelector/>
-            <AgeSelector/>
-            <hr/>
-            <AnalysisPointList/>
+            <GenderSelector />
+            <AgeSelector />
+            <hr />
+            <AnalysisPointList />
 
-            <button
-                type={"submit"}
-                className={"btn w-full"}
-                disabled={pending}
-            >
+            <button type={"submit"} className={"btn w-full"} disabled={pending}>
               Отправить
             </button>
           </form>
-          </div>
         </div>
+      </div>
     </div>
   );
 };
