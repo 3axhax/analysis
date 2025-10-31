@@ -36,7 +36,7 @@ export const selectAnalysisPointsTotalPage = (state: RootState) =>
 export const selectAnalysisPointLimits = createSelector(
   [selectAnalysisPointById],
   (analysisPoint) => {
-    if (!analysisPoint || analysisPoint.limits.length === 0) return [];
+    if (!analysisPoint || !analysisPoint.limits || analysisPoint.limits.length === 0) return [];
     const sortLimits = [...analysisPoint.limits].sort((a, b) => {
       if (a.age.slice(-1) !== b.age.slice(-1))
         return a.age.slice(-1).localeCompare(b.age.slice(-1));
