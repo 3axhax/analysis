@@ -27,7 +27,7 @@ export const EditAge = ({ className, editAgeId, resetEdit }: EditAgeProps) => {
   return (
     <>
       <button
-        className={`bg-green-600 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-green-500${className ? " " + className : ""}`}
+        className={`btn bg-green-600 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-green-500${className ? " " + className : ""}`}
         onClick={() => {
           resetEdit();
           setOpenModal(true);
