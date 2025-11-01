@@ -22,6 +22,8 @@ export {
 export {
   getAnalysisPointList,
   getFullAnalysisPointList,
+  addNewAnalysisPoint,
+  editAnalysisPoint,
   deleteAnalysisPoint,
 } from "./extraReducers";
 
@@ -29,4 +31,5 @@ export type {
   AnalysisPointListItem,
   AnalysisPointState,
   AnalysisPointLimit,
+  AnalysisPointGreatItem,
 } from "./types";

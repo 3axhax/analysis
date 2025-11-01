@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@shared/store";
 import Request from "@shared/transport/RestAPI.ts";
 import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
-import { setPending } from "@entities/analysisPoint";
+import { AnalysisPointGreatItem, setPending } from "@entities/analysisPoint";
 
 export const getAnalysisPointList = createAsyncThunk(
   "analysisPoint/getList",
@@ -31,6 +31,42 @@ export const getFullAnalysisPointList = createAsyncThunk(
           recordPerPage: state.analysisPoint.recordPerPage,
           filters: state.analysisPoint.filters,
         });
+        return response.data;
+      } catch (e) {
+        HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
+      }
+    }
+  },
+);
+
+export const addNewAnalysisPoint = createAsyncThunk(
+  "analysisPoints/addNew",
+  async (data: AnalysisPointGreatItem, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    if (!state.ages.pending) {
+      dispatch(setPending(true));
+      try {
+        const response = await Request.post("/analysisPoints/add", data);
+        return response.data;
+      } catch (e) {
+        HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
+      }
+    }
+  },
+);
+
+export const editAnalysisPoint = createAsyncThunk(
+  "analysisPoints/edit",
+  async (data: AnalysisPointGreatItem, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    if (!state.ages.pending) {
+      dispatch(setPending(true));
+      try {
+        const response = await Request.post("/analysisPoints/edit", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);

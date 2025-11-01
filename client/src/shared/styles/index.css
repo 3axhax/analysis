@@ -51,22 +51,22 @@
 @layer utilities {
   /* Кастомные классы для точного контроля variable font */
   .font-sofia-variable {
-    font-family: 'Sofia Sans', sans-serif;
+    font-family: "Sofia Sans", sans-serif;
     font-variation-settings:
-            'wght' 400,
-            'wdth' 100;
+      "wght" 400,
+      "wdth" 100;
   }
 
   .font-weight-350 {
-    font-variation-settings: 'wght' 350;
+    font-variation-settings: "wght" 350;
   }
 
   .font-weight-450 {
-    font-variation-settings: 'wght' 450;
+    font-variation-settings: "wght" 450;
   }
 
   .font-width-110 {
-    font-variation-settings: 'wdth' 110;
+    font-variation-settings: "wdth" 110;
   }
 
   /* Плавные переходы для variable font */
@@ -115,7 +115,7 @@
   }
 
   .form-control:focus + .form-label,
-  .form-control:not(placeholder-shown) + .form-label {
+  .form-control:not(:placeholder-shown) + .form-label {
     @apply -top-3 text-xs/5;
   }
 
@@ -143,10 +143,9 @@
   .btn {
     @apply relative overflow-hidden text-white text-lg/5 transition-all duration-400 mt-2 font-medium rounded-md px-5 py-4 cursor-pointer
     bg-gradient-to-r
-    from-[var(--color-green-800)]
-    via-[var(--color-green-500)]
-    via-[var(--color-green-400)]
-    to-[var(--color-green-800)]
+    from-green-800
+    via-green-500
+    to-green-800
     bg-[length:300%_100%]
     hover:bg-right-top
     disabled:cursor-not-allowed
@@ -163,8 +162,6 @@
     z-index: -1;
     border: 0;
     container-type: inline-size;
-    transition: -webkit-clip-path var(1s);
-    transition: clip-path var(1s);
     transition:
       clip-path var(1s),
       -webkit-clip-path var(1s);

@@ -8,13 +8,16 @@ export interface AnalysisPointLimit {
   skipAge?: boolean;
 }
 
-export interface AnalysisPointListItem {
+export interface AnalysisPointGreatItem {
   id: number;
   name: string;
-  units: string[];
   translationRu: string;
   translationEn: string;
   limits: AnalysisPointLimit[];
+}
+
+export interface AnalysisPointListItem extends AnalysisPointGreatItem {
+  units: string[];
 }
 
 export interface AnalysisPointState {

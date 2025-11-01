@@ -2,6 +2,8 @@ export {
   analysisPointSlice,
   getAnalysisPointList,
   getFullAnalysisPointList,
+  addNewAnalysisPoint,
+  editAnalysisPoint,
   deleteAnalysisPoint,
   removeSelectedPoint,
   setSelectedPoint,
@@ -22,6 +24,7 @@ export type {
   AnalysisPointListItem,
   AnalysisPointState,
   AnalysisPointLimit,
+  AnalysisPointGreatItem,
 } from "./model";
 export {
   useAnalysisPointsLoad,
