@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { InfoModal } from "@features/infoModal";
-import { Navigation } from "@features/navigation";
+import { Navigation } from "@widgets/navigation";
 import { MainPage } from "@pages/main";
 import { NotFoundPage } from "@pages/404";
 import { TestPage } from "@pages/test";

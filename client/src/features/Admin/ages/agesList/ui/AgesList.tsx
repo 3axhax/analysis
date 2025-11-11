@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
-import { Table, TableData, TableDataRow } from "@widgets/table";
+import { Table, TableData, TableDataRow } from "@shared/ui/Table";
 import {
   deleteAge,
   AgesListItem,

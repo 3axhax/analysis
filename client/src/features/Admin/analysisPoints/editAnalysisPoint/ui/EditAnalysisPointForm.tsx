@@ -2,6 +2,9 @@ import { useTranslation } from "react-i18next";
 import { AnalysisPointGreatItem } from "@entities/analysisPoint";
 import React from "react";
 import { InputWithLabel } from "@shared/ui/InputWithLabel";
+import {
+  AnalysisPointDataLimitsEditableList
+} from "@widgets/Admin/analysisPointDataLimitsEditableList";
 
 interface EditAnalysisPointFormProps {
   values: AnalysisPointGreatItem;
@@ -51,6 +54,7 @@ export const EditAnalysisPointForm = ({
         className={"justify-between"}
         value={values.translationEn}
       />
+      <AnalysisPointDataLimitsEditableList/>
     </form>
   );
 };

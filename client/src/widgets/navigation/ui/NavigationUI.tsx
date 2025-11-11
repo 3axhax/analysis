@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { JSX, useState } from "react";
-import { Logo } from "@features/logo";
+import { Logo } from "@widgets/logo";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
 

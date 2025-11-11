@@ -1,4 +1,4 @@
-import { Pagination } from "@widgets/pagination";
+import { Pagination } from "@shared/ui/Pagination";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import {
   getAgesListWithTranslate,

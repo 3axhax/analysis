@@ -1,4 +1,4 @@
-import { Modal } from "@widgets/modal";
+import { Modal } from "@shared/ui/Modal";
 import { useTranslation } from "react-i18next";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
 import { useEffect, useState } from "react";

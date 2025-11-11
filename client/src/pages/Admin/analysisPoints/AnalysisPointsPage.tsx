@@ -16,7 +16,6 @@ export const AnalysisPointsPage: React.FC = () => {
   useDocumentTitle(title);
 
   const [editAnalysisPointId, setEditAnalysisPointId] = useState<number>(0);
-  console.log(editAnalysisPointId);
 
   const error = useAppSelector(selectAnalysisPointsError);
 

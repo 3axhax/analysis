@@ -1,7 +1,7 @@
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { useTranslation } from "react-i18next";
 import { SelectAnalysisResultPointData } from "@entities/analysisResult/model/slice.ts";
-import { Table, TableData, TableDataRow } from "@widgets/table";
+import { Table, TableData, TableDataRow } from "@shared/ui/Table";
 import { PointData } from "@entities/analysisResult";
 
 export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {

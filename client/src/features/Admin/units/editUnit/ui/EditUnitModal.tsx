@@ -1,4 +1,4 @@
-import { Modal } from "@widgets/modal";
+import { Modal } from "@shared/ui/Modal";
 import { useTranslation } from "react-i18next";
 import { EditUnitForm } from "@features/Admin/units/editUnit/ui/EditUnitForm.tsx";
 import { useEffect, useState } from "react";

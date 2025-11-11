@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { selectUnitsList } from "@entities/units/model/slice.ts";
-import { Table, TableData, TableDataRow } from "@widgets/table";
+import { Table, TableData, TableDataRow } from "@shared/ui/Table";
 import { deleteUnit, getUnitsList, UnitsListItem } from "@entities/units";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
