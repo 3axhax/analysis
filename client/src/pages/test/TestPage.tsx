@@ -1,5 +1,3 @@
-import { Counter } from "@features/counter";
-
 export const TestPage = () => {
   return (
     <div className="app">
@@ -11,7 +9,6 @@ export const TestPage = () => {
           Демонстрация архитектуры Feature-Sliced Design с Tailwind CSS
         </p>
       </div>
-      <Counter />
     </div>
   );
 };

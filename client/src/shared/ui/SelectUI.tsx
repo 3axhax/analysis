@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import Select, { ClassNamesConfig } from 'react-select';
 
 export interface SelectUIOption<T = string> {
   value: T;
@@ -15,6 +15,9 @@ interface SelectUIProps<T = string> {
   required?: boolean;
   placeholder?: string;
   className?: string;
+  isDisabled?: boolean;
+  error?: string;
+  classNames?: ClassNamesConfig<SelectUIOption<T>>;
 }
 
 const SelectUI = <T extends string | number = string>({
@@ -26,20 +29,22 @@ const SelectUI = <T extends string | number = string>({
   required = false,
   placeholder = "Выберите вариант",
   className = "",
+  isDisabled = false,
+  error,
+  classNames,
   ...other
 }: SelectUIProps<T>) => {
-  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    const value = (
-      typeof options[0]?.value === "number"
-        ? Number(selectedValue)
-        : selectedValue
-    ) as T;
-    onChange(value);
+  const handleChange = (selectedOption: SelectUIOption<T> | null) => {
+    if (selectedOption) {
+      onChange(selectedOption.value);
+    }
   };
 
+  // Находим текущее значение в формате react-select
+  const selectedValue = options.find(option => option.value === value) || null;
+
   return (
-    <div className={`flex justify-between ${className}`}>
+    <div className={`${className}`}>
       {label ? (
         <label
           htmlFor={name}
@@ -49,37 +54,17 @@ const SelectUI = <T extends string | number = string>({
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       ) : null}
-      <select
-        value={value}
-        onChange={handleChange}
-        id={name}
-        className={`
-          w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-          disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed
-          transition-colors
-        `}
-        aria-required={required}
-        {...other}
-      >
-        <option
-          value={typeof value === "string" ? "" : 0}
-          disabled
-          className="text-gray-400"
-        >
-          {placeholder}
-        </option>
-        {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-            disabled={option.disabled}
-            className={option.disabled ? "text-gray-400" : ""}
-          >
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <Select<SelectUIOption<T>>
+          value={selectedValue}
+          onChange={handleChange}
+          options={options}
+          inputId={name}
+          placeholder={placeholder}
+          className={``}
+          aria-required={required}
+          classNames={classNames}
+          {...other}
+      />
     </div>
   );
 };

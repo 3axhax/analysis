@@ -25,6 +25,7 @@
     "react-i18next": "^15.7.3",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.30.1",
+    "react-select": "^5.10.2",
     "react-tooltip": "^5.29.1"
   },
   "devDependencies": {

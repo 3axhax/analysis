@@ -63,7 +63,6 @@ export const AnalysisPage = () => {
           >
             <GenderSelector />
             <AgeSelector />
-            <hr />
             <AnalysisPointList />
 
             <button type={"submit"} className={"btn w-full"} disabled={pending}>
