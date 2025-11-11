@@ -52,7 +52,12 @@ export const AgeSelector = () => {
                 singleValue: () => '!text-gray-900',
                 valueContainer: () => '!px-3 !py-1',
                 indicatorsContainer: () => '!pr-2',
-                dropdownIndicator: () => '!text-gray-400 hover:!text-gray-600',
+                dropdownIndicator: (state) =>
+                    `!text-gray-400 hover:!text-gray-600 transition-all duration-300 ease-in-out ${
+                        state.selectProps.menuIsOpen
+                            ? '!rotate-180 !text-green-800'
+                            : ''
+                    }`,
                 clearIndicator: () => '!text-gray-400 hover:!text-gray-600',
                 indicatorSeparator: () => '!bg-transparent',
                 noOptionsMessage: () => '!text-gray-500 !py-4',

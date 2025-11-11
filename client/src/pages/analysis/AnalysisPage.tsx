@@ -49,7 +49,7 @@ export const AnalysisPage = () => {
         </h1>
       </div>
 
-      <div className="mx-auto text-left relative">
+      <div className="mx-auto text-left relative lg:w-4/12">
         <div className="b-border">
           <div className="trail"></div>
         </div>
