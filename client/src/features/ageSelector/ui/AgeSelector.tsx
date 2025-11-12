@@ -1,34 +1,31 @@
 import SelectUI from "@shared/ui/SelectUI.tsx";
-import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
+import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { setPrepareDataAge } from "@entities/analysisResult";
 
-export const AgeSelector = () => {
-    const ageOptions = useAppSelector(selectAgesListForSelect);
-    useAgesLoad();
-    const { t } = useTranslation("entities");
-    const dispatch = useAppDispatch();
+interface AgeSelectorProps {
+  age: string;
+  setAge: (value: string) => void;
+}
 
-    const [age, setAge] = useState<string>("");
+export const AgeSelector = ({ age, setAge }: AgeSelectorProps) => {
+  const ageOptions = useAppSelector(selectAgesListForSelect);
+  useAgesLoad();
+  const { t } = useTranslation("common");
+  const { t: tEntities } = useTranslation("entities");
 
-    const handlerOnChange = (value: string) => {
-        setAge(value);
-        dispatch(setPrepareDataAge(value));
-    };
-
-    return (
-        <SelectUI<string>
-            name={"age"}
-            options={ageOptions.map((item) => ({
-                ...item,
-                label: t(`ages.${item.label}`),
-            }))}
-            value={age}
-            onChange={handlerOnChange}
-            placeholder="Выберите возраст"
-            className="w-full mb-4"
-        />
-    );
+  return (
+    <SelectUI<string>
+      label={t("age")}
+      name={"age"}
+      options={ageOptions.map((item) => ({
+        ...item,
+        label: tEntities(`ages.${item.label}`),
+      }))}
+      value={age}
+      onChange={setAge}
+      placeholder="Выберите возраст"
+      className="w-full mb-4"
+    />
+  );
 };

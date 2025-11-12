@@ -10,6 +10,7 @@ export {
   setPending,
   setCurrentPage,
   resetError,
+  setEditAnalysisPointId,
   selectAnalysisPointList,
   selectAnalysisPointListForSelect,
   selectAnalysisPointPending,
@@ -19,6 +20,7 @@ export {
   selectAnalysisPointsCurrentPage,
   selectAnalysisPointsTotalPage,
   selectAnalysisPointLimits,
+  selectAnalysisPointsEditAnalysisPointId,
 } from "./model";
 export type {
   AnalysisPointListItem,

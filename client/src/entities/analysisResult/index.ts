@@ -8,8 +8,13 @@ export {
   addPointData,
   removePointData,
   clearAllPointData,
+  clearRedirect,
   SelectAnalysisResultData,
   SelectAnalysisResultDescriptionData,
-  clearRedirect,
+  SelectAnalysisResultPending,
+  SelectAnalysisResultRedirectTo,
+  SelectAnalysisResultPrepareDataAge,
+  SelectAnalysisResultPrepareDataGender,
+  SelectAnalysisResultPointData,
 } from "./model";
 export type { PointData, ResultDescription, PreparePointData } from "./model";

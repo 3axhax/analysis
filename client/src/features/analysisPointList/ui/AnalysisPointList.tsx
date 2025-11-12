@@ -1,15 +1,15 @@
 import SelectUI from "@shared/ui/SelectUI.tsx";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
 import {
   selectAnalysisType,
   selectAnalysisTypeListForSelect,
   useAnalysisTypeLoad,
 } from "@entities/analysisType";
 import { useAnalysisPointsLoad } from "@entities/analysisPoint";
-import { AnalysisPointSelectedList } from "@features/analysisPointList/ui/AnalysisPointSelectedList.tsx";
 import { clearAllPointData } from "@entities/analysisResult";
+import { AnalysisPointSelectedList } from "@features/analysisPointList";
 
 export const AnalysisPointList = () => {
   const dispatch = useAppDispatch();

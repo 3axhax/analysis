@@ -8,7 +8,7 @@ export type TableDataRow = {
 };
 
 export interface TableData {
-  header: { name: string; label: string | JSX.Element }[];
+  header: { name: string; label: string | JSX.Element; className?: string }[];
   rows: TableDataRow[][];
 }
 
@@ -28,7 +28,7 @@ export const Table = ({ tableData, className }: TableProps) => {
           {tableData.header.map((th) => (
             <th
               key={th.name}
-              className="border-r border-gray-600 px-4 py-3 text-center text-sm font-medium"
+              className={`border-r border-gray-600 px-4 py-3 text-center text-sm font-medium${th.className ? ` ${th.className}` : ``}`}
             >
               {th.label}
             </th>

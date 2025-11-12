@@ -1,14 +1,16 @@
 import { Modal } from "@shared/ui/Modal";
 import { useTranslation } from "react-i18next";
-import { EditAnalysisPointForm } from "@features/Admin/analysisPoints/editAnalysisPoint/ui/EditAnalysisPointForm.tsx";
+import { EditAnalysisPointForm } from "./EditAnalysisPointForm";
 import { useEffect, useState } from "react";
 import {
   addNewAnalysisPoint,
   AnalysisPointGreatItem,
+  AnalysisPointLimit,
   editAnalysisPoint,
   getFullAnalysisPointList,
 } from "@entities/analysisPoint";
-import { useAppDispatch } from "@shared/store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
+import { selectAnalysisPointsEditAnalysisPoint } from "@entities/analysisPoint/model/selectors.ts";
 
 interface EditAnalysisPointModalProps {
   open: boolean;
@@ -27,10 +29,13 @@ const initialFormValue: AnalysisPointGreatItem = {
 export const EditAnalysisPointModal = ({
   open,
   setOpen,
-  editableAnalysisPoint,
 }: EditAnalysisPointModalProps) => {
   const { t } = useTranslation("features");
   const dispatch = useAppDispatch();
+
+  const editableAnalysisPoint = useAppSelector(
+    selectAnalysisPointsEditAnalysisPoint,
+  );
 
   const [formValue, setFormValue] = useState<AnalysisPointGreatItem>(
     editableAnalysisPoint ?? initialFormValue,
@@ -46,7 +51,13 @@ export const EditAnalysisPointModal = ({
     }
   }, [open, editableAnalysisPoint]);
 
-  const handlerInput = ({ name, value }: { name: string; value: string }) => {
+  const handlerInput = ({
+    name,
+    value,
+  }: {
+    name: string;
+    value: string | AnalysisPointLimit[];
+  }) => {
     setFormValue({ ...formValue, [name]: value });
   };
 

@@ -9,7 +9,7 @@ import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
 import { useTranslation } from "react-i18next";
 import { WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/16/solid";
-import {NavigationUI, NavItem} from "./NavigationUI.tsx";
+import { NavigationUI, NavItem } from "./NavigationUI.tsx";
 
 export const Navigation = () => {
   const { t } = useTranslation("common");

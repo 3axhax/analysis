@@ -1,5 +1,4 @@
 export {
-  type GenderType,
   genderSlice,
   getGenderList,
   selectGenderPending,

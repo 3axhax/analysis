@@ -1,7 +1,9 @@
+import { GenderType } from "@shared/lib/types";
+
 export interface AnalysisPointLimit {
   age: string;
   unit: string;
-  gender: string;
+  gender: GenderType;
   minValue: number;
   maxValue: number;
   skipGender?: boolean;
@@ -30,4 +32,5 @@ export interface AnalysisPointState {
   totalRecord: number;
   recordPerPage: number;
   filters: Record<string, string | number>;
+  editAnalysisPointId: number;
 }

@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { WritableDraft } from "immer";
-import { ErrorActionType } from "@shared/lib/types/errorActionType.ts";
+import { ErrorActionType } from "@shared/lib/types";
 import {
   AnalysisPointListItem,
   AnalysisPointState,
   getAnalysisPointList,
 } from "@entities/analysisPoint";
-import { getFullAnalysisPointList } from "@entities/analysisPoint/model/extraReducers.ts";
+import { getFullAnalysisPointList } from "./extraReducers.ts";
+import { AnalysisPointsReducers } from "./reducers";
 
 const initialState: AnalysisPointState = {
   loaded: false,
@@ -18,47 +19,13 @@ const initialState: AnalysisPointState = {
   totalRecord: 0,
   recordPerPage: 20,
   filters: {},
+  editAnalysisPointId: 0,
 };
 
 export const analysisPointSlice = createSlice({
   name: "analysisPoint",
   initialState,
-  reducers: {
-    setSelectedPoint: (
-      state: WritableDraft<AnalysisPointState>,
-      action: PayloadAction<number[]>,
-    ) => {
-      state.selectedList = action.payload;
-    },
-    removeSelectedPoint: (
-      state: WritableDraft<AnalysisPointState>,
-      action: PayloadAction<number>,
-    ) => {
-      state.selectedList = state.selectedList.filter(
-        (point) => point !== action.payload,
-      );
-    },
-    setPending: (
-      state: WritableDraft<AnalysisPointState>,
-      action: PayloadAction<boolean>,
-    ) => {
-      state.pending = action.payload;
-    },
-    setCurrentPage: (
-      state: WritableDraft<AnalysisPointState>,
-      action: PayloadAction<number>,
-    ) => {
-      if (
-        action.payload > 0 &&
-        action.payload <= Math.ceil(state.totalRecord / state.recordPerPage)
-      ) {
-        state.currentPage = action.payload;
-      }
-    },
-    resetError: (state: WritableDraft<AnalysisPointState>) => {
-      state.error = "";
-    },
-  },
+  reducers: AnalysisPointsReducers,
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -117,4 +84,5 @@ export const {
   setPending,
   setCurrentPage,
   resetError,
+  setEditAnalysisPointId,
 } = analysisPointSlice.actions;

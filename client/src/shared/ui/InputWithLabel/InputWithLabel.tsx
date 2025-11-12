@@ -6,7 +6,7 @@ interface InputWithLabelProps {
   placeholder?: string;
   onChange?: (value: string) => void;
   className?: string;
-  value?: string;
+  value?: string | number;
   type?: HTMLInputTypeAttribute;
 }
 

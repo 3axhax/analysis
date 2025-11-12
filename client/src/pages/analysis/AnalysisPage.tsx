@@ -1,20 +1,23 @@
 import React, { useEffect } from "react";
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
+import useDocumentTitle from "@shared/hooks/useDocumentTitle";
 import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
 import { AnalysisPointList } from "@features/analysisPointList";
-import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
 import {
   clearRedirect,
   resetPrepareData,
-  sendAnalysisData,
-} from "@entities/analysisResult";
-import {
   SelectAnalysisResultPending,
+  SelectAnalysisResultPrepareDataAge,
+  SelectAnalysisResultPrepareDataGender,
   SelectAnalysisResultRedirectTo,
-} from "@entities/analysisResult/model/slice.ts";
+  sendAnalysisData,
+  setPrepareDataAge,
+  setPrepareDataGender,
+} from "@entities/analysisResult";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { GenderType } from "@shared/lib/types";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");
@@ -24,6 +27,8 @@ export const AnalysisPage = () => {
 
   const pending = useAppSelector(SelectAnalysisResultPending);
   const redirectTo = useAppSelector(SelectAnalysisResultRedirectTo);
+  const age = useAppSelector(SelectAnalysisResultPrepareDataAge);
+  const gender = useAppSelector(SelectAnalysisResultPrepareDataGender);
 
   useEffect(() => {
     dispatch(resetPrepareData());
@@ -35,6 +40,14 @@ export const AnalysisPage = () => {
       dispatch(clearRedirect());
     }
   }, [dispatch, navigate, redirectTo]);
+
+  const handlerAgeSelect = (value: string) => {
+    dispatch(setPrepareDataAge(value));
+  };
+
+  const handlerGenderSelect = (value: GenderType) => {
+    dispatch(setPrepareDataGender(value));
+  };
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,8 +74,8 @@ export const AnalysisPage = () => {
             className="space-y-2 text-gray-600 dark:text-gray-300"
             onSubmit={handlerSubmit}
           >
-            <GenderSelector />
-            <AgeSelector />
+            <GenderSelector gender={gender} setGender={handlerGenderSelect} />
+            <AgeSelector age={age} setAge={handlerAgeSelect} />
             <AnalysisPointList />
 
             <button type={"submit"} className={"btn w-full"} disabled={pending}>

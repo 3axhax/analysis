@@ -7,7 +7,7 @@ import {
   TranslationsListItem,
   TranslationsState,
 } from "@entities/translations";
-import { ErrorActionType } from "@shared/lib/types/errorActionType.ts";
+import { ErrorActionType } from "@shared/lib/types";
 
 const initialState: TranslationsState = {
   loaded: false,

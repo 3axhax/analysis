@@ -9,7 +9,7 @@ import {
   getAgesList,
   getAgesListWithTranslate,
 } from "@entities/ages";
-import { ErrorActionType } from "@shared/lib/types/errorActionType.ts";
+import { ErrorActionType } from "@shared/lib/types";
 
 const initialState: AgesState = {
   loaded: false,

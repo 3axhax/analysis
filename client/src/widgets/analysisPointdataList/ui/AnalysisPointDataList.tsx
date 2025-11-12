@@ -1,6 +1,6 @@
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { useTranslation } from "react-i18next";
-import { SelectAnalysisResultPointData } from "@entities/analysisResult/model/slice.ts";
+import { SelectAnalysisResultPointData } from "@entities/analysisResult";
 import { Table, TableData, TableDataRow } from "@shared/ui/Table";
 import { PointData } from "@entities/analysisResult";
 
