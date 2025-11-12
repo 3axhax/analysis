@@ -6,12 +6,11 @@ import {
 } from "@reduxjs/toolkit";
 
 import Request from "@shared/transport/RestAPI";
-import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
+import { HandlerAxiosError } from "@shared/transport/RequestHandlersError";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
-import { RadioOption } from "@shared/ui/RadioGroup.tsx";
-
-export type GenderType = "m" | "f" | "fp";
+import { RadioOption } from "@shared/ui/RadioGroup";
+import { GenderType } from "@shared/lib/types";
 
 interface GenderListItem {
   id: number;

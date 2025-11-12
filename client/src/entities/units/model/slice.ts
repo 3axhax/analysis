@@ -1,8 +1,8 @@
 import { getUnitsList, UnitsListItem, UnitsState } from "@entities/units";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
-import { ErrorActionType } from "@shared/lib/types/errorActionType.ts";
+import { ErrorActionType } from "@shared/lib/types";
 
 const initialState: UnitsState = {
   loaded: false,
@@ -90,3 +90,12 @@ export const selectUnitsTotalPage = (state: RootState) =>
 
 export const selectUnitById = (state: RootState, id: number) =>
   state.units.list.find((item) => item.id === id) ?? null;
+
+export const selectUnitsListForSelect = createSelector(
+  [selectUnitsList],
+  (list) =>
+    list.map((item) => ({
+      value: item.name,
+      label: item.name,
+    })),
+);

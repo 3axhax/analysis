@@ -6,6 +6,7 @@ export {
   selectUnitsError,
   selectUnitsCurrentPage,
   selectUnitsList,
+  selectUnitsListForSelect,
   selectUnitsTotalPage,
   selectUnitById,
   getUnitsList,

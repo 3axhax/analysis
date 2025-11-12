@@ -7,10 +7,18 @@ export {
   addPointData,
   removePointData,
   clearAllPointData,
-  SelectAnalysisResultData,
-  SelectAnalysisResultDescriptionData,
   clearRedirect,
 } from "./slice";
+
+export {
+  SelectAnalysisResultData,
+  SelectAnalysisResultDescriptionData,
+  SelectAnalysisResultPending,
+  SelectAnalysisResultRedirectTo,
+  SelectAnalysisResultPrepareDataAge,
+  SelectAnalysisResultPrepareDataGender,
+  SelectAnalysisResultPointData,
+} from "./selectors";
 
 export { sendAnalysisData, getAnalysisResult } from "./extraReducers";
 

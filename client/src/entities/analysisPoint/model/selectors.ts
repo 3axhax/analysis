@@ -63,3 +63,12 @@ export const selectAnalysisPointLimits = createSelector(
     });
   },
 );
+
+export const selectAnalysisPointsEditAnalysisPointId = (state: RootState) =>
+  state.analysisPoint.editAnalysisPointId;
+
+export const selectAnalysisPointsEditAnalysisPoint = createSelector(
+  [selectAnalysisPointList, selectAnalysisPointsEditAnalysisPointId],
+  (list, editableId) =>
+    editableId > 0 ? list.find((point) => point.id === editableId) : undefined,
+);

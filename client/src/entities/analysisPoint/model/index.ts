@@ -5,6 +5,7 @@ export {
   setPending,
   setCurrentPage,
   resetError,
+  setEditAnalysisPointId,
 } from "./slice";
 
 export {
@@ -17,6 +18,7 @@ export {
   selectAnalysisPointsCurrentPage,
   selectAnalysisPointsTotalPage,
   selectAnalysisPointLimits,
+  selectAnalysisPointsEditAnalysisPointId,
 } from "./selectors";
 
 export {
