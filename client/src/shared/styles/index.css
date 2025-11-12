@@ -2,16 +2,16 @@
 
 @font-face {
   font-family: "Sofia Sans";
-  src: url("./fonts/SofiaSans.woff2") format("woff2");
-  font-weight: 400;
+  src: url("./fonts/SofiaSans_v.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Sofia Sans";
-  src: url("./fonts/SofiaSans-Italic.woff2") format("woff2");
-  font-weight: 400;
+  src: url("./fonts/SofiaSans-Italic_v.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: italic;
   font-display: swap;
 }
