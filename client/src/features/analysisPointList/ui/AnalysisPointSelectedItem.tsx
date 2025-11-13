@@ -6,6 +6,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import { TrashIcon } from "@heroicons/react/16/solid";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import SelectUI from "@shared/ui/SelectUI.tsx";
 import { ChangeEvent, useEffect, useState } from "react";
 import { addPointData, removePointData } from "@entities/analysisResult";
@@ -74,28 +75,33 @@ export const AnalysisPointSelectedItem = ({
             place="top"
             className="max-w-xs !break-words !whitespace-normal !text-left"
           />
-          <div className={"flex items-center"}>
-            <label>
-              {t(`analysisPoint.${analysisPoint.name}`)}{" "}
-              <span
-                className={"cursor-pointer description_anchor"}
+          <div className={"flex items-center justify-stretch group"}>
+            <div className={"flex items-center lg:w-[180px]"}>
+              <label
+                  htmlFor={t(`analysisPoint.${analysisPoint.name}`).trim().replace(/\s/g, '')}
+                  className={'block lg:max-w-[160px] truncate'}>{t(`analysisPoint.${analysisPoint.name}`)}{" "}</label>
+              <button
+                className={"cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 items-start justify-center hover:text-green-800"}
                 data-tooltip-content={t(
                   `analysisPoint.${analysisPoint.name}_description`,
                 )}
               >
-                ?
-              </span>
-              :
-              <input
-                className={
-                  "px-4 py-2 ml-[10px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                }
-                value={pointValue}
-                onInput={handlerOnInput}
-              />
-            </label>
+                <span className={'sr-only'}>Информация о показателе</span>
+                <InformationCircleIcon className="inline-flex h-4 w-4 transition-transform hover:scale-110" />
+              </button>
+            </div>
+
+            <input
+              id={t(`analysisPoint.${analysisPoint.name}`).trim().replace(/\s/g, '')}
+              className={
+                "px-4 py-2 ml-[10px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-green-800 focus:border-green-800 hover:border-green-800 hover:shadow-green-800"
+              }
+              value={pointValue}
+              onInput={handlerOnInput}
+            />
+
             {analysisPoint.units.length == 1 ? (
-              <span className={"ml-[10px]"}>
+              <span className={"ml-[10px] text-right"}>
                 {t(`units.${analysisPoint.units[0]}`)}
               </span>
             ) : analysisPoint.units.length > 1 ? (
@@ -110,10 +116,12 @@ export const AnalysisPointSelectedItem = ({
                 value={units}
               />
             ) : null}
-            <TrashIcon
-              className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]"
-              onClick={handlerClear}
-            />
+            <button className={'w-10 h-10 flex ml-auto items-center justify-center cursor-pointer text-red-600 transition-colors hover:text-red-700'}
+                    onClick={handlerClear}
+            >
+              <span className={'sr-only'}>Delete</span>
+              <TrashIcon className="w-5 h-5" />
+            </button>
           </div>
         </>
       ) : null}

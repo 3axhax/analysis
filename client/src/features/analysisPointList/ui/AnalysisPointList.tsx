@@ -26,20 +26,20 @@ export const AnalysisPointList = () => {
   }, [analysisType, dispatch]);
 
   return (
-    <>
-      <SelectUI<number>
-        label="Тип анализов"
-        name={"age"}
-        options={analysisTypeOptions.map((item) => ({
-          ...item,
-          label: t(`analysisType.${item.label}`),
-        }))}
-        value={analysisType}
-        onChange={(value) => setAnalysisType(value)}
-        placeholder="Выберите тип анализов"
-        className="w-full mb-4"
-      />
-      <AnalysisPointSelectedList />
-    </>
+      <>
+          <SelectUI<number>
+              label="Тип анализов"
+              name={"age"}
+              options={analysisTypeOptions.map((item) => ({
+                  ...item,
+                  label: t(`analysisType.${item.label}`),
+              }))}
+              value={analysisType}
+              onChange={(value) => setAnalysisType(value)}
+              placeholder="Выберите тип анализов"
+              className="w-full mb-4"
+          />
+          <AnalysisPointSelectedList/>
+      </>
   );
 };
