@@ -21,11 +21,16 @@ export interface AnalysisPointUnitsListResponse {
   rows: AnalysisPointUnitResponse[];
 }
 
-@Controller()
+@Controller('units')
 export class AnalysisPointUnitsController {
   constructor(private analysisPointUnitsService: AnalysisPointUnitsService) {}
 
-  @Get('units')
+  @Get()
+  getAll() {
+    return this.analysisPointUnitsService.getAll();
+  }
+
+  @Get('/withTranslations')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   async getAnalysisPointUnitsList(
@@ -36,7 +41,7 @@ export class AnalysisPointUnitsController {
     );
   }
 
-  @Post('units/add')
+  @Post('add')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   async addNewAnalysisPointUnits(
@@ -45,7 +50,7 @@ export class AnalysisPointUnitsController {
     return this.analysisPointUnitsService.addNewAnalysisPointUnits(param);
   }
 
-  @Post('units/edit')
+  @Post('edit')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   async editAnalysisPointUnits(
@@ -54,7 +59,7 @@ export class AnalysisPointUnitsController {
     return this.analysisPointUnitsService.editAnalysisPointUnits(param);
   }
 
-  @Post('units/delete')
+  @Post('delete')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   async deleteAnalysisPointUnits(@Body('id') id: number): Promise<boolean> {

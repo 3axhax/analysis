@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
-import { selectUnitsError, useUnitsLoad } from "@entities/units";
+import { selectUnitsError, useUnitsWithTranslateLoad } from "@entities/units";
 import { UnitsList } from "@features/Admin/units/unitsList";
 import { UnitsListPagination } from "@features/Admin/units/unitsListPagination";
 import { EditUnit } from "@features/Admin/units/editUnit";
@@ -16,7 +16,7 @@ export const UnitsPage: React.FC = () => {
 
   const error = useAppSelector(selectUnitsError);
 
-  useUnitsLoad();
+  useUnitsWithTranslateLoad();
 
   const handlerEditRecord = (id: number) => {
     setEditUnitId(id);

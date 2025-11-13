@@ -12,6 +12,7 @@ export {
 } from "./slice";
 export {
   getUnitsList,
+  getUnitsListWithTranslate,
   addNewUnit,
   deleteUnit,
   editUnit,

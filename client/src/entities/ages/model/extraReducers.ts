@@ -6,14 +6,17 @@ import { setPending, AgesListItem } from "@entities/ages";
 
 export const getAgesList = createAsyncThunk(
   "ages/getList",
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
-    if (!state.ages.loaded) {
+    if (!state.ages.loaded && !state.ages.pending) {
+      dispatch(setPending(true));
       try {
         const response = await Request.get("/ages");
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
       }
     }
   },

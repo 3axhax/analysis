@@ -4,7 +4,7 @@ import { EditUnitForm } from "@features/Admin/units/editUnit/ui/EditUnitForm.tsx
 import { useEffect, useState } from "react";
 import {
   addNewUnit,
-  getUnitsList,
+  getUnitsListWithTranslate,
   UnitsListItem,
   editUnit,
 } from "@entities/units";
@@ -53,7 +53,7 @@ export const EditUnitModal = ({
     dispatch(!editableUnit ? addNewUnit(formValue) : editUnit(formValue)).then(
       (res) => {
         if (res?.payload) {
-          dispatch(getUnitsList());
+          dispatch(getUnitsListWithTranslate());
         }
       },
     );

@@ -33,14 +33,17 @@ const initialState: GenderState = {
 
 export const getGenderList = createAsyncThunk(
   "gender/getList",
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
-    if (!state.gender.loaded) {
+    if (!state.gender.loaded && !state.gender.pending) {
+      dispatch(setPending(true));
       try {
         const response = await Request.get("/gender");
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
       }
     }
   },
@@ -49,7 +52,14 @@ export const getGenderList = createAsyncThunk(
 export const genderSlice = createSlice({
   name: "gender",
   initialState,
-  reducers: {},
+  reducers: {
+    setPending: (
+      state: WritableDraft<GenderState>,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.pending = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -68,18 +78,16 @@ export const genderSlice = createSlice({
       .addCase(
         getGenderList.rejected,
         (state: WritableDraft<GenderState>, action) => {
-          state.pending = false;
           state.error = action.error.message ? action.error.message : "";
         },
       )
       .addCase(getGenderList.pending, (state: WritableDraft<GenderState>) => {
-        state.pending = true;
         state.error = "";
       });
   },
 });
 
-//export const {  } = agesSlice.actions;
+export const { setPending } = genderSlice.actions;
 
 const selectGenderList = (state: RootState) => state.gender.list;
 export const selectGenderPending = (state: RootState) => state.gender.pending;

@@ -1,8 +1,13 @@
-import { getUnitsList, UnitsListItem, UnitsState } from "@entities/units";
+import {
+  getUnitsListWithTranslate,
+  UnitsListItem,
+  UnitsState,
+} from "@entities/units";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
 import { ErrorActionType } from "@shared/lib/types";
+import { getUnitsList } from "@entities/units/model/extraReducers.ts";
 
 const initialState: UnitsState = {
   loaded: false,
@@ -44,6 +49,19 @@ export const unitsSlice = createSlice({
     builder
       .addCase(
         getUnitsList.fulfilled,
+        (
+          state: WritableDraft<UnitsState>,
+          action: PayloadAction<UnitsListItem[]>,
+        ) => {
+          if (action.payload) {
+            state.list = action.payload;
+            state.loaded = true;
+          }
+          state.pending = false;
+        },
+      )
+      .addCase(
+        getUnitsListWithTranslate.fulfilled,
         (
           state: WritableDraft<UnitsState>,
           action: PayloadAction<{

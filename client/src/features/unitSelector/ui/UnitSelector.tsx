@@ -12,7 +12,6 @@ interface AgeSelectorProps {
 export const UnitSelector = ({ unit, setUnit }: AgeSelectorProps) => {
   const unitsOptions = useAppSelector(selectUnitsListForSelect);
   useUnitsLoad();
-  //const { t } = useTranslation("common");
   const { t: tEntities } = useTranslation("entities");
 
   return (

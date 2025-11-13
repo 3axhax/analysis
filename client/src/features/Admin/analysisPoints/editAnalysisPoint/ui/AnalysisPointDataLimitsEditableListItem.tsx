@@ -3,16 +3,19 @@ import { AgeSelector } from "@features/ageSelector";
 import { GenderSelector } from "@features/genderSelector";
 import { InputWithLabel } from "@shared/ui/InputWithLabel";
 import { UnitSelector } from "@features/unitSelector";
+import { TrashIcon } from "@heroicons/react/16/solid";
 
 interface AnalysisPointDataLimitsEditableListItemProps {
   limit: AnalysisPointLimit;
+  deleteItemHandler: () => void;
 }
 
 export const AnalysisPointDataLimitsEditableListItem = ({
   limit,
+  deleteItemHandler,
 }: AnalysisPointDataLimitsEditableListItemProps) => {
   return (
-    <>
+    <div className={"flex items-center"}>
       <AgeSelector
         age={limit.age}
         setAge={(value) => {
@@ -52,6 +55,12 @@ export const AnalysisPointDataLimitsEditableListItem = ({
           console.log("Unit", value);
         }}
       />
-    </>
+      <div className={"block ml-[10px]"}>
+        <TrashIcon
+          className="w-5 h-5 text-red-500 cursor-pointer"
+          onClick={deleteItemHandler}
+        />
+      </div>
+    </div>
   );
 };

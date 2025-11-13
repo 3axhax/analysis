@@ -25,6 +25,12 @@ export class AnalysisPointUnitsService {
     private translationService: TranslationService,
   ) {}
 
+  async getAll(): Promise<AnalysisPointUnits[] | null> {
+    return this.analysisPointUnitsRepository.findAll({
+      include: { all: true },
+    });
+  }
+
   async getAnalysisPointUnitsByName(
     name: string,
   ): Promise<AnalysisPointUnits | null> {

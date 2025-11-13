@@ -9,10 +9,10 @@ export {
   selectUnitsListForSelect,
   selectUnitsTotalPage,
   selectUnitById,
-  getUnitsList,
+  getUnitsListWithTranslate,
   addNewUnit,
   deleteUnit,
   editUnit,
 } from "./model";
 export type { UnitsState, UnitsListItem } from "./model";
-export { useUnitsLoad } from "./units.hooks";
+export { useUnitsLoad, useUnitsWithTranslateLoad } from "./units.hooks";

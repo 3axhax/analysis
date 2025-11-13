@@ -1,7 +1,7 @@
 import { Pagination } from "@shared/ui/Pagination";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import {
-  getUnitsList,
+  getUnitsListWithTranslate,
   selectUnitsCurrentPage,
   selectUnitsTotalPage,
   setCurrentPage,
@@ -15,7 +15,7 @@ export const UnitsListPagination = () => {
 
   const handlerPageSelect = (page: number) => {
     dispatch(setCurrentPage(page));
-    dispatch(getUnitsList());
+    dispatch(getUnitsListWithTranslate());
   };
 
   return (

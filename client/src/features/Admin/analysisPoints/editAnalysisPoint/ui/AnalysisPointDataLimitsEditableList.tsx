@@ -19,18 +19,26 @@ export const AnalysisPointDataLimitsEditableList = ({
       {
         age: "",
         unit: "",
-        gender: "",
+        gender: "m",
         minValue: 0,
         maxValue: 0,
       },
     ]);
   };
 
+  const deleteItemHandler = (i: number) => {
+    onChange(limits.filter((_, index) => index !== i));
+  };
+
   return (
     <>
       {limits.length > 0 &&
         limits.map((limit, i) => (
-          <AnalysisPointDataLimitsEditableListItem key={i} limit={limit} />
+          <AnalysisPointDataLimitsEditableListItem
+            key={i}
+            limit={limit}
+            deleteItemHandler={() => deleteItemHandler(i)}
+          />
         ))}
       <button className={"btn"} onClick={addLimitHandler}>
         {t("analysisPointData.addNewLimit")}
