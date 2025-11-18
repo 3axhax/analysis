@@ -78,21 +78,30 @@ export const AnalysisPointSelectedItem = ({
           <div className={"flex items-center justify-stretch group"}>
             <div className={"flex items-center lg:w-[180px]"}>
               <label
-                  htmlFor={t(`analysisPoint.${analysisPoint.name}`).trim().replace(/\s/g, '')}
-                  className={'block lg:max-w-[160px] truncate'}>{t(`analysisPoint.${analysisPoint.name}`)}{" "}</label>
+                htmlFor={t(`analysisPoint.${analysisPoint.name}`)
+                  .trim()
+                  .replace(/\s/g, "")}
+                className={"block lg:max-w-[160px] truncate"}
+              >
+                {t(`analysisPoint.${analysisPoint.name}`)}{" "}
+              </label>
               <button
-                className={"cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 items-start justify-center hover:text-green-800"}
+                className={
+                  "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 items-start justify-center hover:text-green-800"
+                }
                 data-tooltip-content={t(
                   `analysisPoint.${analysisPoint.name}_description`,
                 )}
               >
-                <span className={'sr-only'}>Информация о показателе</span>
+                <span className={"sr-only"}>Информация о показателе</span>
                 <InformationCircleIcon className="inline-flex h-4 w-4 transition-transform hover:scale-110" />
               </button>
             </div>
 
             <input
-              id={t(`analysisPoint.${analysisPoint.name}`).trim().replace(/\s/g, '')}
+              id={t(`analysisPoint.${analysisPoint.name}`)
+                .trim()
+                .replace(/\s/g, "")}
               className={
                 "px-4 py-2 ml-[10px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-green-800 focus:border-green-800 hover:border-green-800 hover:shadow-green-800"
               }
@@ -116,10 +125,13 @@ export const AnalysisPointSelectedItem = ({
                 value={units}
               />
             ) : null}
-            <button className={'w-10 h-10 flex ml-auto items-center justify-center cursor-pointer text-red-600 transition-colors hover:text-red-700'}
-                    onClick={handlerClear}
+            <button
+              className={
+                "w-10 h-10 flex ml-auto items-center justify-center cursor-pointer text-red-600 transition-colors hover:text-red-700"
+              }
+              onClick={handlerClear}
             >
-              <span className={'sr-only'}>Delete</span>
+              <span className={"sr-only"}>Delete</span>
               <TrashIcon className="w-5 h-5" />
             </button>
           </div>

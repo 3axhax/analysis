@@ -34,7 +34,7 @@ export const EditAnalysisPointForm = ({
       <InputWithLabel
         label={t("analysisPoint.name")}
         name={"name"}
-        placeholder={"g/l"}
+        placeholder={"hemoglobin"}
         onChange={(value) => {
           handlerInput({ name: "name", value });
         }}
@@ -44,7 +44,7 @@ export const EditAnalysisPointForm = ({
       <InputWithLabel
         label={t("analysisPoint.translationRu")}
         name={"translationRu"}
-        placeholder={"г/л"}
+        placeholder={"Гемоглобин (HGB)"}
         onChange={(value) => {
           handlerInput({ name: "translationRu", value });
         }}
@@ -54,7 +54,7 @@ export const EditAnalysisPointForm = ({
       <InputWithLabel
         label={t("analysisPoint.translationEn")}
         name={"translationEu"}
-        placeholder={"g/l"}
+        placeholder={"Hemoglobin (HGB)"}
         onChange={(value) => {
           handlerInput({ name: "translationEn", value });
         }}

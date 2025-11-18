@@ -4,38 +4,41 @@ import { GenderSelector } from "@features/genderSelector";
 import { InputWithLabel } from "@shared/ui/InputWithLabel";
 import { UnitSelector } from "@features/unitSelector";
 import { TrashIcon } from "@heroicons/react/16/solid";
+import { GenderType } from "@shared/lib/types";
 
 interface AnalysisPointDataLimitsEditableListItemProps {
   limit: AnalysisPointLimit;
   deleteItemHandler: () => void;
+  editItemHandler: ({
+    name,
+    value,
+  }: {
+    name: keyof AnalysisPointLimit;
+    value: string | number | GenderType;
+  }) => void;
 }
 
 export const AnalysisPointDataLimitsEditableListItem = ({
   limit,
   deleteItemHandler,
+  editItemHandler,
 }: AnalysisPointDataLimitsEditableListItemProps) => {
   return (
     <div className={"flex items-center"}>
       <AgeSelector
         age={limit.age}
-        setAge={(value) => {
-          console.log("Age select", value);
-        }}
+        setAge={(value) => editItemHandler({ name: "age", value })}
       />
       <GenderSelector
         type={"list"}
         gender={limit.gender}
-        setGender={(value) => {
-          console.log("Gender select", value);
-        }}
+        setGender={(value) => editItemHandler({ name: "gender", value })}
       />
       <InputWithLabel
         label={"Мин."}
         name={"minValue"}
         placeholder={"0"}
-        onChange={(value) => {
-          console.log("minValue", value);
-        }}
+        onChange={(value) => editItemHandler({ name: "minValue", value })}
         className={"justify-between"}
         value={limit.minValue}
       />
@@ -43,17 +46,13 @@ export const AnalysisPointDataLimitsEditableListItem = ({
         label={"Макс."}
         name={"maxValue"}
         placeholder={"0"}
-        onChange={(value) => {
-          console.log("maxValue", value);
-        }}
+        onChange={(value) => editItemHandler({ name: "maxValue", value })}
         className={"justify-between"}
         value={limit.maxValue}
       />
       <UnitSelector
         unit={limit.unit}
-        setUnit={(value) => {
-          console.log("Unit", value);
-        }}
+        setUnit={(value) => editItemHandler({ name: "unit", value })}
       />
       <div className={"block ml-[10px]"}>
         <TrashIcon

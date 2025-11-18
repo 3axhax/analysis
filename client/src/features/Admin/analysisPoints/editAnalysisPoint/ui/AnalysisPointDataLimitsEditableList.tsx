@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { AnalysisPointLimit } from "@entities/analysisPoint";
 import { AnalysisPointDataLimitsEditableListItem } from "@features/Admin/analysisPoints/editAnalysisPoint/ui/AnalysisPointDataLimitsEditableListItem.tsx";
+import { GenderType } from "@shared/lib/types";
 
 interface AnalysisPointDataLimitsEditableListProps {
   onChange: (value: AnalysisPointLimit[]) => void;
@@ -30,6 +31,28 @@ export const AnalysisPointDataLimitsEditableList = ({
     onChange(limits.filter((_, index) => index !== i));
   };
 
+  const editItemHandler = ({
+    i,
+    name,
+    value,
+  }: {
+    i: number;
+    name: keyof AnalysisPointLimit;
+    value: number | string | GenderType;
+  }) => {
+    onChange(
+      limits.map((limit, index) => {
+        if (index === i) {
+          return {
+            ...limit,
+            [name]: value,
+          };
+        }
+        return limit;
+      }),
+    );
+  };
+
   return (
     <>
       {limits.length > 0 &&
@@ -38,6 +61,9 @@ export const AnalysisPointDataLimitsEditableList = ({
             key={i}
             limit={limit}
             deleteItemHandler={() => deleteItemHandler(i)}
+            editItemHandler={({ name, value }) =>
+              editItemHandler({ i, name, value })
+            }
           />
         ))}
       <button className={"btn"} onClick={addLimitHandler}>
