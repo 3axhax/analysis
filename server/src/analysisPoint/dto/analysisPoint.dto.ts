@@ -1,5 +1,13 @@
 import { Transform, TransformFnParams } from 'class-transformer';
-import { IsNumber, IsObject, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
+import { AnalysisPointLimit } from '../analysisPoint.types';
 
 interface AnalysisPointFilters {
   name?: string;
@@ -63,6 +71,20 @@ export class AddNewAnalysisPointQueryDto {
 
   @IsString()
   translationEn: string;
+
+  @Transform(({ value }: TransformFnParams): AnalysisPointLimit[] => {
+    if (!Array.isArray(value)) return [];
+    return value.map((limit: Record<string, string>) => ({
+      age: limit.age ?? '',
+      unit: limit.unit ?? '',
+      gender: limit.gender ?? '',
+      minValue: limit.minValue ? parseInt(limit.minValue) : 0,
+      maxValue: limit.maxValue ? parseInt(limit.maxValue) : 0,
+    }));
+  })
+  @IsArray()
+  @IsOptional()
+  limits: AnalysisPointLimit[] = [];
 }
 
 export class EditAnalysisPointQueryDto extends AddNewAnalysisPointQueryDto {

@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { AnalysisPoint } from './analysisPoint.model';
 import { LangValue } from '../gender/lang-value.enum';
 import { TranslationService } from '../translation/translation.service';
-import { GetAnalysisPointListQueryDto } from './dto/analysisPoint.dto';
+import {
+  AddNewAnalysisPointQueryDto,
+  GetAnalysisPointListQueryDto,
+} from './dto/analysisPoint.dto';
 import {
   AnalysisPointLimit,
   AnalysisPointsListResponse,
@@ -50,8 +53,6 @@ export class AnalysisPointService {
       limit: parameters.recordPerPage,
       order: [['id', 'ASC']],
     });
-
-    console.log(rows);
 
     const rowsWithTranslation = await Promise.all(
       rows.map(async (row) => {
@@ -130,5 +131,50 @@ export class AnalysisPointService {
       });
     }
     return limits;
+  }
+
+  async addNewAnalysisPoint(
+    parameters: AddNewAnalysisPointQueryDto,
+  ): Promise<void> {
+    console.log(parameters);
+    const existingPoint = await this.analysisPointRepository.findOne({
+      where: { name: parameters.name },
+    });
+
+    if (existingPoint) {
+      throw new HttpException(
+        `Analysis Point with name '${parameters.name}' already exists`,
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const point = await this.analysisPointRepository.create({
+      name: parameters.name,
+    });
+    if (!point) {
+      throw new HttpException('Error in DB', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    /*const [ru, en] = await Promise.all([
+      parameters.translationRu !== ''
+        ? this.translationService.addNewTranslation({
+            lang: LangValue.RU,
+            namespace: this.namespace,
+            module: this.module,
+            submodule: point.name,
+            value: parameters.translationRu,
+          })
+        : Promise.resolve(null),
+      parameters.translationEn !== ''
+        ? this.translationService.addNewTranslation({
+            lang: LangValue.EN,
+            namespace: this.namespace,
+            module: this.module,
+            submodule: point.name,
+            value: parameters.translationEn,
+          })
+        : Promise.resolve(null),
+    ]);*/
+    /*const limits = await Promise.all(parameters.limits.map());
+    console.log(limits);*/
   }
 }

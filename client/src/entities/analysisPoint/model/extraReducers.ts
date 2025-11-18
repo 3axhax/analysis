@@ -42,13 +42,13 @@ export const getFullAnalysisPointList = createAsyncThunk(
 );
 
 export const addNewAnalysisPoint = createAsyncThunk(
-  "analysisPoints/addNew",
+  "analysisPoint/addNew",
   async (data: AnalysisPointGreatItem, { getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/analysisPoints/add", data);
+        const response = await Request.post("/analysisPoint/add", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -60,13 +60,13 @@ export const addNewAnalysisPoint = createAsyncThunk(
 );
 
 export const editAnalysisPoint = createAsyncThunk(
-  "analysisPoints/edit",
+  "analysisPoint/edit",
   async (data: AnalysisPointGreatItem, { getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/analysisPoints/edit", data);
+        const response = await Request.post("/analysisPoint/edit", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -78,13 +78,13 @@ export const editAnalysisPoint = createAsyncThunk(
 );
 
 export const deleteAnalysisPoint = createAsyncThunk(
-  "analysisPoints/delete",
+  "analysisPoint/delete",
   async (id: number, { getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/analysisPoints/delete", { id });
+        const response = await Request.post("/analysisPoint/delete", { id });
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
