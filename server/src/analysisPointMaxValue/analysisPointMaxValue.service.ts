@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AnalysisPointMaxValue } from './analysisPointMaxValue.model';
+import {
+  AnalysisPointMaxValue,
+  AnalysisPointMaxValueCreationAttrs,
+} from './analysisPointMaxValue.model';
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 import { Op } from 'sequelize';
 import { Gender } from '../gender/gender.model';
@@ -60,5 +63,11 @@ export class AnalysisPointMaxValueService {
       where: parameters,
       include: [Gender, Age, AnalysisPointUnits],
     });
+  };
+
+  addNewPointMaxValue = async (
+    parameters: AnalysisPointMaxValueCreationAttrs,
+  ): Promise<AnalysisPointMaxValue> => {
+    return this.analysisPointMaxValueRepository.create(parameters);
   };
 }

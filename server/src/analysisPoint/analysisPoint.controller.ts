@@ -6,7 +6,10 @@ import {
   AddNewAnalysisPointQueryDto,
   GetAnalysisPointListQueryDto,
 } from './dto/analysisPoint.dto';
-import { AnalysisPointsListResponse } from './analysisPoint.types';
+import {
+  AnalysisPointResponse,
+  AnalysisPointsListResponse,
+} from './analysisPoint.types';
 
 @Controller('analysisPoint')
 export class AnalysisPointController {
@@ -30,7 +33,7 @@ export class AnalysisPointController {
   @UseGuards(RolesGuard)
   async addNewAnalysisPoint(
     @Body() param: AddNewAnalysisPointQueryDto,
-  ): Promise<void> {
-    return this.analysisPointService.addNewAnalysisPoint(param);
+  ): Promise<AnalysisPointResponse> {
+    return await this.analysisPointService.addNewAnalysisPoint(param);
   }
 }

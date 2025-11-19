@@ -9,12 +9,16 @@ import {
 } from './dto/analysisPoint.dto';
 import {
   AnalysisPointLimit,
+  AnalysisPointResponse,
   AnalysisPointsListResponse,
 } from './analysisPoint.types';
 import { AnalysisPointMaxValueService } from '../analysisPointMaxValue/analysisPointMaxValue.service';
 import { AnalysisPointMinValueService } from '../analysisPointMinValue/analysisPointMinValue.service';
 import { AnalysisPointMaxValue } from '../analysisPointMaxValue/analysisPointMaxValue.model';
 import { AnalysisPointMinValue } from '../analysisPointMinValue/analysisPointMinValue.model';
+import { AgesService } from '../ages/ages.service';
+import { GenderService } from '../gender/gender.service';
+import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 
 @Injectable()
 export class AnalysisPointService {
@@ -26,6 +30,9 @@ export class AnalysisPointService {
     private translationService: TranslationService,
     private analysisPointMaxValueService: AnalysisPointMaxValueService,
     private analysisPointMinValueService: AnalysisPointMinValueService,
+    private agesService: AgesService,
+    private genderService: GenderService,
+    private unitsService: AnalysisPointUnitsService,
   ) {}
   async getAll() {
     const points = await this.analysisPointRepository.findAll({
@@ -74,17 +81,10 @@ export class AnalysisPointService {
 
     const rowsWithLimits = await Promise.all(
       rowsWithTranslation.map(async (row) => {
-        const max =
-          await this.analysisPointMaxValueService.getMaxValueByParameters({
-            pointId: row.id,
-          });
-        const min =
-          await this.analysisPointMinValueService.getMinValueByParameters({
-            pointId: row.id,
-          });
+        const limits = await this._getLimitsForPointId(row.id);
         return {
           ...row,
-          limits: this._formatLimits(max, min),
+          limits,
         };
       }),
     );
@@ -94,6 +94,18 @@ export class AnalysisPointService {
       currentPage: parameters.currentPage,
       rows: rowsWithLimits,
     };
+  }
+
+  async _getLimitsForPointId(pointId: number): Promise<AnalysisPointLimit[]> {
+    const [min, max] = await Promise.all([
+      this.analysisPointMaxValueService.getMaxValueByParameters({
+        pointId,
+      }),
+      this.analysisPointMinValueService.getMinValueByParameters({
+        pointId,
+      }),
+    ]);
+    return this._formatLimits(max, min);
   }
 
   _formatLimits(
@@ -135,8 +147,7 @@ export class AnalysisPointService {
 
   async addNewAnalysisPoint(
     parameters: AddNewAnalysisPointQueryDto,
-  ): Promise<void> {
-    console.log(parameters);
+  ): Promise<AnalysisPointResponse> {
     const existingPoint = await this.analysisPointRepository.findOne({
       where: { name: parameters.name },
     });
@@ -154,7 +165,7 @@ export class AnalysisPointService {
     if (!point) {
       throw new HttpException('Error in DB', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    /*const [ru, en] = await Promise.all([
+    const [ru, en] = await Promise.all([
       parameters.translationRu !== ''
         ? this.translationService.addNewTranslation({
             lang: LangValue.RU,
@@ -173,8 +184,41 @@ export class AnalysisPointService {
             value: parameters.translationEn,
           })
         : Promise.resolve(null),
-    ]);*/
-    /*const limits = await Promise.all(parameters.limits.map());
-    console.log(limits);*/
+    ]);
+    await Promise.all(
+      parameters.limits.map(async (limit) => {
+        const [age, gender, unit] = await Promise.all([
+          this.agesService.getAgeByName(limit.age),
+          this.genderService.getGenderByName(limit.gender),
+          this.unitsService.getAnalysisPointUnitsByName(limit.unit),
+        ]);
+        if (age && gender && unit) {
+          await Promise.all([
+            this.analysisPointMinValueService.addNewPointMinValue({
+              pointId: point.id,
+              ageId: age.id,
+              genderId: gender.id,
+              unitId: unit.id,
+              value: limit.minValue,
+            }),
+            this.analysisPointMaxValueService.addNewPointMaxValue({
+              pointId: point.id,
+              ageId: age.id,
+              genderId: gender.id,
+              unitId: unit.id,
+              value: limit.minValue,
+            }),
+          ]);
+        }
+      }),
+    );
+    const limits = await this._getLimitsForPointId(point.id);
+    return {
+      id: point.id,
+      name: point.name,
+      translationEn: ru ? ru.value : '',
+      translationRu: en ? en.value : '',
+      limits,
+    };
   }
 }

@@ -7,6 +7,9 @@ import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.mod
 import { AnalysisPointsUnits } from './analysisPoint-Units.model';
 import { AnalysisPointMaxValueModule } from '../analysisPointMaxValue/analysisPointMaxValue.module';
 import { AnalysisPointMinValueModule } from '../analysisPointMinValue/analysisPointMinValue.module';
+import { AgesModule } from '../ages/ages.module';
+import { GenderModule } from '../gender/gender.module';
+import { AnalysisPointUnitsModule } from '../analysisPointUnits/analysisPointUnits.module';
 
 @Module({
   providers: [AnalysisPointService],
@@ -19,6 +22,9 @@ import { AnalysisPointMinValueModule } from '../analysisPointMinValue/analysisPo
     ]),
     AnalysisPointMaxValueModule,
     AnalysisPointMinValueModule,
+    AgesModule,
+    GenderModule,
+    AnalysisPointUnitsModule,
   ],
   exports: [AnalysisPointService],
 })

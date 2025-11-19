@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AnalysisPointMinValue } from './analysisPointMinValue.model';
+import {
+  AnalysisPointMinValue,
+  AnalysisPointMinValueCreationAttrs,
+} from './analysisPointMinValue.model';
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 import { Op } from 'sequelize';
 import { Gender } from '../gender/gender.model';
@@ -61,5 +64,11 @@ export class AnalysisPointMinValueService {
       where: parameters,
       include: [Gender, Age, AnalysisPointUnits],
     });
+  };
+
+  addNewPointMinValue = async (
+    parameters: AnalysisPointMinValueCreationAttrs,
+  ): Promise<AnalysisPointMinValue> => {
+    return this.analysisPointMinValueRepository.create(parameters);
   };
 }
