@@ -71,4 +71,14 @@ export class AnalysisPointMinValueService {
   ): Promise<AnalysisPointMinValue> => {
     return this.analysisPointMinValueRepository.create(parameters);
   };
+
+  async deletePointMinValueByParameters(
+    parameters: Partial<AnalysisPointMinValue>,
+  ): Promise<boolean> {
+    const deletedCount = await this.analysisPointMinValueRepository.destroy({
+      where: parameters,
+    });
+
+    return deletedCount > 0;
+  }
 }

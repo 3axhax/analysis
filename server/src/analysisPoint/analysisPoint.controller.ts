@@ -4,6 +4,7 @@ import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import {
   AddNewAnalysisPointQueryDto,
+  EditAnalysisPointQueryDto,
   GetAnalysisPointListQueryDto,
 } from './dto/analysisPoint.dto';
 import {
@@ -35,5 +36,21 @@ export class AnalysisPointController {
     @Body() param: AddNewAnalysisPointQueryDto,
   ): Promise<AnalysisPointResponse> {
     return await this.analysisPointService.addNewAnalysisPoint(param);
+  }
+
+  @Post('edit')
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  async editAnalysisPoint(
+    @Body() param: EditAnalysisPointQueryDto,
+  ): Promise<AnalysisPointResponse> {
+    return await this.analysisPointService.editAnalysisPoint(param);
+  }
+
+  @Post('delete')
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  async deleteAnalysisPointUnits(@Body('id') id: number): Promise<boolean> {
+    return this.analysisPointService.deleteAnalysisPoint(id);
   }
 }

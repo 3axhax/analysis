@@ -5,6 +5,7 @@ import { LangValue } from '../gender/lang-value.enum';
 import { TranslationService } from '../translation/translation.service';
 import {
   AddNewAnalysisPointQueryDto,
+  EditAnalysisPointQueryDto,
   GetAnalysisPointListQueryDto,
 } from './dto/analysisPoint.dto';
 import {
@@ -19,6 +20,7 @@ import { AnalysisPointMinValue } from '../analysisPointMinValue/analysisPointMin
 import { AgesService } from '../ages/ages.service';
 import { GenderService } from '../gender/gender.service';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class AnalysisPointService {
@@ -94,6 +96,42 @@ export class AnalysisPointService {
       currentPage: parameters.currentPage,
       rows: rowsWithLimits,
     };
+  }
+
+  async _addLimitsToPoint({
+    limits,
+    pointId,
+  }: {
+    limits: AnalysisPointLimit[];
+    pointId: number;
+  }): Promise<void> {
+    await Promise.all(
+      limits.map(async (limit) => {
+        const [age, gender, unit] = await Promise.all([
+          this.agesService.getAgeByName(limit.age),
+          this.genderService.getGenderByName(limit.gender),
+          this.unitsService.getAnalysisPointUnitsByName(limit.unit),
+        ]);
+        if (age && gender && unit) {
+          await Promise.all([
+            this.analysisPointMinValueService.addNewPointMinValue({
+              pointId: pointId,
+              ageId: age.id,
+              genderId: gender.id,
+              unitId: unit.id,
+              value: limit.minValue,
+            }),
+            this.analysisPointMaxValueService.addNewPointMaxValue({
+              pointId: pointId,
+              ageId: age.id,
+              genderId: gender.id,
+              unitId: unit.id,
+              value: limit.minValue,
+            }),
+          ]);
+        }
+      }),
+    );
   }
 
   async _getLimitsForPointId(pointId: number): Promise<AnalysisPointLimit[]> {
@@ -185,33 +223,10 @@ export class AnalysisPointService {
           })
         : Promise.resolve(null),
     ]);
-    await Promise.all(
-      parameters.limits.map(async (limit) => {
-        const [age, gender, unit] = await Promise.all([
-          this.agesService.getAgeByName(limit.age),
-          this.genderService.getGenderByName(limit.gender),
-          this.unitsService.getAnalysisPointUnitsByName(limit.unit),
-        ]);
-        if (age && gender && unit) {
-          await Promise.all([
-            this.analysisPointMinValueService.addNewPointMinValue({
-              pointId: point.id,
-              ageId: age.id,
-              genderId: gender.id,
-              unitId: unit.id,
-              value: limit.minValue,
-            }),
-            this.analysisPointMaxValueService.addNewPointMaxValue({
-              pointId: point.id,
-              ageId: age.id,
-              genderId: gender.id,
-              unitId: unit.id,
-              value: limit.minValue,
-            }),
-          ]);
-        }
-      }),
-    );
+    await this._addLimitsToPoint({
+      limits: parameters.limits,
+      pointId: point.id,
+    });
     const limits = await this._getLimitsForPointId(point.id);
     return {
       id: point.id,
@@ -220,5 +235,113 @@ export class AnalysisPointService {
       translationRu: en ? en.value : '',
       limits,
     };
+  }
+
+  async editAnalysisPoint(
+    parameters: EditAnalysisPointQueryDto,
+  ): Promise<AnalysisPointResponse> {
+    const existingPoint = await this.analysisPointRepository.findByPk(
+      parameters.id,
+    );
+
+    if (!existingPoint) {
+      throw new HttpException(
+        `Analysis Point with id '${parameters.name}' not found`,
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const existingNamePoint = await this.analysisPointRepository.findOne({
+      where: {
+        name: parameters.name,
+        id: { [Op.ne]: parameters.id },
+      },
+    });
+
+    if (existingNamePoint) {
+      throw new HttpException(
+        `Point with name '${parameters.name}' already exists`,
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    await existingPoint?.update(parameters);
+
+    const [ru, en] = await Promise.all([
+      parameters.translationRu !== ''
+        ? this.translationService.editTranslationByParameters({
+            lang: LangValue.RU,
+            namespace: this.namespace,
+            module: this.module,
+            submodule: existingPoint.name,
+            value: parameters.translationRu,
+          })
+        : Promise.resolve(null),
+      parameters.translationEn !== ''
+        ? this.translationService.editTranslationByParameters({
+            lang: LangValue.EN,
+            namespace: this.namespace,
+            module: this.module,
+            submodule: existingPoint.name,
+            value: parameters.translationEn,
+          })
+        : Promise.resolve(null),
+    ]);
+
+    await Promise.all([
+      this.analysisPointMinValueService.deletePointMinValueByParameters({
+        pointId: existingPoint.id,
+      }),
+      this.analysisPointMaxValueService.deletePointMaxValueByParameters({
+        pointId: existingPoint.id,
+      }),
+    ]);
+
+    await this._addLimitsToPoint({
+      limits: parameters.limits,
+      pointId: existingPoint.id,
+    });
+    const limits = await this._getLimitsForPointId(existingPoint.id);
+
+    return {
+      id: existingPoint.id,
+      name: existingPoint.name,
+      translationEn: ru ? ru.value : '',
+      translationRu: en ? en.value : '',
+      limits,
+    };
+  }
+
+  async deleteAnalysisPoint(id: number): Promise<boolean> {
+    const existingPoint = await this.analysisPointRepository.findByPk(id);
+
+    const deletedCount = await this.analysisPointRepository.destroy({
+      where: { id },
+    });
+
+    if (existingPoint) {
+      await Promise.all([
+        this.translationService.deleteTranslationByParameters({
+          lang: LangValue.RU,
+          namespace: this.namespace,
+          module: this.module,
+          submodule: existingPoint.name,
+        }),
+        this.translationService.deleteTranslationByParameters({
+          lang: LangValue.EN,
+          namespace: this.namespace,
+          module: this.module,
+          submodule: existingPoint.name,
+        }),
+        this.analysisPointMinValueService.deletePointMinValueByParameters({
+          pointId: existingPoint.id,
+        }),
+        this.analysisPointMaxValueService.deletePointMaxValueByParameters({
+          pointId: existingPoint.id,
+        }),
+      ]);
+    }
+
+    return deletedCount > 0;
   }
 }

@@ -25,9 +25,11 @@ export const AnalysisPointsListActionItems = ({
   const handlerDeleteRecord = (id: number) => {
     openModal({
       onAccess: () => {
-        dispatch(deleteAnalysisPoint(id)).then(() =>
-          dispatch(getFullAnalysisPointList()),
-        );
+        dispatch(deleteAnalysisPoint(id)).then((res) => {
+          if (res?.payload) {
+            dispatch(getFullAnalysisPointList());
+          }
+        });
       },
       title: `Удалить запись ID: ${id}?`,
       type: "danger",

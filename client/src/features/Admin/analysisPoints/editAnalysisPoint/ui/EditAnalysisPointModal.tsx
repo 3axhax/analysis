@@ -7,7 +7,8 @@ import {
   AnalysisPointGreatItem,
   AnalysisPointLimit,
   editAnalysisPoint,
-  getFullAnalysisPointList, setEditAnalysisPointId,
+  getFullAnalysisPointList,
+  setEditAnalysisPointId,
 } from "@entities/analysisPoint";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
 import { selectAnalysisPointsEditAnalysisPoint } from "@entities/analysisPoint/model/selectors.ts";
@@ -79,9 +80,9 @@ export const EditAnalysisPointModal = ({
       className={"min-w-[600px]"}
       setOpen={(state) => {
         if (!state) {
-          dispatch(setEditAnalysisPointId(0))
+          dispatch(setEditAnalysisPointId(0));
         }
-        setOpen(state)
+        setOpen(state);
       }}
       body={
         <EditAnalysisPointForm handlerInput={handlerInput} values={formValue} />

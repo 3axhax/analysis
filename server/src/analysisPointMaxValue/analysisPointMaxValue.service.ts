@@ -70,4 +70,14 @@ export class AnalysisPointMaxValueService {
   ): Promise<AnalysisPointMaxValue> => {
     return this.analysisPointMaxValueRepository.create(parameters);
   };
+
+  async deletePointMaxValueByParameters(
+    parameters: Partial<AnalysisPointMaxValue>,
+  ): Promise<boolean> {
+    const deletedCount = await this.analysisPointMaxValueRepository.destroy({
+      where: parameters,
+    });
+
+    return deletedCount > 0;
+  }
 }
