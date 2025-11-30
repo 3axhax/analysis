@@ -1,6 +1,6 @@
 export interface DescriptionCondition {
-  id: number;
-  analysisPoint: { name: string };
+  id?: number;
+  analysisPoint: { id: number; name: string };
   status: string;
 }
 
@@ -20,4 +20,10 @@ export interface DescriptionsState {
   recordPerPage: number;
   filters: Record<string, string | number>;
   editDescriptionId: number;
+}
+
+export interface DescriptionGreatItem {
+  id: number;
+  description_ru: string;
+  analysisResultDescriptionConditions: DescriptionCondition[];
 }

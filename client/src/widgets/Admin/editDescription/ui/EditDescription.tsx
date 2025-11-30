@@ -1,26 +1,20 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { selectAnalysisPointsEditAnalysisPointId } from "@entities/analysisPoint";
-import { EditAnalysisPointModal } from "@features/Admin/analysisPoints/editAnalysisPoint";
+import { selectEditDescriptionId } from "@entities/descriptions";
+import { EditDescriptionModal } from "@features/Admin/descriptions/editDescription";
 
-interface EditAnalysisPointProps {
-  className?: string;
-}
-
-export const EditAnalysisPoint = ({ className }: EditAnalysisPointProps) => {
+export const EditDescription = ({ className }: { className?: string }) => {
   const { t } = useTranslation("features");
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const editAnalysisPointId = useAppSelector(
-    selectAnalysisPointsEditAnalysisPointId,
-  );
+  const editDescriptionId = useAppSelector(selectEditDescriptionId);
 
   useEffect(() => {
-    if (editAnalysisPointId && editAnalysisPointId > 0) {
+    if (editDescriptionId && editDescriptionId > 0) {
       setOpenModal(true);
     }
-  }, [editAnalysisPointId]);
+  }, [editDescriptionId]);
 
   return (
     <>
@@ -32,7 +26,7 @@ export const EditAnalysisPoint = ({ className }: EditAnalysisPointProps) => {
       >
         {t("editDialog.add")}
       </button>
-      <EditAnalysisPointModal open={openModal} setOpen={setOpenModal} />
+      <EditDescriptionModal open={openModal} setOpen={setOpenModal} />
     </>
   );
 };

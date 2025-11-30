@@ -10,6 +10,8 @@ export {
   selectDescriptionsTotalPage,
   selectDescriptionById,
   selectConditionsDescriptionById,
+  selectEditDescriptionId,
+  selectEditDescription,
 } from "./slice";
 export {
   getDescriptionsList,
@@ -18,4 +20,9 @@ export {
   deleteDescription,
   editDescription,
 } from "./extraReducers";
-export type { DescriptionsState, DescriptionsListItem } from "./types";
+export type {
+  DescriptionsState,
+  DescriptionsListItem,
+  DescriptionGreatItem,
+  DescriptionCondition,
+} from "./types";

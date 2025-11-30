@@ -595,4 +595,20 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     submodule: 'conditions',
     value: 'Условия применения',
   },
+  {
+    id: 107,
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'descriptions',
+    submodule: 'addNewCondition',
+    value: 'Добавить новое условие',
+  },
+  {
+    id: 108,
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'descriptions',
+    submodule: 'conditionStatus',
+    value: 'Уровень',
+  },
 ];

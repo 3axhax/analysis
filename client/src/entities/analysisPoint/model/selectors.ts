@@ -15,8 +15,8 @@ export const selectAnalysisPointById = (state: RootState, pointId: number) =>
 
 export const selectAnalysisPointListForSelect = createSelector(
   [selectAnalysisPointList],
-  (agesList): SelectUIOption<number>[] =>
-    agesList.map((item) => ({
+  (analysisPointList): SelectUIOption<number>[] =>
+    analysisPointList.map((item) => ({
       value: item.id,
       label: item.name,
     })),

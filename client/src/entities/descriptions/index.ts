@@ -14,8 +14,15 @@ export {
   addNewDescription,
   deleteDescription,
   editDescription,
+  selectEditDescriptionId,
+  selectEditDescription,
 } from "./model";
-export type { DescriptionsState, DescriptionsListItem } from "./model";
+export type {
+  DescriptionsState,
+  DescriptionsListItem,
+  DescriptionGreatItem,
+  DescriptionCondition,
+} from "./model";
 export {
   useDescriptionsLoad,
   useDescriptionsWithTranslateLoad,

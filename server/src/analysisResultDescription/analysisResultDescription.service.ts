@@ -91,6 +91,7 @@ export class AnalysisResultDescriptionService {
           include: [AnalysisPoint],
         },
         distinct: true,
+        attributes: ['id', 'description_ru'],
       });
 
     return {

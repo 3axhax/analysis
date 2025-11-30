@@ -16,7 +16,6 @@ import { selectAnalysisPointsEditAnalysisPoint } from "@entities/analysisPoint/m
 interface EditAnalysisPointModalProps {
   open: boolean;
   setOpen: (state: boolean) => void;
-  editableAnalysisPoint?: AnalysisPointGreatItem | null;
 }
 
 const initialFormValue: AnalysisPointGreatItem = {

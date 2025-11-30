@@ -129,3 +129,12 @@ export const selectConditionsDescriptionById = createSelector(
     return description.analysisResultDescriptionConditions;
   },
 );
+
+export const selectEditDescriptionId = (state: RootState) =>
+  state.descriptions.editDescriptionId;
+
+export const selectEditDescription = createSelector(
+  [selectDescriptionsList, selectEditDescriptionId],
+  (list, editableId) =>
+    editableId > 0 ? list.find((point) => point.id === editableId) : undefined,
+);
