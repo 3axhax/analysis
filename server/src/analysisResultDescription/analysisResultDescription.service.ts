@@ -8,11 +8,15 @@ import { StatusValue } from '../analysisResultDescriptionCondition/status-value.
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 import { AnalysisResultDescriptionCondition } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
 import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
+import { GetAnalysisResultDescriptionsListQueryDto } from './dto/analysisResultDescriptions.dto';
 
 type DescriptionConditions = Record<number, StatusValue>;
 
 @Injectable()
 export class AnalysisResultDescriptionService {
+  namespace: string = 'entities';
+  module: string = 'units';
+
   constructor(
     @InjectModel(AnalysisResultDescription)
     private analysisResultDescriptionRepository: typeof AnalysisResultDescription,
@@ -72,5 +76,27 @@ export class AnalysisResultDescriptionService {
         include: [AnalysisPoint],
       },
     });
+  };
+
+  getAnalysisResultDescriptionsByQuery = async (
+    parameters: GetAnalysisResultDescriptionsListQueryDto,
+  ) => {
+    const { count, rows } =
+      await this.analysisResultDescriptionRepository.findAndCountAll({
+        offset: (parameters.currentPage - 1) * parameters.recordPerPage,
+        limit: parameters.recordPerPage,
+        order: [['id', 'ASC']],
+        include: {
+          model: AnalysisResultDescriptionCondition,
+          include: [AnalysisPoint],
+        },
+        distinct: true,
+      });
+
+    return {
+      totalRecord: count,
+      currentPage: parameters.currentPage,
+      rows: rows,
+    };
   };
 }

@@ -13,7 +13,6 @@ export const AgesPage: React.FC = () => {
   useDocumentTitle(title);
 
   const [editAgeId, setEditAgeId] = useState<number>(0);
-  console.log(editAgeId);
 
   const error = useAppSelector(selectAgesError);
 

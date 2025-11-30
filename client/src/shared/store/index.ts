@@ -8,6 +8,7 @@ import { genderSlice } from "@entities/gender";
 import { analysisResultSlice } from "@entities/analysisResult";
 import { translationsSlice } from "@entities/translations";
 import { unitsSlice } from "@entities/units";
+import { descriptionsSlice } from "@entities/descriptions";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     analysisResult: analysisResultSlice.reducer,
     translations: translationsSlice.reducer,
     units: unitsSlice.reducer,
+    descriptions: descriptionsSlice.reducer,
   },
 });
 

@@ -37,7 +37,7 @@ export const Navigation = () => {
       items: [
         { path: "/admin/analysisType", label: "Типы анализов" },
         { path: "/admin/analysisPoints", label: t("pageTitle.analysisPoints") },
-        { path: "/admin/descriptions", label: "Описания" },
+        { path: "/admin/descriptions", label: t("pageTitle.descriptions") },
         { path: "/admin/units", label: t("pageTitle.units") },
         { path: "/admin/ages", label: t("pageTitle.ages") },
         { path: "" },
