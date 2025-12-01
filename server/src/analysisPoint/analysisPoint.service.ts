@@ -126,7 +126,7 @@ export class AnalysisPointService {
               ageId: age.id,
               genderId: gender.id,
               unitId: unit.id,
-              value: limit.minValue,
+              value: limit.maxValue,
             }),
           ]);
         }
@@ -135,7 +135,7 @@ export class AnalysisPointService {
   }
 
   async _getLimitsForPointId(pointId: number): Promise<AnalysisPointLimit[]> {
-    const [min, max] = await Promise.all([
+    const [max, min] = await Promise.all([
       this.analysisPointMaxValueService.getMaxValueByParameters({
         pointId,
       }),
