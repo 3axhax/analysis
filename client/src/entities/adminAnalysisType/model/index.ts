@@ -1,3 +1,4 @@
 export {adminAnalysisTypeSlice, getFullAdminAnalysisTypeList, setPending,
     setCurrentPage,
-    resetError} from "./slice";
+    resetError,
+    selectAdminAnalysisTypeError} from "./slice";

@@ -1,3 +1,6 @@
-export {adminAnalysisTypeSlice, getFullAdminAnalysisTypeList,setPending,
+export {
+    adminAnalysisTypeSlice, getFullAdminAnalysisTypeList, setPending,
     setCurrentPage,
-    resetError} from "./model";
+    resetError,
+    selectAdminAnalysisTypeError
+} from "./model";

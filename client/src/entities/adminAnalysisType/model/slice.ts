@@ -3,6 +3,7 @@ import {RootState} from "@shared/store";
 import Request from "@shared/transport/RestAPI.ts";
 import {HandlerAxiosError} from "@shared/transport/RequestHandlersError.ts";
 import type {WritableDraft} from "immer";
+import {ErrorActionType} from "@shared/lib/types";
 
 export const getFullAdminAnalysisTypeList = createAsyncThunk(
     "adminAnalysisType/getFullList",
@@ -77,7 +78,44 @@ export const adminAnalysisTypeSlice = createSlice({
         resetError: (state: WritableDraft<AdminAnalysisTypeState>) => {
             state.error = "";
         },
-    }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(
+                getFullAdminAnalysisTypeList.fulfilled,
+                (
+                    state: WritableDraft<AdminAnalysisTypeState>,
+                    action: PayloadAction<{
+                        totalRecord: number;
+                        currentPage: number;
+                        rows: any[];
+                    }>,
+                ) => {
+                    if (action.payload) {
+                        state.list = action.payload.rows;
+                        state.totalRecord = action.payload.totalRecord;
+                        state.loaded = true;
+                    }
+                    state.pending = false;
+                },
+            )
+            .addMatcher(
+                (action) =>
+                    action.type.endsWith("/rejected") &&
+                    action.type.startsWith("adminAnalysisType"),
+                (state: WritableDraft<AdminAnalysisTypeState>, action: ErrorActionType) => {
+                    state.error = action.error.message ? action.error.message : "";
+                },
+            )
+            .addMatcher(
+                (action) =>
+                    action.type.endsWith("/pending") &&
+                    action.type.startsWith("adminAnalysisType"),
+                (state: WritableDraft<AdminAnalysisTypeState>) => {
+                    state.error = "";
+                },
+            );
+    },
 });
 
 export const {
@@ -85,3 +123,6 @@ export const {
     setCurrentPage,
     resetError
 } = adminAnalysisTypeSlice.actions;
+
+export const selectAdminAnalysisTypeError = (state: RootState) =>
+    state.adminAnalysisType.error;

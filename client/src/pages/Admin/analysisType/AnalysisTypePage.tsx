@@ -10,13 +10,14 @@ import { AnalysisPointsListPagination } from "@features/Admin/analysisPoints/ana
 import { useAppSelector } from "@shared/store/hooks";
 import { EditAnalysisPoint } from "@widgets/Admin/editAnalysisPoint";
 import {useFullAdminAnalysisTypesLoad} from "@entities/adminAnalysisType/adminAnalysisType.hooks.ts";
+import {selectAdminAnalysisTypeError} from "@entities/adminAnalysisType";
 
 export const AnalysisTypePage: React.FC = () => {
     const { t } = useTranslation("common");
     const title = t("pageTitle.analysisTYpe");
     useDocumentTitle(title);
 
-    //const error = useAppSelector(selectAnalysisPointsError);
+    const error = useAppSelector(selectAdminAnalysisTypeError);
 
     useFullAdminAnalysisTypesLoad();
 
@@ -28,9 +29,10 @@ export const AnalysisTypePage: React.FC = () => {
                     className={"absolute right-[5%] top-[calc(50%-20px)]"}
                 />*/}
             </div>
-{/*            {error !== "" ? (
+           {error !== "" ? (
                 <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
             ) : null}
+            {/*
             <AnalysisPointsList />
             <AnalysisPointsListPagination />*/}
         </div>
