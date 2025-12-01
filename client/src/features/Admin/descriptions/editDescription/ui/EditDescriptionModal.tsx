@@ -79,6 +79,7 @@ export const EditDescriptionModal = ({
         }
         setOpen(state);
       }}
+      title={`${!editableDescription ? "Добавить" : "Изменить"} описание результатов`}
       body={
         <EditDescriptionForm handlerInput={handlerInput} values={formValue} />
       }

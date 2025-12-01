@@ -1,11 +1,10 @@
-import { useTranslation } from "react-i18next";
 import React from "react";
-import { InputWithLabel } from "@shared/ui/InputWithLabel";
 import {
   DescriptionCondition,
   DescriptionGreatItem,
 } from "@entities/descriptions";
-import { DescriptionConditionsEditableList } from "@features/Admin/descriptions/editDescription/ui/DescriptionConditionsEditableList.tsx";
+import { DescriptionConditionsEditableList } from "./DescriptionConditionsEditableList";
+import { TextArea } from "@shared/ui";
 
 interface EditAnalysisPointFormProps {
   values: DescriptionGreatItem;
@@ -22,7 +21,6 @@ export const EditDescriptionForm = ({
   values,
   handlerInput,
 }: EditAnalysisPointFormProps) => {
-  const { t } = useTranslation("entities");
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -31,15 +29,12 @@ export const EditDescriptionForm = ({
       onSubmit={handlerSubmit}
       className={"space-y-2 text-gray-600 dark:text-gray-300"}
     >
-      <InputWithLabel
-        label={t("descriptions.translationRu")}
+      <TextArea
         name={"description_ru"}
-        placeholder={"hemoglobin"}
+        value={values.description_ru}
         onChange={(value) => {
           handlerInput({ name: "description_ru", value });
         }}
-        className={"justify-between"}
-        value={values.description_ru}
       />
       <DescriptionConditionsEditableList
         onChange={(value) => {
