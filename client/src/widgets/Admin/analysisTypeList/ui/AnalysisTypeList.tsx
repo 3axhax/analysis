@@ -1,16 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { Table, TableData, TableDataRow } from "@shared/ui/Table";
-import {selectAdminAnalysisTypeList} from "@entities/adminAnalysisType";
-import {AnalysisTypePointList} from "@widgets/Admin/analysisTypeList/ui/AnalysisTypePointList.tsx";
+import { selectAdminAnalysisTypeList } from "@entities/adminAnalysisType";
+import { AnalysisTypePointList } from "@widgets/Admin/analysisTypeList/ui/AnalysisTypePointList.tsx";
 
 export const AnalysisTypeList = () => {
   const { t } = useTranslation("entities");
   const { t: tCommon } = useTranslation("common");
 
-  const analysisTypeList  = useAppSelector(
-      selectAdminAnalysisTypeList,
-  );
+  const analysisTypeList = useAppSelector(selectAdminAnalysisTypeList);
 
   const tableData: TableData = {
     header: [
@@ -52,12 +50,12 @@ export const AnalysisTypeList = () => {
         },
         {
           name: "analysis",
-          data: <AnalysisTypePointList list={row.analysisPoint}/>,
+          data: <AnalysisTypePointList list={row.analysisPoint} />,
           className: "text-start",
         },
         {
           name: "action",
-          data: ' '/*<AnalysisPointsListActionItems rowId={row.id} />*/,
+          data: " " /*<AnalysisPointsListActionItems rowId={row.id} />*/,
           className: "flex justify-center",
         },
       ];

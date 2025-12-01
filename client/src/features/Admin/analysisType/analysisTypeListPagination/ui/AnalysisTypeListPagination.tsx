@@ -4,7 +4,7 @@ import {
   getFullAdminAnalysisTypeList,
   selectAnalysisTypeCurrentPage,
   selectAnalysisTypeTotalPage,
-  setCurrentPage
+  setCurrentPage,
 } from "@entities/adminAnalysisType";
 
 export const AnalysisTypeListPagination = () => {

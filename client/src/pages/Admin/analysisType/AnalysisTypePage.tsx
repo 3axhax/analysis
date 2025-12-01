@@ -1,18 +1,11 @@
 import React from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
-import {
-  selectAnalysisPointsError,
-  useFullAnalysisPointsLoad,
-} from "@entities/analysisPoint";
-import { AnalysisPointsList } from "@widgets/Admin/analysisPointsList";
-import { AnalysisPointsListPagination } from "@features/Admin/analysisPoints/analysisPointsListPagination";
 import { useAppSelector } from "@shared/store/hooks";
-import { EditAnalysisPoint } from "@widgets/Admin/editAnalysisPoint";
 import { useFullAdminAnalysisTypesLoad } from "@entities/adminAnalysisType/adminAnalysisType.hooks.ts";
 import { selectAdminAnalysisTypeError } from "@entities/adminAnalysisType";
-import {AnalysisTypeList} from "@widgets/Admin/analysisTypeList";
-import {AnalysisTypeListPagination} from "@features/Admin/analysisType/analysisTypeListPagination";
+import { AnalysisTypeList } from "@widgets/Admin/analysisTypeList";
+import { AnalysisTypeListPagination } from "@features/Admin/analysisType/analysisTypeListPagination";
 
 export const AnalysisTypePage: React.FC = () => {
   const { t } = useTranslation("common");

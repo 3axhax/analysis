@@ -7,7 +7,6 @@ export {
   selectAdminAnalysisTypeError,
   selectAdminAnalysisTypeList,
   selectAnalysisTypeCurrentPage,
-  selectAnalysisTypeTotalPage
+  selectAnalysisTypeTotalPage,
 } from "./slice";
 export type { AdminAnalysisTypePointItem } from "./slice";
-

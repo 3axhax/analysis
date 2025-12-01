@@ -95,7 +95,7 @@ export const adminAnalysisTypeSlice = createSlice({
           action: PayloadAction<{
             totalRecord: number;
             currentPage: number;
-            rows: any[];
+            rows: AdminAnalysisTypeListItem[];
           }>,
         ) => {
           if (action.payload) {
@@ -135,10 +135,10 @@ export const selectAdminAnalysisTypeError = (state: RootState) =>
   state.adminAnalysisType.error;
 
 export const selectAdminAnalysisTypeList = (state: RootState) =>
-    state.adminAnalysisType.list;
+  state.adminAnalysisType.list;
 export const selectAnalysisTypeCurrentPage = (state: RootState) =>
-    state.adminAnalysisType.currentPage;
+  state.adminAnalysisType.currentPage;
 export const selectAnalysisTypeTotalPage = (state: RootState) =>
-    Math.ceil(
-        state.adminAnalysisType.totalRecord / state.adminAnalysisType.recordPerPage,
-    );
+  Math.ceil(
+    state.adminAnalysisType.totalRecord / state.adminAnalysisType.recordPerPage,
+  );
