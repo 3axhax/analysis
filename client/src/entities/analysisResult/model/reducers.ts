@@ -5,7 +5,7 @@ import {
 } from "@entities/analysisResult/model/types.ts";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { initialPrepareData } from "@entities/analysisResult/model/slice.ts";
-import {GenderType} from "@shared/lib/types";
+import { GenderType } from "@shared/lib/types";
 
 export const AnalysisResultReducers = {
   setPending: (

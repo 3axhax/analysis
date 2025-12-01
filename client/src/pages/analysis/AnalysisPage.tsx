@@ -18,7 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GenderType } from "@shared/lib/types";
-import {resetSelectedPoints} from "@entities/analysisPoint";
+import { resetSelectedPoints } from "@entities/analysisPoint";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");

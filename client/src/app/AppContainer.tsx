@@ -17,7 +17,7 @@ import { UnitsPage } from "@pages/Admin/units";
 import { AgesPage } from "@pages/Admin/ages";
 import { AnalysisPointsPage } from "@pages/Admin/analysisPoints";
 import { DescriptionsPage } from "@pages/Admin/descriptions";
-import {AnalysisTypePage} from "@pages/Admin/analysisType";
+import { AnalysisTypePage } from "@pages/Admin/analysisType";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
@@ -48,10 +48,7 @@ function AppContainer() {
               path="/admin/analysisPoints"
               element={<AnalysisPointsPage />}
             />
-              <Route
-                  path="/admin/analysisType"
-                  element={<AnalysisTypePage />}
-              />
+            <Route path="/admin/analysisType" element={<AnalysisTypePage />} />
           </>
         )}
         <Route path="*" element={<NotFoundPage />} />
