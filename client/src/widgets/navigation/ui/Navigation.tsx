@@ -35,7 +35,7 @@ export const Navigation = () => {
         <WrenchScrewdriverIcon className="h-5 w-5 text-green-800 mr-2" />
       ),
       items: [
-        { path: "/admin/analysisType", label: "Типы анализов" },
+        { path: "/admin/analysisType", label: t("pageTitle.analysisTYpe") },
         { path: "/admin/analysisPoints", label: t("pageTitle.analysisPoints") },
         { path: "/admin/descriptions", label: t("pageTitle.descriptions") },
         { path: "/admin/units", label: t("pageTitle.units") },

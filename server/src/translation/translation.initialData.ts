@@ -611,4 +611,12 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     submodule: 'conditionStatus',
     value: 'Уровень',
   },
+  {
+    id: 109,
+    lang: LangValue.RU,
+    namespace: 'common',
+    module: 'pageTitle',
+    submodule: 'analysisType',
+    value: 'Типы анализов',
+  },
 ];
