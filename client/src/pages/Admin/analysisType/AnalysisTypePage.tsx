@@ -11,6 +11,8 @@ import { useAppSelector } from "@shared/store/hooks";
 import { EditAnalysisPoint } from "@widgets/Admin/editAnalysisPoint";
 import { useFullAdminAnalysisTypesLoad } from "@entities/adminAnalysisType/adminAnalysisType.hooks.ts";
 import { selectAdminAnalysisTypeError } from "@entities/adminAnalysisType";
+import {AnalysisTypeList} from "@widgets/Admin/analysisTypeList";
+import {AnalysisTypeListPagination} from "@features/Admin/analysisType/analysisTypeListPagination";
 
 export const AnalysisTypePage: React.FC = () => {
   const { t } = useTranslation("common");
@@ -32,6 +34,8 @@ export const AnalysisTypePage: React.FC = () => {
       {error !== "" ? (
         <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
       ) : null}
+      <AnalysisTypeList />
+      <AnalysisTypeListPagination />
       {/*
             <AnalysisPointsList />
             <AnalysisPointsListPagination />*/}

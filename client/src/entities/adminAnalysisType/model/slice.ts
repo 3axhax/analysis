@@ -26,11 +26,18 @@ export const getFullAdminAnalysisTypeList = createAsyncThunk(
     }
   },
 );
+
+export interface AdminAnalysisTypePointItem {
+  id: number;
+  name: string;
+}
+
 export interface AdminAnalysisTypeListItem {
   id: number;
   name: string;
   translationRu: string;
   translationEn: string;
+  analysisPoint: AdminAnalysisTypePointItem[];
 }
 interface AdminAnalysisTypeState {
   loaded: boolean;
@@ -50,7 +57,7 @@ const initialState: AdminAnalysisTypeState = {
   list: [],
   currentPage: 1,
   totalRecord: 0,
-  recordPerPage: 20,
+  recordPerPage: 10,
   filters: {},
 };
 
@@ -126,3 +133,12 @@ export const { setPending, setCurrentPage, resetError } =
 
 export const selectAdminAnalysisTypeError = (state: RootState) =>
   state.adminAnalysisType.error;
+
+export const selectAdminAnalysisTypeList = (state: RootState) =>
+    state.adminAnalysisType.list;
+export const selectAnalysisTypeCurrentPage = (state: RootState) =>
+    state.adminAnalysisType.currentPage;
+export const selectAnalysisTypeTotalPage = (state: RootState) =>
+    Math.ceil(
+        state.adminAnalysisType.totalRecord / state.adminAnalysisType.recordPerPage,
+    );
