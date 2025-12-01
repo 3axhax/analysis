@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { AnalysisResultDescription } from './analysisResultDescription.model';
 import { AnalysisPointMinValueService } from '../analysisPointMinValue/analysisPointMinValue.service';
@@ -8,7 +8,12 @@ import { StatusValue } from '../analysisResultDescriptionCondition/status-value.
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 import { AnalysisResultDescriptionCondition } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
 import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
-import { GetAnalysisResultDescriptionsListQueryDto } from './dto/analysisResultDescriptions.dto';
+import {
+  AddNewAnalysisResultDescriptionsQueryDto,
+  EditAnalysisResultDescriptionsQueryDto,
+  GetAnalysisResultDescriptionsListQueryDto,
+} from './dto/analysisResultDescriptions.dto';
+import { AnalysisResultDescriptionConditionService } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.service';
 
 type DescriptionConditions = Record<number, StatusValue>;
 
@@ -22,6 +27,7 @@ export class AnalysisResultDescriptionService {
     private analysisResultDescriptionRepository: typeof AnalysisResultDescription,
     private analysisPointMinValueService: AnalysisPointMinValueService,
     private analysisPointMaxValueService: AnalysisPointMaxValueService,
+    private analysisResultDescriptionConditionService: AnalysisResultDescriptionConditionService,
   ) {}
 
   getDescriptionByResult = async (result: AnalysisResult) => {
@@ -99,5 +105,102 @@ export class AnalysisResultDescriptionService {
       currentPage: parameters.currentPage,
       rows: rows,
     };
+  };
+
+  addNewAnalysisResultDescriptions = async (
+    parameters: AddNewAnalysisResultDescriptionsQueryDto,
+  ) => {
+    const description = await this.analysisResultDescriptionRepository.create({
+      description_ru: parameters.description_ru,
+    });
+    if (
+      description &&
+      parameters.analysisResultDescriptionConditions.length > 0
+    ) {
+      await Promise.all(
+        parameters.analysisResultDescriptionConditions.map(
+          async (condition) => {
+            await this.analysisResultDescriptionConditionService.addCondition({
+              descriptionId: description.id,
+              pointId: condition.analysisPoint.id,
+              status: condition.status,
+            });
+          },
+        ),
+      );
+    }
+
+    return await this.analysisResultDescriptionRepository.findOne({
+      where: { id: description.id },
+      include: {
+        model: AnalysisResultDescriptionCondition,
+        include: [AnalysisPoint],
+      },
+      attributes: ['id', 'description_ru'],
+    });
+  };
+
+  editAnalysisResultDescriptions = async (
+    parameters: EditAnalysisResultDescriptionsQueryDto,
+  ) => {
+    const existDescription =
+      await this.analysisResultDescriptionRepository.findOne({
+        where: { id: parameters.id },
+        include: {
+          model: AnalysisResultDescriptionCondition,
+          include: [AnalysisPoint],
+        },
+      });
+    if (!existDescription) {
+      throw new HttpException(
+        `Description with id '${parameters.id}' not exists`,
+        HttpStatus.CONFLICT,
+      );
+    }
+    await existDescription.update(parameters);
+    await this.analysisResultDescriptionConditionService.deleteConditionByDescriptionId(
+      existDescription.id,
+    );
+    await Promise.all(
+      parameters.analysisResultDescriptionConditions.map(async (condition) => {
+        await this.analysisResultDescriptionConditionService.addCondition({
+          descriptionId: existDescription.id,
+          pointId: condition.analysisPoint.id,
+          status: condition.status,
+        });
+      }),
+    );
+
+    return await this.analysisResultDescriptionRepository.findOne({
+      where: { id: existDescription.id },
+      include: {
+        model: AnalysisResultDescriptionCondition,
+        include: [AnalysisPoint],
+      },
+      attributes: ['id', 'description_ru'],
+    });
+  };
+
+  deleteAnalysisResultDescriptions = async (descriptionId: number) => {
+    const existDescription =
+      await this.analysisResultDescriptionRepository.findOne({
+        where: { id: descriptionId },
+        include: {
+          model: AnalysisResultDescriptionCondition,
+          include: [AnalysisPoint],
+        },
+      });
+    if (existDescription) {
+      await Promise.all([
+        this.analysisResultDescriptionConditionService.deleteConditionByDescriptionId(
+          existDescription.id,
+        ),
+        this.analysisResultDescriptionRepository.destroy({
+          where: { id: existDescription.id },
+        }),
+      ]);
+      return true;
+    }
+    return false;
   };
 }

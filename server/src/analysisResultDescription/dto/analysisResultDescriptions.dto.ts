@@ -1,5 +1,13 @@
 import { Transform, TransformFnParams } from 'class-transformer';
-import { IsNumber, IsObject, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
+import { AnalysisResultDescriptionCondition } from '../../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
 
 interface AnalysisResultDescriptionsFilters {
   name?: string;
@@ -60,13 +68,12 @@ export class GetAnalysisResultDescriptionsListQueryDto {
 
 export class AddNewAnalysisResultDescriptionsQueryDto {
   @IsString()
-  name: string;
+  description_ru: string;
 
-  @IsString()
-  translationRu: string;
-
-  @IsString()
-  translationEn: string;
+  @IsArray()
+  @IsOptional()
+  analysisResultDescriptionConditions: AnalysisResultDescriptionCondition[] =
+    [];
 }
 
 export class EditAnalysisResultDescriptionsQueryDto extends AddNewAnalysisResultDescriptionsQueryDto {

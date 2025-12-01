@@ -1,8 +1,13 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { AnalysisResultDescriptionService } from './analysisResultDescription.service';
-import { GetAnalysisResultDescriptionsListQueryDto } from './dto/analysisResultDescriptions.dto';
+import {
+  AddNewAnalysisResultDescriptionsQueryDto,
+  EditAnalysisResultDescriptionsQueryDto,
+  GetAnalysisResultDescriptionsListQueryDto,
+} from './dto/analysisResultDescriptions.dto';
+import { AnalysisResultDescription } from './analysisResultDescription.model';
 
 export interface AnalysisResultDescriptionResponse {
   id: number;
@@ -32,29 +37,29 @@ export class AnalysisResultDescriptionsController {
     );
   }
 
-  /*  @Post('add')
+  @Post('add')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   async addNewAnalysisResultDescriptions(
     @Body() param: AddNewAnalysisResultDescriptionsQueryDto,
-  ): Promise<AnalysisResultDescriptionResponse> {
+  ): Promise<AnalysisResultDescription | null> {
     return this.analysisResultDescriptionService.addNewAnalysisResultDescriptions(
       param,
     );
-  }*/
+  }
 
-  /*  @Post('edit')
+  @Post('edit')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   async editAnalysisResultDescriptions(
     @Body() param: EditAnalysisResultDescriptionsQueryDto,
-  ): Promise<AnalysisResultDescriptionResponse> {
+  ): Promise<AnalysisResultDescription | null> {
     return this.analysisResultDescriptionService.editAnalysisResultDescriptions(
       param,
     );
-  }*/
+  }
 
-  /*  @Post('delete')
+  @Post('delete')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   async deleteAnalysisResultDescriptions(
@@ -63,5 +68,5 @@ export class AnalysisResultDescriptionsController {
     return this.analysisResultDescriptionService.deleteAnalysisResultDescriptions(
       id,
     );
-  }*/
+  }
 }
