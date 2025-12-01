@@ -9,15 +9,16 @@ import { AnalysisPointsList } from "@widgets/Admin/analysisPointsList";
 import { AnalysisPointsListPagination } from "@features/Admin/analysisPoints/analysisPointsListPagination";
 import { useAppSelector } from "@shared/store/hooks";
 import { EditAnalysisPoint } from "@widgets/Admin/editAnalysisPoint";
+import {useFullAdminAnalysisTypesLoad} from "@entities/adminAnalysisType/adminAnalysisType.hooks.ts";
 
 export const AnalysisTypePage: React.FC = () => {
     const { t } = useTranslation("common");
     const title = t("pageTitle.analysisTYpe");
     useDocumentTitle(title);
 
-/*    const error = useAppSelector(selectAnalysisPointsError);
+    //const error = useAppSelector(selectAnalysisPointsError);
 
-    useFullAnalysisPointsLoad();*/
+    useFullAdminAnalysisTypesLoad();
 
     return (
         <div>
