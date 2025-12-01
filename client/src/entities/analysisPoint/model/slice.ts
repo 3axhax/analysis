@@ -85,4 +85,5 @@ export const {
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,
+  resetSelectedPoints
 } = analysisPointSlice.actions;

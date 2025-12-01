@@ -6,6 +6,7 @@ export {
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,
+  resetSelectedPoints,
 } from "./slice";
 
 export {

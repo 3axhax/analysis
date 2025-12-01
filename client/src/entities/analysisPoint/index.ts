@@ -10,6 +10,7 @@ export {
   setPending,
   setCurrentPage,
   resetError,
+  resetSelectedPoints,
   setEditAnalysisPointId,
   selectAnalysisPointList,
   selectAnalysisPointListForSelect,

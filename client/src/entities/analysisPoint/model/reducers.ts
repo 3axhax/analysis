@@ -17,6 +17,10 @@ export const AnalysisPointsReducers = {
       (point) => point !== action.payload,
     );
   },
+
+  resetSelectedPoints: (state: WritableDraft<AnalysisPointState>) => {
+    state.selectedList = [];
+  },
   setPending: (
     state: WritableDraft<AnalysisPointState>,
     action: PayloadAction<boolean>,
