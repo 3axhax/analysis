@@ -166,7 +166,7 @@
     hover:text-green-950
     disabled:cursor-not-allowed
     disabled:bg-blue-300
-    border-1 border-green-800;
+    outline outline-1 outline-green-800;
   }
 
   .b-border {
