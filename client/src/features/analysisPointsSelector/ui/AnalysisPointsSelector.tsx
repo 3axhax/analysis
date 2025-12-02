@@ -32,7 +32,7 @@ export const AnalysisPointsSelector = ({
       value={analysisPoint}
       onChange={setAnalysisPoint}
       placeholder="Выберите тип анализа"
-      className="w-full mb-4"
+      className="min-w-[270px] mr-4"
     />
   );
 };

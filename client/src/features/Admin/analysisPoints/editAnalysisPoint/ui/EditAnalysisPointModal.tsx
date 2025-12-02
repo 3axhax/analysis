@@ -76,7 +76,7 @@ export const EditAnalysisPointModal = ({
   return (
     <Modal
       open={open}
-      className={"min-w-[600px]"}
+      className={"min-w-full md:min-w-[1200px]"}
       setOpen={(state) => {
         if (!state) {
           dispatch(setEditAnalysisPointId(0));

@@ -72,7 +72,7 @@ export const EditDescriptionModal = ({
   return (
     <Modal
       open={open}
-      className={"min-w-[600px]"}
+      className={"min-w-full md:min-w-[800px]"}
       setOpen={(state) => {
         if (!state) {
           dispatch(setEditDescriptionId(0));

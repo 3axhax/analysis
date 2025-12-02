@@ -50,6 +50,11 @@ const SelectUI = <T extends string | number = string>({
         </label>
       ) : null}
       <Select<SelectUIOption<T>>
+          menuPortalTarget={document.body}
+          menuPosition="fixed"
+          styles={{
+              menuPortal: base => ({ ...base, zIndex: 9999 })
+          }}
         value={selectedValue}
         onChange={handleChange}
         options={options}

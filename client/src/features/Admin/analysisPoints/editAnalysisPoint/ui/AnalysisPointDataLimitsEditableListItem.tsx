@@ -55,10 +55,9 @@ export const AnalysisPointDataLimitsEditableListItem = ({
         setUnit={(value) => editItemHandler({ name: "unit", value })}
       />
       <div className={"block ml-[10px]"}>
-        <TrashIcon
-          className="w-5 h-5 text-red-500 cursor-pointer"
-          onClick={deleteItemHandler}
-        />
+          <button type={'button'} className="w-7 h-7 flex text-red-600 cursor-pointer" onClick={deleteItemHandler}>
+            <TrashIcon className="w-5 h-5 text-red-500 cursor-pointer" />
+          </button>
       </div>
     </div>
   );

@@ -145,7 +145,7 @@
   }
 
   .btn {
-    @apply relative overflow-hidden text-white text-lg/5 transition-all duration-400 mt-2 font-medium rounded-md px-5 py-4 cursor-pointer
+    @apply relative overflow-hidden text-white text-lg/5 transition-all duration-400 font-medium rounded-md px-5 py-4 cursor-pointer
     bg-gradient-to-r
     from-green-800
     via-green-500
@@ -154,7 +154,19 @@
     hover:bg-right-top
     disabled:cursor-not-allowed
     disabled:bg-blue-300
-    shadow-lg shadow-green-800/75;
+    shadow-md shadow-green-800/75
+    hover:shadow-gray-500;
+  }
+
+  .btn-white {
+    @apply relative overflow-hidden text-green-800 text-lg/5 transition-all duration-400 font-medium rounded-md px-5 py-4 cursor-pointer
+    shadow-md
+    bg-white
+    hover:shadow-gray-500
+    hover:text-green-950
+    disabled:cursor-not-allowed
+    disabled:bg-blue-300
+    border-1 border-green-800;
   }
 
   .b-border {

@@ -11,6 +11,8 @@ interface RadioGroupProps<T = string> {
   value: T;
   onChange: (value: T) => void;
   required?: boolean;
+  className?: string;
+  labelClassName?: string;
 }
 
 const RadioGroup = <T = string,>({
@@ -19,11 +21,13 @@ const RadioGroup = <T = string,>({
   options,
   value,
   onChange,
+  className,
+  labelClassName,
   required = false,
 }: RadioGroupProps<T>) => {
   return (
-    <fieldset className={`radio-group-container flex mb-5`}>
-      <p className="group-label inline-flex mr-5">
+    <fieldset className={`radio-group-container flex ${className ? " " + className : ""}`}>
+      <p className={`group-label inline-flex mr-5${labelClassName ? " " + labelClassName : ""}`}>
         {label}
         {required && <span className="required-asterisk">*</span>}
       </p>

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { DescriptionCondition } from "@entities/descriptions";
 import { DescriptionConditionsEditableListItem } from "@features/Admin/descriptions/editDescription/ui/DescriptionConditionsEditableListItem.tsx";
+import {PlusCircleIcon} from "@heroicons/react/16/solid";
 
 interface AnalysisPointDataLimitsEditableListProps {
   onChange: (value: DescriptionCondition[]) => void;
@@ -63,7 +64,8 @@ export const DescriptionConditionsEditableList = ({
             }
           />
         ))}
-      <button className={"btn"} onClick={addConditionHandler}>
+      <button className={"btn py-2 px-3"} onClick={addConditionHandler}>
+        <PlusCircleIcon className="h-5 w-5 text-white inline-flex mr-2" />
         {t("descriptions.addNewCondition")}
       </button>
     </>
