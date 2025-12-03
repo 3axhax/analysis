@@ -34,7 +34,7 @@ export const DescriptionConditionsEditableListItem = ({
   console.log(condition);
 
   return (
-    <div className={"flex items-center justify-between mb-5"}>
+    <div className={"flex items-center justify-between mb-5 line-between"}>
       <AnalysisPointsSelector
         analysisPoint={condition.analysisPoint.id}
         setAnalysisPoint={(value) =>

@@ -183,6 +183,10 @@
       -webkit-clip-path var(1s);
   }
 
+  .line-between + .line-between {
+    @apply border-t border-gray-200 pt-1;
+  }
+
   .trail {
     width: calc(var(--trail-size) * 1cqmin);
     aspect-ratio: 2 / 1;
