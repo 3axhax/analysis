@@ -3,6 +3,7 @@ import { EditAgeModal } from "@features/Admin/ages/editAges/ui/EditAgeModal.tsx"
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAgeById } from "@entities/ages";
+import {PlusCircleIcon} from "@heroicons/react/16/solid";
 
 interface EditAgeProps {
   className?: string;
@@ -32,7 +33,7 @@ export const EditAge = ({ className, editAgeId, resetEdit }: EditAgeProps) => {
           resetEdit();
           setOpenModal(true);
         }}
-      >
+      ><PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
         {t("editDialog.add")}
       </button>
       <EditAgeModal

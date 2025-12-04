@@ -19,7 +19,7 @@ export const Pagination = ({
     <div className={"flex gap-1 justify-center m-2"}>
       <button
         className={
-          "bg-green-600 text-white rounded-lg p-1 cursor-pointer hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-green-300"
+          "bg-green-700 text-white rounded-lg p-1 cursor-pointer transition-colors hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-gray-300"
         }
         disabled={currentPage === 1}
         onClick={() => onPageSelect(currentPage - 1)}
@@ -29,7 +29,7 @@ export const Pagination = ({
       {pageButton.map((page) => (
         <button
           key={page}
-          className={`bg-green-600 text-white rounded-lg p-1 w-[30px] cursor-pointer hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-green-300${currentPage === page ? " bg-green-900" : ""}`}
+          className={`bg-green-700 shadow-sm text-white rounded-lg p-1 w-[30px] cursor-pointer hover:scale-110 transition-transform hover:shadow-gray-500 disabled:cursor-not-allowed transition-colors disabled:bg-green-300${currentPage === page ? " bg-green-900" : ""}`}
           onClick={() => onPageSelect(page)}
         >
           {page}
@@ -37,7 +37,7 @@ export const Pagination = ({
       ))}
       <button
         className={
-          "bg-green-600 text-white rounded-lg p-1 cursor-pointer hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-green-300"
+          "bg-green-700 text-white rounded-lg p-1 cursor-pointer hover:bg-green-800 transition-colors disabled:cursor-not-allowed disabled:bg-gray-300"
         }
         disabled={currentPage >= totalPages}
         onClick={() => onPageSelect(currentPage + 1)}

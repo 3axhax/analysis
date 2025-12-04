@@ -65,14 +65,21 @@ export const TranslationsList = ({
         name: "action",
         data: (
           <>
-            <PencilSquareIcon
-              className="w-5 h-5 text-blue-500 cursor-pointer ml-[10px]"
+            <button
+              type={"button"}
               onClick={() => handlerEditRecord(row.id)}
-            />
-            <TrashIcon
-              className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]"
+              className="w-6 h-6 text-blue-600 cursor-pointer ml-[10px] hover:text-blue-700 transition-colors"
+            >
+              <PencilSquareIcon className="w-5 h-5" />
+            </button>
+            <button
+              type={"button"}
               onClick={() => handlerDeleteRecord(row.id)}
-            />
+              className={"w-6 h-6 text-red-600 hover:text-red-700 transition-colors cursor-pointer ml-[10px]"}
+              >
+              <TrashIcon className="w-5 h-5"/>
+            </button>
+
           </>
         ),
         className: "flex justify-center",

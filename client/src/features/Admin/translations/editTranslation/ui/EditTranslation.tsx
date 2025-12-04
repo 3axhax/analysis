@@ -3,6 +3,7 @@ import { EditTranslationModal } from "@features/Admin/translations/editTranslati
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectTranslationById } from "@entities/translations/model/slice.ts";
+import {PlusCircleIcon} from "@heroicons/react/16/solid";
 
 interface EditTranslationProps {
   className?: string;
@@ -36,7 +37,7 @@ export const EditTranslation = ({
           resetEdit();
           setOpenModal(true);
         }}
-      >
+      ><PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
         {t("editDialog.add")}
       </button>
       <EditTranslationModal
