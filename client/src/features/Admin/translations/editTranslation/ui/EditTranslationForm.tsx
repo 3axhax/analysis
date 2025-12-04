@@ -36,6 +36,7 @@ export const EditTranslationForm = ({
         onChange={(value) => {
           handlerInput({ name: "lang", value });
         }}
+        className={"mb-4"}
       />
       <InputWithLabel
         label={t("editTranslationForm.namespace")}
@@ -44,7 +45,7 @@ export const EditTranslationForm = ({
         onChange={(value) => {
           handlerInput({ name: "namespace", value });
         }}
-        className={"justify-between"}
+        className={"justify-between mb-4"}
         value={values.namespace}
       />
       <InputWithLabel
@@ -54,7 +55,7 @@ export const EditTranslationForm = ({
         onChange={(value) => {
           handlerInput({ name: "module", value });
         }}
-        className={"justify-between"}
+        className={"justify-between mb-4"}
         value={values.module}
       />
       <InputWithLabel
@@ -64,7 +65,7 @@ export const EditTranslationForm = ({
         onChange={(value) => {
           handlerInput({ name: "submodule", value });
         }}
-        className={"justify-between"}
+        className={"justify-between mb-4"}
         value={values.submodule ?? ""}
       />
       <InputWithLabel
@@ -74,7 +75,7 @@ export const EditTranslationForm = ({
         onChange={(value) => {
           handlerInput({ name: "value", value });
         }}
-        className={"justify-between"}
+        className={"justify-between mb-4"}
         value={values.value}
       />
     </form>
