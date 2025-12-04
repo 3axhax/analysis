@@ -24,8 +24,8 @@ export const UnitSelector = ({ unit, setUnit }: AgeSelectorProps) => {
       }))}
       value={unit}
       onChange={setUnit}
-      placeholder="Выберите единицу измерений"
-      className="w-full mb-4"
+      placeholder="Единица измерений"
+      className="w-[220px]"
     />
   );
 };

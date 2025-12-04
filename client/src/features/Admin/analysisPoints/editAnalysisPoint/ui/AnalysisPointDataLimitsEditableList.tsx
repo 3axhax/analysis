@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { AnalysisPointLimit } from "@entities/analysisPoint";
 import { AnalysisPointDataLimitsEditableListItem } from "@features/Admin/analysisPoints/editAnalysisPoint/ui/AnalysisPointDataLimitsEditableListItem.tsx";
 import { GenderType } from "@shared/lib/types";
+import {PlusCircleIcon} from "@heroicons/react/16/solid";
 
 interface AnalysisPointDataLimitsEditableListProps {
   onChange: (value: AnalysisPointLimit[]) => void;
@@ -66,7 +67,8 @@ export const AnalysisPointDataLimitsEditableList = ({
             }
           />
         ))}
-      <button className={"btn"} onClick={addLimitHandler}>
+      <button className={"btn py-2 px-3 mt-5"} onClick={addLimitHandler}>
+        <PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
         {t("analysisPointData.addNewLimit")}
       </button>
     </>
