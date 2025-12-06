@@ -25,7 +25,7 @@ export const AgeSelector = ({ age, setAge }: AgeSelectorProps) => {
       value={age}
       onChange={setAge}
       placeholder="Выберите возраст"
-      className="w-full mb-4"
+      className="w-[220px] mr-2"
     />
   );
 };

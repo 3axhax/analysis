@@ -24,7 +24,7 @@ export const AnalysisPointDataLimitsEditableListItem = ({
   editItemHandler,
 }: AnalysisPointDataLimitsEditableListItemProps) => {
   return (
-    <div className={"flex items-center"}>
+    <div className={"flex items-end justify-between line-between"}>
       <AgeSelector
         age={limit.age}
         setAge={(value) => editItemHandler({ name: "age", value })}
@@ -34,12 +34,13 @@ export const AnalysisPointDataLimitsEditableListItem = ({
         gender={limit.gender}
         setGender={(value) => editItemHandler({ name: "gender", value })}
       />
+
       <InputWithLabel
         label={"Мин."}
         name={"minValue"}
         placeholder={"0"}
         onChange={(value) => editItemHandler({ name: "minValue", value })}
-        className={"justify-between"}
+        className={"justify-between mr-2"}
         value={limit.minValue}
       />
       <InputWithLabel
@@ -47,22 +48,16 @@ export const AnalysisPointDataLimitsEditableListItem = ({
         name={"maxValue"}
         placeholder={"0"}
         onChange={(value) => editItemHandler({ name: "maxValue", value })}
-        className={"justify-between"}
+        className={"justify-between mr-2"}
         value={limit.maxValue}
       />
       <UnitSelector
         unit={limit.unit}
         setUnit={(value) => editItemHandler({ name: "unit", value })}
       />
-      <div className={"block ml-[10px]"}>
-        <button
-          type={"button"}
-          className="w-7 h-7 flex text-red-600 cursor-pointer"
-          onClick={deleteItemHandler}
-        >
-          <TrashIcon className="w-5 h-5 text-red-500 cursor-pointer" />
-        </button>
-      </div>
+      <button type={'button'} className="w-7 h-7 flex text-red-600 cursor-pointer hover:text-red-700 transition-colors" onClick={deleteItemHandler}>
+        <TrashIcon className="w-5 h-5" />
+      </button>
     </div>
   );
 };

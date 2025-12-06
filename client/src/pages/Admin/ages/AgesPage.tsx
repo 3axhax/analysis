@@ -25,7 +25,7 @@ export const AgesPage: React.FC = () => {
   return (
     <div>
       <div className={"relative"}>
-        <h1 className={"p-4 text-3xl"}>{title}</h1>
+        <h1 className={"p-4 text-3xl px-50"}>{title}</h1>
         <EditAge
           className={"absolute right-[5%] top-[calc(50%-20px)]"}
           editAgeId={editAgeId}

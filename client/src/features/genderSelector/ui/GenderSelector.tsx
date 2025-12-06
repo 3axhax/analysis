@@ -39,6 +39,7 @@ export const GenderSelector = ({
         <SelectUI<GenderType>
           label={t("gender")}
           name="gender"
+          className={'w-[100px] mr-2'}
           onChange={setGender}
           options={genderOptions.map((item) => ({
             ...item,

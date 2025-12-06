@@ -38,14 +38,12 @@ export const AnalysisPointsListActionItems = ({
 
   return (
     <>
-      <PencilSquareIcon
-        className="w-5 h-5 text-blue-500 cursor-pointer ml-[10px]"
-        onClick={() => handlerEditRecord(rowId)}
-      />
-      <TrashIcon
-        className="w-5 h-5 text-red-500 cursor-pointer ml-[10px]"
-        onClick={() => handlerDeleteRecord(rowId)}
-      />
+      <button type={'button'} onClick={() => handlerEditRecord(rowId)} className={'w-6 h-6 text-blue-600 cursor-pointer ml-[10px] hover:text-blue-700 transition-colors'}>
+        <PencilSquareIcon className="w-5 h-5" />
+      </button>
+      <button type={'button'} onClick={() => handlerDeleteRecord(rowId)} className={'w-6 h-6 text-red-600 cursor-pointer ml-[10px] hover:text-red-700 transition-colors'}>
+        <TrashIcon className="w-5 h-5"/>
+      </button>
     </>
   );
 };
