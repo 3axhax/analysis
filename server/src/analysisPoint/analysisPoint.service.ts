@@ -22,6 +22,13 @@ import { GenderService } from '../gender/gender.service';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 import { Op } from 'sequelize';
 
+export interface AnalysisPointWithTranslation {
+  id: number;
+  name: string;
+  translationRu: string;
+  translationEn: string;
+}
+
 @Injectable()
 export class AnalysisPointService {
   namespace: string = 'entities';
@@ -48,6 +55,36 @@ export class AnalysisPointService {
       };
     });
   }
+
+  async getAllWithTranslation() {
+    const points = await this.analysisPointRepository.findAll({
+      include: { all: true },
+    });
+    return await this.fillTranslation(points);
+  }
+
+  async fillTranslation(
+    points: AnalysisPoint[],
+  ): Promise<AnalysisPointWithTranslation[]> {
+    return await Promise.all(
+      points.map(async (point) => {
+        const translations =
+          await this.translationService.getTranslationsByParameters({
+            namespace: this.namespace,
+            module: this.module,
+            submodule: point.name,
+          });
+        const ru = translations.find((t) => t.lang === LangValue.RU);
+        const en = translations.find((t) => t.lang === LangValue.EN);
+        return {
+          ...point.dataValues,
+          translationRu: ru ? ru.value : '',
+          translationEn: en ? en.value : '',
+        };
+      }),
+    );
+  }
+
   async getAnalysisPointByName(name: string): Promise<AnalysisPoint | null> {
     return this.analysisPointRepository.findOne({
       where: { name },
@@ -63,23 +100,7 @@ export class AnalysisPointService {
       order: [['id', 'ASC']],
     });
 
-    const rowsWithTranslation = await Promise.all(
-      rows.map(async (row) => {
-        const translations =
-          await this.translationService.getTranslationsByParameters({
-            namespace: this.namespace,
-            module: this.module,
-            submodule: row.name,
-          });
-        const ru = translations.find((t) => t.lang === LangValue.RU);
-        const en = translations.find((t) => t.lang === LangValue.EN);
-        return {
-          ...row.dataValues,
-          translationRu: ru ? ru.value : '',
-          translationEn: en ? en.value : '',
-        };
-      }),
-    );
+    const rowsWithTranslation = await this.fillTranslation(rows);
 
     const rowsWithLimits = await Promise.all(
       rowsWithTranslation.map(async (row) => {

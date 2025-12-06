@@ -14,7 +14,6 @@ const initialState: AnalysisPointState = {
   pending: false,
   error: "",
   list: [],
-  selectedList: [],
   currentPage: 1,
   totalRecord: 0,
   recordPerPage: 20,
@@ -79,11 +78,8 @@ export const analysisPointSlice = createSlice({
 });
 
 export const {
-  setSelectedPoint,
-  removeSelectedPoint,
   setPending,
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,
-  resetSelectedPoints,
 } = analysisPointSlice.actions;

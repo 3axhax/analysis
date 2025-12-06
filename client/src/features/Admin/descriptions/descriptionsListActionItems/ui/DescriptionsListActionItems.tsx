@@ -33,11 +33,23 @@ export const DescriptionsListActionItems = ({ rowId }: { rowId: number }) => {
 
   return (
     <>
-      <button type={'button'} className={'text-blue-600 cursor-pointer ml-[10px] flex items-center hover:text-blue-800 transition-colors'} onClick={() => handlerEditRecord(rowId)}>
+      <button
+        type={"button"}
+        className={
+          "text-blue-600 cursor-pointer ml-[10px] flex items-center hover:text-blue-800 transition-colors"
+        }
+        onClick={() => handlerEditRecord(rowId)}
+      >
         <PencilSquareIcon className="w-5 h-5" />
       </button>
 
-      <button type={'button'} className={' text-red-500 cursor-pointer ml-[10px] flex items-center hover:text-red-800 transition-colors'} onClick={() => handlerDeleteRecord(rowId)}>
+      <button
+        type={"button"}
+        className={
+          " text-red-500 cursor-pointer ml-[10px] flex items-center hover:text-red-800 transition-colors"
+        }
+        onClick={() => handlerDeleteRecord(rowId)}
+      >
         <TrashIcon className="w-5 h-5" />
       </button>
     </>

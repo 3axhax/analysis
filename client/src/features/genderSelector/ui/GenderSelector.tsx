@@ -34,7 +34,6 @@ export const GenderSelector = ({
           }))}
           value={gender}
           onChange={setGender}
-
         />
       ) : type === "list" ? (
         <SelectUI<GenderType>

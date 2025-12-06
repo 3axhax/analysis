@@ -7,11 +7,13 @@ type QueryValue = string | number | boolean | null | undefined;
 type QueryParam = QueryValue | QueryValue[] | Record<string, unknown>;
 type QueryParams = Record<string, QueryParam>;
 
+type SendingData = Record<string, string | number | File | Blob | object>;
+
 class RestAPI {
   method: method = "GET";
   target: string = "";
   baseUrl: string = import.meta.env.VITE_BASE_API_URL;
-  data: object = {};
+  data: SendingData | FormData = {};
   token: string = "";
 
   constructor() {}
@@ -34,6 +36,32 @@ class RestAPI {
 
   _send = (): Promise<AxiosResponse> => {
     this._checkToken();
+    if (
+      Object.values(this.data).length > 0 &&
+      Object.values(this.data).some(
+        (value) => value instanceof File || value instanceof Blob,
+      )
+    ) {
+      const data = this.data as SendingData;
+      const formData = new FormData();
+      for (const key in data) {
+        if (
+          data[key] instanceof File ||
+          data[key] instanceof Blob ||
+          typeof data[key] === "string"
+        ) {
+          formData.append(key, data[key]);
+        } else if (typeof data[key] === "number") {
+          formData.append(key, data[key].toString());
+        } else if (typeof data[key] === "object" && data[key] !== null) {
+          formData.append(key, JSON.stringify(data[key]));
+        } else {
+          formData.append(key, String(data[key]));
+        }
+      }
+      this.data = formData;
+    }
+
     const data: {
       url: string;
       method: string;
@@ -62,10 +90,7 @@ class RestAPI {
     return this._send();
   };
 
-  post = <T extends object>(
-    url: string = "",
-    data: T = {} as T,
-  ): Promise<AxiosResponse> => {
+  post = (url: string = "", data: SendingData = {}): Promise<AxiosResponse> => {
     this.method = "POST";
     this._setTarget(url);
     this.data = data;

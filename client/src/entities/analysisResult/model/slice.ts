@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  AnalysisParsingFileResult,
   AnalysisResult,
   AnalysisResultState,
   PreparedData,
@@ -9,7 +10,9 @@ import type { WritableDraft } from "immer";
 import {
   getAnalysisResult,
   sendAnalysisData,
+  sendAnalysisResultFile,
 } from "@entities/analysisResult/model/extraReducers.ts";
+import { ErrorActionType } from "@shared/lib/types";
 
 export const initialPrepareData: PreparedData = {
   gender: "m",
@@ -20,6 +23,7 @@ export const initialPrepareData: PreparedData = {
 const initialState: AnalysisResultState = {
   pending: false,
   error: "",
+  selectedList: [],
   preparedData: initialPrepareData,
   results: {},
 };
@@ -42,18 +46,6 @@ export const analysisResultSlice = createSlice({
         },
       )
       .addCase(
-        sendAnalysisData.rejected,
-        (state: WritableDraft<AnalysisResultState>, action) => {
-          state.error = action.error.message ? action.error.message : "";
-        },
-      )
-      .addCase(
-        sendAnalysisData.pending,
-        (state: WritableDraft<AnalysisResultState>) => {
-          state.error = "";
-        },
-      )
-      .addCase(
         getAnalysisResult.fulfilled,
         (
           state: WritableDraft<AnalysisResultState>,
@@ -65,13 +57,42 @@ export const analysisResultSlice = createSlice({
         },
       )
       .addCase(
-        getAnalysisResult.rejected,
-        (state: WritableDraft<AnalysisResultState>, action) => {
+        sendAnalysisResultFile.fulfilled,
+        (
+          state: WritableDraft<AnalysisResultState>,
+          action: PayloadAction<AnalysisParsingFileResult>,
+        ) => {
+          state.selectedList = action.payload.findingPoints.map(
+            (point) => point.id,
+          );
+          state.preparedData.pointData = action.payload.findingPoints.reduce(
+            (acc, point) => {
+              acc[point.name] = {
+                name: point.name,
+                value: point.value,
+                units: "",
+              };
+              return acc;
+            },
+            {} as PreparedData["pointData"],
+          );
+        },
+      )
+      .addMatcher(
+        (action) =>
+          action.type.endsWith("/rejected") &&
+          action.type.startsWith("analysisResult"),
+        (
+          state: WritableDraft<AnalysisResultState>,
+          action: ErrorActionType,
+        ) => {
           state.error = action.error.message ? action.error.message : "";
         },
       )
-      .addCase(
-        getAnalysisResult.pending,
+      .addMatcher(
+        (action) =>
+          action.type.endsWith("/pending") &&
+          action.type.startsWith("analysisResult"),
         (state: WritableDraft<AnalysisResultState>) => {
           state.error = "";
         },
@@ -88,4 +109,7 @@ export const {
   clearAllPointData,
   setPending,
   clearRedirect,
+  setSelectedPoint,
+  removeSelectedPoint,
+  resetSelectedPoints,
 } = analysisResultSlice.actions;

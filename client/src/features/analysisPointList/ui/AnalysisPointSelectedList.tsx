@@ -1,16 +1,14 @@
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { selectAnalysisPointSelectedList } from "@entities/analysisPoint";
 import { AnalysisPointSelectedItem } from "@features/analysisPointList";
+import { SelectAnalysisResultSelectedList } from "@entities/analysisResult";
 
 export const AnalysisPointSelectedList = () => {
-  const analysisPointSelectedList = useAppSelector(
-    selectAnalysisPointSelectedList,
-  );
+  const selectedList = useAppSelector(SelectAnalysisResultSelectedList);
 
   return (
     <>
-      {analysisPointSelectedList.length > 0
-        ? analysisPointSelectedList.map((pointId) => (
+      {selectedList.length > 0
+        ? selectedList.map((pointId) => (
             <AnalysisPointSelectedItem key={pointId} pointId={pointId} />
           ))
         : null}

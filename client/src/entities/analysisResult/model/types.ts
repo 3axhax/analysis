@@ -1,4 +1,4 @@
-import { GenderType } from "@entities/gender";
+import { GenderType } from "@shared/lib/types";
 
 export interface PreparePointData {
   name: string;
@@ -61,4 +61,14 @@ export interface AnalysisResultState {
   preparedData: PreparedData;
   results: Record<string, AnalysisResult>;
   redirectTo?: string;
+  selectedList: number[];
+}
+
+export interface AnalysisParsingFileResult {
+  findingPoints: {
+    id: number;
+    name: string;
+    unit: number;
+    value: number;
+  }[];
 }

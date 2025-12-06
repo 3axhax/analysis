@@ -8,6 +8,9 @@ export {
   removePointData,
   clearAllPointData,
   clearRedirect,
+  setSelectedPoint,
+  removeSelectedPoint,
+  resetSelectedPoints,
 } from "./slice";
 
 export {
@@ -18,9 +21,16 @@ export {
   SelectAnalysisResultPrepareDataAge,
   SelectAnalysisResultPrepareDataGender,
   SelectAnalysisResultPointData,
+  SelectAnalysisResultError,
+  SelectAnalysisResultSelectedList,
+  SelectAnalysisResultPrepareDataPointDataByName,
 } from "./selectors";
 
-export { sendAnalysisData, getAnalysisResult } from "./extraReducers";
+export {
+  sendAnalysisData,
+  getAnalysisResult,
+  sendAnalysisResultFile,
+} from "./extraReducers";
 
 export type {
   PointData,

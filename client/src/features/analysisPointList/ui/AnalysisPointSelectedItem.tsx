@@ -1,15 +1,17 @@
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
-import {
-  removeSelectedPoint,
-  selectAnalysisPointById,
-} from "@entities/analysisPoint";
+import { selectAnalysisPointById } from "@entities/analysisPoint";
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import SelectUI from "@shared/ui/SelectUI.tsx";
 import { ChangeEvent, useEffect, useState } from "react";
-import { addPointData, removePointData } from "@entities/analysisResult";
+import {
+  addPointData,
+  removePointData,
+  removeSelectedPoint,
+  SelectAnalysisResultPrepareDataPointDataByName,
+} from "@entities/analysisResult";
 
 interface AnalysisPointSelectedItemProps {
   pointId: number;
@@ -20,12 +22,43 @@ export const AnalysisPointSelectedItem = ({
 }: AnalysisPointSelectedItemProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation("entities");
+
   const analysisPoint = useAppSelector((state) =>
     selectAnalysisPointById(state, pointId),
+  );
+  const pointData = useAppSelector((state) =>
+    SelectAnalysisResultPrepareDataPointDataByName(
+      state,
+      analysisPoint?.name ?? "",
+    ),
   );
 
   const [units, setUnits] = useState<string>("");
   const [pointValue, setPointValue] = useState<string>("");
+
+  useEffect(() => {
+    if (pointData) {
+      setPointValue(pointData.value.toString());
+    }
+  }, [pointData]);
+
+  useEffect(() => {
+    if (
+      pointValue !== "" &&
+      units === "" &&
+      analysisPoint &&
+      analysisPoint.units.length > 0
+    ) {
+      setUnits(analysisPoint.units[0]);
+      dispatch(
+        addPointData({
+          name: analysisPoint.name,
+          value: parseFloat(pointValue),
+          units: analysisPoint.units[0],
+        }),
+      );
+    }
+  }, [pointValue, units, analysisPoint, dispatch]);
 
   const handlerClear = () => {
     dispatch(removeSelectedPoint(pointId));
@@ -33,12 +66,12 @@ export const AnalysisPointSelectedItem = ({
       dispatch(removePointData(analysisPoint.name));
     }
   };
-
+  /*
   useEffect(() => {
     if (analysisPoint && analysisPoint.units.length > 0) {
       setUnits(analysisPoint.units[0]);
     }
-  }, [analysisPoint]);
+  }, [analysisPoint]);*/
 
   const handlerOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();

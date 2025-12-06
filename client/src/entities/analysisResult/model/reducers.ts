@@ -49,4 +49,22 @@ export const AnalysisResultReducers = {
   clearRedirect: (state: WritableDraft<AnalysisResultState>) => {
     state.redirectTo = "";
   },
+  setSelectedPoint: (
+    state: WritableDraft<AnalysisResultState>,
+    action: PayloadAction<number[]>,
+  ) => {
+    state.selectedList = action.payload;
+  },
+  removeSelectedPoint: (
+    state: WritableDraft<AnalysisResultState>,
+    action: PayloadAction<number>,
+  ) => {
+    state.selectedList = state.selectedList.filter(
+      (point) => point !== action.payload,
+    );
+  },
+
+  resetSelectedPoints: (state: WritableDraft<AnalysisResultState>) => {
+    state.selectedList = [];
+  },
 };

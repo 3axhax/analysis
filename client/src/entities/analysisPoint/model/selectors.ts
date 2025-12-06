@@ -5,8 +5,6 @@ import { AnalysisPointLimit } from "@entities/analysisPoint";
 
 export const selectAnalysisPointList = (state: RootState) =>
   state.analysisPoint.list;
-export const selectAnalysisPointSelectedList = (state: RootState) =>
-  state.analysisPoint.selectedList;
 export const selectAnalysisPointPending = (state: RootState) =>
   state.analysisPoint.pending;
 

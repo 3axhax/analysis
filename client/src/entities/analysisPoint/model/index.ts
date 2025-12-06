@@ -1,19 +1,15 @@
 export {
   analysisPointSlice,
-  removeSelectedPoint,
-  setSelectedPoint,
   setPending,
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,
-  resetSelectedPoints,
 } from "./slice";
 
 export {
   selectAnalysisPointList,
   selectAnalysisPointListForSelect,
   selectAnalysisPointPending,
-  selectAnalysisPointSelectedList,
   selectAnalysisPointById,
   selectAnalysisPointsError,
   selectAnalysisPointsCurrentPage,

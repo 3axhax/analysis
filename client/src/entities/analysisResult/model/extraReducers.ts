@@ -48,3 +48,21 @@ export const getAnalysisResult = createAsyncThunk(
     }
   },
 );
+
+export const sendAnalysisResultFile = createAsyncThunk(
+  "analysisResult/sendAnalysisResultFile",
+  async (file: File, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    if (!state.analysisResult.pending) {
+      try {
+        dispatch(setPending(true));
+        const response = await Request.post("/result/fromFile", { file: file });
+        dispatch(setPending(false));
+        return response.data;
+      } catch (e) {
+        dispatch(setPending(false));
+        HandlerAxiosError(e);
+      }
+    }
+  },
+);

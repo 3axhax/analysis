@@ -10,7 +10,7 @@ import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
 import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
-import { setSelectedPoint } from "@entities/analysisPoint";
+import { setSelectedPoint } from "@entities/analysisResult";
 
 interface AnalysisPointItem {
   id: number;

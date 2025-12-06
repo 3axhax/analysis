@@ -3,24 +3,6 @@ import { AnalysisPointState } from "@entities/analysisPoint";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const AnalysisPointsReducers = {
-  setSelectedPoint: (
-    state: WritableDraft<AnalysisPointState>,
-    action: PayloadAction<number[]>,
-  ) => {
-    state.selectedList = action.payload;
-  },
-  removeSelectedPoint: (
-    state: WritableDraft<AnalysisPointState>,
-    action: PayloadAction<number>,
-  ) => {
-    state.selectedList = state.selectedList.filter(
-      (point) => point !== action.payload,
-    );
-  },
-
-  resetSelectedPoints: (state: WritableDraft<AnalysisPointState>) => {
-    state.selectedList = [];
-  },
   setPending: (
     state: WritableDraft<AnalysisPointState>,
     action: PayloadAction<boolean>,

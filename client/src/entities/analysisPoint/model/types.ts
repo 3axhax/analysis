@@ -27,7 +27,6 @@ export interface AnalysisPointState {
   pending: boolean;
   error: string;
   list: AnalysisPointListItem[];
-  selectedList: number[];
   currentPage: number;
   totalRecord: number;
   recordPerPage: number;

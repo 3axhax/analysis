@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectEditDescriptionId } from "@entities/descriptions";
 import { EditDescriptionModal } from "@features/Admin/descriptions/editDescription";
-import {PlusCircleIcon} from "@heroicons/react/16/solid";
+import { PlusCircleIcon } from "@heroicons/react/16/solid";
 
 export const EditDescription = ({ className }: { className?: string }) => {
   const { t } = useTranslation("features");
@@ -25,8 +25,8 @@ export const EditDescription = ({ className }: { className?: string }) => {
           setOpenModal(true);
         }}
       >
-          <PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
-          {t("editDialog.add")}
+        <PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
+        {t("editDialog.add")}
       </button>
       <EditDescriptionModal open={openModal} setOpen={setOpenModal} />
     </>

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
 import {
   clearRedirect,
   resetPrepareData,
+  resetSelectedPoints,
   SelectAnalysisResultPending,
   SelectAnalysisResultPrepareDataAge,
   SelectAnalysisResultPrepareDataGender,
@@ -18,7 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GenderType } from "@shared/lib/types";
-import { resetSelectedPoints } from "@entities/analysisPoint";
+import { DropFile } from "@pages/analysis/Dropfile.tsx";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");
@@ -63,6 +64,8 @@ export const AnalysisPage = () => {
           {t("pageTitle.analysis")}
         </h1>
       </div>
+
+      <DropFile />
 
       <div className="mx-auto text-left relative lg:w-4/12">
         <div className="b-border">

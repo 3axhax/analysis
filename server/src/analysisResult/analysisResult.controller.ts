@@ -1,4 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   AnalysisResultService,
   GetResultResponse,
@@ -6,10 +15,15 @@ import {
 } from './analysisResult.service';
 import { User } from '../decorators/user.decorator';
 import { User as UserModel } from '../users/users.model';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ParseFileService } from './parseFile.service';
 
 @Controller('result')
 export class AnalysisResultController {
-  constructor(private AnalysisResultService: AnalysisResultService) {}
+  constructor(
+    private AnalysisResultService: AnalysisResultService,
+    private ParseFileService: ParseFileService,
+  ) {}
   @Post('/save')
   async saveResult(
     @Body('age') age: string,
@@ -43,5 +57,21 @@ export class AnalysisResultController {
     } else {
       return await analysisResult;
     }
+  }
+
+  @Post('/fromFile')
+  @UseInterceptors(FileInterceptor('file'))
+  async parseFile(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }),
+          new FileTypeValidator({ fileType: 'pdf' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ): Promise<any> {
+    return await this.ParseFileService.parseFile(file);
   }
 }

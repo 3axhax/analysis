@@ -26,8 +26,12 @@ const RadioGroup = <T = string,>({
   required = false,
 }: RadioGroupProps<T>) => {
   return (
-    <fieldset className={`radio-group-container flex ${className ? " " + className : ""}`}>
-      <p className={`group-label inline-flex mr-5${labelClassName ? " " + labelClassName : ""}`}>
+    <fieldset
+      className={`radio-group-container flex ${className ? " " + className : ""}`}
+    >
+      <p
+        className={`group-label inline-flex mr-5${labelClassName ? " " + labelClassName : ""}`}
+      >
         {label}
         {required && <span className="required-asterisk">*</span>}
       </p>

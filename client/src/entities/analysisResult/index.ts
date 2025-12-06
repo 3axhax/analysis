@@ -5,10 +5,14 @@ export {
   setPrepareDataAge,
   resetPrepareData,
   sendAnalysisData,
+  sendAnalysisResultFile,
   addPointData,
   removePointData,
   clearAllPointData,
   clearRedirect,
+  setSelectedPoint,
+  removeSelectedPoint,
+  resetSelectedPoints,
   SelectAnalysisResultData,
   SelectAnalysisResultDescriptionData,
   SelectAnalysisResultPending,
@@ -16,5 +20,8 @@ export {
   SelectAnalysisResultPrepareDataAge,
   SelectAnalysisResultPrepareDataGender,
   SelectAnalysisResultPointData,
+  SelectAnalysisResultError,
+  SelectAnalysisResultSelectedList,
+  SelectAnalysisResultPrepareDataPointDataByName,
 } from "./model";
 export type { PointData, ResultDescription, PreparePointData } from "./model";
