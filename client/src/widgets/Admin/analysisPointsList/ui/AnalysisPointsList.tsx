@@ -51,6 +51,10 @@ export const AnalysisPointsList = () => {
                 {t("analysisPoint.translationEn")} -{" "}
                 {row.translationEn !== "" ? row.translationEn : "Not set"}
               </div>
+              <div>
+                {t("analysisPoint.parsingString")} -{" "}
+                {row.parsingWords !== "" ? `"${row.parsingWords}"` : "Not set"}
+              </div>
             </div>
           ),
         },

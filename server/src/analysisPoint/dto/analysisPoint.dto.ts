@@ -72,6 +72,9 @@ export class AddNewAnalysisPointQueryDto {
   @IsString()
   translationEn: string;
 
+  @IsString()
+  parsingWords: string;
+
   @Transform(({ value }: TransformFnParams): AnalysisPointLimit[] => {
     if (!Array.isArray(value)) return [];
     return value.map((limit: Record<string, string>) => ({

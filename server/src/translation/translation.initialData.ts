@@ -524,7 +524,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Перевод EN',
   },
   {
-    id: 98,
     lang: LangValue.EN,
     namespace: 'entities',
     module: 'ages',
@@ -532,7 +531,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: '15-18 years',
   },
   {
-    id: 99,
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'age',
@@ -540,7 +538,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Обозначение',
   },
   {
-    id: 100,
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'age',
@@ -548,7 +545,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Перевод RU',
   },
   {
-    id: 101,
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'age',
@@ -556,7 +552,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Перевод En',
   },
   {
-    id: 102,
     lang: LangValue.RU,
     namespace: 'common',
     module: 'pageTitle',
@@ -564,7 +559,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Возрастные группы',
   },
   {
-    id: 103,
     lang: LangValue.RU,
     namespace: 'common',
     module: 'pageTitle',
@@ -572,7 +566,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Описания',
   },
   {
-    id: 104,
     lang: LangValue.RU,
     namespace: 'common',
     module: 'pageTitle',
@@ -580,7 +573,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Параметры анализов',
   },
   {
-    id: 105,
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'descriptions',
@@ -588,7 +580,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Описание на RU',
   },
   {
-    id: 106,
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'descriptions',
@@ -596,7 +587,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Условия применения',
   },
   {
-    id: 107,
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'descriptions',
@@ -604,7 +594,6 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Добавить новое условие',
   },
   {
-    id: 108,
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'descriptions',
@@ -612,11 +601,52 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     value: 'Уровень',
   },
   {
-    id: 109,
     lang: LangValue.RU,
     namespace: 'common',
     module: 'pageTitle',
     submodule: 'analysisType',
     value: 'Типы анализов',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'analysisPoint',
+    submodule: 'translationRu',
+    value: 'Перевод RU',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'analysisPoint',
+    submodule: 'translationEn',
+    value: 'Перевод EN',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'analysisPoint',
+    submodule: 'parsingString',
+    value: 'Строка для парсинга',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'analysisPoint',
+    submodule: 'hemoglobin_parsing',
+    value: 'гемоглобин hemoglobin',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'analysisPoint',
+    submodule: 'erythrocyte_parsing',
+    value: 'Эритроциты erythrocyte',
+  },
+  {
+    lang: LangValue.RU,
+    namespace: 'entities',
+    module: 'analysisPoint',
+    submodule: 'hematocrit_parsing',
+    value: 'hematocrit Гематокрит',
   },
 ];

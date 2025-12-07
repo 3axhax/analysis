@@ -15,6 +15,7 @@ export interface AnalysisPointGreatItem {
   name: string;
   translationRu: string;
   translationEn: string;
+  parsingWords: string;
   limits: AnalysisPointLimit[];
 }
 

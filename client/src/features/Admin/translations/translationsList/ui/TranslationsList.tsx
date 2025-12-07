@@ -75,11 +75,12 @@ export const TranslationsList = ({
             <button
               type={"button"}
               onClick={() => handlerDeleteRecord(row.id)}
-              className={"w-6 h-6 text-red-600 hover:text-red-700 transition-colors cursor-pointer ml-[10px]"}
-              >
-              <TrashIcon className="w-5 h-5"/>
+              className={
+                "w-6 h-6 text-red-600 hover:text-red-700 transition-colors cursor-pointer ml-[10px]"
+              }
+            >
+              <TrashIcon className="w-5 h-5" />
             </button>
-
           </>
         ),
         className: "flex justify-center",

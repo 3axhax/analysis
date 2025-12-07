@@ -57,10 +57,20 @@ export const UnitsList = ({ handlerEditRecord }: UnitsListProps) => {
         name: "action",
         data: (
           <>
-            <button type={'button'} onClick={() => handlerEditRecord(row.id)} className="w-6 h-6 text-blue-600 hover:text-blue-700 transition-colors cursor-pointer ml-[10px]">
+            <button
+              type={"button"}
+              onClick={() => handlerEditRecord(row.id)}
+              className="w-6 h-6 text-blue-600 hover:text-blue-700 transition-colors cursor-pointer ml-[10px]"
+            >
               <PencilSquareIcon className="w-5 h-5" />
             </button>
-            <button type={'button'} className={'w-5 h-5 text-red-600 hover:text-red-700 transition-colors cursor-pointer ml-[10px]'} onClick={() => handlerDeleteRecord(row.id)}>
+            <button
+              type={"button"}
+              className={
+                "w-5 h-5 text-red-600 hover:text-red-700 transition-colors cursor-pointer ml-[10px]"
+              }
+              onClick={() => handlerDeleteRecord(row.id)}
+            >
               <TrashIcon className="w-5 h-5" />
             </button>
           </>

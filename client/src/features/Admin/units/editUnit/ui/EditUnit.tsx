@@ -3,7 +3,7 @@ import { EditUnitModal } from "@features/Admin/units/editUnit/ui/EditUnitModal.t
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectUnitById } from "@entities/units";
-import {PlusCircleIcon} from "@heroicons/react/16/solid";
+import { PlusCircleIcon } from "@heroicons/react/16/solid";
 
 interface EditUnitProps {
   className?: string;
@@ -38,7 +38,7 @@ export const EditUnit = ({
           setOpenModal(true);
         }}
       >
-          <PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
+        <PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
         {t("editDialog.add")}
       </button>
       <EditUnitModal

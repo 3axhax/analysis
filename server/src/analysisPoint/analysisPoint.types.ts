@@ -11,6 +11,7 @@ export interface AnalysisPointResponse {
   name: string;
   translationRu: string;
   translationEn: string;
+  parsingWords: string;
   limits: AnalysisPointLimit[];
 }
 

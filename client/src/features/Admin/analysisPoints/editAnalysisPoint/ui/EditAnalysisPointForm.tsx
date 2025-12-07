@@ -61,6 +61,16 @@ export const EditAnalysisPointForm = ({
         className={"justify-between"}
         value={values.translationEn}
       />
+      <InputWithLabel
+        label={"Ключевые слова для парсинга"}
+        name={"parsingWords"}
+        placeholder={"Hemoglobin Гемоглобин HGB"}
+        onChange={(value) => {
+          handlerInput({ name: "parsingWords", value });
+        }}
+        className={"justify-between"}
+        value={values.parsingWords}
+      />
       <AnalysisPointDataLimitsEditableList
         onChange={(value) => {
           handlerInput({ name: "limits", value });

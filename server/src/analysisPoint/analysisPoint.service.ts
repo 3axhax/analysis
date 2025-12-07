@@ -27,12 +27,14 @@ export interface AnalysisPointWithTranslation {
   name: string;
   translationRu: string;
   translationEn: string;
+  parsingWords: string;
 }
 
 @Injectable()
 export class AnalysisPointService {
   namespace: string = 'entities';
   module: string = 'analysisPoint';
+  parsingSufix = '_parsing';
   constructor(
     @InjectModel(AnalysisPoint)
     private analysisPointRepository: typeof AnalysisPoint,
@@ -76,10 +78,22 @@ export class AnalysisPointService {
           });
         const ru = translations.find((t) => t.lang === LangValue.RU);
         const en = translations.find((t) => t.lang === LangValue.EN);
+
+        const parsingTranslation =
+          await this.translationService.getTranslationsByParameters({
+            namespace: this.namespace,
+            module: this.module,
+            submodule: point.name + this.parsingSufix,
+            lang: LangValue.RU,
+          });
         return {
           ...point.dataValues,
           translationRu: ru ? ru.value : '',
           translationEn: en ? en.value : '',
+          parsingWords:
+            parsingTranslation && parsingTranslation.length > 0
+              ? parsingTranslation[0].value
+              : '',
         };
       }),
     );
@@ -224,7 +238,7 @@ export class AnalysisPointService {
     if (!point) {
       throw new HttpException('Error in DB', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    const [ru, en] = await Promise.all([
+    const [ru, en, parsing] = await Promise.all([
       parameters.translationRu !== ''
         ? this.translationService.addNewTranslation({
             lang: LangValue.RU,
@@ -243,6 +257,15 @@ export class AnalysisPointService {
             value: parameters.translationEn,
           })
         : Promise.resolve(null),
+      parameters.parsingWords !== ''
+        ? this.translationService.addNewTranslation({
+            lang: LangValue.RU,
+            namespace: this.namespace,
+            module: this.module,
+            submodule: point.name + this.parsingSufix,
+            value: parameters.parsingWords,
+          })
+        : Promise.resolve(null),
     ]);
     await this._addLimitsToPoint({
       limits: parameters.limits,
@@ -254,6 +277,7 @@ export class AnalysisPointService {
       name: point.name,
       translationEn: ru ? ru.value : '',
       translationRu: en ? en.value : '',
+      parsingWords: parsing ? parsing.value : '',
       limits,
     };
   }
@@ -288,7 +312,7 @@ export class AnalysisPointService {
 
     await existingPoint?.update(parameters);
 
-    const [ru, en] = await Promise.all([
+    const [ru, en, parsing] = await Promise.all([
       parameters.translationRu !== ''
         ? this.translationService.editTranslationByParameters({
             lang: LangValue.RU,
@@ -305,6 +329,15 @@ export class AnalysisPointService {
             module: this.module,
             submodule: existingPoint.name,
             value: parameters.translationEn,
+          })
+        : Promise.resolve(null),
+      parameters.parsingWords !== ''
+        ? this.translationService.editTranslationByParameters({
+            lang: LangValue.RU,
+            namespace: this.namespace,
+            module: this.module,
+            submodule: existingPoint.name + this.parsingSufix,
+            value: parameters.parsingWords,
           })
         : Promise.resolve(null),
     ]);
@@ -329,6 +362,7 @@ export class AnalysisPointService {
       name: existingPoint.name,
       translationEn: ru ? ru.value : '',
       translationRu: en ? en.value : '',
+      parsingWords: parsing ? parsing.value : '',
       limits,
     };
   }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAnalysisPointsEditAnalysisPointId } from "@entities/analysisPoint";
 import { EditAnalysisPointModal } from "@features/Admin/analysisPoints/editAnalysisPoint";
-import {PlusCircleIcon} from "@heroicons/react/16/solid";
+import { PlusCircleIcon } from "@heroicons/react/16/solid";
 
 interface EditAnalysisPointProps {
   className?: string;
@@ -30,7 +30,8 @@ export const EditAnalysisPoint = ({ className }: EditAnalysisPointProps) => {
         onClick={() => {
           setOpenModal(true);
         }}
-      ><PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
+      >
+        <PlusCircleIcon className="h-5 w-5 inline-flex mr-2" />
         {t("editDialog.add")}
       </button>
       <EditAnalysisPointModal open={openModal} setOpen={setOpenModal} />

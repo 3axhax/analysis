@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { AnalysisPointLimit } from "@entities/analysisPoint";
 import { AnalysisPointDataLimitsEditableListItem } from "@features/Admin/analysisPoints/editAnalysisPoint/ui/AnalysisPointDataLimitsEditableListItem.tsx";
 import { GenderType } from "@shared/lib/types";
-import {PlusCircleIcon} from "@heroicons/react/16/solid";
+import { PlusCircleIcon } from "@heroicons/react/16/solid";
 
 interface AnalysisPointDataLimitsEditableListProps {
   onChange: (value: AnalysisPointLimit[]) => void;
