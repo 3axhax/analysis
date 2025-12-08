@@ -52,7 +52,7 @@ export const addNewUnit = createAsyncThunk(
     if (!state.units.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/units/add", data);
+        const response = await Request.post<UnitsListItem>("/units/add", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -70,7 +70,7 @@ export const editUnit = createAsyncThunk(
     if (!state.units.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/units/edit", data);
+        const response = await Request.post<UnitsListItem>("/units/edit", data);
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);

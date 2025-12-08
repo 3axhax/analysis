@@ -90,10 +90,10 @@ class RestAPI {
     return this._send();
   };
 
-  post = (url: string = "", data: SendingData = {}): Promise<AxiosResponse> => {
+  post<T = SendingData> (url: string = "", data: T): Promise<AxiosResponse> {
     this.method = "POST";
     this._setTarget(url);
-    this.data = data;
+    this.data = data as SendingData;
     return this._send();
   };
 
