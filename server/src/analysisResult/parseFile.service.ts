@@ -20,75 +20,113 @@ export class ParseFileService {
   constructor(private analysisPointService: AnalysisPointService) {}
   parseFile = async (file: Express.Multer.File) => {
     this.findingPoints = [];
-    console.log('Получен файл:', file.originalname);
 
     this.pointsList = await this.analysisPointService.getAllWithTranslation();
 
+    await this.parseBufferByTables(file.buffer);
     await this.parseBufferByLines(file.buffer);
 
     return {
       message: 'success',
-      filename: file.originalname,
-      size: file.size,
       findingPoints: this.findingPoints,
       pointsList: this.pointsList,
-      data: await this.parseTablesFromBuffer(file.buffer),
     };
   };
 
-  async parseBufferByLines(buffer) {
+  async parseBufferByLines(buffer: Buffer) {
     try {
       const parser = new PDFParse({ data: buffer });
 
       const text = await parser.getText();
-      console.log(text);
       const lines = text.text.split('\n');
       lines.forEach((line, index) => {
         this.pointsList.forEach((point) => {
-          if (line.includes(point.translationRu)) {
-            let value = this._checkLineForValue({
-              line,
-              reference: point.translationRu,
-            });
-            if (value === 0 && lines[index + 1]) {
-              value = this._checkLineForValue({
-                line: lines[index + 1],
-                reference: point.translationRu,
-                skipRef: true,
+          const referenceList = (
+            point.parsingWords !== ''
+              ? point.parsingWords.split(/\s+/)
+              : [point.translationRu, point.translationEn]
+          )
+            .map((r) => r.trim().toLowerCase())
+            .filter((r) => r !== '');
+          referenceList.forEach((reference) => {
+            if (line.toLowerCase().includes(reference)) {
+              let value = this._checkLineForValue({
+                line,
+                reference: reference,
+              });
+              if (value === 0 && lines[index + 1]) {
+                value = this._checkLineForValue({
+                  line: lines[index + 1],
+                  reference: reference,
+                  skipRef: true,
+                });
+              }
+              if (value === 0 && lines[index + 2]) {
+                value = this._checkLineForValue({
+                  line: lines[index + 2],
+                  reference: reference,
+                  skipRef: true,
+                });
+              }
+              this._addFindingPoints({
+                id: point.id,
+                name: point.name,
+                value: value,
+                unit: 0,
               });
             }
-            if (value === 0 && lines[index + 2]) {
-              value = this._checkLineForValue({
-                line: lines[index + 2],
-                reference: point.translationRu,
-                skipRef: true,
-              });
-            }
-            this.findingPoints.push({
-              id: point.id,
-              name: point.name,
-              value: value,
-              unit: 0,
-            });
-          }
+          });
         });
       });
-      console.log(this.findingPoints);
       return { ...text, test: text.text.split('\n') };
     } catch (error) {
       console.log('Ошибка парсинга PDF:', error);
     }
   }
 
-  async parseTablesFromBuffer(buffer) {
+  async parseBufferByTables(buffer: Buffer) {
     try {
       const parser = new PDFParse({ data: buffer });
 
-      const result = await parser.getText();
-      return result;
+      const result = await parser.getTable();
+      result.pages.forEach((page) => {
+        page.tables.forEach((table) => {
+          table.forEach((row) => {
+            row.forEach((cell, cellIndex) => {
+              this.pointsList.forEach((point) => {
+                const referenceList = (
+                  point.parsingWords !== ''
+                    ? point.parsingWords.split(/\s+/)
+                    : [point.translationRu, point.translationEn]
+                )
+                  .map((r) => r.trim().toLowerCase())
+                  .filter((r) => r !== '');
+                referenceList.forEach((reference) => {
+                  if (cell.toLowerCase().includes(reference)) {
+                    let value = 0;
+                    if (row[cellIndex + 1]) {
+                      value = this._checkLineForValue({
+                        line: row[cellIndex + 1],
+                        reference: reference,
+                        skipRef: true,
+                      });
+                    }
+
+                    this._addFindingPoints({
+                      id: point.id,
+                      name: point.name,
+                      value: value,
+                      unit: 0,
+                    });
+                  }
+                });
+              });
+            });
+          });
+        });
+      });
     } catch (error) {
       console.log('Ошибка парсинга PDF:', error);
-      throw error;
     }
   }
 
@@ -102,25 +140,16 @@ export class ParseFileService {
     skipRef?: boolean;
   }): number {
     const lineData = line.split(/\s+/);
-    console.log(lineData);
     let value = 0;
     let isNameFind = skipRef;
-    for (const [index, data] of lineData.entries()) {
+    for (const data of lineData) {
       if (isNameFind) {
         value = this._parseNumber(data);
         if (value > 0) {
-          console.log(
-            'name: ',
-            reference,
-            'value: ',
-            value,
-            'unit: ',
-            lineData[index + 1],
-          );
           break;
         }
       }
-      if (!isNameFind && data.includes(reference)) {
+      if (!isNameFind && data.toLowerCase().includes(reference)) {
         isNameFind = true;
       }
     }
@@ -131,5 +160,16 @@ export class ParseFileService {
     const normalized = str.replace(/\s+/g, '').replace(',', '.');
     const num = parseFloat(normalized);
     return isNaN(num) ? 0 : num;
+  }
+
+  _addFindingPoints(point: {
+    id: number;
+    name: string;
+    value: number;
+    unit: number;
+  }) {
+    if (!this.findingPoints.find((p) => p.id === point.id)) {
+      this.findingPoints.push(point);
+    }
   }
 }
