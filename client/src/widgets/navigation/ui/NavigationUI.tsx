@@ -36,7 +36,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                       {item.iconLink && item.iconLink}
                       <span
                         className={
-                          "max-w-50 overflow-ellipsis text-nowrap overflow-hidden"
+                          "max-w-50 overflow-ellipsis text-nowrap overflow-hidden uppercase"
                         }
                       >
                         {item.label}
@@ -84,8 +84,8 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   </button>
                 ) : (
                   <Link
-                    to={item.key}
-                    className={`flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-white  ${
+                    to={'#'+ item.key}
+                    className={`flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-white uppercase  ${
                       location.pathname === item.path
                         ? " bg-green-900 text-white"
                         : " text-gray-600 dark:text-gray-300 hover:text-green-800 hover:border-green-800 hover:bg-green-600/10 dark:hover:bg-gray-700"

@@ -20,8 +20,8 @@ export const Navigation = () => {
   const { openModal } = useInfoModalData();
 
   const navItems: NavItem[] = [
+    { key: "preparation", path: "#preparation", label: "Подготовка" },
     { key: "analysis", path: "/analysis", label: "Загрузить анализы" },
-    { key: "about", path: "/about", label: "О проекте" },
     { key: "contacts", path: "/contacts", label: "Контакты" },
   ];
 
