@@ -31,7 +31,7 @@ function AppContainer() {
     <div className="app">
       <Navigation />
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<AnalysisPage />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="/analysis" element={<AnalysisPage />} />
         <Route path="/result/:resultId" element={<AnalysisResultPage />} />

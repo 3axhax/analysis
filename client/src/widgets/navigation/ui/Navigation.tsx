@@ -20,9 +20,9 @@ export const Navigation = () => {
   const { openModal } = useInfoModalData();
 
   const navItems: NavItem[] = [
-    { key: "preparation", path: "#preparation", label: "Подготовка" },
-    { key: "analysis", path: "/analysis", label: "Загрузить анализы" },
-    { key: "contacts", path: "/contacts", label: "Контакты" },
+    { key: "preparation", path: "preparation", label: "Подготовка" },
+    { key: "analysis", path: "analysis", label: "Загрузить анализы" },
+
   ];
 
   if (isUserAdmin) {
