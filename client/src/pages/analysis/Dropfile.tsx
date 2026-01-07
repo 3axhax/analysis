@@ -5,6 +5,7 @@ import {
   SelectAnalysisResultPending,
   sendAnalysisResultFile,
 } from "@entities/analysisResult";
+import {PDF} from "@shared/ui/Icons/PDF.tsx";
 
 export const DropFile = () => {
   const dispatch = useAppDispatch();
@@ -27,35 +28,28 @@ export const DropFile = () => {
   });
 
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+    <div className={'p-5 max-w-[800px] ml-auto mr-auto'}>
       <div
         {...getRootProps()}
-        style={{
-          border: "2px dashed #cccccc",
-          borderRadius: "4px",
-          padding: "40px",
-          textAlign: "center",
-          cursor: "pointer",
-          backgroundColor: isDragActive ? "#f0f8ff" : "#fafafa",
-          marginBottom: "20px",
-        }}
+          className={`rounded border-2 border-gray-400 border-dashed p-8 cursor-grab mb-5 ${isDragActive ? 'bg-gray-10' : 'bg-gray-50'}`}
       >
         {error !== "" ? (
           <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
         ) : null}
         <input {...getInputProps()} />
         {loading ? (
-          <div style={{ textAlign: "center", margin: "20px 0" }}>
+          <div className={'text-center my-5'}>
             <div>Обработка PDF...</div>
           </div>
         ) : isDragActive ? (
           <p>Перетащите PDF файл сюда...</p>
         ) : (
-          <div>
-            <p>Перетащите PDF файл сюда или нажмите для выбора</p>
-            <p style={{ fontSize: "12px", color: "#666" }}>
-              Поддерживаются только PDF файлы (макс. 10MB)
-            </p>
+          <div className={'flex items-center'}>
+            <PDF className={'size-10 inline mr-3 text-gray-400'}/>
+            <div><p>Перетащите PDF файл сюда или нажмите для выбора</p>
+              <p className={'text-sm text-gray-500'}>
+                Поддерживаются только PDF файлы (макс. 10MB)
+              </p></div>
           </div>
         )}
       </div>
