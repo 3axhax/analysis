@@ -25,19 +25,19 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
   return (
     <header className="header">
         <Logo />
-        <BurgerButton isOpen={isMobileMenuOpen} className={"md:hidden absolute top-0 right-0"} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}/>
-        <nav className={`ml-auto fixed z-40 top-0 right-0 bottom-0 overflow-hidden md:relative md:visible ${isMobileMenuOpen ? 'visible' : 'hidden'}`}>
+        <BurgerButton isOpen={isMobileMenuOpen} className={"lg:hidden absolute top-0 right-0"} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}/>
+        <nav className={`ml-auto fixed z-40 top-0 right-0 bottom-0 overflow-hidden lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
           <div
-              className={`fixed inset-0 z-40 transition-opacity duration-300 md:hidden ${
+              className={`fixed inset-0 z-40 transition-opacity duration-300 lg:hidden ${
                   isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
               }`}
               onClick={()=>setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <span className={`absolute inset-0 bg-black ${isMobileMenuOpen ? 'opacity-50' : 'opacity-0'}`}/>
           </div>
-          <ul className={`navigation__menu bg-white fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}  ${isMobileMenuOpen ? 'is-open z-50' : ''}`}>
+          <ul className={`navigation__menu py-6 px-4 z-40 bg-white fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             {navItems.map((item) => (
-                <li key={item.key} className={"inline-flex justify-center  sm:flex sm:justify-stretch sm:w-full"}>
+                <li key={item.key} className={"flex justify-stretch w-full"}>
                   {item.isDropdown ? (
                       <>
                         <div
@@ -97,7 +97,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   ) : (
                       <Link
                           to={'#' + item.key}
-                          className={`flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-white uppercase md:whitespace-pre  ${
+                          className={`flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-white uppercase lg:whitespace-pre  ${
                               location.pathname === item.path
                                   ? " bg-green-900 text-white"
                                   : " text-gray-600 dark:text-gray-300 hover:text-green-800 hover:border-green-800 hover:bg-green-600/10 dark:hover:bg-gray-700"
