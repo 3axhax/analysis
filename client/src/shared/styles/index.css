@@ -84,10 +84,6 @@
     @apply flex flex-col items-center;
   }
 
-  .logo {
-    @apply flex items-center text-green-800 mr-8;
-  }
-
   .logo__text {
     @apply flex flex-col items-start text-green-800;
   }
@@ -105,7 +101,7 @@
   }
 
   .header {
-    @apply w-9/12 bg-white/95 rounded-lg dark:bg-gray-800 shadow-lg py-4 px-6 mb-8 sticky top-0 flex items-center justify-center z-10;
+    @apply w-full bg-white/95 dark:bg-gray-800 shadow-lg py-4 px-6 mb-8 sticky top-0 flex items-center justify-start z-10 relative;
   }
 
   .form-control {
@@ -232,6 +228,10 @@
   }
   .radio-input:after {
     @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white border-2 border-green-800;
+  }
+
+  .navigation__menu {
+    @apply flex flex-col sm:justify-start sm:gap-4 md:flex-row md:inline-flex space-x-6 md:justify-center;
   }
 }
 
