@@ -22,6 +22,7 @@ import { GenderType } from "@shared/lib/types";
 import { DropFile } from "@pages/analysis/Dropfile.tsx";
 import {Laboratory} from "@shared/ui/Icons/Laboratory.tsx";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");
@@ -75,7 +76,8 @@ export const AnalysisPage = () => {
           </ul>
         </div>
         <div className="mb-8" id={'analysis'}>
-          <h2 className="text-4xl font-sans  text-gray-900 dark:text-white mb-4">
+          <h2 className="text-4xl font-sans text-gray-900 dark:text-white mb-4">
+            <ArrowDownTrayIcon className="inline text-gray-900 size-7 mr-3 mb-1" />
             {t("pageTitle.analysis")}
           </h2>
         </div>
