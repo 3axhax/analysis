@@ -35,7 +35,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
           >
             <span className={`absolute inset-0 bg-black ${isMobileMenuOpen ? 'opacity-50' : 'opacity-0'}`}/>
           </div>
-          <ul className={`navigation__menu py-6 px-4 z-40 bg-white fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <ul className={`navigation__menu py-6 px-4 z-40 bg-white dark:bg-gray-950 fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             {navItems.map((item) => (
                 <li key={item.key} className={"flex justify-stretch w-full"}>
                   {item.isDropdown ? (
@@ -86,7 +86,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   ) : item.isButton ? (
                       <button
                           className={
-                            "cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 ml-20 transition-all"
+                            "cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 lg:ml-20 transition-all"
                           }
                           key={item.key}
                           onClick={item.onClick}

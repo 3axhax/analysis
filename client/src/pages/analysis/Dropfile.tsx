@@ -31,7 +31,7 @@ export const DropFile = () => {
     <div className={'p-5 max-w-[800px] ml-auto mr-auto'}>
       <div
         {...getRootProps()}
-          className={`rounded border-2 border-gray-400 border-dashed p-8 cursor-grab mb-5 ${isDragActive ? 'bg-gray-10' : 'bg-gray-50'}`}
+          className={`rounded border-2 border-gray-400 dark:border-white border-dashed p-8 cursor-grab mb-5 ${isDragActive ? 'bg-gray-10 dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-950'}`}
       >
         {error !== "" ? (
           <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
@@ -45,9 +45,9 @@ export const DropFile = () => {
           <p>Перетащите PDF файл сюда...</p>
         ) : (
           <div className={'flex items-center'}>
-            <PDF className={'size-10 inline mr-3 text-gray-400'}/>
+            <PDF className={'size-10 inline mr-3 text-gray-400 dark:text-gray-200'}/>
             <div><p>Перетащите PDF файл сюда или нажмите для выбора</p>
-              <p className={'text-sm text-gray-500'}>
+              <p className={'text-sm text-gray-500 dark:text-gray-300'}>
                 Поддерживаются только PDF файлы (макс. 10MB)
               </p></div>
           </div>

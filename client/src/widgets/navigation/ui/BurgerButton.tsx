@@ -12,10 +12,10 @@ export const BurgerButton: React.FC<BurgerButtonProps> = ({ isOpen, onClick, cla
             <button
                 type="button"
                 onClick={onClick}
-                className={`relative w-10 h-10 focus:outline-none cursor-pointer ${className}`}
+                className={`relative w-10 h-10 focus:outline-none cursor-pointer dark:text-green-200 ${className}`}
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
             >
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6">
+                <div className="absolute top-1/2 right-0 transform -translate-x-1/2 -translate-y-1/2 w-6">
                     <span
                         className={`absolute h-0.5 w-6 bg-current transform transition-all duration-300 ${isOpen ? 'rotate-45 -top-0.5' : '-translate-y-2 top-0'}`}
                     />
