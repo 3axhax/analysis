@@ -77,7 +77,7 @@ export const AnalysisPage = () => {
         </div>
         <div className="mb-8" id={'analysis'}>
           <h2 className="text-4xl font-sans text-gray-900 dark:text-white mb-4">
-            <Donwload className="inline text-gray-900 size-10 mr-3 mb-3"/>
+            <Donwload className="inline size-10 mr-3 mb-3"/>
             {t("pageTitle.analysis")}
           </h2>
         </div>

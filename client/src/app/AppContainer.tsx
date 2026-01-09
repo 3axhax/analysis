@@ -28,7 +28,7 @@ function AppContainer() {
   }, [dispatch]);
 
   return (
-    <div className="bg-white dark:bg-gray-950">
+    <div className="page">
       <Navigation />
       <Routes>
         <Route path="/" element={<AnalysisPage />} />

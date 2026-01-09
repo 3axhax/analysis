@@ -40,6 +40,21 @@
     --secondaryColor: var(--color-green-800);
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      --accent: white;
+      --canvas: color-mix(in lch, canvas, canvasText 100%);
+      --border: color-mix(in lch, canvas, canvasText 75%);
+    }
+  }
+
+  /* Manual override with .dark class */
+  :root.dark {
+    --accent: white;
+    --canvas: color-mix(in lch, canvas, canvasText 100%);
+    --border: color-mix(in lch, canvas, canvasText 75%);
+  }
+
   body {
     font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
     @apply m-0 flex items-stretch justify-center min-w-[320px] min-h-screen bg-white dark:bg-gray-950;
