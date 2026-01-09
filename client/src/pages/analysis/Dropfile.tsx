@@ -28,7 +28,7 @@ export const DropFile = () => {
   });
 
   return (
-    <div className={'p-5 max-w-[800px] ml-auto mr-auto'}>
+    <div className={'mx-auto text-left relative lg:w-4/12 sm:w-full'}>
       <div
         {...getRootProps()}
           className={`rounded border-2 border-gray-400 dark:border-white border-dashed p-8 cursor-grab mb-5 ${isDragActive ? 'bg-gray-10 dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-950'}`}
