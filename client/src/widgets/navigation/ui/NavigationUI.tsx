@@ -26,7 +26,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
     <header className="header">
         <Logo />
         <BurgerButton isOpen={isMobileMenuOpen} className={"lg:hidden absolute top-0 right-0"} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}/>
-        <nav className={`ml-auto fixed z-40 top-0 right-0 bottom-0 overflow-hidden lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
+        <nav className={`ml-auto fixed z-40 top-0 right-0 bottom-0 overflow-hidden lg:overflow-visible lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
           <div
               className={`fixed inset-0 z-40 transition-opacity duration-300 lg:hidden ${
                   isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
