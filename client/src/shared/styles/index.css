@@ -231,7 +231,7 @@
   }
 
   .navigation__menu {
-    @apply flex flex-col sm:justify-start sm:gap-4 md:flex-row md:inline-flex space-x-6 md:justify-center;
+    @apply flex flex-col lg:justify-start lg:gap-4 lg:flex-row lg:inline-flex space-x-6;
   }
 }
 

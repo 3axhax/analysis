@@ -103,6 +103,6 @@ export const selectIsUserAuthorized = (state: RootState) =>
   !!(state.user.token && state.user.name);
 
 export const selectIsUserAdmin = (state: RootState) =>
-  state.user.roles.includes("ADMIN");
+  state.user.roles?.includes("ADMIN");
 
 export default userSlice.reducer;
