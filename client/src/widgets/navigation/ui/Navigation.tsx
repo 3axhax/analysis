@@ -22,7 +22,6 @@ export const Navigation = () => {
   const navItems: NavItem[] = [
     { key: "preparation", path: "preparation", label: "Подготовка" },
     { key: "analysis", path: "analysis", label: "Загрузить анализы" },
-
   ];
 
   if (isUserAdmin) {

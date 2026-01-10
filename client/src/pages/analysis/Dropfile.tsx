@@ -28,10 +28,10 @@ export const DropFile = () => {
   });
 
   return (
-    <div className={'mx-auto text-left relative lg:w-4/12 sm:w-full'}>
+    <div className={'mx-auto text-left relative w-full'}>
       <div
         {...getRootProps()}
-          className={`rounded border-2 border-gray-400 dark:border-white border-dashed p-8 cursor-grab mb-5 ${isDragActive ? 'bg-gray-10 dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-950'}`}
+          className={`rounded rounded-3xl border-2 border-gray-400 dark:border-white/30 border-dashed p-8 cursor-grab mb-5 ${isDragActive ? 'bg-gray-10 dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-950'}`}
       >
         {error !== "" ? (
           <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>

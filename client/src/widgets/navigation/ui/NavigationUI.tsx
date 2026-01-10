@@ -95,8 +95,8 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                         {item.label}
                       </button>
                   ) : (
-                      <Link
-                          to={'#' + item.key}
+                      <a
+                          href={'#' + item.key}
                           className={`flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-white uppercase lg:whitespace-pre  ${
                               location.pathname === item.path
                                   ? " bg-green-900 text-white"
@@ -105,7 +105,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                       >
                         {item.iconLink && item.iconLink}
                         {item.label}
-                      </Link>
+                      </a>
                   )}
                 </li>
             ))}

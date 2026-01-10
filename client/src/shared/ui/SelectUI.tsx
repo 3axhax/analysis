@@ -43,7 +43,7 @@ const SelectUI = <T extends string | number = string>({
       {label ? (
         <label
           htmlFor={name}
-          className="text-sm font-medium text-gray-700 mb-1"
+          className="text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"
         >
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
