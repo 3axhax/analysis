@@ -11,7 +11,7 @@ export const Logo = () => {
         <span className={"text-nowrap text-base tracking-wider"}>
           Clinical Analise
         </span>
-        <span className={"uppercase text-lg/4"}>Transcription</span>
+        <span className={"uppercase text-base/3"}>Transcription</span>
       </p>
     </Link>
   );
