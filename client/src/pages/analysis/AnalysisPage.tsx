@@ -93,7 +93,7 @@ export const AnalysisPage = () => {
                 className="space-y-2 text-gray-600 dark:text-gray-300"
                 onSubmit={handlerSubmit}
             >
-              <div className={'flex gap-8'}>
+              <div className={'flex flex-col lg:flex-row lg:gap-8'}>
                 <GenderSelector gender={gender} setGender={handlerGenderSelect}/>
                 <AgeSelector age={age} setAge={handlerAgeSelect}/>
               </div>
