@@ -63,7 +63,7 @@ const SelectUI = <T extends string | number = string>({
         aria-required={required}
         classNames={{
           control: (state) =>
-            `!min-h-10 !border !rounded-lg !bg-white !dark:!bg-gray-900 !shadow-sm transition-all duration-200 outline-none text-left ${
+            `!min-h-10 !border !rounded-lg !bg-white dark:!bg-gray-950 !shadow-sm transition-all duration-200 outline-none text-left ${
               state.isFocused
                 ? "!border-green-800 !ring-1 !ring-green-800 !ring-opacity-20"
                 : "!border-gray-300 hover:!border-green-800 hover:!shadow-green-800"
@@ -73,27 +73,27 @@ const SelectUI = <T extends string | number = string>({
                 : ""
             }`,
           menu: () =>
-            "!border !border-gray-200 !rounded-lg !shadow-lg !mt-1 !bg-white",
+            "!border !border-gray-200 !rounded-lg !shadow-lg !mt-1 !bg-white !overflow-hidden dark:!bg-gray-950 dark:!border-gray-600",
           menuList: () => "!py-1",
           option: (state) =>
             `!px-3 !py-2 !cursor-pointer ${
               state.isSelected
-                ? "!bg-green-800 !text-white !dark:bg-white !dark:text-gray-900"
+                ? "!bg-green-800 !text-white"
                 : state.isFocused
-                  ? "!bg-green-50 !text-gray-900"
-                  : "!text-gray-700 hover:!bg-gray-50"
+                  ? "!bg-green-50 !text-gray-900 dark:!text-white dark:!bg-green-800"
+                  : "!text-gray-700 dark:!text-gray-200 dark:!bg-gray-950 hover:!bg-gray-50"
             } ${state.isDisabled ? "!opacity-50 !cursor-not-allowed" : ""}`,
           placeholder: () => "!text-gray-400",
-          singleValue: () => "!text-gray-900",
+          singleValue: () => "!text-gray-900 dark:!text-white",
           valueContainer: () => "!px-3 !py-1",
           indicatorsContainer: () => "!pr-2",
           dropdownIndicator: (state) =>
-            `!text-gray-400 hover:!text-gray-600 transition-all duration-300 ease-in-out ${
+            `!text-gray-400 hover:!text-gray-600 dark:!text-white hover:dark:!text-gray-300 transition-all duration-300 ease-in-out ${
               state.selectProps.menuIsOpen ? "!rotate-180 !text-green-800" : ""
             }`,
-          clearIndicator: () => "!text-gray-400 hover:!text-gray-600",
+          clearIndicator: () => "!text-gray-400 hover:!text-gray-600 dark:!text-white hover:dark:!text-gray-300",
           indicatorSeparator: () => "!bg-transparent",
-          noOptionsMessage: () => "!text-gray-500 !py-4",
+          noOptionsMessage: () => "!text-gray-500 dark:!text-gray-300 !py-4",
         }}
         {...other}
       />
