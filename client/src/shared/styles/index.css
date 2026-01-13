@@ -245,7 +245,6 @@
       transparent;
     border: calc(var(--border-width) * 1px) solid transparent;
     border-radius: calc(var(--border-radius) * 1px);
-    padding: clamp(1rem, 3vmin + 1rem, 6rem);
   }
 
   .radio-input {

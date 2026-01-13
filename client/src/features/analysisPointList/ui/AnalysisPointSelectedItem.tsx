@@ -108,19 +108,19 @@ export const AnalysisPointSelectedItem = ({
             place="top"
             className="max-w-xs !break-words !whitespace-normal !text-left"
           />
-          <div className={"flex items-center justify-stretch group"}>
-            <div className={"flex items-center lg:w-[180px]"}>
+          <div className={"flex flex-col lg:flex-row lg:items-center justify-stretch py-2 relative"}>
+            <div className={"flex items-center lg:w-[240px] "}>
               <label
                 htmlFor={t(`analysisPoint.${analysisPoint.name}`)
                   .trim()
                   .replace(/\s/g, "")}
-                className={"block lg:max-w-[160px] truncate"}
+                className={"block lg:max-w-[220px] truncate"}
               >
                 {t(`analysisPoint.${analysisPoint.name}`)}{" "}
               </label>
               <button
                 className={
-                  "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 items-start justify-center hover:text-green-800"
+                  "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 dark:text-gray-200 items-start justify-center hover:text-green-800"
                 }
                 data-tooltip-content={t(
                   `analysisPoint.${analysisPoint.name}_description`,
@@ -136,7 +136,7 @@ export const AnalysisPointSelectedItem = ({
                 .trim()
                 .replace(/\s/g, "")}
               className={
-                "px-4 py-2 ml-[10px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-green-800 focus:border-green-800 hover:border-green-800 hover:shadow-green-800"
+                "px-4 py-2 lg:ml-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-green-800 focus:border-green-800 hover:border-green-800 hover:shadow-green-800"
               }
               value={pointValue}
               onInput={handlerOnInput}
@@ -151,6 +151,7 @@ export const AnalysisPointSelectedItem = ({
                 name={"unitSelect"}
                 onChange={handlerOnUnitsSelect}
                 placeholder={"ед. изм."}
+                className={'mt-4 lg:mt-0 flex-grow lg:ml-4'}
                 options={analysisPoint.units.map((unit) => ({
                   label: t(`units.${unit}`),
                   value: unit,
@@ -160,7 +161,7 @@ export const AnalysisPointSelectedItem = ({
             ) : null}
             <button
               className={
-                "w-10 h-10 flex ml-auto items-center justify-center cursor-pointer text-red-600 transition-colors hover:text-red-700"
+                "w-10 h-10 absolute lg:relative -right-2.5 top-0 flex ml-auto items-center justify-center cursor-pointer text-red-600 dark:text-red-500 transition-colors hover:text-red-700"
               }
               onClick={handlerClear}
             >

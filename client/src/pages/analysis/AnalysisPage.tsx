@@ -63,8 +63,8 @@ export const AnalysisPage = () => {
   return (
       <div className="app w-full">
         <div className="mb-8 lg:w-6/12 sm:w-full" id={'preparation'}>
-          <h2 className="text-4xl font-sans  text-gray-900 dark:text-white mb-4">
-            <Laboratory  className={'inline size-10 mr-3 mb-3'}/>
+          <h2 className="text-2xl lg:text-4xl font-sans  text-gray-900 dark:text-white mb-4">
+            <Laboratory  className={'inline size-6 lg:size-10 mr-3 mb-3'}/>
             {t("pageTitle.analysis")}
           </h2>
           <p className={'text-2xl text-center text-gray-900 dark:text-white mb-4'}>Основные рекомендации:</p>
@@ -76,8 +76,8 @@ export const AnalysisPage = () => {
           </ul>
         </div>
         <div className="mb-8 lg:w-6/12 sm:w-full" id={'analysis'}>
-          <h2 className="text-4xl font-sans text-gray-900 mb-2 dark:text-white">
-            <Donwload className="inline size-10 mr-3 mb-3"/>
+          <h2 className="text-2xl lg:text-4xl font-sans text-gray-900 mb-2 dark:text-white">
+            <Donwload className="inline size-6 lg:size-10 mr-3 mb-3"/>
             {t("pageTitle.analysis")}
           </h2>
           <DropFile/>
@@ -85,7 +85,7 @@ export const AnalysisPage = () => {
           <div className="b-border">
             <div className="trail"></div>
           </div>
-          <div className="b-border__content">
+          <div className="b-border__content p-4 lg:p-8">
             <h2 className="text-2xl text-center text-gray-900 dark:text-white mb-4">
               Введите данные
             </h2>

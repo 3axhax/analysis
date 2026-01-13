@@ -63,7 +63,7 @@ const SelectUI = <T extends string | number = string>({
         aria-required={required}
         classNames={{
           control: (state) =>
-            `!min-h-10 !border !rounded-lg !bg-white !shadow-sm transition-all duration-200 outline-none text-left ${
+            `!min-h-10 !border !rounded-lg !bg-white !dark:!bg-gray-900 !shadow-sm transition-all duration-200 outline-none text-left ${
               state.isFocused
                 ? "!border-green-800 !ring-1 !ring-green-800 !ring-opacity-20"
                 : "!border-gray-300 hover:!border-green-800 hover:!shadow-green-800"
@@ -78,7 +78,7 @@ const SelectUI = <T extends string | number = string>({
           option: (state) =>
             `!px-3 !py-2 !cursor-pointer ${
               state.isSelected
-                ? "!bg-green-800 !text-white"
+                ? "!bg-green-800 !text-white !dark:bg-white !dark:text-gray-900"
                 : state.isFocused
                   ? "!bg-green-50 !text-gray-900"
                   : "!text-gray-700 hover:!bg-gray-50"
