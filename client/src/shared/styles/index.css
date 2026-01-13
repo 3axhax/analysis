@@ -17,6 +17,7 @@
 }
 
 @layer base {
+
   :root {
     font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
     font-weight: 300;
@@ -36,8 +37,15 @@
     --speed: 12s;
     --size: 45px;
     --line: color-mix(in lch, canvasText, transparent 70%);
+    --header-height: 2.5rem;
 
     --secondaryColor: var(--color-green-800);
+  }
+
+  @media (min-width: theme(--breakpoint-lg)) {
+    :root {
+      --header-height: 4.75rem;
+    }
   }
 
   @media (prefers-color-scheme: dark) {
@@ -64,6 +72,19 @@
 
   #root {
     @apply mx-auto text-center w-full;
+  }
+
+  /* Global smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + 2rem);
+  }
+
+  /* Disable smooth scroll for performance */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 
@@ -243,10 +264,6 @@
   }
   .radio-input:after {
     @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white border-2 border-green-800;
-  }
-
-  .navigation__menu {
-    @apply flex flex-col lg:justify-start gap-4 lg:flex-row lg:inline-flex space-x-6;
   }
 }
 

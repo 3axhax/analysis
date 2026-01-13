@@ -35,7 +35,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
           >
             <span className={`absolute inset-0 bg-black ${isMobileMenuOpen ? 'opacity-50' : 'opacity-0'}`}/>
           </div>
-          <ul className={`navigation__menu py-6 px-4 z-40 bg-white dark:bg-gray-950 fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <ul className={`flex flex-col lg:justify-start gap-4 lg:flex-row lg:inline-flex space-x-6 py-6 px-4 z-40 bg-white dark:bg-gray-950 fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             {navItems.map((item) => (
                 <li key={item.key} className={"flex justify-stretch w-full"}>
                   {item.isDropdown ? (
