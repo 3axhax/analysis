@@ -264,6 +264,12 @@
   .radio-input:after {
     @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white dark:bg-black border-2 border-green-800;
   }
+
+  .st0{fill:#016630;}
+  .st1{display:none;}
+  .st2{fill:#6A7282;}
+  .st3{fill:none;stroke:#016630;stroke-miterlimit:10;}
+  .st4{fill:#C10007;}
 }
 
 .font-sans {
