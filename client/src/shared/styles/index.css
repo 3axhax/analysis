@@ -267,9 +267,12 @@
 
   .st0{fill:#016630;}
   .st1{display:none;}
-  .st2{fill:#6A7282;}
-  .st3{fill:none;stroke:#016630;stroke-miterlimit:10;}
+  .st2{display:none;fill:#6A7282;}
+  .st3{display:inline;fill:none;stroke:#016630;stroke-miterlimit:10;}
   .st4{fill:#C10007;}
+  .st5{stroke:#016630;stroke-width:2;stroke-miterlimit:10;}
+  .st6{font-family:'DINCondensed-Bold';}
+  .st7{font-size:12px;}
 }
 
 .font-sans {

@@ -4,6 +4,7 @@ import { Logo } from "@widgets/logo";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import {BurgerButton} from "@widgets/navigation/ui/BurgerButton.tsx";
+import {ArrowLong} from "@shared/ui/Icons/ArrowLong.tsx";
 
 export interface NavItem {
   key: string;
@@ -97,14 +98,15 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   ) : (
                       <a
                           href={'#' + item.key}
-                          className={`flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-white uppercase lg:whitespace-pre  ${
+                          className={`relative flex overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#016630] flex-gap-2 pr-9 py-2 uppercase group lg:whitespace-pre hover:text-green-800  ${
                               location.pathname === item.path
                                   ? " bg-green-900 text-white"
-                                  : " text-gray-600 dark:text-gray-300 hover:text-green-800 hover:border-green-800 hover:bg-green-600/10 dark:hover:bg-gray-700"
+                                  : " text-gray-600 dark:text-gray-300 hover:text-green-800"
                           }`}
                       >
+                        <ArrowLong className="absolute h-2 w-8 text-gray-500 -left-9 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-green-800" />
                         {item.iconLink && item.iconLink}
-                        {item.label}
+                        <span className={'group-hover:translate-x-9  transition-transform duration-200 ease-linear'}>{item.label}</span>
                       </a>
                   )}
                 </li>
