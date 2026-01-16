@@ -98,13 +98,13 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   ) : (
                       <a
                           href={'#' + item.key}
-                          className={`relative flex overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#016630] flex-gap-2 pr-9 py-2 uppercase group lg:whitespace-pre hover:text-green-800  ${
+                          className={`relative flex overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#016630] flex-gap-2 pr-9 py-2 uppercase group lg:whitespace-pre hover:text-green-800 dark:hover:text-green-200  ${
                               location.pathname === item.path
                                   ? " bg-green-900 text-white"
                                   : " text-gray-600 dark:text-gray-300 hover:text-green-800"
                           }`}
                       >
-                        <ArrowLong className="absolute h-2 w-8 text-gray-500 -left-9 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-green-800" />
+                        <ArrowLong className="absolute h-2 w-8 text-gray-500 -left-9 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-green-800 dark:group-hover:text-green-200" />
                         {item.iconLink && item.iconLink}
                         <span className={'group-hover:translate-x-9  transition-transform duration-200 ease-linear'}>{item.label}</span>
                       </a>
