@@ -36,13 +36,15 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
           >
             <span className={`absolute inset-0 bg-black ${isMobileMenuOpen ? 'opacity-50' : 'opacity-0'}`}/>
           </div>
-          <ul className={`flex flex-col lg:justify-start gap-4 lg:flex-row lg:inline-flex space-x-6 py-6 px-4 z-40 bg-white dark:bg-gray-950 fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <ul className={`flex flex-col lg:justify-start gap-4 lg:flex-row lg:inline-flex space-x-6 py-6 px-4 z-40 bg-white lg:bg-transparent dark:bg-gray-950 fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             {navItems.map((item) => (
-                <li key={item.key} className={"flex justify-stretch w-full"}>
+                <li key={item.key} className={"flex justify-stretch w-full m-0"}>
                   {item.isDropdown ? (
                       <>
                         <div
-                            className={`relative flex items-center flex-gap-2 px-4 py-2 rounded-full transition-colors duration-200 border-1 border-green-800 hover:cursor-pointer text-gray-600 dark:text-gray-300 group hover:text-green-800 hover:bg-green-600/10 hover:text-green-800 dark:hover:bg-gray-700`}
+                            className={`relative flex items-center hover:cursor-pointer rounded-full 
+                            transition-colors duration-200 group 
+                            text-white hover:text-orange-300 hover:border-orange-300`}
                             onClick={() => setIsDropdownOpen(item.key)}
                         >
                           {item.iconLink && item.iconLink}
@@ -54,11 +56,11 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                         {item.label}
                       </span>
                           <ChevronDownIcon
-                              className={`inline-flex h-4 w-4 ml-2 text-gray-600 transition-transform group-hover:text-green-800 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
+                              className={`inline-flex h-4 w-4 ml-1 text-white transition-transform group-hover:text-orange-300 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
                           />
                           {isDropdownOpen === item.key && (
                               <div
-                                  className="absolute top-full left-0 mt-4 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 border border-gray-200 dark:border-gray-700">
+                                  className="absolute top-full left-0 mt-4 w-48 rounded-lg shadow-lg z-10 border">
                                 {item.items?.map((dropdownItem) =>
                                     dropdownItem.label ? (
                                         <Link
@@ -98,13 +100,14 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   ) : (
                       <a
                           href={'#' + item.key}
-                          className={`relative flex overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#016630] flex-gap-2 pr-9 py-2 uppercase group lg:whitespace-pre hover:text-green-800 dark:hover:text-green-200  ${
+                          className={`relative flex overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
+                          flex-gap-2 pr-9 py-2 uppercase group lg:whitespace-pre hover:text-orange-300  ${
                               location.pathname === item.path
-                                  ? " bg-green-900 text-white"
-                                  : " text-gray-600 dark:text-gray-300 hover:text-green-800"
+                                  ? " text-orange-300"
+                                  : " text-white"
                           }`}
                       >
-                        <ArrowLong className="absolute h-2 w-8 text-gray-500 -left-9 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-green-800 dark:group-hover:text-green-200" />
+                        <ArrowLong className="absolute h-2 w-8 text-gray-500 -left-9 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-300" />
                         {item.iconLink && item.iconLink}
                         <span className={'group-hover:translate-x-9  transition-transform duration-200 ease-linear'}>{item.label}</span>
                       </a>

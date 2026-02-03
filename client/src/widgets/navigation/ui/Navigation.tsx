@@ -30,7 +30,7 @@ export const Navigation = () => {
       path: "#",
       label: "Управление",
       isDropdown: true,
-      iconLink: (<Cog8ToothIcon class="h-5 w-5 text-green-800 mr-2" />
+      iconLink: (<Cog8ToothIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
   ),
       items: [
         { path: "/admin/analysisType", label: t("pageTitle.analysisType") },
@@ -65,7 +65,7 @@ export const Navigation = () => {
       path: "#",
       label: `${userName}`,
       isDropdown: true,
-      iconLink: <UserIcon className="h-5 w-5 text-green-800 mr-2" />,
+      iconLink: <UserIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />,
       items: [
         { path: "/user/profile", label: "Профиль" },
         { path: "/user/analysis", label: "Мои анализы" },

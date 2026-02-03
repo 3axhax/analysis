@@ -40,6 +40,12 @@
     --header-height: 2.5rem;
 
     --secondaryColor: var(--color-green-800);
+
+    --color-blue-d: oklch(25.47% 0.093 258.22); /* blue-950 */
+    --color-blue-l: oklch(55.81% 0.096 207.96); /* cyan-600 */
+    --color-yellow-l: oklch(90.43% 0.069 82.68); /* orange-200 */
+    --color-yellow-d: oklch(80.08% 0.126 58.41); /* orange-300 */
+    --color-orange: oklch(66.59% 0.207 36.07); /* orange-600 */
   }
 
   @media (min-width: theme(--breakpoint-lg)) {
@@ -120,10 +126,6 @@
     @apply flex flex-col items-center dark:text-white px-6;
   }
 
-  .logo__text {
-    @apply flex flex-col items-start text-green-800;
-  }
-
   .counter {
     @apply flex flex-col items-center gap-4 p-8 border border-gray-200 rounded-xl bg-white/5 backdrop-blur-sm;
   }
@@ -137,7 +139,7 @@
   }
 
   .header {
-    @apply w-full bg-white/95 dark:bg-gray-950/95 shadow-sm dark:shadow-white/20 py-4 px-6 mb-8 sticky top-0 flex items-center justify-start z-10 relative;
+    @apply w-full bg-blue-950/95 dark:bg-gray-950/95 shadow-sm dark:shadow-white/20 py-4 px-6 mb-8 sticky top-0 flex items-center justify-start z-10 relative;
   }
 
   .form-control {
@@ -264,15 +266,10 @@
   .radio-input:after {
     @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white dark:bg-black border-2 border-green-800;
   }
-
-  .st0{fill:#016630;}
-  .st1{display:none;}
-  .st2{display:none;fill:#6A7282;}
-  .st3{display:inline;fill:none;stroke:#016630;stroke-miterlimit:10;}
-  .st4{fill:#C10007;}
-  .st5{stroke:#016630;stroke-width:2;stroke-miterlimit:10;}
-  .st6{font-family:'DINCondensed-Bold';}
-  .st7{font-size:12px;}
+  .st_0{fill:#FA6E51;}
+  .st_1{fill:#E8573F;}
+  .st_2{fill:#F4F6F9;}
+  .st_3{fill:#FFFFFF;}
 }
 
 .font-sans {
