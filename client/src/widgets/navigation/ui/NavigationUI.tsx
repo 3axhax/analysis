@@ -2,9 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { JSX, useState } from "react";
 import { Logo } from "@widgets/logo";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import {BurgerButton} from "@widgets/navigation/ui/BurgerButton.tsx";
-import {ArrowLong} from "@shared/ui/Icons/ArrowLong.tsx";
+import {LoginIcon} from "@shared/ui/Icons/LoginIcon.tsx";
 
 export interface NavItem {
   key: string;
@@ -24,10 +23,10 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   return (
-    <header className="header">
+    <header className="header before:content-[''] before:w-full before:h-full before:z-2 before:absolute before:bg-cyan-600/90 shadow-lg before:dark:bg-gray-950/95 dark:shadow-white/20">
         <Logo />
         <BurgerButton isOpen={isMobileMenuOpen} className={"lg:hidden absolute top-0 right-0"} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}/>
-        <nav className={`ml-auto fixed z-40 top-0 right-0 bottom-0 overflow-hidden lg:overflow-visible lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
+        <nav className={`ml-auto fixed z-40 lg:z-2 top-0 right-0 bottom-0 overflow-hidden lg:overflow-visible lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
           <div
               className={`fixed inset-0 z-40 transition-opacity duration-300 lg:hidden ${
                   isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -44,8 +43,8 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                         <div
                             className={`relative flex items-center hover:cursor-pointer rounded-full 
                             transition-colors duration-200 group 
-                            text-white hover:text-orange-300 hover:border-orange-300`}
-                            onClick={() => setIsDropdownOpen(item.key)}
+                            text-orange-50 hover:text-orange-300 hover:border-orange-300`}
+                            onClick={() => setIsDropdownOpen(isDropdownOpen === item.key ? null : item.key)}
                         >
                           {item.iconLink && item.iconLink}
                           <span
@@ -58,58 +57,49 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                           <ChevronDownIcon
                               className={`inline-flex h-4 w-4 ml-1 text-white transition-transform group-hover:text-orange-300 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
                           />
-                          {isDropdownOpen === item.key && (
-                              <div
-                                  className="absolute top-full left-0 mt-4 w-48 rounded-lg shadow-lg z-10 border">
-                                {item.items?.map((dropdownItem) =>
-                                    dropdownItem.label ? (
-                                        <Link
+                              <div className={`absolute flex flex-col gap-2 left-0 top-full w-48 rounded-b-lg bg-white shadow-lg shadow-cyan-950/40 transition-transform duration-300 ease-in-out ${isDropdownOpen === item.key ? 'translate-y-4 z-10': '-translate-y-full z-0'}`}>
+                                <ul className={'py-3'}>{item.items?.map((dropdownItem) =>
+                                    dropdownItem.label &&
+                                        <li><Link
                                             key={dropdownItem.path}
                                             to={dropdownItem.path}
                                             onClick={() => setIsDropdownOpen("")}
-                                            className={`block text-left px-4 py-2 text-sm transition-colors${
+                                            className={`block text-left px-4 py-1 text-sm font-normal transition-colors${
                                                 location.pathname === dropdownItem.path
-                                                    ? " bg-green-900 text-white"
-                                                    : " text-gray-700 dark:text-gray-300 hover:bg-green-800/10 dark:hover:bg-gray-700"
+                                                    ? " bg-cyan-600 text-white"
+                                                    : " text-cyan-800 hover:text-cyan-950"
                                             }`}
                                         >
                                           {dropdownItem.label}
-                                        </Link>
-                                    ) : (
-                                        <hr
-                                            key={dropdownItem.path}
-                                            className="text-gray-300"
-                                        />
-                                    ),
+                                        </Link></li>
                                 )}
+                                </ul>
                               </div>
-                          )}
                         </div>
                       </>
                   ) : item.isButton ? (
                       <button
                           className={
-                            "cursor-pointer flex justify-center items-center rounded-full px-4 font-medium py-2 border-2 border-green-800 bg-green-800 text-white hover:bg-white hover:text-green-800 lg:ml-20 transition-all"
+                            "cursor-pointer flex justify-center items-center text-white transition-colors"
                           }
                           key={item.key}
                           onClick={item.onClick}
                       >
-                        <ArrowRightEndOnRectangleIcon className="inline-flex h-5 w-5 mr-1"/>
+                        <LoginIcon className="inline-flex h-4 w-4 mr-2"/>
                         {item.label}
                       </button>
                   ) : (
                       <a
                           href={'#' + item.key}
                           className={`relative flex overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
-                          flex-gap-2 pr-9 py-2 uppercase group lg:whitespace-pre hover:text-orange-300  ${
+                          flex-gap-2 pr-6 py-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
                               location.pathname === item.path
-                                  ? " text-orange-300"
-                                  : " text-white"
+                                  ? " text-orange-200"
+                                  : " text-orange-50"
                           }`}
                       >
-                        <ArrowLong className="absolute h-2 w-8 text-gray-500 -left-9 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-300" />
                         {item.iconLink && item.iconLink}
-                        <span className={'group-hover:translate-x-9  transition-transform duration-200 ease-linear'}>{item.label}</span>
+                        <span className={'group-hover:translate-x-6  transition-transform duration-200 ease-linear'}>{item.label}</span>
                       </a>
                   )}
                 </li>

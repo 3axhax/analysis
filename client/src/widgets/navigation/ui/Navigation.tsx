@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { NavigationUI, NavItem } from "./NavigationUI.tsx";
+import {Laboratory} from "@shared/ui/Icons/Laboratory.tsx";
+import {Donwload} from "@shared/ui/Icons/Donwload.tsx";
 
 export const Navigation = () => {
   const { t } = useTranslation("common");
@@ -20,8 +22,16 @@ export const Navigation = () => {
   const { openModal } = useInfoModalData();
 
   const navItems: NavItem[] = [
-    { key: "preparation", path: "preparation", label: "Подготовка" },
-    { key: "analysis", path: "analysis", label: "Загрузить анализы" },
+    { key: "preparation",
+      path: "preparation",
+      label: "Подготовка",
+      iconLink: <Laboratory className={'absolute h-5 w-5 text-white -left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
+    },
+    { key: "analysis",
+      path: "analysis",
+      label: "Загрузить анализы",
+      iconLink: <Donwload className={'absolute h-5 w-5 text-white -left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
+    },
   ];
 
   if (isUserAdmin) {
