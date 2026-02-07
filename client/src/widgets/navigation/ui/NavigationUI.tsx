@@ -23,10 +23,10 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   return (
-    <header className="header before:content-[''] before:w-full before:h-full before:z-2 before:absolute before:bg-cyan-600/90 shadow-lg before:dark:bg-gray-950/95 dark:shadow-white/20">
+    <header className="header bg-cyan-600/90 shadow-lg dark:bg-gray-950/95 dark:shadow-white/20">
         <Logo />
         <BurgerButton isOpen={isMobileMenuOpen} className={"lg:hidden absolute top-0 right-0"} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}/>
-        <nav className={`ml-auto fixed z-40 lg:z-2 top-0 right-0 bottom-0 overflow-hidden lg:overflow-visible lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
+        <nav className={`ml-auto fixed z-40 top-0 right-0 bottom-0 overflow-hidden lg:overflow-visible lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
           <div
               className={`fixed inset-0 z-40 transition-opacity duration-300 lg:hidden ${
                   isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -57,7 +57,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                           <ChevronDownIcon
                               className={`inline-flex h-4 w-4 ml-1 text-white transition-transform group-hover:text-orange-300 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
                           />
-                              <div className={`absolute flex flex-col gap-2 left-0 top-full w-48 rounded-b-lg bg-white shadow-lg shadow-cyan-950/40 transition-transform duration-300 ease-in-out ${isDropdownOpen === item.key ? 'translate-y-4 z-10': '-translate-y-full z-0'}`}>
+                              <div className={`absolute flex flex-col gap-2 left-0 w-48 rounded-b-lg bg-white shadow-lg shadow-cyan-950/40 transition-transform duration-300 ease-in-out ${isDropdownOpen === item.key ? 'translate-y-4 z-10 top-full': '-translate-y-full z-0 -top-full'}`}>
                                 <ul className={'py-3'}>{item.items?.map((dropdownItem) =>
                                     dropdownItem.label &&
                                         <li><Link
