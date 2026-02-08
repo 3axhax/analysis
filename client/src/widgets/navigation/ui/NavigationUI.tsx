@@ -35,23 +35,24 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
           >
             <span className={`absolute inset-0 bg-black ${isMobileMenuOpen ? 'opacity-50' : 'opacity-0'}`}/>
           </div>
-          <ul className={`flex flex-col lg:justify-start lg:flex-row lg:inline-flex z-40 bg-white lg:bg-transparent dark:bg-gray-950 fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:py-0 lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <ul className={`bg-cyan-600 py-4 lg:py-0 flex flex-col lg:justify-start lg:flex-row lg:inline-flex z-40 lg:bg-transparent dark:bg-gray-950 fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:px-0 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             {navItems.map((item) => (
                 <li key={item.key} className={"flex justify-stretch w-full m-0"}>
                   {item.isDropdown ? (
                       <>
                         <div
-                            className={`relative bg-cyan-600 flex items-center`}
+                            className={`relative flex flex-col items-start lg:items-center w-full`}
                             onClick={() => setIsDropdownOpen(isDropdownOpen === item.key ? "" : item.key)}
-                        ><span className={'hover:cursor-pointer transition-colors duration-200 group text-orange-50 hover:text-orange-300 hover:border-orange-300 py-6 px-3 flex items-center bg-cyan-600 lg:w-50 z-2'}>
+                        >
+                          <span className={'hover:cursor-pointer w-full transition-colors duration-200 group text-orange-50 hover:text-orange-300 hover:border-orange-300 py-2 lg:py-6 px-3 flex items-center bg-cyan-600 lg:w-50 z-2'}>
                           {item.iconLink && item.iconLink}
                           <span className={"max-w-50 text-nowrap overflow-hidden uppercase"}>{item.label}</span>
                           <ChevronDownIcon
                               className={`inline-flex h-4 w-4 ml-1 text-white transition-transform group-hover:text-orange-300 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
                           />
                           </span>
-                              <div className={`absolute flex flex-col gap-2 left-0 w-48 rounded-b-lg bg-white shadow-lg shadow-cyan-950/40 transition-transform duration-300 ease-in-out ${isDropdownOpen === item.key ? 'translate-y-0 z-1 top-full': '-translate-y-full z-0 -top-full'}`}>
-                                <ul className={'py-3'}>{item.items?.map((dropdownItem) =>
+                              <div className={`relative overflow-hidden lg:absolute flex flex-col gap-2 lg:left-0 w-full lg:w-48 lg:rounded-b-lg bg-white lg:shadow-lg shadow-cyan-950/40 transition-all duration-300 ease-linear ${isDropdownOpen === item.key ? 'max-h-[500px] lg:translate-y-0 z-1 lg:top-full': 'max-h-0 lg:-translate-y-full z-0 lg:-top-full'}`}>
+                                <ul className={'py-3 m-0'}>{item.items?.map((dropdownItem) =>
                                     dropdownItem.label &&
                                         <li className={'text-left'}><Link
                                             key={dropdownItem.path}
@@ -85,8 +86,8 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   ) : (
                       <a
                           href={'#' + item.key}
-                          className={`relative flex overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
-                          flex-gap-2 pr-10 py-6 bg-cyan-600 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
+                          className={`relative flex w-full overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
+                          flex-gap-2 pr-10 pl-3 py-2 lg:py-6 bg-cyan-600 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
                               location.pathname === item.path
                                   ? " text-orange-200"
                                   : " text-orange-50"

@@ -12,7 +12,7 @@ export const BurgerButton: React.FC<BurgerButtonProps> = ({ isOpen, onClick, cla
             <button
                 type="button"
                 onClick={onClick}
-                className={`relative w-10 h-10 focus:outline-none cursor-pointer dark:text-green-200 ${className}`}
+                className={`relative text-white w-10 h-10 focus:outline-none cursor-pointer dark:text-green-200 ${className}`}
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
             >
                 <div className="absolute top-1/2 right-0 transform -translate-x-1/2 -translate-y-1/2 w-6">
