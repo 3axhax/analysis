@@ -25,12 +25,12 @@ export const Navigation = () => {
     { key: "preparation",
       path: "preparation",
       label: "Подготовка",
-      iconLink: <Laboratory className={'absolute h-5 w-5 text-white -left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
+      iconLink: <Laboratory className={'absolute h-5 w-5 -left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
     },
     { key: "analysis",
       path: "analysis",
       label: "Загрузить анализы",
-      iconLink: <Donwload className={'absolute h-5 w-5 text-white -left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
+      iconLink: <Donwload className={'absolute h-5 w-5 -left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
     },
   ];
 

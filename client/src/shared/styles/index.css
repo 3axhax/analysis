@@ -284,6 +284,19 @@
   .st_1{fill:#E8573F;}
   .st_2{fill:#F4F6F9;}
   .st_3{fill:#FFFFFF;}
+
+  .outlined-text {
+    @apply text-cyan-600
+    [text-shadow:-1px_-1px_0_var(--color-white),1px_-1px_0_var(--color-white),-1px_1px_0_var(--color-white),1px_1px_0_var(--color-white)]
+    supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-stroke:1px_var(--color-white)]
+    supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-fill-color:var(text-blue-950)]
+    supports-[-webkit-text-stroke:1px_var(--color-white)]:[text-shadow:none]
+    dark:text-gray-900
+    dark:[text-shadow:-1px_-1px_0_var(--color-white),1px_-1px_0_var(--color-white),-1px_1px_0_var(--color-white),1px_1px_0_var(--color-white)]
+    dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-stroke:1px_var(--color-white)]
+    dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-fill-color:var(--color-gray-900)]
+    dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[text-shadow:none];
+  }
 }
 
 .font-sans {

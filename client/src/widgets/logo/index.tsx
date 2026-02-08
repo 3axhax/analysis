@@ -1,18 +1,19 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import {LogoIcon} from "@shared/ui/Icons/LogoIcon.tsx";
 
 export const Logo = () => {
   const { t } = useTranslation();
   return (
-    <Link to={"/"} title={t("logo")} className={"flex items-center text-orange-50 mr-8 ml-0 relative z-2"}>
-        <LogoIcon className="h-10 w-10 mr-2" />
-          <p className={"flex flex-col items-start text-shadow-md"}>
-            <span className={"text-nowrap text-base tracking-wider"}>
-              Clinical Analise
-            </span>
-            <span className={"uppercase text-base/3"}>Transcription</span>
-          </p>
-    </Link>
+      <Link to={"/"} title={t("logo")} className={"group flex items-center font-bold mr-8 ml-0 relative z-2 text-xl rounded-full border-1 border-white/80 py-1 px-3"}>
+          <span className={"text-white inline-flex relative overflow-hidden"}>
+              C<span className={'max-w-0 transition-all duration-300 group-hover:max-w-[250px]'}>linical&nbsp;</span>
+          </span>
+          <span className={"text-orange-200 inline-flex relative overflow-hidden"}>
+              A<span className={'max-w-0 transition-all duration-300 group-hover:max-w-[250px]'}>nalise&nbsp;</span>
+          </span>
+        <span className={"text-white inline-flex relative overflow-hidden"}>
+            T<span className={'max-w-0 transition-all duration-300 group-hover:max-w-[250px]'}>ranscription</span>
+        </span>
+      </Link>
   );
 };
