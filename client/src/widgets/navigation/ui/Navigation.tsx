@@ -12,6 +12,9 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { NavigationUI, NavItem } from "./NavigationUI.tsx";
 import {Laboratory} from "@shared/ui/Icons/Laboratory.tsx";
 import {Donwload} from "@shared/ui/Icons/Donwload.tsx";
+import {LogoutIcon} from "@shared/ui/Icons/LogoutIcon.tsx";
+import {SettingsIcon} from "@shared/ui/Icons/SettingsIcon.tsx";
+import {ListsIcon} from "@shared/ui/Icons/ListsIcon.tsx";
 
 export const Navigation = () => {
   const { t } = useTranslation("common");
@@ -77,9 +80,9 @@ export const Navigation = () => {
       isDropdown: true,
       iconLink: <UserIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />,
       items: [
-        { path: "/user/profile", label: "Профиль" },
-        { path: "/user/analysis", label: "Мои анализы" },
-        { path: "/logout", label: "Выход" },
+        { path: "/user/profile", label: "Профиль", iconLink: <SettingsIcon className="h-4 w-4 inline-flex mr-2" /> },
+        { path: "/user/analysis", label: "Мои анализы", iconLink: <ListsIcon className="h-4 w-4 inline-flex mr-2" /> },
+        { path: "/logout", label: "Выход", iconLink: <LogoutIcon className="h-4 w-4 inline-flex mr-2" /> },
       ],
     });
   }

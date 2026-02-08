@@ -14,7 +14,7 @@ export interface NavItem {
   isButton?: boolean;
   onClick?: () => void;
   setIsBurgerOpen?: () => void;
-  items?: { path: string; label?: string }[];
+  items?: { path: string; label?: string, iconLink?: JSX.Element}[];
 }
 
 export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
@@ -26,7 +26,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
     <header className="header bg-cyan-600 shadow-lg dark:bg-gray-950/95 dark:shadow-white/20">
         <Logo />
         <BurgerButton isOpen={isMobileMenuOpen} className={"lg:hidden absolute top-0 right-0"} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}/>
-        <nav className={`ml-auto mr-6 fixed z-40 top-0 right-0 bottom-0 overflow-hidden lg:overflow-visible lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
+        <nav className={`ml-auto fixed z-40 top-0 right-0 bottom-0 overflow-hidden lg:overflow-visible lg:relative lg:visible ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
           <div
               className={`fixed inset-0 z-40 transition-opacity duration-300 lg:hidden ${
                   isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -41,11 +41,9 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   {item.isDropdown ? (
                       <>
                         <div
-                            className={`relative bg-cyan-600 flex items-center hover:cursor-pointer
-                            transition-colors duration-200 group 
-                            text-orange-50 hover:text-orange-300 hover:border-orange-300`}
+                            className={`relative bg-cyan-600 flex items-center`}
                             onClick={() => setIsDropdownOpen(isDropdownOpen === item.key ? "" : item.key)}
-                        ><span className={'py-6 px-3 flex items-center bg-cyan-600 lg:w-50 z-2'}>
+                        ><span className={'hover:cursor-pointer transition-colors duration-200 group text-orange-50 hover:text-orange-300 hover:border-orange-300 py-6 px-3 flex items-center bg-cyan-600 lg:w-50 z-2'}>
                           {item.iconLink && item.iconLink}
                           <span className={"max-w-50 text-nowrap overflow-hidden uppercase"}>{item.label}</span>
                           <ChevronDownIcon
@@ -55,16 +53,17 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                               <div className={`absolute flex flex-col gap-2 left-0 w-48 rounded-b-lg bg-white shadow-lg shadow-cyan-950/40 transition-transform duration-300 ease-in-out ${isDropdownOpen === item.key ? 'translate-y-0 z-1 top-full': '-translate-y-full z-0 -top-full'}`}>
                                 <ul className={'py-3'}>{item.items?.map((dropdownItem) =>
                                     dropdownItem.label &&
-                                        <li><Link
+                                        <li className={'text-left'}><Link
                                             key={dropdownItem.path}
                                             to={dropdownItem.path}
                                             onClick={() => setIsDropdownOpen("")}
-                                            className={`block text-left px-4 py-1 text-sm font-normal transition-colors${
+                                            className={`group group-hover:text-cyan-950 inline-flex justify-start px-4 py-1 text-sm font-normal transition-colors${
                                                 location.pathname === dropdownItem.path
                                                     ? " bg-cyan-600 text-white"
                                                     : " text-cyan-800 hover:text-cyan-950"
                                             }`}
                                         >
+                                          {dropdownItem.iconLink && dropdownItem.iconLink}
                                           {dropdownItem.label}
                                         </Link></li>
                                 )}
