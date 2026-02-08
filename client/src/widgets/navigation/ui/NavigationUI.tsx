@@ -44,7 +44,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                             className={`relative flex items-center hover:cursor-pointer rounded-full 
                             transition-colors duration-200 group 
                             text-orange-50 hover:text-orange-300 hover:border-orange-300`}
-                            onClick={() => setIsDropdownOpen(isDropdownOpen === item.key ? null : item.key)}
+                            onClick={() => setIsDropdownOpen(isDropdownOpen === item.key ? "" : item.key)}
                         >
                           {item.iconLink && item.iconLink}
                           <span
