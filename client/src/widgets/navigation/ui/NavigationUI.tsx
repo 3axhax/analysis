@@ -87,7 +87,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                       <a
                           href={'#' + item.key}
                           className={`relative flex w-full overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
-                          flex-gap-2 pr-10 pl-3 py-2 lg:py-6 bg-cyan-600 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
+                          flex-gap-2 pr-10 pl-3 lg:pl-0 py-2 lg:py-6 bg-cyan-600 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
                               location.pathname === item.path
                                   ? " text-orange-200"
                                   : " text-orange-50"

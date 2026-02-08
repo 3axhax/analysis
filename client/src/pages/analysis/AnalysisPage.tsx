@@ -65,9 +65,9 @@ export const AnalysisPage = () => {
         <div className="mb-8 lg:w-6/12 sm:w-full" id={'preparation'}>
           <h2 className="text-2xl font-light lg:text-4xl font-sans text-gray-900 dark:text-white mb-4">
             <Laboratory  className={'inline size-6 lg:size-8 mr-2 mb-2'}/>
-            {t("pageTitle.analysis")}
+            Подготовка к сдаче анализа
           </h2>
-          <p className={'text-2xl text-center text-gray-900 dark:text-white mb-4'}>Основные рекомендации:</p>
+          <p className={'text-2xl font-light text-center text-gray-900 dark:text-white mb-4'}>Основные рекомендации:</p>
           <ul className={'text-left mb-4'}>
             <li><CheckIcon className="inline h-4 w-4 text-gray-700 dark:text-white" /> минимальные физические нагрузки в течение суток;</li>
             <li><CheckIcon className="inline h-4 w-4 text-gray-700 dark:text-white" /> не принимать алкоголь за трое суток;</li>
