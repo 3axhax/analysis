@@ -75,7 +75,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   ) : item.isButton ? (
                       <button
                           className={
-                            "cursor-pointer flex justify-center items-center text-white transition-colors"
+                            "cursor-pointer flex justify-center items-center text-white transition-colors lg:mr-6"
                           }
                           key={item.key}
                           onClick={item.onClick}

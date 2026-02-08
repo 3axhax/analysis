@@ -52,6 +52,7 @@ export const LoginForm = () => {
         value={email}
         onChange={setEmail}
         label={t("email")}
+        className={'mb-5'}
       />
       <InputWithLabel
         type={"password"}
@@ -60,6 +61,7 @@ export const LoginForm = () => {
         value={password}
         onChange={setPassword}
         label={t("password")}
+        className={'mb-5'}
       />
 
       {error && (
@@ -68,7 +70,7 @@ export const LoginForm = () => {
         </div>
       )}
 
-      <button type={"submit"} className={"btn w-full mb-5"} disabled={pending}>
+      <button type={"submit"} className={"btn w-full mb-2"} disabled={pending}>
         Войти
       </button>
     </form>
