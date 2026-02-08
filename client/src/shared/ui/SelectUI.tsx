@@ -65,8 +65,8 @@ const SelectUI = <T extends string | number = string>({
           control: (state) =>
             `!min-h-10 !border !rounded-lg !bg-white dark:!bg-gray-950 !shadow-sm transition-all duration-200 outline-none text-left ${
               state.isFocused
-                ? "!border-green-800 !ring-1 !ring-green-800 !ring-opacity-20"
-                : "!border-gray-300 hover:!border-green-800 hover:!shadow-green-800"
+                ? "!border-cyan-800 !ring-1 !ring-cyan-800 !ring-opacity-20"
+                : "!border-gray-300 hover:!border-cyan-800 hover:!shadow-cyan-800"
             } ${
               state.isDisabled
                 ? "!bg-gray-50 !cursor-not-allowed !opacity-50"
@@ -78,9 +78,9 @@ const SelectUI = <T extends string | number = string>({
           option: (state) =>
             `!px-3 !py-2 !cursor-pointer ${
               state.isSelected
-                ? "!bg-green-800 !text-white"
+                ? "!bg-cyan-800 !text-white"
                 : state.isFocused
-                  ? "!bg-green-50 !text-gray-900 dark:!text-white dark:!bg-green-800"
+                  ? "!bg-cyan-50 !text-gray-900 dark:!text-white dark:!bg-cyan-800"
                   : "!text-gray-700 dark:!text-gray-200 dark:!bg-gray-950 hover:!bg-gray-50"
             } ${state.isDisabled ? "!opacity-50 !cursor-not-allowed" : ""}`,
           placeholder: () => "!text-gray-400",
