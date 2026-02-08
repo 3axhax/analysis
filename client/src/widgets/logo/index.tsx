@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Logo = () => {
   const { t } = useTranslation();
   return (
-      <Link to={"/"} title={t("logo")} className={"group flex items-center font-bold mr-8 ml-0 relative z-2 text-xl rounded-full border-1 border-white/80 py-1 px-3"}>
+      <Link to={"/"} title={t("logo")} className={"group flex items-center font-bold my-4 mx-6 relative z-2 text-xl rounded-full border-1 border-white/80 py-1 px-3"}>
           <span className={"text-white inline-flex relative overflow-hidden"}>
               C<span className={'max-w-0 transition-all duration-300 group-hover:max-w-[250px]'}>linical&nbsp;</span>
           </span>

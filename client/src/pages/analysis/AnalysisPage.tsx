@@ -63,7 +63,7 @@ export const AnalysisPage = () => {
   return (
       <div className="app w-full">
         <div className="mb-8 lg:w-6/12 sm:w-full" id={'preparation'}>
-          <h2 className="text-2xl lg:text-4xl font-sans  text-gray-900 dark:text-white mb-4">
+          <h2 className="text-2xl font-light lg:text-4xl font-sans text-gray-900 dark:text-white mb-4">
             <Laboratory  className={'inline size-6 lg:size-8 mr-2 mb-2'}/>
             {t("pageTitle.analysis")}
           </h2>
