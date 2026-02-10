@@ -40,6 +40,8 @@
     --header-height: 2.5rem;
 
     --secondaryColor: var(--color-green-800);
+    --underline-spacing: 3px;
+    --underline-height: 1px;
 
 
     --color-grey: oklch(16.90% 0.031 222.65); /* grey-900 */
@@ -131,6 +133,36 @@
   /* Плавные переходы для variable font */
   .font-transition {
     transition: font-variation-settings 0.3s ease;
+  }
+
+
+  .bg-underline {
+    @apply bg-gradient-to-r from-current to-current
+    bg-no-repeat
+    [background-position:left_bottom_var(--underline-spacing)]
+    [background-size:0_var(--underline-height)]
+    hover:[background-size:100%_var(--underline-height)]
+    transition-[background-size] duration-300 ease-out
+    pb-[var(--underline-spacing)] -mb-1;
+  }
+
+  .bg-underline-hover {
+    @apply bg-gradient-to-r from-current to-current
+    bg-no-repeat
+    [background-position:left_bottom_var(--underline-spacing)]
+    hover:[background-size:0_var(--underline-height)]
+    [background-size:100%_var(--underline-height)]
+    transition-[background-size] duration-300 ease-out
+    pb-[var(--underline-spacing)] -mb-1;
+  }
+
+  .bg-underline-current {
+    @apply bg-gradient-to-r cursor-auto from-current to-current
+    bg-no-repeat
+    [background-position:left_bottom_var(--underline-spacing)]
+    [background-size:100%_var(--underline-height)]
+    transition-[background-size] duration-300 ease-out
+    pb-[var(--underline-spacing)] -mb-1;
   }
 
 }

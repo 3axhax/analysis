@@ -51,21 +51,21 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                               className={`inline-flex h-4 w-4 ml-1 text-white transition-transform group-hover:text-orange-300 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
                           />
                           </span>
-                              <div className={`relative overflow-hidden lg:absolute flex flex-col gap-2 lg:left-0 w-full lg:w-48 lg:rounded-b-lg bg-white lg:shadow-lg shadow-cyan-950/40 transition-all duration-300 ease-linear ${isDropdownOpen === item.key ? 'max-h-[500px] lg:translate-y-0 z-1 lg:top-full': 'max-h-0 lg:-translate-y-full z-0 lg:-top-full'}`}>
-                                <ul className={'py-3 m-0'}>{item.items?.map((dropdownItem) =>
+                              <div className={`relative overflow-hidden lg:absolute flex flex-col gap-2 lg:left-0 w-full lg:w-48 lg:rounded-b-lg 
+                               bg-orange-400/90 lg:shadow-lg shadow-cyan-950/40 transition-all duration-300 ease-linear ${isDropdownOpen === item.key ? 'max-h-[500px] lg:translate-y-0 z-1 lg:top-full': 'max-h-0 lg:-translate-y-full z-0 lg:-top-full'}`}>
+                                <ul className={'py-3 flex flex-col w-full m-0'}>{item.items?.map((dropdownItem) =>
                                     dropdownItem.label &&
                                         <li className={'text-left'}><Link
                                             key={dropdownItem.path}
                                             to={dropdownItem.path}
                                             onClick={() => setIsDropdownOpen("")}
-                                            className={`group group-hover:text-cyan-950 inline-flex justify-start px-4 py-1 text-sm font-normal transition-colors${
-                                                location.pathname === dropdownItem.path
-                                                    ? " bg-cyan-600 text-white"
-                                                    : " text-cyan-800 hover:text-cyan-950"
-                                            }`}
+                                            className={`group group-hover:text-cyan-950 inline-flex text-white justify-start mx-4 py-1 text-sm font-normal transition-colors`}
                                         >
                                           {dropdownItem.iconLink && dropdownItem.iconLink}
-                                          {dropdownItem.label}
+                                          <span className={` ${location.pathname === dropdownItem.path
+                                                    ? " bg-underline-current"
+                                                    : " bg-underline"
+                                            }`}>{dropdownItem.label}</span>
                                         </Link></li>
                                 )}
                                 </ul>
