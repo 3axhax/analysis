@@ -52,7 +52,7 @@ export const LoginForm = () => {
         value={email}
         onChange={setEmail}
         label={t("email")}
-        className={'mb-5'}
+        className={"mb-5"}
       />
       <InputWithLabel
         type={"password"}
@@ -61,7 +61,7 @@ export const LoginForm = () => {
         value={password}
         onChange={setPassword}
         label={t("password")}
-        className={'mb-5'}
+        className={"mb-5"}
       />
 
       {error && (

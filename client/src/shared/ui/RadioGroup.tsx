@@ -30,7 +30,7 @@ const RadioGroup = <T = string,>({
       className={`radio-group-container flex items-center lg:flex-col lg:items-start ${className ? " " + className : ""}`}
     >
       <label
-          id={`${name}-label`}
+        id={`${name}-label`}
         className={`text-sm font-medium mr-6 text-gray-700 dark:text-gray-100 ${labelClassName ? " " + labelClassName : ""}`}
       >
         {label}

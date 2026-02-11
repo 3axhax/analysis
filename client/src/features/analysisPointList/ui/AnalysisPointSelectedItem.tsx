@@ -108,7 +108,11 @@ export const AnalysisPointSelectedItem = ({
             place="top"
             className="max-w-xs !break-words !whitespace-normal !text-left"
           />
-          <div className={"flex flex-col lg:flex-row lg:items-center justify-stretch py-2 relative"}>
+          <div
+            className={
+              "flex flex-col lg:flex-row lg:items-center justify-stretch py-2 relative"
+            }
+          >
             <div className={"flex items-center lg:w-[240px] "}>
               <label
                 htmlFor={t(`analysisPoint.${analysisPoint.name}`)
@@ -151,7 +155,7 @@ export const AnalysisPointSelectedItem = ({
                 name={"unitSelect"}
                 onChange={handlerOnUnitsSelect}
                 placeholder={"ед. изм."}
-                className={'mt-4 lg:mt-0 flex-grow lg:ml-4'}
+                className={"mt-4 lg:mt-0 flex-grow lg:ml-4"}
                 options={analysisPoint.units.map((unit) => ({
                   label: t(`units.${unit}`),
                   value: unit,

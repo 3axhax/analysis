@@ -9,11 +9,11 @@ import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
 import { useTranslation } from "react-i18next";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { NavigationUI, NavItem } from "./NavigationUI.tsx";
-import {Laboratory} from "@shared/ui/Icons/Laboratory.tsx";
-import {Donwload} from "@shared/ui/Icons/Donwload.tsx";
-import {LogoutIcon} from "@shared/ui/Icons/LogoutIcon.tsx";
-import {SettingsIcon} from "@shared/ui/Icons/SettingsIcon.tsx";
-import {ListsIcon} from "@shared/ui/Icons/ListsIcon.tsx";
+import { Laboratory } from "@shared/ui/Icons/Laboratory.tsx";
+import { Donwload } from "@shared/ui/Icons/Donwload.tsx";
+import { LogoutIcon } from "@shared/ui/Icons/LogoutIcon.tsx";
+import { SettingsIcon } from "@shared/ui/Icons/SettingsIcon.tsx";
+import { ListsIcon } from "@shared/ui/Icons/ListsIcon.tsx";
 
 export const Navigation = () => {
   const { t } = useTranslation("common");
@@ -24,15 +24,29 @@ export const Navigation = () => {
   const { openModal } = useInfoModalData();
 
   const navItems: NavItem[] = [
-    { key: "preparation",
+    {
+      key: "preparation",
       path: "preparation",
       label: "Подготовка",
-      iconLink: <Laboratory className={'lg:absolute mr-2 lg:mr-0 h-5 w-5 lg:-left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
+      iconLink: (
+        <Laboratory
+          className={
+            "lg:absolute mr-2 lg:mr-0 h-5 w-5 lg:-left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50"
+          }
+        />
+      ),
     },
-    { key: "analysis",
+    {
+      key: "analysis",
       path: "analysis",
       label: "Загрузить анализы",
-      iconLink: <Donwload className={'lg:absolute mr-2 lg:mr-0 h-5 w-5 lg:-left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50'}/>
+      iconLink: (
+        <Donwload
+          className={
+            "lg:absolute mr-2 lg:mr-0 h-5 w-5 lg:-left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50"
+          }
+        />
+      ),
     },
   ];
 
@@ -42,8 +56,9 @@ export const Navigation = () => {
       path: "#",
       label: "Управление",
       isDropdown: true,
-      iconLink: (<SettingsIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
-  ),
+      iconLink: (
+        <SettingsIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
+      ),
       items: [
         { path: "/admin/analysisType", label: t("pageTitle.analysisType") },
         { path: "/admin/analysisPoints", label: t("pageTitle.analysisPoints") },
@@ -77,11 +92,25 @@ export const Navigation = () => {
       path: "#",
       label: `${userName}`,
       isDropdown: true,
-      iconLink: <UserIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />,
+      iconLink: (
+        <UserIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
+      ),
       items: [
-        { path: "/user/profile", label: "Профиль", iconLink: <SettingsIcon className="h-4 w-4 inline-flex mr-2" /> },
-        { path: "/user/analysis", label: "Мои анализы", iconLink: <ListsIcon className="h-4 w-4 inline-flex mr-2" /> },
-        { path: "/logout", label: "Выход", iconLink: <LogoutIcon className="h-4 w-4 inline-flex mr-2" /> },
+        {
+          path: "/user/profile",
+          label: "Профиль",
+          iconLink: <SettingsIcon className="h-4 w-4 inline-flex mr-2" />,
+        },
+        {
+          path: "/user/analysis",
+          label: "Мои анализы",
+          iconLink: <ListsIcon className="h-4 w-4 inline-flex mr-2" />,
+        },
+        {
+          path: "/logout",
+          label: "Выход",
+          iconLink: <LogoutIcon className="h-4 w-4 inline-flex mr-2" />,
+        },
       ],
     });
   }

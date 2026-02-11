@@ -5,7 +5,7 @@ import {
   SelectAnalysisResultPending,
   sendAnalysisResultFile,
 } from "@entities/analysisResult";
-import {PDF} from "@shared/ui/Icons/PDF.tsx";
+import { PDF } from "@shared/ui/Icons/PDF.tsx";
 
 export const DropFile = () => {
   const dispatch = useAppDispatch();
@@ -28,28 +28,32 @@ export const DropFile = () => {
   });
 
   return (
-    <div className={'mx-auto text-left relative w-full'}>
+    <div className={"mx-auto text-left relative w-full"}>
       <div
         {...getRootProps()}
-          className={`rounded-3xl border-3 border-[var(--border)] border-dashed p-4 lg:p-8 cursor-grab mb-5 ${isDragActive ? 'bg-gray-10 dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-950'}`}
+        className={`rounded-3xl border-3 border-[var(--border)] border-dashed p-4 lg:p-8 cursor-grab mb-5 ${isDragActive ? "bg-gray-10 dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-950"}`}
       >
         {error !== "" ? (
           <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
         ) : null}
         <input {...getInputProps()} />
         {loading ? (
-          <div className={'text-center my-5'}>
+          <div className={"text-center my-5"}>
             <div>Обработка PDF...</div>
           </div>
         ) : isDragActive ? (
           <p>Перетащите PDF файл сюда...</p>
         ) : (
-          <div className={'flex items-center'}>
-            <PDF className={'size-10 inline mr-3 text-gray-400 dark:text-gray-200'}/>
-            <div><p>Перетащите PDF файл сюда или нажмите для выбора</p>
-              <p className={'text-sm text-gray-500 dark:text-gray-300'}>
+          <div className={"flex items-center"}>
+            <PDF
+              className={"size-10 inline mr-3 text-gray-400 dark:text-gray-200"}
+            />
+            <div>
+              <p>Перетащите PDF файл сюда или нажмите для выбора</p>
+              <p className={"text-sm text-gray-500 dark:text-gray-300"}>
                 Поддерживаются только PDF файлы (макс. 10MB)
-              </p></div>
+              </p>
+            </div>
           </div>
         )}
       </div>

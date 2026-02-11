@@ -17,7 +17,6 @@
 }
 
 @layer base {
-
   :root {
     font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
     font-weight: 400;
@@ -43,18 +42,16 @@
     --underline-spacing: 3px;
     --underline-height: 1px;
 
-
-    --color-grey: oklch(16.90% 0.031 222.65); /* grey-900 */
+    --color-grey: oklch(16.9% 0.031 222.65); /* grey-900 */
     --color-cyan: oklch(44.85% 0.081 218.73); /* cyan-800 */
-    --color-cyan-2: oklch(60.24% 0.101 197.40); /* cyan-600 */
-    --color-cyan-3: oklch(81.57% 0.070 171.43); /* cyan-300 */
-    --color-beige: oklch(88.40% 0.068 91.51); /* orange-50 */
-    --color-orange-2: oklch(75.47% 0.162 71.40); /* orange-400 */
+    --color-cyan-2: oklch(60.24% 0.101 197.4); /* cyan-600 */
+    --color-cyan-3: oklch(81.57% 0.07 171.43); /* cyan-300 */
+    --color-beige: oklch(88.4% 0.068 91.51); /* orange-50 */
+    --color-orange-2: oklch(75.47% 0.162 71.4); /* orange-400 */
     --color-orange-3: oklch(61.89% 0.154 54.41); /* orange-600 */
-    --color-orange-4: oklch(53.78% 0.170 39.15); /* orange-700 */
-    --color-orange-5: oklch(48.65% 0.179 30.20); /* orange-800 */
+    --color-orange-4: oklch(53.78% 0.17 39.15); /* orange-700 */
+    --color-orange-5: oklch(48.65% 0.179 30.2); /* orange-800 */
     --color-orange-6: oklch(45.44% 0.157 24.59); /* orange-900 */
-
 
     --color-blue-d: oklch(25.47% 0.093 258.22); /* blue-950 */
     --color-blue-l: oklch(55.81% 0.096 207.96); /* cyan-600 */
@@ -135,7 +132,6 @@
     transition: font-variation-settings 0.3s ease;
   }
 
-
   .bg-underline {
     @apply bg-gradient-to-r from-current to-current
     bg-no-repeat
@@ -164,7 +160,6 @@
     transition-[background-size] duration-300 ease-out
     pb-[var(--underline-spacing)] -mb-1;
   }
-
 }
 
 @layer components {
@@ -312,10 +307,18 @@
   .radio-input:after {
     @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white dark:bg-black border-2 border-cyan-800;
   }
-  .st_0{fill:#FA6E51;}
-  .st_1{fill:#E8573F;}
-  .st_2{fill:#F4F6F9;}
-  .st_3{fill:#FFFFFF;}
+  .st_0 {
+    fill: #fa6e51;
+  }
+  .st_1 {
+    fill: #e8573f;
+  }
+  .st_2 {
+    fill: #f4f6f9;
+  }
+  .st_3 {
+    fill: #ffffff;
+  }
 
   .outlined-text {
     @apply text-cyan-600

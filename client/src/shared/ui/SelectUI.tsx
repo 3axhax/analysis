@@ -91,7 +91,8 @@ const SelectUI = <T extends string | number = string>({
             `!text-gray-400 hover:!text-gray-600 dark:!text-white hover:dark:!text-gray-300 transition-all duration-300 ease-in-out ${
               state.selectProps.menuIsOpen ? "!rotate-180 !text-green-800" : ""
             }`,
-          clearIndicator: () => "!text-gray-400 hover:!text-gray-600 dark:!text-white hover:dark:!text-gray-300",
+          clearIndicator: () =>
+            "!text-gray-400 hover:!text-gray-600 dark:!text-white hover:dark:!text-gray-300",
           indicatorSeparator: () => "!bg-transparent",
           noOptionsMessage: () => "!text-gray-500 dark:!text-gray-300 !py-4",
         }}
