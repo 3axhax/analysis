@@ -86,7 +86,7 @@ export const AnalysisPage = () => {
             <div className="trail"></div>
           </div>
           <div className="b-border__content p-4 lg:p-8">
-            <h2 className="text-2xl text-center text-gray-900 dark:text-white mb-4">
+            <h2 className="font-light text-2xl text-center text-gray-900 dark:text-white mb-4">
               Введите данные
             </h2>
             <form

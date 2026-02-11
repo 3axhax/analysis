@@ -7,7 +7,6 @@ import {
 import { useInfoModalData } from "@app/providers/infoModalProvider";
 import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
 import { useTranslation } from "react-i18next";
-import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { NavigationUI, NavItem } from "./NavigationUI.tsx";
 import {Laboratory} from "@shared/ui/Icons/Laboratory.tsx";
@@ -43,7 +42,7 @@ export const Navigation = () => {
       path: "#",
       label: "Управление",
       isDropdown: true,
-      iconLink: (<Cog8ToothIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
+      iconLink: (<SettingsIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
   ),
       items: [
         { path: "/admin/analysisType", label: t("pageTitle.analysisType") },
