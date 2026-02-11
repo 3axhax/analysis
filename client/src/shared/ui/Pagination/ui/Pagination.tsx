@@ -29,7 +29,7 @@ export const Pagination = ({
       {pageButton.map((page) => (
         <button
           key={page}
-          className={`bg-orange-600 shadow-sm rounded-lg border-1 border-orange-600 w-[30px] cursor-pointer hover:shadow-gray-500 disabled:cursor-not-allowed transition-colors disabled:bg-orange-300${currentPage === page ? " bg-white  text-orange-600" : " text-white transition-transform hover:scale-110"}`}
+          className={`bg-orange-600 shadow-sm rounded-lg border-1 border-orange-600 w-7 cursor-pointer hover:shadow-gray-500 disabled:cursor-not-allowed transition-colors disabled:bg-orange-300${currentPage === page ? " bg-white  text-orange-600" : " text-white transition-transform hover:scale-110"}`}
           onClick={() => onPageSelect(page)}
         >
           {page}

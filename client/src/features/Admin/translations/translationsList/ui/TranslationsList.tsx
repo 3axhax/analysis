@@ -68,7 +68,7 @@ export const TranslationsList = ({
             <button
               type={"button"}
               onClick={() => handlerEditRecord(row.id)}
-              className="w-6 h-6 text-blue-600 cursor-pointer ml-[10px] hover:text-blue-700 transition-colors"
+              className="w-6 h-6 text-cyan-600 cursor-pointer ml-[10px] hover:text-cyan-800 transition-colors"
             >
               <PencilSquareIcon className="w-5 h-5" />
             </button>

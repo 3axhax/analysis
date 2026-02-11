@@ -38,7 +38,6 @@
     --line: color-mix(in lch, canvasText, transparent 70%);
     --header-height: 2.5rem;
 
-    --secondaryColor: var(--color-green-800);
     --underline-spacing: 3px;
     --underline-height: 1px;
 
