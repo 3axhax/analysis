@@ -49,9 +49,9 @@ export const Modal = ({
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
           <DialogPanel
             transition
-            className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95${className ? ` ${className}` : ``}`}
+            className={`relative transform overflow-hidden rounded-lg bg-white dark:bg-cyan-950 text-left shadow-xl dark:shadow-cyan-600/40 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95${className ? ` ${className}` : ``}`}
           >
-            <div className="bg-white px-4 py-5 sm:p-6 sm:pb-4">
+            <div className="bg-white dark:bg-cyan-950 px-4 py-5 sm:p-6 sm:pb-4">
               <div className="flex">
                 {icon && (
                   <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
@@ -59,7 +59,10 @@ export const Modal = ({
                   </div>
                 )}
                 <div className="text-center w-full">
-                  <DialogTitle as="h3" className="text-xl font-bold mb-5">
+                  <DialogTitle
+                    as="h3"
+                    className="text-xl font-bold dark:text-white mb-5"
+                  >
                     {title}
                   </DialogTitle>
                   <div className="mt-2">{body}</div>
