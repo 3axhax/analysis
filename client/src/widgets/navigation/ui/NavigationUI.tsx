@@ -47,7 +47,10 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
           className={`bg-cyan-600 dark:bg-cyan-950 py-4 lg:py-0 flex flex-col lg:justify-start lg:flex-row lg:inline-flex z-40 lg:bg-transparent fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:px-0 ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}
         >
           {navItems.map((item) => (
-            <li key={item.key} className={"flex justify-stretch w-full m-0"}>
+            <li
+              key={item.key}
+              className={"flex justify-stretch items-center w-full m-0"}
+            >
               {item.isDropdown ? (
                 <>
                   <div
@@ -112,12 +115,12 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
               ) : item.isButton ? (
                 <button
                   className={
-                    "cursor-pointer flex justify-center items-center text-white transition-colors ml-3 lg:ml-0 lg:mr-6"
+                    "cursor-pointer flex justify-center items-center text-white transition-colors h-10 ml-3 lg:ml-0 lg:mr-6 group"
                   }
                   key={item.key}
                   onClick={item.onClick}
                 >
-                  <LoginIcon className="inline-flex h-4 w-4 mr-2" />
+                  <LoginIcon className="inline-flex h-5 w-5 mr-2" />
                   {item.label}
                 </button>
               ) : (
