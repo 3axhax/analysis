@@ -32,6 +32,9 @@ export const AnalysisPointsPage: React.FC = () => {
       ) : null}
       <AnalysisPointsList />
       <AnalysisPointsListPagination />
+        <EditAnalysisPoint
+            className={"my-4"}
+        />
     </div>
   );
 };
