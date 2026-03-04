@@ -42,7 +42,7 @@ export const AnalysisPointsListActionItems = ({
         type={"button"}
         onClick={() => handlerEditRecord(rowId)}
         className={
-          "w-6 h-6 text-cyan-600 cursor-pointer ml-[10px] hover:text-cayn-800 transition-colors"
+          "w-6 h-6 text-cyan-600 cursor-pointer ml-[10px] hover:text-cyan-800 transition-colors"
         }
       >
         <PencilSquareIcon className="w-5 h-5" />
