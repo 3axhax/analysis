@@ -86,9 +86,11 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                         {item.items?.map(
                           (dropdownItem) =>
                             dropdownItem.label && (
-                              <li className={"text-left"}>
+                              <li
+                                className={"text-left"}
+                                key={dropdownItem.path}
+                              >
                                 <Link
-                                  key={dropdownItem.path}
                                   to={dropdownItem.path}
                                   onClick={() => setIsDropdownOpen("")}
                                   className={`group group-hover:text-cyan-950 inline-flex text-white justify-start mx-4 py-1 text-sm font-normal transition-colors`}
