@@ -370,10 +370,6 @@ export class AnalysisPointService {
   async deleteAnalysisPoint(id: number): Promise<boolean> {
     const existingPoint = await this.analysisPointRepository.findByPk(id);
 
-    const deletedCount = await this.analysisPointRepository.destroy({
-      where: { id },
-    });
-
     if (existingPoint) {
       await Promise.all([
         this.translationService.deleteTranslationByParameters({
@@ -396,6 +392,10 @@ export class AnalysisPointService {
         }),
       ]);
     }
+
+    const deletedCount = await this.analysisPointRepository.destroy({
+      where: { id },
+    });
 
     return deletedCount > 0;
   }
