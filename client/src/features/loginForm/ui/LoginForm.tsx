@@ -9,7 +9,7 @@ import {
   selectPendingUser,
 } from "@entities/user";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
-import { InputWithLabel } from "@shared/ui/InputWithLabel";
+import { InputWithLabel } from "@shared/ui";
 import { useTranslation } from "react-i18next";
 
 export const LoginForm = () => {

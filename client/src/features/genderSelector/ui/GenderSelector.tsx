@@ -1,7 +1,6 @@
-import RadioGroup from "@shared/ui/RadioGroup";
+import { RadioGroup, SelectUI } from "@shared/ui";
 import { useAppSelector } from "@shared/store/hooks";
 import { useTranslation } from "react-i18next";
-import SelectUI from "@shared/ui/SelectUI";
 import { GenderType } from "@shared/lib/types";
 import { selectGenderListForSelect, useGenderLoad } from "@entities/gender";
 

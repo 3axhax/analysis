@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { Table, TableData, TableDataRow } from "@shared/ui/Table";
+import { Table, TableData, TableDataRow } from "@shared/ui";
 import {
   DescriptionsListItem,
   selectDescriptionsList,

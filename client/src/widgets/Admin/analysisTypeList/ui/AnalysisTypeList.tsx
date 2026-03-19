@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { Table, TableData, TableDataRow } from "@shared/ui/Table";
+import { Table, TableData, TableDataRow } from "@shared/ui";
 import { selectAdminAnalysisTypeList } from "@entities/adminAnalysisType";
-import { AnalysisTypePointList } from "@widgets/Admin/analysisTypeList/ui/AnalysisTypePointList.tsx";
+import { AnalysisTypePointList } from "@widgets/Admin/analysisTypeList/ui/AnalysisTypePointList";
 
 export const AnalysisTypeList = () => {
   const { t } = useTranslation("entities");

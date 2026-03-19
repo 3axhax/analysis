@@ -10,7 +10,7 @@ import { AnalysisPointsList } from "@widgets/Admin/analysisPointsList";
 import { AnalysisPointsListPagination } from "@features/Admin/analysisPoints/analysisPointsListPagination";
 import { useAppSelector } from "@shared/store/hooks";
 import { EditAnalysisPointModal } from "@features/Admin/analysisPoints/editAnalysisPoint";
-import { AddButton } from "@shared/ui/AddButton.tsx";
+import { AddButton } from "@shared/ui";
 
 export const AnalysisPointsPage: React.FC = () => {
   const { t } = useTranslation("common");

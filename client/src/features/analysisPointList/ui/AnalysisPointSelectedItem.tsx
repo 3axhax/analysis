@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import SelectUI from "@shared/ui/SelectUI.tsx";
+import { SelectUI } from "@shared/ui";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
   addPointData,

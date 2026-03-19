@@ -1,4 +1,4 @@
-import SelectUI from "@shared/ui/SelectUI.tsx";
+import { SelectUI } from "@shared/ui";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAgesListForSelect, useAgesLoad } from "@entities/ages";
 import { useTranslation } from "react-i18next";

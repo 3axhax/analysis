@@ -20,9 +20,8 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GenderType } from "@shared/lib/types";
 import { DropFile } from "@pages/analysis/Dropfile.tsx";
-import { Laboratory } from "@shared/ui/Icons/Laboratory.tsx";
+import { Laboratory, Donwload } from "@shared/ui/Icons";
 import { CheckIcon } from "@heroicons/react/24/outline";
-import { Donwload } from "@shared/ui/Icons/Donwload.tsx";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");

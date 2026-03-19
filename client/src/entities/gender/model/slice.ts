@@ -9,7 +9,7 @@ import Request from "@shared/transport/RestAPI";
 import { HandlerAxiosError } from "@shared/transport/RequestHandlersError";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
-import { RadioOption } from "@shared/ui/RadioGroup";
+import { RadioOption } from "@shared/ui";
 import { GenderType } from "@shared/lib/types";
 
 interface GenderListItem {

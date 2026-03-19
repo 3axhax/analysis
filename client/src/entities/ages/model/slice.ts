@@ -2,7 +2,7 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
-import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
+import { SelectUIOption } from "@shared/ui";
 import {
   AgesListItem,
   AgesState,

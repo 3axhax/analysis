@@ -1,4 +1,4 @@
-import SelectUI from "@shared/ui/SelectUI.tsx";
+import { SelectUI } from "@shared/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks";

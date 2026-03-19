@@ -9,11 +9,13 @@ import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
 import { useTranslation } from "react-i18next";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { NavigationUI, NavItem } from "./NavigationUI.tsx";
-import { Laboratory } from "@shared/ui/Icons/Laboratory.tsx";
-import { Donwload } from "@shared/ui/Icons/Donwload.tsx";
-import { LogoutIcon } from "@shared/ui/Icons/LogoutIcon.tsx";
-import { SettingsIcon } from "@shared/ui/Icons/SettingsIcon.tsx";
-import { ListsIcon } from "@shared/ui/Icons/ListsIcon.tsx";
+import {
+  Donwload,
+  Laboratory,
+  ListsIcon,
+  LogoutIcon,
+  SettingsIcon,
+} from "@shared/ui/Icons";
 
 export const Navigation = () => {
   const { t } = useTranslation("common");

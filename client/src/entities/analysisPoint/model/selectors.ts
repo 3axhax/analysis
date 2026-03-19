@@ -1,6 +1,6 @@
 import { RootState } from "@shared/store";
 import { createSelector } from "@reduxjs/toolkit";
-import { SelectUIOption } from "@shared/ui/SelectUI.tsx";
+import { SelectUIOption } from "@shared/ui";
 import { AnalysisPointLimit } from "@entities/analysisPoint";
 
 export const selectAnalysisPointList = (state: RootState) =>

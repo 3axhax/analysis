@@ -4,7 +4,7 @@ import {
   AnalysisPointLimit,
 } from "@entities/analysisPoint";
 import React from "react";
-import { InputWithLabel } from "@shared/ui/InputWithLabel";
+import { InputWithLabel } from "@shared/ui";
 import { AnalysisPointDataLimitsEditableList } from "./AnalysisPointDataLimitsEditableList";
 
 interface EditAnalysisPointFormProps {

@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next";
-import RadioGroup from "@shared/ui/RadioGroup.tsx";
+import { InputWithLabel, RadioGroup } from "@shared/ui";
 import {
   TranslationLangType,
   TranslationsListItem,
 } from "@entities/translations";
 import React from "react";
-import { InputWithLabel } from "@shared/ui/InputWithLabel";
 
 interface EditTranslationFormProps {
   values: TranslationsListItem;

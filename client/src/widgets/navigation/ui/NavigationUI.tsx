@@ -3,7 +3,7 @@ import { JSX, useState } from "react";
 import { Logo } from "@widgets/logo";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { BurgerButton } from "@widgets/navigation/ui/BurgerButton.tsx";
-import { LoginIcon } from "@shared/ui/Icons/LoginIcon.tsx";
+import { LoginIcon } from "@shared/ui/Icons";
 
 export interface NavItem {
   key: string;

@@ -2,7 +2,7 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 import { SelectAnalysisResultDescriptionData } from "@entities/analysisResult";
 import { useTranslation } from "react-i18next";
 import { ResultDescription } from "@entities/analysisResult";
-import { Table, TableData, TableDataRow } from "@shared/ui/Table";
+import { Table, TableData, TableDataRow } from "@shared/ui";
 
 export const AnalysisDescriptionList = ({
   resultId,

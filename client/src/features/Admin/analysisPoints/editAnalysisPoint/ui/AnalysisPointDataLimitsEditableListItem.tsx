@@ -1,7 +1,7 @@
 import { AnalysisPointLimit } from "@entities/analysisPoint";
 import { AgeSelector } from "@features/ageSelector";
 import { GenderSelector } from "@features/genderSelector";
-import { InputWithLabel } from "@shared/ui/InputWithLabel";
+import { InputWithLabel } from "@shared/ui";
 import { UnitSelector } from "@features/unitSelector";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { GenderType } from "@shared/lib/types";

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { UnitsListItem } from "@entities/units";
 import React from "react";
-import { InputWithLabel } from "@shared/ui/InputWithLabel";
+import { InputWithLabel } from "@shared/ui";
 
 interface EditUnitFormProps {
   values: UnitsListItem;

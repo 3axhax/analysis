@@ -15,7 +15,7 @@ interface RadioGroupProps<T = string> {
   labelClassName?: string;
 }
 
-const RadioGroup = <T = string,>({
+export const RadioGroup = <T = string,>({
   label,
   name,
   options,
@@ -65,5 +65,3 @@ const RadioGroup = <T = string,>({
     </fieldset>
   );
 };
-
-export default RadioGroup;

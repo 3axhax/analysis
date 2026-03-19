@@ -17,7 +17,7 @@ interface SelectUIProps<T = string> {
   className?: string;
 }
 
-const SelectUI = <T extends string | number = string>({
+export const SelectUI = <T extends string | number = string>({
   label,
   name,
   options,
@@ -34,7 +34,6 @@ const SelectUI = <T extends string | number = string>({
     }
   };
 
-  // Находим текущее значение в формате react-select
   const selectedValue =
     options.find((option) => option.value === value) || null;
 
@@ -101,5 +100,3 @@ const SelectUI = <T extends string | number = string>({
     </div>
   );
 };
-
-export default SelectUI;

@@ -1,7 +1,7 @@
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { DescriptionCondition } from "@entities/descriptions";
 import { AnalysisPointsSelector } from "@features/analysisPointsSelector";
-import RadioGroup from "@shared/ui/RadioGroup.tsx";
+import { RadioGroup } from "@shared/ui";
 import { useTranslation } from "react-i18next";
 
 interface DescriptionConditionsEditableListItemProps {

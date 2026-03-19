@@ -5,7 +5,7 @@ import {
   SelectAnalysisResultPending,
   sendAnalysisResultFile,
 } from "@entities/analysisResult";
-import { PDF } from "@shared/ui/Icons/PDF.tsx";
+import { PDF } from "@shared/ui/Icons";
 
 export const DropFile = () => {
   const dispatch = useAppDispatch();

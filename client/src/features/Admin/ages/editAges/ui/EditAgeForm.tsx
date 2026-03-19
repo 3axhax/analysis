@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { AgesListItem } from "@entities/ages";
 import React from "react";
-import { InputWithLabel } from "@shared/ui/InputWithLabel";
+import { InputWithLabel } from "@shared/ui";
 
 interface EditAgeFormProps {
   values: AgesListItem;
