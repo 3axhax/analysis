@@ -24,6 +24,8 @@ export type {
   AnalysisPointState,
   AnalysisPointLimit,
   AnalysisPointGreatItem,
+  AnalysisPointFormatedLimit,
+  AnalysisPointGreatItemFormated,
 } from "./model";
 export {
   useAnalysisPointsLoad,

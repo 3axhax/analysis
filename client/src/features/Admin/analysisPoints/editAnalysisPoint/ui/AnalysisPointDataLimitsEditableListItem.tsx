@@ -1,11 +1,11 @@
 import { AnalysisPointLimit } from "@entities/analysisPoint";
-import { AgeSelector } from "@features/ageSelector";
-import { GenderSelector } from "@features/genderSelector";
 import { InputWithLabel } from "@shared/ui";
 import { UnitSelector } from "@features/unitSelector";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { GenderType } from "@shared/lib/types";
 import React from "react";
+import { AgeMultiSelector } from "@features/ageMultiSelector";
+import { GenderMultiSelector } from "@features/genderMultiSelector";
 
 interface AnalysisPointDataLimitsEditableListItemProps {
   limit: AnalysisPointLimit;
@@ -15,7 +15,7 @@ interface AnalysisPointDataLimitsEditableListItemProps {
     value,
   }: {
     name: keyof AnalysisPointLimit;
-    value: string | number | GenderType;
+    value: string | number | GenderType | string[] | GenderType[];
   }) => void;
 }
 
@@ -27,12 +27,11 @@ export const AnalysisPointDataLimitsEditableListItem = React.memo(
   }: AnalysisPointDataLimitsEditableListItemProps) => {
     return (
       <div className={"flex items-end justify-between line-between"}>
-        <AgeSelector
+        <AgeMultiSelector
           age={limit.age}
           setAge={(value) => editItemHandler({ name: "age", value })}
         />
-        <GenderSelector
-          type={"list"}
+        <GenderMultiSelector
           gender={limit.gender}
           setGender={(value) => editItemHandler({ name: "gender", value })}
         />

@@ -2,7 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@shared/store";
 import Request from "@shared/transport/RestAPI.ts";
 import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
-import { AnalysisPointGreatItem, setPending } from "@entities/analysisPoint";
+import {
+  AnalysisPointFormatedLimit,
+  AnalysisPointGreatItem,
+  AnalysisPointGreatItemFormated,
+  setPending,
+} from "@entities/analysisPoint";
+import { GenderType } from "@shared/lib/types";
 
 export const getAnalysisPointList = createAsyncThunk(
   "analysisPoint/getList",
@@ -48,7 +54,10 @@ export const addNewAnalysisPoint = createAsyncThunk(
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/analysisPoint/add", data);
+        const response = await Request.post(
+          "/analysisPoint/add",
+          formatAnalysisPointLimits(data),
+        );
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -66,7 +75,10 @@ export const editAnalysisPoint = createAsyncThunk(
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/analysisPoint/edit", data);
+        const response = await Request.post(
+          "/analysisPoint/edit",
+          formatAnalysisPointLimits(data),
+        );
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -94,3 +106,23 @@ export const deleteAnalysisPoint = createAsyncThunk(
     }
   },
 );
+
+const formatAnalysisPointLimits = (
+  data: AnalysisPointGreatItem,
+): AnalysisPointGreatItemFormated => {
+  return {
+    ...data,
+    limits: data.limits.reduce((acc, limit) => {
+      limit.age.forEach((age: string) => {
+        limit.gender.forEach((gender: GenderType) => {
+          acc.push({
+            ...limit,
+            age: age,
+            gender: gender,
+          });
+        });
+      });
+      return acc;
+    }, [] as AnalysisPointFormatedLimit[]),
+  };
+};

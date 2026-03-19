@@ -31,4 +31,6 @@ export type {
   AnalysisPointState,
   AnalysisPointLimit,
   AnalysisPointGreatItem,
+  AnalysisPointFormatedLimit,
+  AnalysisPointGreatItemFormated,
 } from "./types";

@@ -1,7 +1,11 @@
 import { RootState } from "@shared/store";
 import { createSelector } from "@reduxjs/toolkit";
 import { SelectUIOption } from "@shared/ui";
-import { AnalysisPointLimit } from "@entities/analysisPoint";
+import {
+  AnalysisPointFormatedLimit,
+  AnalysisPointGreatItem,
+  AnalysisPointLimit,
+} from "@entities/analysisPoint";
 
 export const selectAnalysisPointList = (state: RootState) =>
   state.analysisPoint.list;
@@ -47,7 +51,7 @@ export const selectAnalysisPointLimits = createSelector(
       return parseInt(a.age) > parseInt(b.age) ? 1 : -1;
     });
     return sortLimits.map((limit, i) => {
-      const formatedLimit: AnalysisPointLimit = { ...limit };
+      const formatedLimit: AnalysisPointFormatedLimit = { ...limit };
       if (sortLimits[i + 1] && sortLimits[i + 1].age === limit.age) {
         formatedLimit.skipAge = true;
         if (
@@ -69,4 +73,61 @@ export const selectAnalysisPointsEditAnalysisPoint = createSelector(
   [selectAnalysisPointList, selectAnalysisPointsEditAnalysisPointId],
   (list, editableId) =>
     editableId > 0 ? list.find((point) => point.id === editableId) : undefined,
+);
+
+export const selectAnalysisPointsEditAnalysisPointFormatLimits = createSelector(
+  [selectAnalysisPointsEditAnalysisPoint],
+  (point): AnalysisPointGreatItem => {
+    if (point) {
+      const genderLimits = point.limits.reduce((acc, limit) => {
+        const index = acc.findIndex(
+          (exist: AnalysisPointLimit) =>
+            exist.minValue === limit.minValue &&
+            exist.maxValue === limit.maxValue &&
+            exist.unit === limit.unit &&
+            exist.gender.includes(limit.gender),
+        );
+        if (index !== -1) {
+          acc[index] = {
+            ...acc[index],
+            age: [...acc[index].age, limit.age],
+          };
+        } else {
+          acc.push({
+            ...limit,
+            age: [limit.age],
+            gender: [limit.gender],
+          });
+        }
+        return acc;
+      }, [] as AnalysisPointLimit[]);
+      const limits = genderLimits.reduce((acc, limit) => {
+        const index = acc.findIndex(
+          (exist: AnalysisPointLimit) =>
+            exist.minValue === limit.minValue &&
+            exist.maxValue === limit.maxValue &&
+            exist.unit === limit.unit,
+        );
+        if (index !== -1) {
+          if (limit.age.length === acc[index].age.length) {
+            const age1 = [...limit.age].sort();
+            const age2 = [...acc[index].age].sort();
+
+            if (age1.every((value, i) => value === age2[i])) {
+              acc[index] = {
+                ...acc[index],
+                gender: [...acc[index].gender, ...limit.gender],
+              };
+              return acc;
+            }
+          }
+        }
+        return [...acc, limit];
+      }, [] as AnalysisPointLimit[]);
+      return {
+        ...point,
+        limits: limits,
+      };
+    } else return {} as AnalysisPointGreatItem;
+  },
 );

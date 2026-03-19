@@ -11,7 +11,7 @@ import {
   setEditAnalysisPointId,
 } from "@entities/analysisPoint";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
-import { selectAnalysisPointsEditAnalysisPoint } from "@entities/analysisPoint/model/selectors.ts";
+import { selectAnalysisPointsEditAnalysisPointFormatLimits } from "@entities/analysisPoint/model/selectors.ts";
 
 interface EditAnalysisPointModalProps {
   open: boolean;
@@ -35,7 +35,7 @@ export const EditAnalysisPointModal = ({
   const dispatch = useAppDispatch();
 
   const editableAnalysisPoint = useAppSelector(
-    selectAnalysisPointsEditAnalysisPoint,
+    selectAnalysisPointsEditAnalysisPointFormatLimits,
   );
 
   const [formValue, setFormValue] = useState<AnalysisPointGreatItem>(

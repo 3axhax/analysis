@@ -19,9 +19,9 @@ export const AnalysisPointDataLimitsEditableList = ({
     onChange([
       ...limits,
       {
-        age: "",
+        age: [],
         unit: "",
-        gender: "m",
+        gender: ["m"],
         minValue: 0,
         maxValue: 0,
       },
@@ -39,7 +39,7 @@ export const AnalysisPointDataLimitsEditableList = ({
   }: {
     i: number;
     name: keyof AnalysisPointLimit;
-    value: number | string | GenderType;
+    value: number | string | GenderType | string[] | GenderType[];
   }) => {
     onChange(
       limits.map((limit, index) => {
@@ -56,7 +56,7 @@ export const AnalysisPointDataLimitsEditableList = ({
 
   return (
     <>
-      {limits.length > 0 &&
+      {limits?.length > 0 &&
         limits.map((limit, i) => (
           <AnalysisPointDataLimitsEditableListItem
             key={i}

@@ -1,9 +1,9 @@
 import { GenderType } from "@shared/lib/types";
 
 export interface AnalysisPointLimit {
-  age: string;
+  age: string[];
   unit: string;
-  gender: GenderType;
+  gender: GenderType[];
   minValue: number;
   maxValue: number;
   skipGender?: boolean;
@@ -19,7 +19,18 @@ export interface AnalysisPointGreatItem {
   limits: AnalysisPointLimit[];
 }
 
-export interface AnalysisPointListItem extends AnalysisPointGreatItem {
+export interface AnalysisPointFormatedLimit
+  extends Omit<AnalysisPointLimit, "age" | "gender"> {
+  age: string;
+  gender: GenderType;
+}
+
+export interface AnalysisPointGreatItemFormated
+  extends Omit<AnalysisPointGreatItem, "limits"> {
+  limits: AnalysisPointFormatedLimit[];
+}
+
+export interface AnalysisPointListItem extends AnalysisPointGreatItemFormated {
   units: string[];
 }
 
