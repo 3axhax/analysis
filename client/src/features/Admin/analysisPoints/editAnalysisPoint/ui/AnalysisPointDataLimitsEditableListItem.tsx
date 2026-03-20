@@ -6,9 +6,11 @@ import { GenderType } from "@shared/lib/types";
 import React from "react";
 import { AgeMultiSelector } from "@features/ageMultiSelector";
 import { GenderMultiSelector } from "@features/genderMultiSelector";
+import {arrayCompare} from "@shared/utils";
 
 interface AnalysisPointDataLimitsEditableListItemProps {
   limit: AnalysisPointLimit;
+    totalLimits: number;
   deleteItemHandler: () => void;
   editItemHandler: ({
     name,
@@ -70,11 +72,12 @@ export const AnalysisPointDataLimitsEditableListItem = React.memo(
     const prevLimit = prevProps.limit;
     const nextLimit = nextProps.limit;
     return (
-      prevLimit.age === nextLimit.age &&
-      prevLimit.unit === nextLimit.unit &&
-      prevLimit.gender === nextLimit.gender &&
-      prevLimit.minValue === nextLimit.minValue &&
-      prevLimit.maxValue === nextLimit.maxValue
+        prevProps.totalLimits === nextProps.totalLimits &&
+        arrayCompare(prevLimit.age, nextLimit.age) &&
+        arrayCompare(prevLimit.gender, nextLimit.gender) &&
+        prevLimit.unit === nextLimit.unit &&
+        prevLimit.minValue === nextLimit.minValue &&
+        prevLimit.maxValue === nextLimit.maxValue
     );
   },
 );

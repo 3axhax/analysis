@@ -61,6 +61,7 @@ export const AnalysisPointDataLimitsEditableList = ({
           <AnalysisPointDataLimitsEditableListItem
             key={i}
             limit={limit}
+            totalLimits={limits.length}
             deleteItemHandler={() => deleteItemHandler(i)}
             editItemHandler={({ name, value }) =>
               editItemHandler({ i, name, value })
