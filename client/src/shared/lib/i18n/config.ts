@@ -11,7 +11,7 @@ export const i18nConfig: InitOptions = {
   load: "languageOnly",
 
   backend: {
-    loadPath: `${import.meta.env.VITE_BASE_API_URL}/i18n/{{lng}}/{{ns}}`,
+    loadPath: `${window.location.protocol}//${window.location.hostname}:5050/i18n/{{lng}}/{{ns}}`,
     crossDomain: true,
     withCredentials: true,
     requestOptions: {
