@@ -8,6 +8,7 @@ interface InputWithLabelProps {
   className?: string;
   value?: string | number;
   type?: HTMLInputTypeAttribute;
+  hint?: string;
 }
 
 export const InputWithLabel = ({
@@ -18,6 +19,7 @@ export const InputWithLabel = ({
   className,
   value,
   type = "text",
+    hint = '',
 }: InputWithLabelProps) => {
   const handlerOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
@@ -39,6 +41,7 @@ export const InputWithLabel = ({
       <label className={"form-label"} htmlFor={name}>
         {label}
       </label>
+      {hint && hint !== '' && <span className={"text-sm text-gray-400 self-start ml-5"}>{hint}</span>}
     </div>
   );
 };

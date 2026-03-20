@@ -633,20 +633,20 @@ export const translationInitialData: TranslationCreationAttrs[] = [
     namespace: 'entities',
     module: 'analysisPoint',
     submodule: 'hemoglobin_parsing',
-    value: 'гемоглобин hemoglobin',
+    value: 'гемоглобин_hemoglobin',
   },
   {
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'analysisPoint',
     submodule: 'erythrocyte_parsing',
-    value: 'Эритроциты erythrocyte',
+    value: 'эритроциты_erythrocyte',
   },
   {
     lang: LangValue.RU,
     namespace: 'entities',
     module: 'analysisPoint',
     submodule: 'hematocrit_parsing',
-    value: 'hematocrit Гематокрит',
+    value: 'hematocrit_гематокрит',
   },
 ];

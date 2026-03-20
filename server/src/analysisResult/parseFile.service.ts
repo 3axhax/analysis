@@ -43,11 +43,12 @@ export class ParseFileService {
         this.pointsList.forEach((point) => {
           const referenceList = (
             point.parsingWords !== ''
-              ? point.parsingWords.split(/\s+/)
+              ? point.parsingWords.split('_')
               : [point.translationRu, point.translationEn]
           )
             .map((r) => r.trim().toLowerCase())
             .filter((r) => r !== '');
+          console.log(referenceList);
           referenceList.forEach((reference) => {
             if (line.toLowerCase().includes(reference)) {
               let value = this._checkLineForValue({

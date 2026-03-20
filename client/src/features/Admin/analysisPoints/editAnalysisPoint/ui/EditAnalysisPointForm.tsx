@@ -64,12 +64,13 @@ export const EditAnalysisPointForm = ({
       <InputWithLabel
         label={"Ключевые слова для парсинга"}
         name={"parsingWords"}
-        placeholder={"Hemoglobin Гемоглобин HGB"}
+        placeholder={"Hemoglobin_Гемоглобин_HGB"}
         onChange={(value) => {
           handlerInput({ name: "parsingWords", value });
         }}
-        className={"justify-between"}
+        className={"justify-between flex flex-col"}
         value={values.parsingWords}
+        hint={"Фразы и слова для парсинга разделяются по знаку нижнее подчёркивание \"_\""}
       />
       <AnalysisPointDataLimitsEditableList
         onChange={(value) => {
