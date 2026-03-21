@@ -15,4 +15,4 @@ ENV WATCHPACK_POLLING=true
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["sh", "/app/client/entrypoint.sh"]
