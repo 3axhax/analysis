@@ -14,6 +14,9 @@ import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.mod
 export interface AnalysisPointCreationAttrs {
   name: string;
   id?: number;
+  translationRu?: string;
+  translationEn?: string;
+  translationParsing?: string;
 }
 
 @Table({
@@ -38,6 +41,27 @@ export class AnalysisPoint extends Model<
     allowNull: false,
   })
   declare name: string;
+
+  @Column({
+    type: DataType.STRING(255),
+    unique: true,
+    allowNull: false,
+  })
+  declare translationRu: string;
+
+  @Column({
+    type: DataType.STRING(255),
+    unique: true,
+    allowNull: false,
+  })
+  declare translationEn: string;
+
+  @Column({
+    type: DataType.TEXT,
+    unique: true,
+    allowNull: false,
+  })
+  declare translationParsing: string;
 
   @AfterSync
   static async addInitialData() {

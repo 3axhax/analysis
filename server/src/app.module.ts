@@ -39,6 +39,8 @@ import { UsersSessions } from './users/usersSessions/usersSessions.model';
 import { AuthGuard } from './auth/auth.guard';
 import { TranslationModule } from './translation/translation.module';
 import { Translation } from './translation/translation.model';
+import { MigrationsService } from './migrations/migrations.service';
+import { MigrationsAnalysisPoint } from './migrations/migrations.analysisPoint';
 
 @Module({
   imports: [
@@ -94,6 +96,8 @@ import { Translation } from './translation/translation.model';
   controllers: [AppController],
   providers: [
     AppService,
+    MigrationsService,
+    MigrationsAnalysisPoint,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
