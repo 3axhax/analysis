@@ -67,7 +67,7 @@ export const AnalysisPointsFilters = () => {
           handlerInput({ name: "translationEn", value });
         }}
         className={"justify-between"}
-        value={formValue.name}
+        value={formValue.translationEn}
       />
       <button className={"btn p-2"}>
         <MagnifyingGlassIcon
