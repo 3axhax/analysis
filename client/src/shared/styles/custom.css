@@ -1,27 +1,27 @@
 .b-border {
-    position: absolute;
-    inset: 0;
-    clip-path: inset(0 0 0 0 round calc(var(--border-radius) * 1px));
-    border-radius: calc(var(--border-radius) * 1px);
-    background: var(--border);
-    z-index: -1;
-    border: 0;
-    container-type: inline-size;
-    transition:
-            clip-path var(1s),
-            -webkit-clip-path var(1s);
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 0 0 0 round calc(var(--border-radius) * 1px));
+  border-radius: calc(var(--border-radius) * 1px);
+  background: var(--border);
+  z-index: -1;
+  border: 0;
+  container-type: inline-size;
+  transition:
+    clip-path var(1s),
+    -webkit-clip-path var(1s);
 }
 
 .trail {
-    width: calc(var(--trail-size) * 1cqmin);
-    aspect-ratio: 2 / 1;
-    position: absolute;
-    background: radial-gradient(
-            100% 100% at right,
-            var(--accent, red),
-            transparent 50%
-    );
-    offset-path: border-box;
-    offset-anchor: 100% 50%;
-    animation: journey var(--speed, 6s) infinite linear;
+  width: calc(var(--trail-size) * 1cqmin);
+  aspect-ratio: 2 / 1;
+  position: absolute;
+  background: radial-gradient(
+    100% 100% at right,
+    var(--accent, red),
+    transparent 50%
+  );
+  offset-path: border-box;
+  offset-anchor: 100% 50%;
+  animation: journey var(--speed, 6s) infinite linear;
 }

@@ -98,9 +98,34 @@ export class AnalysisPointService {
   async getAnalysisPointByQuery(
     parameters: GetAnalysisPointListQueryDto,
   ): Promise<AnalysisPointsListResponse> {
+    const whereCondition = {};
+    if (parameters.filters.name && parameters.filters.name !== '') {
+      whereCondition['name'] = { [Op.like]: `%${parameters.filters.name}%` };
+    }
+    if (
+      parameters.filters.translationRu &&
+      parameters.filters.translationRu !== ''
+    ) {
+      whereCondition['translationRu'] = {
+        [Op.like]: `%${parameters.filters.translationRu}%`,
+      };
+    }
+    if (
+      parameters.filters.translationEn &&
+      parameters.filters.translationEn !== ''
+    ) {
+      whereCondition['translationEn'] = {
+        [Op.like]: `%${parameters.filters.translationEn}%`,
+      };
+    }
+
+    console.log(parameters);
+    console.log(whereCondition);
+
     const { count, rows } = await this.analysisPointRepository.findAndCountAll({
       offset: (parameters.currentPage - 1) * parameters.recordPerPage,
       limit: parameters.recordPerPage,
+      where: whereCondition,
       order: [['id', 'ASC']],
     });
 

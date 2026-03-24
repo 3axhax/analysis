@@ -11,6 +11,7 @@ import { AnalysisPointsListPagination } from "@features/Admin/analysisPoints/ana
 import { useAppSelector } from "@shared/store/hooks";
 import { EditAnalysisPointModal } from "@features/Admin/analysisPoints/editAnalysisPoint";
 import { AddButton } from "@shared/ui";
+import { AnalysisPointsFilters } from "@features/Admin/analysisPoints/analysisPointsFilters/ui/AnalysisPointsFilters.tsx";
 
 export const AnalysisPointsPage: React.FC = () => {
   const { t } = useTranslation("common");
@@ -49,6 +50,7 @@ export const AnalysisPointsPage: React.FC = () => {
       {error !== "" ? (
         <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
       ) : null}
+      <AnalysisPointsFilters />
       <AnalysisPointsList />
       <AnalysisPointsListPagination />
       <AddButton

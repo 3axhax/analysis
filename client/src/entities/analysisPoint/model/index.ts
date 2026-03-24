@@ -4,6 +4,7 @@ export {
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,
+  setFilters,
 } from "./slice";
 
 export {

@@ -30,4 +30,10 @@ export const AnalysisPointsReducers = {
     state.editAnalysisPointId =
       action.payload && action.payload > 0 ? action.payload : 0;
   },
+  setFilters: (
+    state: WritableDraft<AnalysisPointState>,
+    action: PayloadAction<Record<string, string>>,
+  ) => {
+    state.filters = action.payload;
+  },
 };

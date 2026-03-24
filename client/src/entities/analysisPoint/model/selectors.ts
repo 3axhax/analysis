@@ -77,7 +77,7 @@ export const selectAnalysisPointsEditAnalysisPoint = createSelector(
 
 export const selectAnalysisPointsEditAnalysisPointFormatLimits = createSelector(
   [selectAnalysisPointsEditAnalysisPoint],
-  (point): AnalysisPointGreatItem | undefined=> {
+  (point): AnalysisPointGreatItem | undefined => {
     if (point) {
       const genderLimits = point.limits.reduce((acc, limit) => {
         const index = acc.findIndex(

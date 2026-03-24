@@ -9,6 +9,7 @@ export {
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,
+  setFilters,
   selectAnalysisPointList,
   selectAnalysisPointListForSelect,
   selectAnalysisPointPending,

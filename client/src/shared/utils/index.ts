@@ -1,1 +1,1 @@
-export {arrayCompare} from './arrayCompare'
+export { arrayCompare } from "./arrayCompare";
