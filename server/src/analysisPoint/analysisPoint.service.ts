@@ -100,14 +100,14 @@ export class AnalysisPointService {
   ): Promise<AnalysisPointsListResponse> {
     const whereCondition = {};
     if (parameters.filters.name && parameters.filters.name !== '') {
-      whereCondition['name'] = { [Op.like]: `%${parameters.filters.name}%` };
+      whereCondition['name'] = { [Op.iLike]: `%${parameters.filters.name}%` };
     }
     if (
       parameters.filters.translationRu &&
       parameters.filters.translationRu !== ''
     ) {
       whereCondition['translationRu'] = {
-        [Op.like]: `%${parameters.filters.translationRu}%`,
+        [Op.iLike]: `%${parameters.filters.translationRu}%`,
       };
     }
     if (
@@ -115,7 +115,7 @@ export class AnalysisPointService {
       parameters.filters.translationEn !== ''
     ) {
       whereCondition['translationEn'] = {
-        [Op.like]: `%${parameters.filters.translationEn}%`,
+        [Op.iLike]: `%${parameters.filters.translationEn}%`,
       };
     }
 
