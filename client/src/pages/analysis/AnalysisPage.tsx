@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle";
 import { GenderSelector } from "@features/genderSelector";
 import { AgeSelector } from "@features/ageSelector";
@@ -34,6 +34,8 @@ export const AnalysisPage = () => {
   const age = useAppSelector(SelectAnalysisResultPrepareDataAge);
   const gender = useAppSelector(SelectAnalysisResultPrepareDataGender);
 
+  const [error, setError] = useState<string>("");
+
   useEffect(() => {
     dispatch(resetPrepareData());
     dispatch(resetSelectedPoints());
@@ -46,6 +48,12 @@ export const AnalysisPage = () => {
     }
   }, [dispatch, navigate, redirectTo]);
 
+  useEffect(() => {
+    if (age || gender) {
+      setError("");
+    }
+  }, [age, gender]);
+
   const handlerAgeSelect = (value: string) => {
     dispatch(setPrepareDataAge(value));
   };
@@ -56,7 +64,11 @@ export const AnalysisPage = () => {
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(sendAnalysisData());
+    if (age && gender) {
+      dispatch(sendAnalysisData());
+    } else {
+      setError("Не заполнен пол или возраст");
+    }
   };
 
   return (
@@ -120,6 +132,11 @@ export const AnalysisPage = () => {
                 />
                 <AgeSelector age={age} setAge={handlerAgeSelect} />
               </div>
+              {error !== "" ? (
+                <div className={"bg-red-300 mb-2 p-2 rounded-lg text-center"}>
+                  {error}
+                </div>
+              ) : null}
               <AnalysisPointList />
 
               <button

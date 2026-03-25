@@ -37,10 +37,13 @@ export const AnalysisPointSelectedItem = ({
   const [pointValue, setPointValue] = useState<string>("");
 
   useEffect(() => {
-    if (pointData) {
+    if (
+      pointData &&
+      parseFloat(pointValue) !== parseFloat(pointData.value.toString())
+    ) {
       setPointValue(pointData.value.toString());
     }
-  }, [pointData]);
+  }, [pointData, pointValue]);
 
   useEffect(() => {
     if (
@@ -66,21 +69,20 @@ export const AnalysisPointSelectedItem = ({
       dispatch(removePointData(analysisPoint.name));
     }
   };
-  /*
-  useEffect(() => {
-    if (analysisPoint && analysisPoint.units.length > 0) {
-      setUnits(analysisPoint.units[0]);
-    }
-  }, [analysisPoint]);*/
 
   const handlerOnInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setPointValue(e.target.value.replace(",", "."));
+    const value = parseFloat(e.target.value.replace(",", "."));
+    setPointValue(
+      !isNaN(value)
+        ? e.target.value.replace(",", ".").replace(/[^\d.]/g, "")
+        : "",
+    );
     if (analysisPoint) {
       dispatch(
         addPointData({
           name: analysisPoint.name,
-          value: parseFloat(e.target.value.replace(",", ".")),
+          value: !isNaN(value) ? value : 0,
           units,
         }),
       );
@@ -92,7 +94,7 @@ export const AnalysisPointSelectedItem = ({
       dispatch(
         addPointData({
           name: analysisPoint.name,
-          value: parseFloat(pointValue),
+          value: parseInt(pointValue),
           units: value,
         }),
       );
