@@ -101,4 +101,23 @@ export class AnalysisPoint extends Model<
 
   @BelongsToMany(() => AnalysisPointUnits, () => AnalysisPointsUnits)
   declare units: AnalysisPointUnits[];
+
+  async removeAllUnits(): Promise<void> {
+    await AnalysisPointsUnits.destroy({
+      where: {
+        pointId: this.id,
+      },
+    });
+  }
+
+  async addUnits(unitsIds: number[]): Promise<void> {
+    const records = unitsIds.map((unitsId) => ({
+      pointId: this.id,
+      unitsId,
+    }));
+
+    await AnalysisPointsUnits.bulkCreate(records, {
+      ignoreDuplicates: true,
+    });
+  }
 }

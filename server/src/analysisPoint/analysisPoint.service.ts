@@ -21,6 +21,7 @@ import { AgesService } from '../ages/ages.service';
 import { GenderService } from '../gender/gender.service';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 import { Op } from 'sequelize';
+import { unique } from 'sequelize-typescript/dist/shared/array';
 
 export interface AnalysisPointWithTranslation {
   id: number;
@@ -34,7 +35,6 @@ export interface AnalysisPointWithTranslation {
 export class AnalysisPointService {
   namespace: string = 'entities';
   module: string = 'analysisPoint';
-  parsingSufix = '_parsing';
   constructor(
     @InjectModel(AnalysisPoint)
     private analysisPointRepository: typeof AnalysisPoint,
@@ -180,6 +180,27 @@ export class AnalysisPointService {
       }),
     );
   }
+  async _addUnitsToPointFromLimits({
+    limits,
+    pointId,
+  }: {
+    limits: AnalysisPointLimit[];
+    pointId: number;
+  }): Promise<void> {
+    const existPoint = await this.analysisPointRepository.findByPk(pointId);
+    if (existPoint) {
+      await existPoint.removeAllUnits();
+      const unitsIds = await Promise.all(
+        limits.map(async (limit) => {
+          const unit = await this.unitsService.getAnalysisPointUnitsByName(
+            limit.unit,
+          );
+          return unit ? unit.id : 0;
+        }),
+      );
+      await existPoint.addUnits(unique(unitsIds).filter((id) => id > 0));
+    }
+  }
 
   async _getLimitsForPointId(pointId: number): Promise<AnalysisPointLimit[]> {
     const [max, min] = await Promise.all([
@@ -273,6 +294,10 @@ export class AnalysisPointService {
           })
         : Promise.resolve(null),
     ]);
+    await this._addUnitsToPointFromLimits({
+      limits: parameters.limits,
+      pointId: point.id,
+    });
     await this._addLimitsToPoint({
       limits: parameters.limits,
       pointId: point.id,
@@ -354,6 +379,11 @@ export class AnalysisPointService {
         pointId: existingPoint.id,
       }),
     ]);
+
+    await this._addUnitsToPointFromLimits({
+      limits: parameters.limits,
+      pointId: existingPoint.id,
+    });
 
     await this._addLimitsToPoint({
       limits: parameters.limits,
