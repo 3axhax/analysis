@@ -83,7 +83,7 @@ export class AnalysisPointService {
           ...point.dataValues,
           translationRu: ru ? ru.value : '',
           translationEn: en ? en.value : '',
-          parsingWords: point.translationParsing,
+          parsingWords: point.translationParsing ?? '',
         };
       }),
     );
