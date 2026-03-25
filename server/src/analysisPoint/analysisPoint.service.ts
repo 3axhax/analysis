@@ -119,9 +119,6 @@ export class AnalysisPointService {
       };
     }
 
-    console.log(parameters);
-    console.log(whereCondition);
-
     const { count, rows } = await this.analysisPointRepository.findAndCountAll({
       offset: (parameters.currentPage - 1) * parameters.recordPerPage,
       limit: parameters.recordPerPage,

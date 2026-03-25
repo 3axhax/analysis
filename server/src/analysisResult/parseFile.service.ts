@@ -48,7 +48,6 @@ export class ParseFileService {
           )
             .map((r) => r.trim().toLowerCase())
             .filter((r) => r !== '');
-          console.log(referenceList);
           referenceList.forEach((reference) => {
             if (line.toLowerCase().includes(reference)) {
               let value = this._checkLineForValue({

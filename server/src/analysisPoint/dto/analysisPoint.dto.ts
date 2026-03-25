@@ -81,8 +81,12 @@ export class AddNewAnalysisPointQueryDto {
       age: limit.age ?? '',
       unit: limit.unit ?? '',
       gender: limit.gender ?? '',
-      minValue: limit.minValue ? parseInt(limit.minValue) : 0,
-      maxValue: limit.maxValue ? parseInt(limit.maxValue) : 0,
+      minValue: limit.minValue
+        ? parseFloat(limit.minValue.replaceAll(',', '.'))
+        : 0,
+      maxValue: limit.maxValue
+        ? parseFloat(limit.maxValue.replaceAll(',', '.'))
+        : 0,
     }));
   })
   @IsArray()

@@ -104,9 +104,6 @@ export class TranslationService {
     const findExistParameters = { ...parameters };
     delete findExistParameters.value;
 
-    console.log(findExistParameters);
-    console.log(parameters);
-
     const translation = await this.translationRepository.findOne({
       where: findExistParameters,
     });
