@@ -45,6 +45,9 @@ export const selectAnalysisPointLimits = createSelector(
     )
       return [];
     const sortLimits = [...analysisPoint.limits].sort((a, b) => {
+      if (a.unit !== b.unit) {
+        return a.unit.localeCompare(b.unit);
+      }
       if (a.age.slice(-1) !== b.age.slice(-1))
         return a.age.slice(-1).localeCompare(b.age.slice(-1));
       if (isNaN(parseInt(a.age))) return 1;
