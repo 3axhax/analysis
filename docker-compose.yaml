@@ -18,7 +18,7 @@ services:
 
   postgres_analysis:
     container_name: postgresAnalysis
-    image: postgres:12
+    image: postgres:18
     env_file:
       - ./.postgres.env
     ports:
