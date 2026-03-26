@@ -1,6 +1,5 @@
 import { AnalysisType } from '../analysisType/analysisType.model';
 import {
-  AfterSync,
   Column,
   DataType,
   ForeignKey,
@@ -8,7 +7,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { AnalysisPoint } from './analysisPoint.model';
-import { analysisTypePointInitialData } from './analysisType-Point.initialData';
 
 export interface AnalysisTypePointCreationAttrs {
   typeId: number;
@@ -36,16 +34,4 @@ export class AnalysisTypePoint extends Model<
     allowNull: false,
   })
   declare pointId: number;
-
-  @AfterSync
-  static async addInitialData() {
-    try {
-      const count = await AnalysisTypePoint.count();
-      if (count === 0) {
-        await AnalysisTypePoint.bulkCreate(analysisTypePointInitialData);
-      }
-    } catch (error) {
-      console.error('Error in AnalysisTypePoint.addInitialData:', error);
-    }
-  }
 }
