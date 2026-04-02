@@ -36,7 +36,7 @@ export const DescriptionsListActionItems = ({ rowId }: { rowId: number }) => {
       <button
         type={"button"}
         className={
-          "text-blue-600 cursor-pointer ml-[10px] flex items-center hover:text-blue-800 transition-colors"
+          "text-cyan-600 cursor-pointer ml-[10px] hover:text-cyan-800 flex items-center transition-colors"
         }
         onClick={() => handlerEditRecord(rowId)}
       >
@@ -46,7 +46,7 @@ export const DescriptionsListActionItems = ({ rowId }: { rowId: number }) => {
       <button
         type={"button"}
         className={
-          " text-red-500 cursor-pointer ml-[10px] flex items-center hover:text-red-800 transition-colors"
+          "text-red-600 cursor-pointer ml-[10px] hover:text-red-700 flex items-center transition-colors"
         }
         onClick={() => handlerDeleteRecord(rowId)}
       >
