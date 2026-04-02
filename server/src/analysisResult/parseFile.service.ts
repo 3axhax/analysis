@@ -53,6 +53,7 @@ export class ParseFileService {
               let value = this._checkLineForValue({
                 line,
                 reference: reference,
+                skipRef: true,
               });
               if (value === 0 && lines[index + 1]) {
                 value = this._checkLineForValue({
