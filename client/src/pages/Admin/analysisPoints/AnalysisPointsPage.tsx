@@ -36,7 +36,7 @@ export const AnalysisPointsPage: React.FC = () => {
   }, [editAnalysisPointId]);
 
   return (
-    <div>
+    <>
       <div className={"relative"}>
         <h1 className={"p-4 text-3xl"}>{title}</h1>
         <AddButton
@@ -54,13 +54,13 @@ export const AnalysisPointsPage: React.FC = () => {
       <AnalysisPointsList />
       <AnalysisPointsListPagination />
       <AddButton
-        className={"my-4"}
+        className={"my-4 xl:sticky xl:bottom-5 xl:mr-[5%] xl:ml-auto flex"}
         title={tFeatures("editDialog.add")}
         onClick={() => {
           setOpenModal(true);
         }}
       />
       <EditAnalysisPointModal open={openModal} setOpen={setOpenModal} />
-    </div>
+    </>
   );
 };
