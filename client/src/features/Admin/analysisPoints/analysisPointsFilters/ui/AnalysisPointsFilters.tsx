@@ -36,7 +36,7 @@ export const AnalysisPointsFilters = () => {
 
   return (
     <form
-      className={"flex space-x-2 m-auto max-w-[90%]"}
+      className={"flex items-center justify-center space-x-2 m-auto max-w-[90%] mb-5"}
       onSubmit={handlerSubmit}
     >
       <InputWithLabel
