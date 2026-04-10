@@ -10,9 +10,7 @@ import {
 import { AnalysisResultDescriptionCondition } from '../../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
 
 interface AnalysisResultDescriptionsFilters {
-  name?: string;
-  translationRu?: string;
-  translationEn?: string;
+  analysisPoint?: number;
 }
 
 function isValidTranslationsFilters(
@@ -20,13 +18,14 @@ function isValidTranslationsFilters(
 ): obj is AnalysisResultDescriptionsFilters {
   if (typeof obj !== 'object' || obj === null) return false;
 
-  const allowedKeys = ['name', 'translationRu', 'translationEn'];
+  const allowedKeys = ['analysisPoint'];
   const objKeys = Object.keys(obj);
 
   return objKeys.every(
     (key) =>
       allowedKeys.includes(key) &&
       (typeof (obj as Record<string, unknown>)[key] === 'string' ||
+        typeof (obj as Record<string, unknown>)[key] === 'number' ||
         (obj as Record<string, unknown>)[key] === undefined),
   );
 }

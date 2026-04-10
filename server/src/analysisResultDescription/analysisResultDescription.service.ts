@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op, Order } from 'sequelize';
 import { AnalysisResultDescription } from './analysisResultDescription.model';
 import { AnalysisPointMinValueService } from '../analysisPointMinValue/analysisPointMinValue.service';
 import { AnalysisPointMaxValueService } from '../analysisPointMaxValue/analysisPointMaxValue.service';
@@ -87,18 +88,36 @@ export class AnalysisResultDescriptionService {
   getAnalysisResultDescriptionsByQuery = async (
     parameters: GetAnalysisResultDescriptionsListQueryDto,
   ) => {
+    const condition = {
+      offset: (parameters.currentPage - 1) * parameters.recordPerPage,
+      limit: parameters.recordPerPage,
+      order: [['id', 'ASC']] as Order,
+      include: {
+        model: AnalysisResultDescriptionCondition,
+        include: [AnalysisPoint],
+      },
+      distinct: true,
+      attributes: ['id', 'description_ru'],
+    };
+    if (
+      parameters.filters?.analysisPoint &&
+      parameters.filters.analysisPoint > 0
+    ) {
+      const sequelize = AnalysisResultDescription.sequelize;
+      if (sequelize) {
+        condition['where'] = {
+          id: {
+            [Op.in]: sequelize.literal(`
+            (SELECT DISTINCT "descriptionId" 
+             FROM "analysisResultDescriptionCondition" 
+             WHERE "pointId" = ${parameters.filters.analysisPoint})
+          `),
+          },
+        };
+      }
+    }
     const { count, rows } =
-      await this.analysisResultDescriptionRepository.findAndCountAll({
-        offset: (parameters.currentPage - 1) * parameters.recordPerPage,
-        limit: parameters.recordPerPage,
-        order: [['id', 'ASC']],
-        include: {
-          model: AnalysisResultDescriptionCondition,
-          include: [AnalysisPoint],
-        },
-        distinct: true,
-        attributes: ['id', 'description_ru'],
-      });
+      await this.analysisResultDescriptionRepository.findAndCountAll(condition);
 
     return {
       totalRecord: count,

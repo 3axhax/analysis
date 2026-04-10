@@ -43,6 +43,7 @@ export const DescriptionConditionsEditableListItem = ({
             value: { id: value, name: "" },
           })
         }
+        label={"Параметр"}
       />
       <RadioGroup<string>
         label={tEntities("descriptions.conditionStatus")}

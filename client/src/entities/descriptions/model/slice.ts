@@ -52,6 +52,12 @@ export const descriptionsSlice = createSlice({
       state.editDescriptionId =
         action.payload && action.payload > 0 ? action.payload : 0;
     },
+    setFilters: (
+      state: WritableDraft<DescriptionsState>,
+      action: PayloadAction<Record<string, number>>,
+    ) => {
+      state.filters = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -105,8 +111,13 @@ export const descriptionsSlice = createSlice({
   },
 });
 
-export const { setPending, setCurrentPage, resetError, setEditDescriptionId } =
-  descriptionsSlice.actions;
+export const {
+  setPending,
+  setCurrentPage,
+  resetError,
+  setEditDescriptionId,
+  setFilters,
+} = descriptionsSlice.actions;
 
 export const selectDescriptionsList = (state: RootState) =>
   state.descriptions.list;

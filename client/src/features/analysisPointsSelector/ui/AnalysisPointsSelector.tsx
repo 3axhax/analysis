@@ -9,11 +9,13 @@ import {
 interface AnalysisPointsSelectorProps {
   analysisPoint: number;
   setAnalysisPoint: (value: number) => void;
+  label?: string;
 }
 
 export const AnalysisPointsSelector = ({
   analysisPoint,
   setAnalysisPoint,
+  label,
 }: AnalysisPointsSelectorProps) => {
   const AnalysisPointsOptions = useAppSelector(
     selectAnalysisPointListForSelect,
@@ -23,7 +25,7 @@ export const AnalysisPointsSelector = ({
 
   return (
     <SelectUI<number>
-      label={"Параметр"}
+      label={label}
       name={"analysisPoint"}
       options={AnalysisPointsOptions.map((item) => ({
         ...item,

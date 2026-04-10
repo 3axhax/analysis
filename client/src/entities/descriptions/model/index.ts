@@ -12,6 +12,7 @@ export {
   selectConditionsDescriptionById,
   selectEditDescriptionId,
   selectEditDescription,
+  setFilters,
 } from "./slice";
 export {
   getDescriptionsList,

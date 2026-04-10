@@ -11,6 +11,7 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 import { DescriptionsListPagination } from "@features/Admin/descriptions/descriptionsListPagination";
 import { AddButton } from "@shared/ui";
 import { EditDescriptionModal } from "@features/Admin/descriptions/editDescription";
+import { DescriptionsFilters } from "@features/Admin/descriptions/descriptionsFilters";
 
 export const DescriptionsPage: React.FC = () => {
   const { t } = useTranslation("common");
@@ -46,6 +47,7 @@ export const DescriptionsPage: React.FC = () => {
       {error !== "" ? (
         <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
       ) : null}
+      <DescriptionsFilters />
       <DescriptionsList />
       <DescriptionsListPagination />
       <AddButton

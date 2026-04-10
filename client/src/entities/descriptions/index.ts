@@ -16,6 +16,7 @@ export {
   editDescription,
   selectEditDescriptionId,
   selectEditDescription,
+  setFilters,
 } from "./model";
 export type {
   DescriptionsState,
