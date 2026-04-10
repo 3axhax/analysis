@@ -48,6 +48,7 @@ export class AnalysisPointService {
   async getAll() {
     const points = await this.analysisPointRepository.findAll({
       include: { all: true },
+      order: [['translationRu', 'ASC']],
     });
     return points.map((point) => {
       return {
