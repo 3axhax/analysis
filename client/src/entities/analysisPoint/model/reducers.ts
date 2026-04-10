@@ -9,6 +9,12 @@ export const AnalysisPointsReducers = {
   ) => {
     state.pending = action.payload;
   },
+  setLoaded: (
+    state: WritableDraft<AnalysisPointState>,
+    action: PayloadAction<boolean>,
+  ) => {
+    state.loaded = action.payload;
+  },
   setCurrentPage: (
     state: WritableDraft<AnalysisPointState>,
     action: PayloadAction<number>,

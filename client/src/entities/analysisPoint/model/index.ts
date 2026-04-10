@@ -1,6 +1,7 @@
 export {
   analysisPointSlice,
   setPending,
+  setLoaded,
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,

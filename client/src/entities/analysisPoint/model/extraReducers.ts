@@ -6,20 +6,24 @@ import {
   AnalysisPointFormatedLimit,
   AnalysisPointGreatItem,
   AnalysisPointGreatItemFormated,
+  setLoaded,
   setPending,
 } from "@entities/analysisPoint";
 import { GenderType } from "@shared/lib/types";
 
 export const getAnalysisPointList = createAsyncThunk(
   "analysisPoint/getList",
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
-    if (!state.analysisPoint.loaded) {
+    if (!state.analysisPoint.loaded && !state.analysisPoint.pending) {
+      dispatch(setPending(true));
       try {
         const response = await Request.get("/analysisPoint");
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
+      } finally {
+        dispatch(setPending(false));
       }
     }
   },
@@ -63,6 +67,7 @@ export const addNewAnalysisPoint = createAsyncThunk(
         HandlerAxiosError(e);
       } finally {
         dispatch(setPending(false));
+        dispatch(setLoaded(false));
       }
     }
   },
@@ -84,6 +89,7 @@ export const editAnalysisPoint = createAsyncThunk(
         HandlerAxiosError(e);
       } finally {
         dispatch(setPending(false));
+        dispatch(setLoaded(false));
       }
     }
   },
@@ -102,6 +108,7 @@ export const deleteAnalysisPoint = createAsyncThunk(
         HandlerAxiosError(e);
       } finally {
         dispatch(setPending(false));
+        dispatch(setLoaded(false));
       }
     }
   },

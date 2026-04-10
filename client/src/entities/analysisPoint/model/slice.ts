@@ -53,7 +53,6 @@ export const analysisPointSlice = createSlice({
           if (action.payload) {
             state.list = action.payload.rows;
             state.totalRecord = action.payload.totalRecord;
-            state.loaded = true;
           }
           state.pending = false;
         },
@@ -79,6 +78,7 @@ export const analysisPointSlice = createSlice({
 
 export const {
   setPending,
+  setLoaded,
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,

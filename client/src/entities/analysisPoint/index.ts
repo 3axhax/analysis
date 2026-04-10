@@ -6,6 +6,7 @@ export {
   editAnalysisPoint,
   deleteAnalysisPoint,
   setPending,
+  setLoaded,
   setCurrentPage,
   resetError,
   setEditAnalysisPointId,
