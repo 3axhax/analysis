@@ -29,6 +29,7 @@ export const DescriptionConditionsEditableListItem = ({
   const conditionStatusOptions = [
     { value: "0", label: t(`analysisDescriptionConditionStatus.0`) },
     { value: "1", label: t(`analysisDescriptionConditionStatus.1`) },
+    { value: "-1", label: t(`analysisDescriptionConditionStatus.-1`) },
   ];
 
   console.log(condition);
