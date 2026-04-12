@@ -53,6 +53,8 @@ export class AnalysisResultDescriptionService {
             })
           ) {
             pointStatus[data.pointId] = StatusValue.HIGH;
+          } else {
+            pointStatus[data.pointId] = StatusValue.NORMAL;
           }
         },
       ),
