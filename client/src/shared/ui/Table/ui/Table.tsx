@@ -40,7 +40,7 @@ export const Table = ({ tableData, className }: TableProps) => {
           tableData.rows.map((row: TableDataRow[], index: number) => (
             <tr
               key={index}
-              className="border-t border-gray-300 hover:bg-cyan-50"
+              className="border-t border-gray-300 hover:bg-cyan-50 first:border-t-0"
             >
               {row.map((cell: TableDataRow, cellIndex: number) => (
                 <td
