@@ -21,7 +21,7 @@ export const Table = ({ tableData, className }: TableProps) => {
   const { t } = useTranslation("common");
   return (
     <table
-      className={`m-auto border border-cyan-800${className ? ` ${className}` : ""}`}
+      className={`m-auto lg:w-9/12 border border-cyan-800${className ? ` ${className}` : ""}`}
     >
       <thead>
         <tr className="bg-cyan-800 text-white">
