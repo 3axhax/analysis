@@ -6,13 +6,16 @@ import { useAnalysisResultsLoad } from "@entities/analysisResult/analysisResults
 import { AnalysisDescriptionList } from "@widgets/analysisDescriptionList";
 import { AnalysisPointDataList } from "@widgets/analysisPointdataList";
 import { useTranslation } from "react-i18next";
+import {CheckIcon, LinkIcon} from "@heroicons/react/24/outline";
+import {useState} from "react";
 
 export const AnalysisResultPage = () => {
   const { resultId } = useParams();
+  const [copied, setCopied] = useState(false);
   const { t } = useTranslation();
   const { t: tEntities } = useTranslation("entities");
 
-  const title = `Результат расшифровки ${resultId}`;
+  const title = `Результат расшифровки`;
   useDocumentTitle(title);
 
   useAnalysisResultsLoad(resultId || "");
@@ -20,11 +23,25 @@ export const AnalysisResultPage = () => {
     SelectAnalysisResultData(state, resultId || ""),
   );
 
+  const handleCopy = async () => {
+    const currentUrl = window.location.href;
+    await navigator.clipboard.writeText(currentUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="app">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 className="text-4xl font-light text-gray-900 dark:text-white mb-4">
           {title}
+          <button type={'button'} onClick={handleCopy} title="Скопировать ссылку на результатврасшифровки ${resultId}" className={'size-6 cursor-pointer ml-2'}>
+            {copied ? (
+                <CheckIcon className="size-6 inline-flex mx-1 text-green-600" />
+            ) : (
+                <LinkIcon className={'size-6 inline-flex mx-1 text-gray-500 hover:text-gray-700 transition-colors'} />
+            )}
+          </button>
         </h1>
       </div>
       {analysisResult ? (
