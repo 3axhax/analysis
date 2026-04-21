@@ -32,7 +32,7 @@ export const AnalysisResultPage = () => {
 
   return (
     <div className="app">
-      <div className="mb-8">
+      <div className="mb-4">
         <h1 className="text-4xl font-light text-gray-900 dark:text-white mb-4">
           {title}
           <button type={'button'} onClick={handleCopy} title="Скопировать ссылку на результатврасшифровки ${resultId}" className={'size-6 cursor-pointer ml-2'}>
