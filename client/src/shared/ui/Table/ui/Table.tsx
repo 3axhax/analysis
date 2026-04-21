@@ -28,7 +28,7 @@ export const Table = ({ tableData, className }: TableProps) => {
           {tableData.header.map((th) => (
             <th
               key={th.name}
-              className={`border-r border-white px-4 py-3 text-start text-sm font-medium${th.className ? ` ${th.className}` : ``}`}
+              className={`border-r border-white last:border-r-cyan-800 px-4 py-3 text-start text-sm font-medium${th.className ? ` ${th.className}` : ``}`}
             >
               {th.label}
             </th>
