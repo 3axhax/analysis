@@ -12,7 +12,7 @@ export const AnalysisResultPage = () => {
   const { t } = useTranslation();
   const { t: tEntities } = useTranslation("entities");
 
-  const title = `Результат ${resultId}`;
+  const title = `Результат расшифровки ${resultId}`;
   useDocumentTitle(title);
 
   useAnalysisResultsLoad(resultId || "");

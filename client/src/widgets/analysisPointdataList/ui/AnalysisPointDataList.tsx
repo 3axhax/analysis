@@ -35,8 +35,8 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
         name: "value",
         data: (
           <span className={cn({
-            'font-normal': row.pointDataStatus === StatusValue.NORMAL,
-            'font-semibold': row.pointDataStatus === StatusValue.HIGH || row.pointDataStatus === StatusValue.LOW
+            'font-normal flex items-baseline': row.pointDataStatus === StatusValue.NORMAL,
+            'font-semibold flex items-baseline': row.pointDataStatus === StatusValue.HIGH || row.pointDataStatus === StatusValue.LOW
           })}>
             {`${row.value} ${tEntities(`units.${row.pointUnit.name}`)}`}
             <AnalysisPointDataListStatus row={row} />{" "}
