@@ -16,7 +16,6 @@ export const AnalysisPointDataListStatus = ({row}: { row: PointData }) => {
         >
       {row.pointDataStatus === StatusValue.NORMAL
           ? <CheckIcon className="size-4 inline-flex mx-1 color-green-600" />
-
           : row.pointDataStatus === StatusValue.HIGH
               ? <ArrowUpIcon className={'size-4 inline-flex mx-1 color-green-600'} />
               : row.pointDataStatus === StatusValue.LOW
