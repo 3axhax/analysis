@@ -11,7 +11,7 @@ export const AnalysisPointDataListStatus = ({row}: { row: PointData }) => {
         <span
             className={cn({
                 'text-green-600': row.pointDataStatus === StatusValue.NORMAL,
-                'text-red-600': row.pointDataStatus === StatusValue.HIGH || row.pointDataStatus === StatusValue.LOW
+                'text-red-600 font-normal': row.pointDataStatus === StatusValue.HIGH || row.pointDataStatus === StatusValue.LOW
             })}
         >
       {row.pointDataStatus === StatusValue.NORMAL
