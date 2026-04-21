@@ -29,7 +29,7 @@ export const AnalysisResultPage = () => {
       </div>
       {analysisResult ? (
         <div className="mx-auto text-left">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+          <div className="bg-white dark:bg-blue-950 rounded-xl p-8 shadow-lg">
             <div className={"flex gap-3 mb-2 border-b-1 border-gray-300"}>
               <div>
                 {t("gender")}:{" "}

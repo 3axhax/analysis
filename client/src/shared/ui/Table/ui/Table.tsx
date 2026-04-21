@@ -21,14 +21,14 @@ export const Table = ({ tableData, className }: TableProps) => {
   const { t } = useTranslation("common");
   return (
     <table
-      className={`m-auto border border-gray-300${className ? ` ${className}` : ""}`}
+      className={`m-auto border border-cyan-800${className ? ` ${className}` : ""}`}
     >
       <thead>
-        <tr className="bg-gray-800 text-white">
+        <tr className="bg-cyan-800 text-white">
           {tableData.header.map((th) => (
             <th
               key={th.name}
-              className={`border-r border-gray-600 px-4 py-3 text-center text-sm font-medium${th.className ? ` ${th.className}` : ``}`}
+              className={`border-r border-white px-4 py-3 text-start text-sm font-medium${th.className ? ` ${th.className}` : ``}`}
             >
               {th.label}
             </th>
@@ -40,7 +40,7 @@ export const Table = ({ tableData, className }: TableProps) => {
           tableData.rows.map((row: TableDataRow[], index: number) => (
             <tr
               key={index}
-              className="border-t border-gray-300 hover:bg-gray-50"
+              className="border-t border-gray-300 hover:bg-cyan-50"
             >
               {row.map((cell: TableDataRow, cellIndex: number) => (
                 <td

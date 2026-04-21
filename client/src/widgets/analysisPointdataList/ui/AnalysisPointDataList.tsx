@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { SelectAnalysisResultPointData } from "@entities/analysisResult";
 import { Table, TableData, TableDataRow } from "@shared/ui";
 import { PointData } from "@entities/analysisResult";
+import { AnalysisPointDataListStatus } from "@widgets/analysisPointdataList/ui/AnalysisPointDataListStatus.tsx";
 
 export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
-  const { t } = useTranslation("common");
   const { t: tWidgets } = useTranslation("widgets");
   const { t: tEntities } = useTranslation("entities");
   const pointDataList = useAppSelector((state) =>
@@ -22,6 +22,7 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
   };
 
   if (pointDataList?.length > 0) {
+    console.log(pointDataList);
     tableData.rows = pointDataList.map((row: PointData) => [
       { name: "name", data: tEntities(`analysisPoint.${row.point.name}`) },
       {
@@ -30,7 +31,12 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
       },
       {
         name: "value",
-        data: `${row.value} ${tEntities(`units.${row.pointUnit.name}`)} ${t(`analysisDescriptionConditionStatus.${row.pointDataStatus}`)}`,
+        data: (
+          <span>
+            {`${row.value} ${tEntities(`units.${row.pointUnit.name}`)}`}
+            <AnalysisPointDataListStatus row={row} />{" "}
+          </span>
+        ),
       },
     ]);
   }
