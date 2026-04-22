@@ -97,7 +97,7 @@ export class ParseFileService {
               this.pointsList.forEach((point) => {
                 const referenceList = (
                   point.parsingWords !== ''
-                    ? point.parsingWords.split(/\s+/)
+                    ? point.parsingWords.split('_')
                     : [point.translationRu, point.translationEn]
                 )
                   .map((r) => r.trim().toLowerCase())
