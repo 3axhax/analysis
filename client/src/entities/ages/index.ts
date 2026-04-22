@@ -18,3 +18,4 @@ export {
 } from "./model";
 export type { AgesListItem, AgesState } from "./model";
 export { useAgesLoad, useAgesWithTranslateLoad } from "./ages.hooks.ts";
+export { convertDaysToAge } from "./utils";

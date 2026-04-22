@@ -12,6 +12,7 @@ import {
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { convertDaysToAge } from "@entities/ages";
 
 export const AnalysisResultPage = () => {
   const { resultId } = useParams();
@@ -65,7 +66,7 @@ export const AnalysisResultPage = () => {
             <span className={"text-gray-600"}>{t("gender")}: </span>
             {tEntities(`gender.${analysisResult.result.Gender.name}`)}
             <span className={"text-gray-600"}>{t("age")}: </span>
-            {tEntities(`ages.${analysisResult.result.Age.name}`)}
+            {convertDaysToAge(analysisResult.result.ageInDays)}
           </div>
 
           {analysisResult.result.analysisResultPointData.length > 0 && (

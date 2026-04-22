@@ -13,13 +13,13 @@ export const AgeInDaysSelector = ({
   const [ageInMonth, setAgeInMonth] = useState<number>(ageInDays);
   const [ageInYear, setAgeInYear] = useState<number>(ageInDays);
 
-  const ageInMonthOptions: SelectUIOption<number>[] = Array.from(
-    { length: 12 },
-    (_, i) => ({
+  const ageInMonthOptions: SelectUIOption<number>[] = [
+    { label: "< 1", value: 1 },
+    ...Array.from({ length: 11 }, (_, i) => ({
       label: `${i + 1}`,
       value: (i + 1) * 30,
-    }),
-  );
+    })),
+  ];
 
   const ageInYearOptions: SelectUIOption<number>[] = Array.from(
     { length: 100 },

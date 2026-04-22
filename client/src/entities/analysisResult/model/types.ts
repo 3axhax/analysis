@@ -40,6 +40,7 @@ export interface PointData {
 interface Result {
   Age: { id: number; name: string };
   Gender: { id: number; name: string };
+  ageInDays: number;
   analysisResultPointData: PointData[];
 }
 
