@@ -11,6 +11,7 @@ import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
 import { SelectUIOption } from "@shared/ui";
 import { setSelectedPoint } from "@entities/analysisResult";
+import { SelectMultiUIOption } from "@shared/ui/SelectUI.tsx";
 
 interface AnalysisPointItem {
   id: number;
@@ -115,4 +116,18 @@ export const selectAnalysisTypeListForSelect = createSelector(
       value: item.id,
       label: item.name,
     })),
+);
+
+export const selectAnalysisTypeListForMultiSelect = createSelector(
+  [selectAnalysisTypeList],
+  (agesList): SelectMultiUIOption<number>[] => {
+    return agesList.map((item) => ({
+      label: item.name,
+      options: item.analysisPoint.map((point) => ({
+        value: point.id,
+        label: point.name,
+        group: item.name,
+      })),
+    }));
+  },
 );
