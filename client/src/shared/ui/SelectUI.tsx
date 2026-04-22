@@ -1,4 +1,5 @@
 import Select from "react-select";
+import { JSX } from "react";
 
 export interface SelectUIOption<T = string> {
   value: T;
@@ -13,7 +14,7 @@ export interface SelectMultiUIOption<T = string> {
 }
 
 interface SelectUIProps<T = string> {
-  label?: string;
+  label?: string | JSX.Element;
   name: string;
   options: SelectUIOption<T>[];
   value: T;

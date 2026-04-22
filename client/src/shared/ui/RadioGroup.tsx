@@ -31,7 +31,7 @@ export const RadioGroup = <T = string,>({
     >
       <label
         id={`${name}-label`}
-        className={`text-sm font-medium mr-6 text-gray-700 dark:text-gray-100 ${labelClassName ? " " + labelClassName : ""}`}
+        className={`text-lg font-medium mr-2 text-gray-700 dark:text-gray-100 ${labelClassName ? " " + labelClassName : ""}`}
       >
         {label}
         {required && <span className="required-asterisk">*</span>}

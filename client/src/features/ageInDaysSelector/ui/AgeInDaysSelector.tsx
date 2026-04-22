@@ -1,5 +1,7 @@
 import { SelectUI, SelectUIOption } from "@shared/ui";
 import { useState } from "react";
+import { Baby } from "@shared/ui/Icons/Baby.tsx";
+import { Quest } from "@shared/ui/Icons/Quest.tsx";
 
 interface AgeSelectorProps {
   ageInDays: number;
@@ -42,25 +44,42 @@ export const AgeInDaysSelector = ({
   };
 
   return (
-    <div>
-      <SelectUI<number>
-        label={"Возраст в месяцах"}
-        name={"ageInMonth"}
-        options={ageInMonthOptions}
-        value={ageInMonth}
-        onChange={selectMonthHendler}
-        placeholder="Выберите возраст в месяцах"
-        className="flex-grow"
-      />
-      <SelectUI<number>
-        label={"Возраст в годах"}
-        name={"ageInYear"}
-        options={ageInYearOptions}
-        value={ageInYear}
-        onChange={selectYearHendler}
-        placeholder="Выберите возраст в годах"
-        className="flex-grow"
-      />
+    <div className={"flex flex-col"}>
+      <span
+        className={"text-lg font-medium text-gray-700 mb-1 dark:text-gray-100 "}
+      >
+        Введите возраст
+      </span>
+      <div className={"flex flex-col gap-2 lg:flex-row lg:gap-4"}>
+        <SelectUI<number>
+          label={
+            <>
+              В месяцах для детей до 1 года{" "}
+              <Baby className={"size-5 -mt-1 ml-1 inline-flex"} />
+            </>
+          }
+          name={"ageInMonth"}
+          options={ageInMonthOptions}
+          value={ageInMonth}
+          onChange={selectMonthHendler}
+          placeholder="Выберите возраст в месяцах"
+          className="flex-grow"
+        />
+        <SelectUI<number>
+          label={
+            <>
+              В годах для детей старше 1 года и взрослых{" "}
+              <Quest className={"size-4 -mt-1 ml-1 inline-flex"} />
+            </>
+          }
+          name={"ageInYear"}
+          options={ageInYearOptions}
+          value={ageInYear}
+          onChange={selectYearHendler}
+          placeholder="Выберите возраст в годах"
+          className="flex-grow"
+        />
+      </div>
     </div>
   );
 };
