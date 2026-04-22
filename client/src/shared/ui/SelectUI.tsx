@@ -4,6 +4,12 @@ export interface SelectUIOption<T = string> {
   value: T;
   label: string;
   disabled?: boolean;
+  group?: string;
+}
+
+export interface SelectMultiUIOption<T = string> {
+  label: string;
+  options: SelectUIOption<T>[];
 }
 
 interface SelectUIProps<T = string> {
