@@ -51,7 +51,7 @@ export interface AnalysisResult {
 
 export interface PreparedData {
   gender: GenderType;
-  age: string;
+  ageInDays: number;
   pointData: Record<string, PreparePointData>;
 }
 

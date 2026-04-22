@@ -12,8 +12,8 @@ export const SelectAnalysisResultSelectedList = (state: RootState) =>
 export const SelectAnalysisResultRedirectTo = (state: RootState) =>
   state.analysisResult.redirectTo;
 
-export const SelectAnalysisResultPrepareDataAge = (state: RootState) =>
-  state.analysisResult.preparedData.age;
+export const SelectAnalysisResultPrepareDataAgeInDays = (state: RootState) =>
+  state.analysisResult.preparedData.ageInDays;
 
 export const SelectAnalysisResultPrepareDataGender = (state: RootState) =>
   state.analysisResult.preparedData.gender;

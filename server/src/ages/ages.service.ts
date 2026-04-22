@@ -34,6 +34,19 @@ export class AgesService {
     });
   }
 
+  async getAgeByDays(ageInDays: number): Promise<Age | null> {
+    return this.agesRepository.findOne({
+      where: {
+        intervalDayStart: {
+          [Op.lte]: ageInDays,
+        },
+        intervalDayEnd: {
+          [Op.gte]: ageInDays,
+        },
+      },
+    });
+  }
+
   async getAgesByQuery(
     parameters: GetAgesListQueryDto,
   ): Promise<AgesListResponse> {

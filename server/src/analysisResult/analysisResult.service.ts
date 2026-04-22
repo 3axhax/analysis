@@ -46,18 +46,18 @@ export class AnalysisResultService {
     private analysisPointMaxValueService: AnalysisPointMaxValueService,
   ) {}
   saveResult = async ({
-    age: ageName,
+    ageInDays: ageInDays,
     gender: genderName,
     pointData,
     user,
   }: {
-    age: string;
+    ageInDays: number;
     gender: string;
     pointData: { name: string; value: number; units: string }[];
     user: User | undefined;
   }): Promise<SaveResultResponse> => {
     const resultId = crypto.randomBytes(20).toString('hex');
-    const age = await this.agesService.getAgeByName(ageName);
+    const age = await this.agesService.getAgeByDays(ageInDays);
     if (!age) {
       return { error: 'Invalid age' };
     }
@@ -69,6 +69,7 @@ export class AnalysisResultService {
     const result: AnalysisResult = await this.analysisResultRepository.create({
       resultId,
       ageId: age.id,
+      ageInDays: ageInDays,
       genderId: gender.id,
       userId: user ? user.id : null,
     });

@@ -26,16 +26,16 @@ export class AnalysisResultController {
   ) {}
   @Post('/save')
   async saveResult(
-    @Body('age') age: string,
+    @Body('ageInDays') ageInDays: number,
     @Body('gender') gender: string,
     @Body('pointData') pointData: [],
     @User() user: UserModel | undefined,
   ): Promise<SaveResultResponse> {
-    if (!age || !gender) {
+    if (!ageInDays || !gender) {
       return { error: 'No required parameters: age, gender' };
     }
     return this.AnalysisResultService.saveResult({
-      age,
+      ageInDays,
       gender,
       pointData,
       user,

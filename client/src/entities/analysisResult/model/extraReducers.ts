@@ -12,11 +12,11 @@ export const sendAnalysisData = createAsyncThunk(
       try {
         dispatch(setPending(true));
         const gender = state.analysisResult.preparedData.gender;
-        const age = state.analysisResult.preparedData.age;
+        const ageInDays = state.analysisResult.preparedData.ageInDays;
         const pointData = state.analysisResult.preparedData.pointData;
         const response = await Request.post("/result/save", {
           gender,
-          age,
+          ageInDays,
           pointData: Object.values(pointData),
         });
         dispatch(setPending(false));

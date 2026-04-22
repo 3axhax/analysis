@@ -23,11 +23,11 @@ export const AnalysisResultReducers = {
   ) => {
     state.preparedData.gender = action.payload;
   },
-  setPrepareDataAge: (
+  setPrepareDataAgeInDays: (
     state: WritableDraft<AnalysisResultState>,
-    action: PayloadAction<string>,
+    action: PayloadAction<number>,
   ) => {
-    state.preparedData.age = action.payload;
+    state.preparedData.ageInDays = action.payload;
   },
   addPointData: (
     state: WritableDraft<AnalysisResultState>,

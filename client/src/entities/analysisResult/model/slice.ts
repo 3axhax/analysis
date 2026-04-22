@@ -16,7 +16,7 @@ import { ErrorActionType } from "@shared/lib/types";
 
 export const initialPrepareData: PreparedData = {
   gender: "m",
-  age: "",
+  ageInDays: 0,
   pointData: {},
 };
 
@@ -102,7 +102,7 @@ export const analysisResultSlice = createSlice({
 
 export const {
   setPrepareDataGender,
-  setPrepareDataAge,
+  setPrepareDataAgeInDays,
   resetPrepareData,
   addPointData,
   removePointData,

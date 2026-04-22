@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useDocumentTitle from "@shared/hooks/useDocumentTitle";
 import { GenderSelector } from "@features/genderSelector";
-import { AgeSelector } from "@features/ageSelector";
 import { AnalysisPointList } from "@features/analysisPointList";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
 import {
@@ -9,11 +8,11 @@ import {
   resetPrepareData,
   resetSelectedPoints,
   SelectAnalysisResultPending,
-  SelectAnalysisResultPrepareDataAge,
+  SelectAnalysisResultPrepareDataAgeInDays,
   SelectAnalysisResultPrepareDataGender,
   SelectAnalysisResultRedirectTo,
   sendAnalysisData,
-  setPrepareDataAge,
+  setPrepareDataAgeInDays,
   setPrepareDataGender,
 } from "@entities/analysisResult";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +21,7 @@ import { GenderType } from "@shared/lib/types";
 import { DropFile } from "@pages/analysis/Dropfile.tsx";
 import { Laboratory, Donwload } from "@shared/ui/Icons";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { AgeInDaysSelector } from "@features/ageInDaysSelector";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");
@@ -31,7 +31,7 @@ export const AnalysisPage = () => {
 
   const pending = useAppSelector(SelectAnalysisResultPending);
   const redirectTo = useAppSelector(SelectAnalysisResultRedirectTo);
-  const age = useAppSelector(SelectAnalysisResultPrepareDataAge);
+  const ageInDays = useAppSelector(SelectAnalysisResultPrepareDataAgeInDays);
   const gender = useAppSelector(SelectAnalysisResultPrepareDataGender);
 
   const [error, setError] = useState<string>("");
@@ -49,13 +49,13 @@ export const AnalysisPage = () => {
   }, [dispatch, navigate, redirectTo]);
 
   useEffect(() => {
-    if (age || gender) {
+    if (ageInDays || gender) {
       setError("");
     }
-  }, [age, gender]);
+  }, [ageInDays, gender]);
 
-  const handlerAgeSelect = (value: string) => {
-    dispatch(setPrepareDataAge(value));
+  const handlerAgeSelect = (value: number) => {
+    dispatch(setPrepareDataAgeInDays(value));
   };
 
   const handlerGenderSelect = (value: GenderType) => {
@@ -64,7 +64,7 @@ export const AnalysisPage = () => {
 
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (age && gender) {
+    if (ageInDays && gender) {
       dispatch(sendAnalysisData());
     } else {
       setError("Не заполнен пол или возраст");
@@ -130,7 +130,10 @@ export const AnalysisPage = () => {
                   gender={gender}
                   setGender={handlerGenderSelect}
                 />
-                <AgeSelector age={age} setAge={handlerAgeSelect} />
+                <AgeInDaysSelector
+                  ageInDays={ageInDays}
+                  setAgeInDays={handlerAgeSelect}
+                />
               </div>
               {error !== "" ? (
                 <div className={"bg-red-300 mb-2 p-2 rounded-lg text-center"}>
