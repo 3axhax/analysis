@@ -96,11 +96,17 @@ export const AnalysisPointGroupSelect = () => {
   };
 
   return (
-    <div style={{ width: "500px", margin: "50px auto" }}>
-      <label htmlFor={"analysisPoints"}>Параметры анализов:</label>
+    <div className={"w-full m-auto mb-8"}>
+      <label
+        className={"text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"}
+        htmlFor={"analysisPoints"}
+      >
+        Параметры анализов для ввода и корректировки вручную
+      </label>
       <div style={{ position: "relative" }}>
         <Select<SelectUIOption<number>, true>
           name={"analysisPoints"}
+          menuPortalTarget={document.body}
           isMulti
           options={groupedOptions}
           value={selectedOptions}
@@ -150,27 +156,15 @@ export const AnalysisPointGroupSelect = () => {
 
         {/* Кастомный индикатор выбранных элементов */}
         <div
-          style={{
-            position: "absolute",
-            top: 0,
-            right: "20px",
-            bottom: 0,
-            display: "flex",
-            alignItems: "center",
-            padding: "0 12px",
-            pointerEvents: "none",
-            backgroundColor: "transparent",
-          }}
+          className={
+            "absolute top-0 bottom-0 right-5 px-3 py-0 pointer-events-none bg-transparent flex items-center"
+          }
         >
           {selectedOptions.length === 0 ? null : (
             <span
-              style={{
-                backgroundColor: "#e8f0fe",
-                padding: "4px 12px",
-                borderRadius: "8px",
-                fontSize: "14px",
-                fontWeight: "500",
-              }}
+              className={
+                "bg-cyan-600 text-white py-1 px-3 rounded-md font-medium text-sm"
+              }
             >
               Выбрано: {selectedOptions.length}
             </span>
