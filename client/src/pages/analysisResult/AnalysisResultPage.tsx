@@ -6,8 +6,12 @@ import { useAnalysisResultsLoad } from "@entities/analysisResult/analysisResults
 import { AnalysisDescriptionList } from "@widgets/analysisDescriptionList";
 import { AnalysisPointDataList } from "@widgets/analysisPointdataList";
 import { useTranslation } from "react-i18next";
-import {CheckIcon, LinkIcon, ExclamationCircleIcon} from "@heroicons/react/24/outline";
-import {useState} from "react";
+import {
+  CheckIcon,
+  LinkIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 export const AnalysisResultPage = () => {
   const { resultId } = useParams();
@@ -53,40 +57,47 @@ export const AnalysisResultPage = () => {
       </h1>
       {analysisResult ? (
         <div className="mx-auto mb-8 w-10/12 bg-white dark:bg-blue-950 rounded-xl p-8 shadow-xl text-left">
-            <div className={"flex gap-3 py-2 border-1 border-cyan-800 justify-center"}>
-              <span className={'text-gray-600'}>{t("gender")}:{" "}</span>
-                {tEntities(`gender.${analysisResult.result.Gender.name}`)}
-                <span className={'text-gray-600'}>{t("age")}:{" "}</span>
-                  {tEntities(`ages.${analysisResult.result.Age.name}`)}
-            </div>
+          <div
+            className={
+              "flex gap-3 py-2 border-1 border-cyan-800 justify-center"
+            }
+          >
+            <span className={"text-gray-600"}>{t("gender")}: </span>
+            {tEntities(`gender.${analysisResult.result.Gender.name}`)}
+            <span className={"text-gray-600"}>{t("age")}: </span>
+            {tEntities(`ages.${analysisResult.result.Age.name}`)}
+          </div>
 
-            {analysisResult.result.analysisResultPointData.length > 0 && (
-              <AnalysisPointDataList resultId={analysisResult.resultId} />
-            )}
-            {analysisResult.descriptions.length > 0 && (
-                <>
-                  <h2 className={'text-xl my-6 text-center'}>Интерпретация</h2>
+          {analysisResult.result.analysisResultPointData.length > 0 && (
+            <AnalysisPointDataList resultId={analysisResult.resultId} />
+          )}
+          {analysisResult.descriptions.length > 0 && (
+            <>
+              <h2 className={"text-xl my-6 text-center"}>Интерпретация</h2>
 
-                  <div className="w-full overflow-hidden bg-orange-600 py-3">
-                    <div className="animate-[scroll_25s_linear_infinite] whitespace-nowrap text-white">
-                      <span className="mx-4 font-bold">
-                          <ExclamationCircleIcon className={'size-5 inline-flex mr-2'}/>
-                          Внимание!
-                      </span>
-                      <span className="mx-4">
-                        Данная расшифровка носит исключительно ознакомительный характер.
-                      </span>
-                      <span className="mx-4">
-                          Не является медицинским диагнозом.
-                      </span>
-                      <span className="mx-4">
-                          Не заменяет прием медицинского специалиста.
-                      </span>
-                    </div>
-                  </div>
-                  <AnalysisDescriptionList resultId={analysisResult.resultId}/>
-                </>
-            )}
+              <div className="w-full overflow-hidden bg-orange-600 py-3">
+                <div className="animate-[scroll_25s_linear_infinite] whitespace-nowrap text-white">
+                  <span className="mx-4 font-bold">
+                    <ExclamationCircleIcon
+                      className={"size-5 inline-flex mr-2"}
+                    />
+                    Внимание!
+                  </span>
+                  <span className="mx-4">
+                    Данная расшифровка носит исключительно ознакомительный
+                    характер.
+                  </span>
+                  <span className="mx-4">
+                    Не является медицинским диагнозом.
+                  </span>
+                  <span className="mx-4">
+                    Не заменяет прием медицинского специалиста.
+                  </span>
+                </div>
+              </div>
+              <AnalysisDescriptionList resultId={analysisResult.resultId} />
+            </>
+          )}
         </div>
       ) : null}
     </div>
