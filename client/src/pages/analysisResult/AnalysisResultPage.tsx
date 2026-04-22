@@ -76,7 +76,7 @@ export const AnalysisResultPage = () => {
               <h2 className={"text-xl my-6 text-center"}>Интерпретация</h2>
 
               <div className="w-full overflow-hidden bg-orange-600 py-3">
-                <div className="animate-[scroll_25s_linear_infinite] whitespace-nowrap text-white">
+                <div className="animate-[scroll_25s_linear_infinite] transition-all whitespace-nowrap text-white">
                   <span className="mx-4 font-bold">
                     <ExclamationCircleIcon
                       className={"size-5 inline-flex mr-2"}
