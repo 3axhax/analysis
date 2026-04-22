@@ -21,7 +21,7 @@ export const Table = ({ tableData, className }: TableProps) => {
   const { t } = useTranslation("common");
   return (
     <table
-      className={`m-auto lg:w-9/12 border border-cyan-800${className ? ` ${className}` : ""}`}
+      className={`m-auto w-full border border-cyan-800${className ? ` ${className}` : ""}`}
     >
       <thead>
         <tr className="bg-cyan-800 text-white">
@@ -45,7 +45,7 @@ export const Table = ({ tableData, className }: TableProps) => {
               {row.map((cell: TableDataRow, cellIndex: number) => (
                 <td
                   key={cell.name}
-                  className={`px-4 py-3 text-sm text-gray-900${cellIndex + 1 < Object.keys(row).length ? ` border-r border-gray-300` : ``}${cell.className ? ` ${cell.className}` : ``}`}
+                  className={`px-3 py-2 text-sm text-gray-900${cellIndex + 1 < Object.keys(row).length ? ` border-r border-gray-300` : ``}${cell.className ? ` ${cell.className}` : ``}`}
                 >
                   {cell.data}
                 </td>
