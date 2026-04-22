@@ -15,6 +15,7 @@ import { User } from '../users/users.model';
 export interface AnalysisResultAttrs {
   resultId: string;
   ageId: number;
+  ageInDays?: number;
   genderId: number;
   userId?: number | null;
 }
@@ -43,6 +44,12 @@ export class AnalysisResult extends Model<AnalysisResult, AnalysisResultAttrs> {
     allowNull: false,
   })
   declare ageId: number;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  declare ageInDays: number;
 
   @ForeignKey(() => Gender)
   @Column({

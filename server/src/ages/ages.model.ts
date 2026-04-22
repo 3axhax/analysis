@@ -3,6 +3,8 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 export interface AgesCreationAttrs {
   id?: number;
   name: string;
+  intervalDayStart: number;
+  intervalDayEnd: number;
 }
 @Table({
   tableName: 'ages',
@@ -23,4 +25,16 @@ export class Age extends Model<Age, AgesCreationAttrs> {
     allowNull: false,
   })
   declare name: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  declare intervalDayStart: number;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  declare intervalDayEnd: number;
 }

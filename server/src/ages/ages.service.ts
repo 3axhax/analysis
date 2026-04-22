@@ -82,6 +82,8 @@ export class AgesService {
 
     const age = await this.agesRepository.create({
       name: parameters.name,
+      intervalDayStart: 0,
+      intervalDayEnd: 0,
     });
     if (!age) {
       throw new HttpException('Error in DB', HttpStatus.INTERNAL_SERVER_ERROR);
