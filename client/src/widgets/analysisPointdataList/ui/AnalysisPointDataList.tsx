@@ -5,7 +5,7 @@ import { Table, TableData, TableDataRow } from "@shared/ui";
 import { PointData } from "@entities/analysisResult";
 import { AnalysisPointDataListStatus } from "@widgets/analysisPointdataList/ui/AnalysisPointDataListStatus.tsx";
 import cn from "classnames";
-import {StatusValue} from "@entities/analysisResult/model/types.ts";
+import { StatusValue } from "@entities/analysisResult/model/types.ts";
 
 export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
   const { t: tWidgets } = useTranslation("widgets");
@@ -24,7 +24,6 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
   };
 
   if (pointDataList?.length > 0) {
-    console.log(pointDataList);
     tableData.rows = pointDataList.map((row: PointData) => [
       { name: "name", data: tEntities(`analysisPoint.${row.point.name}`) },
       {
@@ -34,12 +33,17 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
       {
         name: "value",
         data: (
-          <span className={cn({
-            'font-normal flex items-baseline': row.pointDataStatus === StatusValue.NORMAL,
-            'font-bold flex items-baseline': row.pointDataStatus === StatusValue.HIGH || row.pointDataStatus === StatusValue.LOW
-          })}>
-            {`${row.value} ${tEntities(`units.${row.pointUnit.name}`)}`}
-            <AnalysisPointDataListStatus row={row} />{" "}
+          <span
+            className={cn({
+              "font-normal flex items-baseline":
+                row.pointDataStatus === StatusValue.NORMAL,
+              "font-bold flex items-baseline":
+                row.pointDataStatus === StatusValue.HIGH ||
+                row.pointDataStatus === StatusValue.LOW,
+            })}
+          >
+            {`${row.value} ${tEntities(`units.${row.pointUnit.name}`)}`}&nbsp;
+            <AnalysisPointDataListStatus status={row.pointDataStatus} />{" "}
           </span>
         ),
       },

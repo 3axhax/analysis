@@ -87,19 +87,19 @@ export const AnalysisPage = () => {
         </p>
         <ul className={"text-left mb-4"}>
           <li>
-            <CheckIcon className="inline h-4 w-4 text-gray-700 dark:text-white" />{" "}
+            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
             минимальные физические нагрузки в течение суток;
           </li>
           <li>
-            <CheckIcon className="inline h-4 w-4 text-gray-700 dark:text-white" />{" "}
+            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
             не принимать алкоголь за трое суток;
           </li>
           <li>
-            <CheckIcon className="inline h-4 w-4 text-gray-700 dark:text-white" />{" "}
+            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
             не курить за пару часов;
           </li>
           <li>
-            <CheckIcon className="inline h-4 w-4 text-gray-700 dark:text-white" />{" "}
+            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
             анализы сдаются натощак (12-14 часов воздержания от приема пищи),
             желательно соблюдать диетический режим питания (не употреблять
             острую, жирную, соленую пищу), можно выпить 100-200г теплой воды
@@ -144,7 +144,7 @@ export const AnalysisPage = () => {
                 className={"btn w-full"}
                 disabled={pending}
               >
-                Отправить
+                Расшифровать
               </button>
             </form>
           </div>

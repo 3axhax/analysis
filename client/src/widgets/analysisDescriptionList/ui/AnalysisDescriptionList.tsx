@@ -3,6 +3,7 @@ import { SelectAnalysisResultDescriptionData } from "@entities/analysisResult";
 import { useTranslation } from "react-i18next";
 import { ResultDescription } from "@entities/analysisResult";
 import { Table, TableData, TableDataRow } from "@shared/ui";
+import { AnalysisPointDataListStatus } from "@widgets/analysisPointdataList/ui/AnalysisPointDataListStatus.tsx";
 
 export const AnalysisDescriptionList = ({
   resultId,
@@ -11,7 +12,6 @@ export const AnalysisDescriptionList = ({
   resultId: string;
   className?: string;
 }) => {
-  const { t } = useTranslation("common");
   const { t: tWidgets } = useTranslation("widgets");
   const { t: tEntities } = useTranslation("entities");
   const descriptionList: ResultDescription[] = useAppSelector((state) =>
@@ -41,11 +41,11 @@ export const AnalysisDescriptionList = ({
         {
           name: "reasons",
           data: (
-            <ul>
+            <ul className={"flex flex-col"}>
               {row.analysisResultDescriptionConditions.map((condition) => (
                 <li key={condition.id}>
-                  {tEntities(`analysisPoint.${condition.analysisPoint.name}`)} -{" "}
-                  {t(`analysisDescriptionConditionStatus.${condition.status}`)}
+                  {tEntities(`analysisPoint.${condition.analysisPoint.name}`)}
+                  <AnalysisPointDataListStatus status={condition.status} />{" "}
                 </li>
               ))}
             </ul>
