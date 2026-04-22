@@ -126,7 +126,9 @@ export const AnalysisPage = () => {
               onSubmit={handlerSubmit}
             >
               <div
-                className={"flex flex-col lg:flex-row justify-between lg:gap-8"}
+                className={
+                  "flex gap:2 flex-col lg:flex-row justify-between lg:gap-8"
+                }
               >
                 <GenderSelector
                   gender={gender}

@@ -45,12 +45,12 @@ export const AgeInDaysSelector = ({
 
   return (
     <div className={"flex flex-col"}>
-      <label
-        className={"text-sm font-medium text-gray-700 mb-1 dark:text-gray-100 "}
+      <span
+        className={"text-lg font-medium text-gray-700 mb-1 dark:text-gray-100 "}
       >
         Введите возраст
-      </label>
-      <div className={"flex gap-4"}>
+      </span>
+      <div className={"flex flex-col gap-2 lg:flex-row lg:gap-4"}>
         <SelectUI<number>
           label={
             <>
