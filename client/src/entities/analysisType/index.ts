@@ -1,7 +1,6 @@
 export {
   analysisTypeSlice,
   selectAnalysisType,
-  selectAnalysisTypeListForSelect,
   selectAnalysisTypeListForMultiSelect,
   selectAnalysisTypePending,
 } from "./model";

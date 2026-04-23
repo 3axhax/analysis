@@ -9,7 +9,6 @@ import Request from "@shared/transport/RestAPI";
 import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
 import type { WritableDraft } from "immer";
 import { RootState } from "@shared/store";
-import { SelectUIOption } from "@shared/ui";
 import { setSelectedPoint } from "@entities/analysisResult";
 import { SelectMultiUIOption } from "@shared/ui/SelectUI.tsx";
 
@@ -109,25 +108,40 @@ const selectAnalysisTypeList = (state: RootState) => state.analysisType.list;
 export const selectAnalysisTypePending = (state: RootState) =>
   state.analysisType.pending;
 
-export const selectAnalysisTypeListForSelect = createSelector(
-  [selectAnalysisTypeList],
-  (agesList): SelectUIOption<number>[] =>
-    agesList.map((item) => ({
-      value: item.id,
-      label: item.name,
-    })),
-);
+const analysisPointsList = (state: RootState) => state.analysisPoint.list;
 
 export const selectAnalysisTypeListForMultiSelect = createSelector(
-  [selectAnalysisTypeList],
-  (agesList): SelectMultiUIOption<number>[] => {
-    return agesList.map((item) => ({
+  [selectAnalysisTypeList, analysisPointsList],
+  (analysisTypeList, analysisPointsList): SelectMultiUIOption<number>[] => {
+    const groupedPointIds: number[] = [];
+    const result = analysisTypeList.map((item) => ({
       label: item.name,
-      options: item.analysisPoint.map((point) => ({
-        value: point.id,
-        label: point.name,
-        group: item.name,
-      })),
+      options: item.analysisPoint.map((point) => {
+        groupedPointIds.push(point.id);
+        return {
+          value: point.id,
+          label: point.name,
+          group: item.name,
+        };
+      }),
     }));
+    const ungroupedPoints = analysisPointsList.filter(
+      (point) => !groupedPointIds.includes(point.id),
+    );
+    console.log(ungroupedPoints);
+    if (ungroupedPoints.length === 0) {
+      return result;
+    }
+    return [
+      ...result,
+      {
+        label: "ungrouped_points",
+        options: ungroupedPoints.map((point) => ({
+          value: point.id,
+          label: point.name,
+          group: "ungrouped_points",
+        })),
+      },
+    ];
   },
 );

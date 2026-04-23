@@ -3,6 +3,5 @@ export {
   getAnalysisTypeList,
   selectAnalysisType,
   selectAnalysisTypePending,
-  selectAnalysisTypeListForSelect,
   selectAnalysisTypeListForMultiSelect,
 } from "./slice";
