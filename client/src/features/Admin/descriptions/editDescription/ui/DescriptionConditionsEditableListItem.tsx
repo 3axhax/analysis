@@ -32,8 +32,6 @@ export const DescriptionConditionsEditableListItem = ({
     { value: "-1", label: t(`analysisDescriptionConditionStatus.-1`) },
   ];
 
-  console.log(condition);
-
   return (
     <div className={"flex items-center justify-between mb-5 line-between"}>
       <AnalysisPointsSelector

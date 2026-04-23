@@ -13,7 +13,6 @@ export const DescriptionsListActionItems = ({ rowId }: { rowId: number }) => {
   const { openModal } = useInfoModalData();
 
   const handlerEditRecord = (id: number) => {
-    console.log("handlerEditRecord", id);
     dispatch(setEditDescriptionId(id));
   };
 
