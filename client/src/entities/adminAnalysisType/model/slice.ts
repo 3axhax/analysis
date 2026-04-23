@@ -30,6 +30,8 @@ export const getFullAdminAnalysisTypeList = createAsyncThunk(
 export interface AdminAnalysisTypePointItem {
   id: number;
   name: string;
+  translationRu: string;
+  translationEn: string;
 }
 
 export interface AdminAnalysisTypeListItem {

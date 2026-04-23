@@ -1,6 +1,5 @@
 import { SelectUI } from "@shared/ui";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { useTranslation } from "react-i18next";
 import {
   selectAnalysisPointListForSelect,
   useAnalysisPointsLoad,
@@ -21,16 +20,12 @@ export const AnalysisPointsSelector = ({
     selectAnalysisPointListForSelect,
   );
   useAnalysisPointsLoad();
-  const { t } = useTranslation("entities");
 
   return (
     <SelectUI<number>
       label={label}
       name={"analysisPoint"}
-      options={AnalysisPointsOptions.map((item) => ({
-        ...item,
-        label: t(`analysisPoint.${item.label}`),
-      }))}
+      options={AnalysisPointsOptions}
       value={analysisPoint}
       onChange={setAnalysisPoint}
       placeholder="Выберите тип анализа"

@@ -117,12 +117,10 @@ export const AnalysisPointSelectedItem = ({
           >
             <div className={"flex items-center lg:w-[240px] "}>
               <label
-                htmlFor={t(`analysisPoint.${analysisPoint.name}`)
-                  .trim()
-                  .replace(/\s/g, "")}
+                htmlFor={analysisPoint.translationRu.trim().replace(/\s/g, "")}
                 className={"block lg:max-w-[220px] truncate"}
               >
-                {t(`analysisPoint.${analysisPoint.name}`)}{" "}
+                {analysisPoint.translationRu}{" "}
               </label>
               <button
                 className={
@@ -138,9 +136,7 @@ export const AnalysisPointSelectedItem = ({
             </div>
 
             <input
-              id={t(`analysisPoint.${analysisPoint.name}`)
-                .trim()
-                .replace(/\s/g, "")}
+              id={analysisPoint.translationRu.trim().replace(/\s/g, "")}
               className={
                 "px-4 py-2 lg:ml-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-green-800 focus:border-green-800 hover:border-green-800 hover:shadow-green-800"
               }

@@ -15,6 +15,8 @@ import { SelectMultiUIOption } from "@shared/ui/SelectUI.tsx";
 interface AnalysisPointItem {
   id: number;
   name: string;
+  translationRu: string;
+  translationEn: string;
 }
 
 interface AnalysisTypeListItem {
@@ -120,7 +122,7 @@ export const selectAnalysisTypeListForMultiSelect = createSelector(
         groupedPointIds.push(point.id);
         return {
           value: point.id,
-          label: point.name,
+          label: point.translationRu,
           group: item.name,
         };
       }),
@@ -138,7 +140,7 @@ export const selectAnalysisTypeListForMultiSelect = createSelector(
         label: "ungrouped_points",
         options: ungroupedPoints.map((point) => ({
           value: point.id,
-          label: point.name,
+          label: point.translationRu,
           group: "ungrouped_points",
         })),
       },

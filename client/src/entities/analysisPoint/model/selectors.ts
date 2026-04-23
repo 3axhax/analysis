@@ -20,7 +20,7 @@ export const selectAnalysisPointListForSelect = createSelector(
   (analysisPointList): SelectUIOption<number>[] =>
     analysisPointList.map((item) => ({
       value: item.id,
-      label: item.name,
+      label: item.translationRu,
     })),
 );
 

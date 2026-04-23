@@ -22,7 +22,6 @@ export const AnalysisPointGroupSelect = () => {
     label: t(`analysisType.${group.label}`),
     options: group.options.map((option) => ({
       ...option,
-      label: t(`analysisPoint.${option.label}`),
       group: t(`analysisType.${group.label}`),
     })),
   }));

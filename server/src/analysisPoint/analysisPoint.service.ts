@@ -54,6 +54,8 @@ export class AnalysisPointService {
       return {
         id: point.id,
         name: point.name,
+        translationRu: point.translationRu,
+        translationEn: point.translationEn,
         units: point.units.map((unit) => unit.name),
       };
     });

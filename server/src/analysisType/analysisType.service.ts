@@ -21,7 +21,7 @@ export class AnalysisTypeService {
     return this.analysisTypeRepository.findAll({
       include: {
         model: AnalysisPoint,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'translationRu', 'translationEn'],
         through: { attributes: [] },
       },
     });
