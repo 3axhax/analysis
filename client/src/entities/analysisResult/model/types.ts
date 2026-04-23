@@ -29,7 +29,12 @@ export interface ResultDescription {
 
 export interface PointData {
   id: number;
-  point: { id: number; name: string };
+  point: {
+    id: number;
+    name: string;
+    translationRu: string;
+    translationEn: string;
+  };
   pointUnit: { id: number; name: string };
   value: number;
   minValue: number;

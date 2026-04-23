@@ -130,7 +130,6 @@ export const selectAnalysisTypeListForMultiSelect = createSelector(
     const ungroupedPoints = analysisPointsList.filter(
       (point) => !groupedPointIds.includes(point.id),
     );
-    console.log(ungroupedPoints);
     if (ungroupedPoints.length === 0) {
       return result;
     }

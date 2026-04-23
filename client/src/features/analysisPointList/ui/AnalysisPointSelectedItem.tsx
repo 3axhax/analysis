@@ -1,9 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { selectAnalysisPointById } from "@entities/analysisPoint";
 import { useTranslation } from "react-i18next";
-import { Tooltip } from "react-tooltip";
 import { TrashIcon } from "@heroicons/react/16/solid";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { SelectUI } from "@shared/ui";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
@@ -105,11 +103,6 @@ export const AnalysisPointSelectedItem = ({
     <>
       {analysisPoint ? (
         <>
-          <Tooltip
-            anchorSelect=".description_anchor"
-            place="top"
-            className="max-w-xs !break-words !whitespace-normal !text-left"
-          />
           <div
             className={
               "flex flex-col lg:flex-row lg:items-center justify-stretch py-2 relative"
@@ -122,17 +115,6 @@ export const AnalysisPointSelectedItem = ({
               >
                 {analysisPoint.translationRu}{" "}
               </label>
-              <button
-                className={
-                  "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 dark:text-gray-200 items-start justify-center hover:text-green-800"
-                }
-                data-tooltip-content={t(
-                  `analysisPoint.${analysisPoint.name}_description`,
-                )}
-              >
-                <span className={"sr-only"}>Информация о показателе</span>
-                <InformationCircleIcon className="inline-flex h-4 w-4 transition-transform hover:scale-110" />
-              </button>
             </div>
 
             <input
