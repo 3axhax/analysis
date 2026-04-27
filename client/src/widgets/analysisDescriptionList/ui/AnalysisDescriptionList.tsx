@@ -37,7 +37,15 @@ export const AnalysisDescriptionList = ({
           a.analysisResultDescriptionConditions.length,
       )
       .map((row: ResultDescription) => [
-        { name: "description", data: row.description_ru },
+        {
+          name: "description",
+          data: (
+            <div
+              className={"description__inner"}
+              dangerouslySetInnerHTML={{ __html: row.description_ru }}
+            ></div>
+          ),
+        },
         {
           name: "reasons",
           data: (
