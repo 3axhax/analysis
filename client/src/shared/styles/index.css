@@ -1,319 +1,341 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Sofia Sans";
-  src: url("./fonts/SofiaSans_v.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+    font-family: "Sofia Sans";
+    src: url("./fonts/SofiaSans_v.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Sofia Sans";
-  src: url("./fonts/SofiaSans-Italic_v.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
+    font-family: "Sofia Sans";
+    src: url("./fonts/SofiaSans-Italic_v.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
 }
 
 @layer base {
-  :root {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
-    font-weight: 400;
-    line-height: 1.5;
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-text-size-adjust: 100%;
-    --accent: black;
-    --canvas: color-mix(in lch, canvas, canvasText 1%);
-    --border: color-mix(in lch, canvas, canvasText 10%);
-    --text: color-mix(in lch, canvasText, canvas 25%);
-    --border-radius: 24;
-    --border-width: 3;
-    --trail-size: 25;
-    --speed: 12s;
-    --size: 45px;
-    --line: color-mix(in lch, canvasText, transparent 70%);
-    --header-height: 2.5rem;
-
-    --underline-spacing: 3px;
-    --underline-height: 1px;
-
-    --color-grey: oklch(16.9% 0.031 222.65); /* grey-900 */
-    --color-cyan: oklch(44.85% 0.081 218.73); /* cyan-800 */
-    --color-cyan-2: oklch(60.24% 0.101 197.4); /* cyan-600 */
-    --color-cyan-3: oklch(81.57% 0.07 171.43); /* cyan-300 */
-    --color-beige: oklch(88.4% 0.068 91.51); /* orange-50 */
-    --color-orange-2: oklch(75.47% 0.162 71.4); /* orange-400 */
-    --color-orange-3: oklch(61.89% 0.154 54.41); /* orange-600 */
-    --color-orange-4: oklch(53.78% 0.17 39.15); /* orange-700 */
-    --color-orange-5: oklch(48.65% 0.179 30.2); /* orange-800 */
-    --color-orange-6: oklch(45.44% 0.157 24.59); /* orange-900 */
-
-    --color-blue-d: oklch(25.47% 0.093 258.22); /* blue-950 */
-    --color-blue-l: oklch(55.81% 0.096 207.96); /* cyan-600 */
-    --color-yellow-l: oklch(90.43% 0.069 82.68); /* orange-200 */
-    --color-yellow-d: oklch(80.08% 0.126 58.41); /* orange-300 */
-    --color-orange: oklch(66.59% 0.207 36.07); /* orange-600 */
-  }
-
-  @media (min-width: theme(--breakpoint-lg)) {
     :root {
-      --header-height: 4.75rem;
+        font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+        font-weight: 400;
+        line-height: 1.5;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-text-size-adjust: 100%;
+        --accent: black;
+        --canvas: color-mix(in lch, canvas, canvasText 1%);
+        --border: color-mix(in lch, canvas, canvasText 10%);
+        --text: color-mix(in lch, canvasText, canvas 25%);
+        --border-radius: 24;
+        --border-width: 3;
+        --trail-size: 25;
+        --speed: 12s;
+        --size: 45px;
+        --line: color-mix(in lch, canvasText, transparent 70%);
+        --header-height: 2.5rem;
+
+        --underline-spacing: 3px;
+        --underline-height: 1px;
+
+        --color-grey: oklch(16.9% 0.031 222.65); /* grey-900 */
+        --color-cyan: oklch(44.85% 0.081 218.73); /* cyan-800 */
+        --color-cyan-2: oklch(60.24% 0.101 197.4); /* cyan-600 */
+        --color-cyan-3: oklch(81.57% 0.07 171.43); /* cyan-300 */
+        --color-beige: oklch(88.4% 0.068 91.51); /* orange-50 */
+        --color-orange-2: oklch(75.47% 0.162 71.4); /* orange-400 */
+        --color-orange-3: oklch(61.89% 0.154 54.41); /* orange-600 */
+        --color-orange-4: oklch(53.78% 0.17 39.15); /* orange-700 */
+        --color-orange-5: oklch(48.65% 0.179 30.2); /* orange-800 */
+        --color-orange-6: oklch(45.44% 0.157 24.59); /* orange-900 */
+
+        --color-blue-d: oklch(25.47% 0.093 258.22); /* blue-950 */
+        --color-blue-l: oklch(55.81% 0.096 207.96); /* cyan-600 */
+        --color-yellow-l: oklch(90.43% 0.069 82.68); /* orange-200 */
+        --color-yellow-d: oklch(80.08% 0.126 58.41); /* orange-300 */
+        --color-orange: oklch(66.59% 0.207 36.07); /* orange-600 */
     }
-  }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not(.light) {
-      --accent: white;
-      --canvas: color-mix(in lch, canvas, canvasText 100%);
-      --border: color-mix(in lch, canvas, canvasText 75%);
+    @media (min-width: theme(--breakpoint-lg)) {
+        :root {
+            --header-height: 4.75rem;
+        }
     }
-  }
 
-  /* Manual override with .dark class */
-  :root.dark {
-    --accent: white;
-    --canvas: color-mix(in lch, canvas, canvasText 100%);
-    --border: color-mix(in lch, canvas, canvasText 75%);
-  }
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light) {
+            --accent: white;
+            --canvas: color-mix(in lch, canvas, canvasText 100%);
+            --border: color-mix(in lch, canvas, canvasText 75%);
+        }
+    }
 
-  body {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
-    @apply m-0 flex items-stretch justify-center min-w-[320px] min-h-screen bg-white dark:bg-gray-950;
-    /*    background: linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size), linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
-    -webkit-mask: linear-gradient(-20deg, transparent 50%, white);*/
-  }
+    /* Manual override with .dark class */
+    :root.dark {
+        --accent: white;
+        --canvas: color-mix(in lch, canvas, canvasText 100%);
+        --border: color-mix(in lch, canvas, canvasText 75%);
+    }
 
-  #root {
-    @apply mx-auto text-center w-full;
-  }
+    body {
+        font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+        @apply m-0 flex items-stretch justify-center min-w-[320px] min-h-screen bg-white dark:bg-gray-950;
+        /*    background: linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size), linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
+        -webkit-mask: linear-gradient(-20deg, transparent 50%, white);*/
+    }
 
-  /* Global smooth scrolling */
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: calc(var(--header-height) + 2rem);
-  }
+    #root {
+        @apply mx-auto text-center w-full;
+    }
 
-  /* Disable smooth scroll for performance */
-  @media (prefers-reduced-motion: reduce) {
+    /* Global smooth scrolling */
     html {
-      scroll-behavior: auto;
+        scroll-behavior: smooth;
+        scroll-padding-top: calc(var(--header-height) + 2rem);
     }
-  }
+
+    /* Disable smooth scroll for performance */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
 }
 
 @layer utilities {
-  /* Кастомные классы для точного контроля variable font */
-  .font-sofia-variable {
-    font-family: "Sofia Sans", sans-serif;
-    font-variation-settings:
-      "wght" 400,
-      "wdth" 100;
-  }
+    /* Кастомные классы для точного контроля variable font */
+    .font-sofia-variable {
+        font-family: "Sofia Sans", sans-serif;
+        font-variation-settings: "wght" 400,
+        "wdth" 100;
+    }
 
-  .font-weight-350 {
-    font-variation-settings: "wght" 350;
-  }
+    .font-weight-350 {
+        font-variation-settings: "wght" 350;
+    }
 
-  .font-weight-450 {
-    font-variation-settings: "wght" 450;
-  }
+    .font-weight-450 {
+        font-variation-settings: "wght" 450;
+    }
 
-  .font-width-110 {
-    font-variation-settings: "wdth" 110;
-  }
+    .font-width-110 {
+        font-variation-settings: "wdth" 110;
+    }
 
-  /* Плавные переходы для variable font */
-  .font-transition {
-    transition: font-variation-settings 0.3s ease;
-  }
+    /* Плавные переходы для variable font */
+    .font-transition {
+        transition: font-variation-settings 0.3s ease;
+    }
 
-  .bg-underline {
-    @apply bg-gradient-to-r from-current to-current
-    bg-no-repeat
-    [background-position:left_bottom_var(--underline-spacing)]
-    [background-size:0_var(--underline-height)]
-    hover:[background-size:100%_var(--underline-height)]
-    transition-[background-size] duration-300 ease-out
-    pb-[var(--underline-spacing)] -mb-1;
-  }
+    .bg-underline {
+        @apply bg-gradient-to-r from-current to-current
+        bg-no-repeat
+        [background-position:left_bottom_var(--underline-spacing)]
+        [background-size:0_var(--underline-height)]
+        hover:[background-size:100%_var(--underline-height)]
+        transition-[background-size] duration-300 ease-out
+        pb-[var(--underline-spacing)] -mb-1;
+    }
 
-  .bg-underline-hover {
-    @apply bg-gradient-to-r from-current to-current
-    bg-no-repeat
-    [background-position:left_bottom_var(--underline-spacing)]
-    hover:[background-size:0_var(--underline-height)]
-    [background-size:100%_var(--underline-height)]
-    transition-[background-size] duration-300 ease-out
-    pb-[var(--underline-spacing)] -mb-1;
-  }
+    .bg-underline-hover {
+        @apply bg-gradient-to-r from-current to-current
+        bg-no-repeat
+        [background-position:left_bottom_var(--underline-spacing)]
+        hover:[background-size:0_var(--underline-height)]
+        [background-size:100%_var(--underline-height)]
+        transition-[background-size] duration-300 ease-out
+        pb-[var(--underline-spacing)] -mb-1;
+    }
 
-  .bg-underline-current {
-    @apply bg-gradient-to-r cursor-auto from-current to-current
-    bg-no-repeat
-    [background-position:left_bottom_var(--underline-spacing)]
-    [background-size:100%_var(--underline-height)]
-    transition-[background-size] duration-300 ease-out
-    pb-[var(--underline-spacing)] -mb-1;
-  }
+    .bg-underline-current {
+        @apply bg-gradient-to-r cursor-auto from-current to-current
+        bg-no-repeat
+        [background-position:left_bottom_var(--underline-spacing)]
+        [background-size:100%_var(--underline-height)]
+        transition-[background-size] duration-300 ease-out
+        pb-[var(--underline-spacing)] -mb-1;
+    }
 }
 
 @layer components {
-  .app {
-    @apply flex flex-col items-center dark:text-white px-6;
-  }
-
-  .counter {
-    @apply flex flex-col items-center gap-4 p-8 border border-gray-200 rounded-xl bg-white/5 backdrop-blur-sm;
-  }
-
-  .counter h2 {
-    @apply m-0 text-3xl font-bold text-blue-600;
-  }
-
-  .counter-controls {
-    @apply flex gap-4 flex-wrap justify-center;
-  }
-
-  .header {
-    @apply w-full shadow-sm mb-8 sticky top-0 flex items-center justify-start z-12 relative;
-  }
-
-  .form-control {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
-    @apply text-cyan-800 w-full px-5 py-3 border border-cyan-800 bg-white text-base/5 rounded-md shadow-sm hover:shadow-cyan-900 focus:outline-none focus:border-green-900 focus:shadow-gray-400;
-  }
-
-  .form-label {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
-    @apply absolute top-3 left-4 bg-white text-base/5 rounded-xs text-cyan-800 transition-all duration-300 ease-in-out py-0.25 px-1;
-  }
-
-  .form-control:focus + .form-label,
-  .form-control:not(:placeholder-shown) + .form-label {
-    @apply -top-3 text-xs/5;
-  }
-
-  .form-control:-webkit-autofill,
-  .form-control:-webkit-autofill:hover,
-  .form-control:-webkit-autofill:focus,
-  .form-control:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px white inset !important;
-    -webkit-text-fill-color: var(--color-cyan-800) !important;
-    transition: background-color 5000s ease-in-out 0s;
-  }
-
-  .form-control:-webkit-autofill + .form-label,
-  .form-control:-webkit-autofill:hover + .form-label,
-  .form-control:-webkit-autofill:focus + .form-label,
-  .form-control:-webkit-autofill:active + .form-label {
-    @apply -top-3 text-xs/5;
-  }
-
-  .page-title {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
-    @apply text-4xl text-gray-900 dark:text-white mb-4;
-  }
-
-  .btn {
-    @apply relative overflow-hidden text-white text-lg/5 transition-all duration-400 font-medium rounded-md px-5 py-4 cursor-pointer
-    bg-gradient-to-r
-    from-cyan-800
-    via-cyan-500
-    to-cyan-800
-    bg-[length:300%_100%]
-    hover:bg-right-top
-    disabled:cursor-not-allowed
-    disabled:bg-cyan-300
-    shadow-md shadow-cyan-800/75
-    hover:shadow-gray-500;
-  }
-
-  .btn-white {
-    @apply relative overflow-hidden text-green-800 text-lg/5 transition-all duration-400 font-medium rounded-md px-5 py-4 cursor-pointer
-    shadow-md
-    bg-white
-    hover:shadow-gray-500
-    hover:text-green-950
-    disabled:cursor-not-allowed
-    disabled:bg-blue-300
-    outline outline-1 outline-offset-[-1px] outline-green-800;
-  }
-
-  .line-between + .line-between {
-    @apply border-t border-gray-200 pt-1;
-  }
-
-  @keyframes journey {
-    to {
-      offset-distance: 100%;
+    .app {
+        @apply flex flex-col items-center dark:text-white px-6;
     }
-  }
 
-  .b-border__content {
-    background:
-      linear-gradient(var(--canvas), var(--canvas)) padding-box,
-      transparent;
-    border: calc(var(--border-width) * 1px) solid transparent;
-    border-radius: calc(var(--border-radius) * 1px);
-  }
+    .counter {
+        @apply flex flex-col items-center gap-4 p-8 border border-gray-200 rounded-xl bg-white/5 backdrop-blur-sm;
+    }
 
-  .radio-input {
-    @apply relative mr-1 cursor-pointer;
-  }
+    .counter h2 {
+        @apply m-0 text-3xl font-bold text-blue-600;
+    }
 
-  .radio-input:before {
-    @apply w-3 h-3 absolute top-0.5 left-0.5 rounded-full z-1 bg-cyan-800 content-[''] transform scale-0 transition-transform duration-400 ease-[cubic-bezier(.45,1.8,.5,.75)];
-  }
+    .counter-controls {
+        @apply flex gap-4 flex-wrap justify-center;
+    }
 
-  .radio-label {
-    @apply relative;
-  }
-  .radio-input:checked:before {
-    @apply transform scale-100;
-  }
-  .radio-input:after {
-    @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white dark:bg-black border-2 border-cyan-800;
-  }
-  .st_0 {
-    fill: #fa6e51;
-  }
-  .st_1 {
-    fill: #e8573f;
-  }
-  .st_2 {
-    fill: #f4f6f9;
-  }
-  .st_3 {
-    fill: #ffffff;
-  }
+    .header {
+        @apply w-full shadow-sm mb-8 sticky top-0 flex items-center justify-start z-12 relative;
+    }
 
-  .outlined-text {
-    @apply text-cyan-600
-    [text-shadow:-1px_-1px_0_var(--color-white),1px_-1px_0_var(--color-white),-1px_1px_0_var(--color-white),1px_1px_0_var(--color-white)]
-    supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-stroke:1px_var(--color-white)]
-    supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-fill-color:var(text-blue-950)]
-    supports-[-webkit-text-stroke:1px_var(--color-white)]:[text-shadow:none]
-    dark:text-gray-900
-    dark:[text-shadow:-1px_-1px_0_var(--color-white),1px_-1px_0_var(--color-white),-1px_1px_0_var(--color-white),1px_1px_0_var(--color-white)]
-    dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-stroke:1px_var(--color-white)]
-    dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-fill-color:var(--color-gray-900)]
-    dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[text-shadow:none];
-  }
+    .form-control {
+        font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+        @apply text-cyan-800 w-full px-5 py-3 border border-cyan-800 bg-white text-base/5 rounded-md shadow-sm hover:shadow-cyan-900 focus:outline-none focus:border-green-900 focus:shadow-gray-400;
+    }
+
+    .form-label {
+        font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+        @apply absolute top-3 left-4 bg-white text-base/5 rounded-xs text-cyan-800 transition-all duration-300 ease-in-out py-0.25 px-1;
+    }
+
+    .form-control:focus + .form-label,
+    .form-control:not(:placeholder-shown) + .form-label {
+        @apply -top-3 text-xs/5;
+    }
+
+    .form-control:-webkit-autofill,
+    .form-control:-webkit-autofill:hover,
+    .form-control:-webkit-autofill:focus,
+    .form-control:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px white inset !important;
+        -webkit-text-fill-color: var(--color-cyan-800) !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .form-control:-webkit-autofill + .form-label,
+    .form-control:-webkit-autofill:hover + .form-label,
+    .form-control:-webkit-autofill:focus + .form-label,
+    .form-control:-webkit-autofill:active + .form-label {
+        @apply -top-3 text-xs/5;
+    }
+
+    .page-title {
+        font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+        @apply text-4xl text-gray-900 dark:text-white mb-4;
+    }
+
+    .btn {
+        @apply relative overflow-hidden text-white text-lg/5 transition-all duration-400 font-medium rounded-md px-5 py-4 cursor-pointer
+        bg-gradient-to-r
+        from-cyan-800
+        via-cyan-500
+        to-cyan-800
+        bg-[length:300%_100%]
+        hover:bg-right-top
+        disabled:cursor-not-allowed
+        disabled:bg-cyan-300
+        shadow-md shadow-cyan-800/75
+        hover:shadow-gray-500;
+    }
+
+    .btn-white {
+        @apply relative overflow-hidden text-green-800 text-lg/5 transition-all duration-400 font-medium rounded-md px-5 py-4 cursor-pointer
+        shadow-md
+        bg-white
+        hover:shadow-gray-500
+        hover:text-green-950
+        disabled:cursor-not-allowed
+        disabled:bg-blue-300
+        outline outline-1 outline-offset-[-1px] outline-green-800;
+    }
+
+    .line-between + .line-between {
+        @apply border-t border-gray-200 pt-1;
+    }
+
+    @keyframes journey {
+        to {
+            offset-distance: 100%;
+        }
+    }
+
+    .b-border__content {
+        background: linear-gradient(var(--canvas), var(--canvas)) padding-box,
+        transparent;
+        border: calc(var(--border-width) * 1px) solid transparent;
+        border-radius: calc(var(--border-radius) * 1px);
+    }
+
+    .radio-input {
+        @apply relative mr-1 cursor-pointer;
+    }
+
+    .radio-input:before {
+        @apply w-3 h-3 absolute top-0.5 left-0.5 rounded-full z-1 bg-cyan-800 content-[''] transform scale-0 transition-transform duration-400 ease-[cubic-bezier(.45,1.8,.5,.75)];
+    }
+
+    .radio-label {
+        @apply relative;
+    }
+
+    .radio-input:checked:before {
+        @apply transform scale-100;
+    }
+
+    .radio-input:after {
+        @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white dark:bg-black border-2 border-cyan-800;
+    }
+
+    .st_0 {
+        fill: #fa6e51;
+    }
+
+    .st_1 {
+        fill: #e8573f;
+    }
+
+    .st_2 {
+        fill: #f4f6f9;
+    }
+
+    .st_3 {
+        fill: #ffffff;
+    }
+
+    .outlined-text {
+        @apply text-cyan-600
+        [text-shadow:-1px_-1px_0_var(--color-white),1px_-1px_0_var(--color-white),-1px_1px_0_var(--color-white),1px_1px_0_var(--color-white)]
+        supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-stroke:1px_var(--color-white)]
+        supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-fill-color:var(text-blue-950)]
+        supports-[-webkit-text-stroke:1px_var(--color-white)]:[text-shadow:none]
+        dark:text-gray-900
+        dark:[text-shadow:-1px_-1px_0_var(--color-white),1px_-1px_0_var(--color-white),-1px_1px_0_var(--color-white),1px_1px_0_var(--color-white)]
+        dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-stroke:1px_var(--color-white)]
+        dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[-webkit-text-fill-color:var(--color-gray-900)]
+        dark:supports-[-webkit-text-stroke:1px_var(--color-white)]:[text-shadow:none];
+    }
+
+    .description__inner {
+        ul {
+            @apply list-inside;
+
+            li {
+              @apply relative pl-3.5 mb-0.5;
+
+                &::before {
+                    @apply absolute left-0 size-2 top-1.5;
+                    content: '';
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23008391' viewBox='0 0 8 8'%3E%3Cpath fill-rule='evenodd' d='M0.4,1.8C0.1,1.3,0.5,0.8,1,1l6.6,2.4c0.5,0.2,0.5,0.8,0,1L1,6.7C0.5,6.9,0.1,6.4,0.4,5.9l1.1-1.8 c0.1-0.2,0.1-0.4,0-0.6L0.4,1.8z' clip-rule='evenodd'/%3E%3C/svg%3E");
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+    }
 }
 
 .font-sans {
-  font-family: "Sofia Sans", sans-serif;
+    font-family: "Sofia Sans", sans-serif;
 }
 
 @keyframes scroll {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
