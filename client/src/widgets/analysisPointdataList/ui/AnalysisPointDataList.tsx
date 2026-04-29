@@ -10,7 +10,6 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { Tooltip } from "react-tooltip";
 
 export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
-  const { t } = useTranslation("entities");
   const { t: tWidgets } = useTranslation("widgets");
   const { t: tEntities } = useTranslation("entities");
   const pointDataList = useAppSelector((state) =>
@@ -33,18 +32,18 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
         data: (
           <div>
             {row.point.translationRu}
-            <button
-              className={
-                "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 dark:text-gray-200 items-start justify-center hover:text-green-800"
-              }
-              type={"button"}
-              data-tooltip-content={t(
-                `analysisPoint.${row.point.name}_description`,
-              )}
-            >
-              <span className={"sr-only"}>Информация о показателе</span>
-              <InformationCircleIcon className="inline-flex h-4 w-4 transition-transform hover:scale-110" />
-            </button>
+            {row.point.pointHintRu && (
+              <button
+                className={
+                  "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 dark:text-gray-200 items-start justify-center hover:text-green-800"
+                }
+                type={"button"}
+                data-tooltip-content={row.point.pointHintRu}
+              >
+                <span className={"sr-only"}>Информация о показателе</span>
+                <InformationCircleIcon className="inline-flex h-4 w-4 transition-transform hover:scale-110" />
+              </button>
+            )}
           </div>
         ),
       },

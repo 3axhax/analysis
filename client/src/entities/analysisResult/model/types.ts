@@ -34,6 +34,8 @@ export interface PointData {
     name: string;
     translationRu: string;
     translationEn: string;
+    pointHintRu: string | null;
+    pointHintEn: string | null;
   };
   pointUnit: { id: number; name: string };
   value: number;

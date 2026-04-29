@@ -1,4 +1,5 @@
 import { RootState } from "@shared/store";
+import { createSelector } from "@reduxjs/toolkit";
 
 export const SelectAnalysisResultPending = (state: RootState) =>
   state.analysisResult.pending;
@@ -31,7 +32,14 @@ export const SelectAnalysisResultDescriptionData = (
   resultId: string,
 ) => state.analysisResult.results[resultId].descriptions;
 
-export const SelectAnalysisResultPointData = (
-  state: RootState,
-  resultId: string,
-) => state.analysisResult.results[resultId].result.analysisResultPointData;
+const AnalysisResultPointData = (state: RootState, resultId: string) =>
+  state.analysisResult.results[resultId].result.analysisResultPointData;
+
+export const SelectAnalysisResultPointData = createSelector(
+  [AnalysisResultPointData],
+  (pointData) => {
+    return [...pointData].sort((a, b) =>
+      a.point.name.localeCompare(b.point.name),
+    );
+  },
+);

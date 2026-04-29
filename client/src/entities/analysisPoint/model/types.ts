@@ -16,6 +16,8 @@ export interface AnalysisPointGreatItem {
   translationRu: string;
   translationEn: string;
   parsingWords: string;
+  pointHintRu: string | null;
+  pointHintEn: string | null;
   limits: AnalysisPointLimit[];
 }
 

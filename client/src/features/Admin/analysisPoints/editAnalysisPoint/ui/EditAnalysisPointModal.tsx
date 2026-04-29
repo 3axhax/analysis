@@ -24,6 +24,8 @@ const initialFormValue: AnalysisPointGreatItem = {
   translationRu: "",
   translationEn: "",
   parsingWords: "",
+  pointHintRu: "",
+  pointHintEn: "",
   limits: [],
 };
 

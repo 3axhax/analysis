@@ -273,6 +273,8 @@ export class AnalysisPointService {
       translationEn: parameters.translationEn ?? null,
       translationRu: parameters.translationRu ?? null,
       translationParsing: parameters.parsingWords ?? null,
+      pointHintRu: parameters.pointHintRu ?? null,
+      pointHintEn: parameters.pointHintEn ?? null,
     });
     if (!point) {
       throw new HttpException('Error in DB', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -349,6 +351,8 @@ export class AnalysisPointService {
       translationRu: parameters.translationRu ?? null,
       translationEn: parameters.translationEn ?? null,
       translationParsing: parameters.parsingWords ?? null,
+      pointHintRu: parameters.pointHintRu ?? null,
+      pointHintEn: parameters.pointHintEn ?? null,
     };
 
     await existingPoint?.update(updateParameter);

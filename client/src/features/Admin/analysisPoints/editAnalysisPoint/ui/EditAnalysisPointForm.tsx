@@ -74,6 +74,24 @@ export const EditAnalysisPointForm = ({
           'Фразы и слова для парсинга разделяются по знаку нижнее подчёркивание "_"'
         }
       />
+      <InputWithLabel
+        label={"Описание для параметра на русском"}
+        name={"pointHintRu"}
+        onChange={(value) => {
+          handlerInput({ name: "pointHintRu", value });
+        }}
+        className={"justify-between flex flex-col"}
+        value={values.pointHintRu ?? ""}
+      />
+      <InputWithLabel
+        label={"Описание для параметра на английском"}
+        name={"pointHintEn"}
+        onChange={(value) => {
+          handlerInput({ name: "pointHintEn", value });
+        }}
+        className={"justify-between flex flex-col"}
+        value={values.pointHintEn ?? ""}
+      />
       <AnalysisPointDataLimitsEditableList
         onChange={(value) => {
           handlerInput({ name: "limits", value });

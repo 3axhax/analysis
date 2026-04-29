@@ -30,6 +30,7 @@ export class MigrationsService implements OnModuleInit {
         switch (model) {
           case 'analysisPoint':
             await this.migrationsAnalysisPoint.addTranslationRuENParsingColumn();
+            await this.migrationsAnalysisPoint.addPointHintRuENColumn();
             break;
           case 'ages':
             await this.migrationsAges.addIntervalsColumn();
