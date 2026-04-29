@@ -26,4 +26,23 @@ export class MigrationsAnalysisPoint {
       );
     }
   }
+
+  async addPointHintRuENColumn() {
+    const [results] = await this.sequelize.query(
+      `SELECT * FROM "migrations" WHERE name = 'add_pointHintRuEN_to_analysisPoint'`,
+      { type: QueryTypes.SELECT },
+    );
+
+    if (!results) {
+      await this.sequelize.query(`
+          ALTER TABLE "analysisPoint" 
+          ADD COLUMN IF NOT EXISTS "pointHintRu" text DEFAULT NULL,
+          ADD COLUMN IF NOT EXISTS "pointHintEn" text DEFAULT NULL
+        `);
+      await this.sequelize.query(
+        `INSERT INTO "migrations" (name) VALUES ('add_pointHintRuEN_to_analysisPoint')`,
+      );
+      console.log('Migration add_pointHintRuEN_to_analysisPoint executed');
+    }
+  }
 }

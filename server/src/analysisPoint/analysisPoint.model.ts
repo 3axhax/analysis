@@ -15,6 +15,8 @@ export interface AnalysisPointCreationAttrs {
   translationRu?: string;
   translationEn?: string;
   translationParsing?: string;
+  pointHintRu?: string;
+  pointHintEn?: string;
 }
 
 @Table({
@@ -43,23 +45,32 @@ export class AnalysisPoint extends Model<
   @Column({
     type: DataType.STRING(255),
     unique: true,
-    allowNull: false,
   })
   declare translationRu: string;
 
   @Column({
     type: DataType.STRING(255),
     unique: true,
-    allowNull: false,
   })
   declare translationEn: string;
 
   @Column({
     type: DataType.TEXT,
     unique: true,
-    allowNull: false,
   })
   declare translationParsing: string;
+
+  @Column({
+    type: DataType.TEXT,
+    unique: true,
+  })
+  declare pointHintRu: string;
+
+  @Column({
+    type: DataType.TEXT,
+    unique: true,
+  })
+  declare pointHintEn: string;
 
   @BelongsToMany(() => AnalysisPointUnits, () => AnalysisPointsUnits)
   declare units: AnalysisPointUnits[];
