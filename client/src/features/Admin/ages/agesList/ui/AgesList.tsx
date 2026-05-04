@@ -60,7 +60,7 @@ export const AgesList = ({ handlerEditRecord }: AgesListProps) => {
             <button
               type={"button"}
               onClick={() => handlerEditRecord(row.id)}
-              className="w-6 h-6 text-blue-600 hover:text-blue-700 transition-colors cursor-pointer ml-[10px]"
+              className="w-6 h-6 text-cyan-600 hover:text-cyan-800 transition-colors cursor-pointer ml-[10px]"
             >
               <PencilSquareIcon className="w-5 h-5" />
             </button>
