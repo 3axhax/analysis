@@ -7,6 +7,8 @@ import {
 } from "@entities/analysisPoint";
 import { AnalysisPointDataLimits } from "@widgets/Admin/analysisPointDataLimits";
 import { AnalysisPointsListActionItems } from "@features/Admin/analysisPoints/analysisPointsListActionItems";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { Tooltip } from "react-tooltip";
 
 export const AnalysisPointsList = () => {
   const { t } = useTranslation("entities");
@@ -46,10 +48,34 @@ export const AnalysisPointsList = () => {
               <div>
                 {t("analysisPoint.translationRu")} -{" "}
                 {row.translationRu !== "" ? row.translationRu : "Not set"}
+                {row.pointHintRu && (
+                  <button
+                    className={
+                      "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 dark:text-gray-200 items-start justify-center hover:text-green-800"
+                    }
+                    type={"button"}
+                    data-tooltip-content={row.pointHintRu}
+                  >
+                    <span className={"sr-only"}>Информация о показателе</span>
+                    <InformationCircleIcon className="inline-flex h-4 w-4 transition-transform hover:scale-110" />
+                  </button>
+                )}
               </div>
               <div>
                 {t("analysisPoint.translationEn")} -{" "}
                 {row.translationEn !== "" ? row.translationEn : "Not set"}
+                {row.pointHintEn && (
+                  <button
+                    className={
+                      "cursor-pointer description_anchor w-5 h-7 inline-flex text-gray-500 dark:text-gray-200 items-start justify-center hover:text-green-800"
+                    }
+                    type={"button"}
+                    data-tooltip-content={row.pointHintEn}
+                  >
+                    <span className={"sr-only"}>Информация о показателе</span>
+                    <InformationCircleIcon className="inline-flex h-4 w-4 transition-transform hover:scale-110" />
+                  </button>
+                )}
               </div>
               <div>
                 {t("analysisPoint.parsingString")} -{" "}
@@ -72,5 +98,14 @@ export const AnalysisPointsList = () => {
     });
   }
 
-  return <Table tableData={tableData} className={"max-w-[90%]"} />;
+  return (
+    <>
+      <Tooltip
+        anchorSelect=".description_anchor"
+        place="top"
+        className="max-w-xs !break-words !whitespace-normal !text-left"
+      />
+      <Table tableData={tableData} className={"max-w-[90%]"} />
+    </>
+  );
 };
