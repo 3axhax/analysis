@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {Laboratory} from "@shared/ui/Icons";
-import React from "react";
 
 export const Logo = () => {
   const { t } = useTranslation();
