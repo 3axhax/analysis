@@ -13,7 +13,7 @@ export const Logo = () => {
       }
     >
       <Laboratory className={"inline text-white size-4 lg:size-5 mr-1"} />
-      <span className={"text-white inline-flex relative overflow-hidden"}>
+      <span className={"text-white mt-0.5 inline-flex relative overflow-hidden"}>
         Р
         <span
           className={
@@ -23,7 +23,7 @@ export const Logo = () => {
           асшифровка&nbsp;
         </span>
       </span>
-      <span className={"text-orange-200 inline-flex relative overflow-hidden"}>
+      <span className={"text-orange-200 mt-0.5 inline-flex relative overflow-hidden"}>
         А
         <span
           className={
