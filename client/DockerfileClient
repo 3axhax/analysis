@@ -16,3 +16,14 @@ ENV WATCHPACK_POLLING=true
 EXPOSE 5173
 
 ENTRYPOINT ["sh", "/app/client/entrypoint.sh"]
+
+#FROM node:${NODE_VERSION}-alpine as builder
+#WORKDIR /app/client
+#COPY package*.json ./
+#RUN npm ci
+#COPY . .
+#RUN npm run build
+#
+#FROM nginx:alpine
+#COPY --from=builder /app/client/dist /usr/share/nginx/html
+#EXPOSE 80
