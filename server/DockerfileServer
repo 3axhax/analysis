@@ -5,18 +5,27 @@ FROM node:${NODE_VERSION}-alpine AS builder
 
 WORKDIR /app/server
 
+# Копируем package файлы
 COPY package*.json ./
-RUN npm ci --only=production
 
+# Устанавливаем все зависимости (включая devDependencies)
+RUN npm ci
+
+# Копируем исходный код
 COPY . .
-RUN npm run build  # Собираем NestJS приложение
+
+# Устанавливаем NestJS CLI глобально (альтернативное решение)
+# RUN npm install -g @nestjs/cli
+
+# Собираем приложение
+RUN npm run build
 
 # Стадия production
 FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app/server
 
-# Копируем только необходимое
+# Копируем собранное приложение и production зависимости
 COPY --from=builder /app/server/dist ./dist
 COPY --from=builder /app/server/node_modules ./node_modules
 COPY --from=builder /app/server/package*.json ./
