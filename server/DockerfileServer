@@ -1,13 +1,34 @@
 ARG NODE_VERSION=22.14.0
 
+# Стадия сборки
+FROM node:${NODE_VERSION}-alpine AS builder
+
+WORKDIR /app/server
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+RUN npm run build  # Собираем NestJS приложение
+
+# Стадия production
 FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app/server
 
-COPY ./package*.json ./
+# Копируем только необходимое
+COPY --from=builder /app/server/dist ./dist
+COPY --from=builder /app/server/node_modules ./node_modules
+COPY --from=builder /app/server/package*.json ./
 
-RUN npm install
+# Создаем пользователя без прав root
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nestjs -u 1001 && \
+    chown -R nestjs:nodejs /app/server
 
-COPY . .
+USER nestjs
 
-CMD ["npm", "run", "start:dev"]
+EXPOSE 5050
+
+# Запуск в production режиме
+CMD ["node", "dist/main.js"]
