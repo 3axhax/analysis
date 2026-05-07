@@ -14,9 +14,6 @@ RUN npm ci
 # Копируем исходный код
 COPY . .
 
-# Устанавливаем NestJS CLI глобально (альтернативное решение)
-# RUN npm install -g @nestjs/cli
-
 # Собираем приложение
 RUN npm run build
 
@@ -30,9 +27,9 @@ COPY --from=builder /app/server/dist ./dist
 COPY --from=builder /app/server/node_modules ./node_modules
 COPY --from=builder /app/server/package*.json ./
 
-# Создаем пользователя без прав root
+# Создаем пользователя без прав root (исправленная версия)
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nestjs -u 1001 && \
+    adduser -S -u 1001 -G nodejs nestjs && \
     chown -R nestjs:nodejs /app/server
 
 USER nestjs
