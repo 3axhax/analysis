@@ -23,8 +23,7 @@ services:
     env_file:
       - ./server/.development.env
     volumes:
-      - ./server:/app/server
-      - /app/server/node_modules
+      - ./server/uploads:/app/server/uploads
     expose:
       - "5050"
     depends_on:
