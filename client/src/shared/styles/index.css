@@ -183,17 +183,21 @@
 
     .form-control {
         font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
-        @apply text-cyan-800 w-full px-5 py-3 border border-cyan-800 bg-white text-base/5 rounded-md shadow-sm hover:shadow-cyan-900 focus:outline-none focus:border-green-900 focus:shadow-gray-400;
+        @apply text-cyan-800 w-full px-5 py-3 border border-cyan-800 bg-white text-base/5 rounded-md shadow-sm hover:shadow-cyan-900 focus:outline-none focus:border-green-900 focus:shadow-gray-400 dark:bg-cyan-950 dark:text-white;
     }
 
     .form-label {
         font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
-        @apply absolute top-3 left-4 bg-white text-base/5 rounded-xs text-cyan-800 transition-all duration-300 ease-in-out py-0.25 px-1;
+        @apply absolute top-3 left-4 bg-white text-base/5 rounded-xs text-cyan-800 dark:bg-cyan-950 dark:text-white transition-all duration-300 ease-in-out py-0.25 px-1;
     }
 
     .form-control:focus + .form-label,
-    .form-control:not(:placeholder-shown) + .form-label {
+    .form-control:focus:not(:placeholder-shown) + .form-label {
         @apply -top-3 text-xs/5;
+    }
+
+    .form-control:not(:focus):placeholder-shown {
+        color: transparent;
     }
 
     .form-control:-webkit-autofill,
