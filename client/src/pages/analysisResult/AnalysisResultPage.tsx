@@ -57,15 +57,15 @@ export const AnalysisResultPage = () => {
         </button>
       </h1>
       {analysisResult ? (
-        <div className="mx-auto mb-8 w-10/12 bg-white dark:bg-blue-950 rounded-xl p-8 shadow-xl text-left">
+        <div className="mx-auto mb-8 w-10/12 bg-white dark:bg-cyan-950 rounded-xl p-8 shadow-xl text-left">
           <div
             className={
-              "flex gap-3 py-2 border-1 border-cyan-800 justify-center"
+              "flex gap-3 py-2 border-1 border-b-0 border-cyan-800 dark:border-white justify-center"
             }
           >
-            <span className={"text-gray-600"}>{t("gender")}: </span>
+            <span className={"text-gray-600 dark:text-gray-300"}>{t("gender")}: </span>
             {tEntities(`gender.${analysisResult.result.Gender.name}`)}
-            <span className={"text-gray-600"}>{t("age")}: </span>
+            <span className={"text-gray-600 dark:text-gray-300"}>{t("age")}: </span>
             {convertDaysToAge(analysisResult.result.ageInDays)}
           </div>
 
