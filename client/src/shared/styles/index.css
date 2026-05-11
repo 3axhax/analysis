@@ -331,13 +331,13 @@
     }
 
     .result-table tr {
-        @apply grid grid-cols-[60%_40%];
+        @apply max-sm:grid max-sm:grid-cols-[60%_40%];
 
         td{
-            @apply last:col-span-2 last:border-t last:border-b last:justify-items-center [&:nth-child(2)]:!border-r-0;
+            @apply max-sm:last:col-span-2 max-sm:last:border-t max-sm:last:border-b max-sm:last:justify-items-center max-sm:[&:nth-child(2)]:!border-r-0;
         }
         th {
-            @apply [&:last-child]:hidden [&:nth-child(2)]:!border-r-0;
+            @apply max-sm:[&:last-child]:hidden max-sm:[&:nth-child(2)]:!border-r-0;
         }
     }
 
