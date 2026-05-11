@@ -37,7 +37,7 @@ export const AnalysisResultPage = () => {
 
   return (
     <div className="app">
-      <h1 className="text-4xl font-light text-gray-900 dark:text-white mb-4">
+      <h1 className="text-2xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
         {title}
         <button
           type={"button"}
@@ -50,14 +50,14 @@ export const AnalysisResultPage = () => {
           ) : (
             <LinkIcon
               className={
-                "size-6 inline-flex mx-1 text-gray-500 hover:text-gray-700 transition-colors"
+                "size-6 inline-flex mx-1 text-gray-500 hover:text-gray-700 dark:text-gray-100 dark:hover:dark:text-gray-300 transition-colors"
               }
             />
           )}
         </button>
       </h1>
       {analysisResult ? (
-        <div className="mx-auto mb-8 w-10/12 bg-white dark:bg-cyan-950 rounded-xl p-8 shadow-xl text-left">
+        <div className="mx-auto mb-8 w-full lg:w-10/12 bg-white dark:bg-cyan-950 rounded-xl lg:p-8 shadow-xl text-left">
           <div
             className={
               "flex gap-3 py-2 border-1 border-b-0 border-cyan-800 dark:border-white justify-center"

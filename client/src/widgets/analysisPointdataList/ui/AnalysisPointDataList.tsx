@@ -78,7 +78,7 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
         place="top"
         className="max-w-xs !break-words !whitespace-normal !text-left"
       />
-      <Table tableData={tableData} />
+      <Table tableData={tableData} className={'result-table'} />
     </>
   );
 };

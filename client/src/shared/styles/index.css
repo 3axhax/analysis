@@ -268,7 +268,7 @@
     }
 
     .radio-input:before {
-        @apply w-3 h-3 absolute top-0.5 left-0.5 rounded-full z-1 bg-cyan-800 content-[''] transform scale-0 transition-transform duration-400 ease-[cubic-bezier(.45,1.8,.5,.75)];
+        @apply w-3 h-3 absolute top-0.5 left-0.5 rounded-full z-1 bg-cyan-800 dark:bg-cyan-50 content-[''] transform scale-0 transition-transform duration-400 ease-[cubic-bezier(.45,1.8,.5,.75)];
     }
 
     .radio-label {
@@ -280,7 +280,7 @@
     }
 
     .radio-input:after {
-        @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white dark:bg-black border-2 border-cyan-800;
+        @apply w-5 h-5 absolute -top-0.5 -left-0.5 rounded-full content-[''] bg-white dark:bg-black border-2 border-cyan-800 dark:border-cyan-50;
     }
 
     .st_0 {
@@ -329,6 +329,18 @@
             }
         }
     }
+
+    .result-table tr {
+        @apply grid grid-cols-[60%_40%];
+
+        td{
+            @apply last:col-span-2 last:border-t last:border-b last:justify-items-center [&:nth-child(2)]:!border-r-0;
+        }
+        th {
+            @apply [&:last-child]:hidden [&:nth-child(2)]:!border-r-0;
+        }
+    }
+
 }
 
 .font-sans {
