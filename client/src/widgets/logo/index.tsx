@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import {Laboratory} from "@shared/ui/Icons";
+import { Laboratory } from "@shared/ui/Icons";
 
 export const Logo = () => {
   const { t } = useTranslation();
@@ -13,7 +13,9 @@ export const Logo = () => {
       }
     >
       <Laboratory className={"inline text-white size-4 lg:size-5 mr-1"} />
-      <span className={"text-white mt-0.5 inline-flex relative overflow-hidden"}>
+      <span
+        className={"text-white mt-0.5 inline-flex relative overflow-hidden"}
+      >
         Р
         <span
           className={
@@ -23,7 +25,11 @@ export const Logo = () => {
           асшифровка&nbsp;
         </span>
       </span>
-      <span className={"text-orange-200 mt-0.5 inline-flex relative overflow-hidden"}>
+      <span
+        className={
+          "text-orange-200 mt-0.5 inline-flex relative overflow-hidden"
+        }
+      >
         А
         <span
           className={

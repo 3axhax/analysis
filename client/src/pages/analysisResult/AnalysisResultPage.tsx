@@ -63,9 +63,13 @@ export const AnalysisResultPage = () => {
               "flex gap-3 py-2 border-1 border-b-0 border-cyan-800 dark:border-white justify-center"
             }
           >
-            <span className={"text-gray-600 dark:text-gray-300"}>{t("gender")}: </span>
+            <span className={"text-gray-600 dark:text-gray-300"}>
+              {t("gender")}:{" "}
+            </span>
             {tEntities(`gender.${analysisResult.result.Gender.name}`)}
-            <span className={"text-gray-600 dark:text-gray-300"}>{t("age")}: </span>
+            <span className={"text-gray-600 dark:text-gray-300"}>
+              {t("age")}:{" "}
+            </span>
             {convertDaysToAge(analysisResult.result.ageInDays)}
           </div>
 
