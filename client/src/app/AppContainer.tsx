@@ -17,10 +17,15 @@ import { AgesPage } from "@pages/Admin/ages";
 import { AnalysisPointsPage } from "@pages/Admin/analysisPoints";
 import { DescriptionsPage } from "@pages/Admin/descriptions";
 import { AnalysisTypePage } from "@pages/Admin/analysisType";
+import { PoliticsAgreementBlock } from "@features/politicsAgreementBlock";
+import { ConsentPersonalData } from "@pages/consentPersonalData";
+import { PolicyPersonalData } from "@pages/policyPersonalData";
+import { Basement } from "@pages/basement";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
   const isUserAdmin = useAppSelector(selectIsUserAdmin);
+  const acceptYm = localStorage.getItem("accept_ym");
 
   useEffect(() => {
     dispatch(checkLSUser());
@@ -37,6 +42,11 @@ function AppContainer() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
+        <Route
+          path="/consent-personal-data"
+          element={<ConsentPersonalData />}
+        />
+        <Route path="/privacy-policy" element={<PolicyPersonalData />} />
         {isUserAdmin && (
           <>
             <Route path="/admin/translations" element={<TranslationsPage />} />
@@ -52,7 +62,9 @@ function AppContainer() {
         )}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Basement />
       <InfoModal />
+      {!acceptYm && <PoliticsAgreementBlock />}
     </div>
   );
 }

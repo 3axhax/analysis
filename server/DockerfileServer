@@ -1,13 +1,31 @@
 ARG NODE_VERSION=22.14.0
 
+FROM node:${NODE_VERSION}-alpine AS builder
+
+WORKDIR /app/server
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
 FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app/server
 
-COPY ./package*.json ./
+COPY --from=builder /app/server/dist ./dist
+COPY --from=builder /app/server/node_modules ./node_modules
+COPY --from=builder /app/server/package*.json ./
 
-RUN npm install
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S -u 1001 -G nodejs nestjs && \
+    chown -R nestjs:nodejs /app/server
 
-COPY . .
+USER nestjs
 
-CMD ["npm", "run", "start:dev"]
+EXPOSE 5050
+
+CMD ["node", "dist/main.js"]
