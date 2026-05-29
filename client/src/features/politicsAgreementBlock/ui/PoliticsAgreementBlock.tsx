@@ -22,7 +22,7 @@ export const PoliticsAgreementBlock = () => {
   return showBlock ? (
     <div
       className={
-        "w-full lg:w-9/12 mx-auto mt-auto sticky z-100 bottom-0 bg-cyan-600 text-white bg-gradient-to-r from-cyan-800 via-cyan-500 to-cyan-800 bg-[length:300%_100%]dark:shadow-white/20 rounded-t-3xl shadow-xl py-4 px-8"
+        "w-full lg:w-9/12 mx-auto mt-auto sticky z-100 bottom-0 bg-cyan-600 text-white bg-gradient-to-r from-cyan-800 via-cyan-500 to-cyan-800 bg-[length:300%_100%]dark:shadow-white/20 rounded-t-xl lg:rounded-t-3xl shadow-xl py-4 px-8"
       }
     >
       <p className={"pb-2"}>
