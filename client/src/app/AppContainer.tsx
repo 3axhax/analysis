@@ -32,7 +32,7 @@ function AppContainer() {
   }, [dispatch]);
 
   return (
-    <div className="page">
+    <div className="page min-h-screen flex flex-col">
       <Navigation />
       <Routes>
         <Route path="/" element={<AnalysisPage />} />
