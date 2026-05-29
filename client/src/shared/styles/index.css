@@ -348,6 +348,13 @@
       @apply max-sm:[&:last-child]:hidden max-sm:[&:nth-child(2)]:!border-r-0;
     }
   }
+
+  .content {
+    p,
+    ul {
+      @apply mb-4;
+    }
+  }
 }
 
 .font-sans {

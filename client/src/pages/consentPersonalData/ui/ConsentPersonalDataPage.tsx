@@ -4,8 +4,14 @@ export const ConsentPersonalData = () => {
   const title = "Согласие на обработку персональных данных";
   useDocumentTitle(title);
   return (
-    <>
-      <h1>{title}</h1>
+    <div className={"mx-auto lg:w-8/12 sm:w-full text-left content"}>
+      <h1
+        className={
+          "text-2xl text-center font-light lg:text-4xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        {title}
+      </h1>
 
       <p>
         Настоящее Согласие регулирует отношения, связанные с обработкой
@@ -21,7 +27,13 @@ export const ConsentPersonalData = () => {
         в настоящем документе.
       </p>
 
-      <h2>1. Какие данные обрабатываются</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        1. Какие данные обрабатываются
+      </h2>
 
       <h3>1.1. Данные, вводимые пользователем добровольно</h3>
       <p>
@@ -65,7 +77,13 @@ export const ConsentPersonalData = () => {
         <li>Информацию, позволяющую идентифицировать личность пользователя.</li>
       </ul>
 
-      <h2>2. Цели обработки данных</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        2. Цели обработки данных
+      </h2>
 
       <h3>2.1. Обработка параметров анализов, пола и возраста</h3>
       <p>Указанные данные обрабатываются исключительно в следующих целях:</p>
@@ -92,7 +110,13 @@ export const ConsentPersonalData = () => {
         </li>
       </ul>
 
-      <h2>3. Хранение данных и уникальная зашифрованная ссылка</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        3. Хранение данных и уникальная зашифрованная ссылка
+      </h2>
 
       <h3>3.1. Сохранение результатов анализов</h3>
       <p>
@@ -123,7 +147,13 @@ export const ConsentPersonalData = () => {
         в случае утраты ссылки.
       </p>
 
-      <h2>4. Использование LocalStorage и Cookie</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        4. Использование LocalStorage и Cookie
+      </h2>
 
       <h3>4.1. LocalStorage</h3>
       <p>
@@ -151,7 +181,13 @@ export const ConsentPersonalData = () => {
         позволяющие идентифицировать конкретного человека.
       </p>
 
-      <h2>5. Правовое основание и согласие</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        5. Правовое основание и согласие
+      </h2>
 
       <h3>5.1. Согласие на сбор статистики (Яндекс Метрика)</h3>
       <p>
@@ -177,7 +213,13 @@ export const ConsentPersonalData = () => {
         добровольно по действию пользователя (нажатие кнопки "Расшифровать").
       </p>
 
-      <h2>6. Отзыв согласия</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        6. Отзыв согласия
+      </h2>
 
       <h3>6.1. Отзыв согласия на сбор статистики Яндекс Метрикой</h3>
       <p>
@@ -209,7 +251,13 @@ export const ConsentPersonalData = () => {
         ссылку.
       </p>
 
-      <h2>7. Передача данных третьим лицам</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        7. Передача данных третьим лицам
+      </h2>
 
       <h3>7.1. Яндекс Метрика</h3>
       <p>
@@ -225,7 +273,13 @@ export const ConsentPersonalData = () => {
         Российской Федерации.
       </p>
 
-      <h2>8. Сроки хранения данных</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        8. Сроки хранения данных
+      </h2>
 
       <ul>
         <li>
@@ -239,7 +293,13 @@ export const ConsentPersonalData = () => {
         <li>Cookie Яндекс Метрики — до 1 года.</li>
       </ul>
 
-      <h2>9. Права пользователя</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        9. Права пользователя
+      </h2>
 
       <p>Пользователь имеет право:</p>
       <ul>
@@ -263,7 +323,13 @@ export const ConsentPersonalData = () => {
         зашифрованной ссылки.
       </p>
 
-      <h2>10. Контактная информация Оператора</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        10. Контактная информация Оператора
+      </h2>
 
       <p>
         По вопросам, связанным с обработкой данных, отзывом согласия или
@@ -272,7 +338,13 @@ export const ConsentPersonalData = () => {
         <a href="mailto:privacy@proanalize.ru">privacy@proanalize.ru</a>
       </p>
 
-      <h2>11. Подтверждение согласия</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        11. Подтверждение согласия
+      </h2>
 
       <p>
         Нажимая кнопку <strong>"Принять"</strong> в уведомлении о сборе
@@ -300,9 +372,11 @@ export const ConsentPersonalData = () => {
         </li>
       </ul>
 
-      <hr />
-
-      <p>
+      <p
+        className={
+          "text-cyan-950 text text-center font-light lg:text-lg font-sans"
+        }
+      >
         <strong>Дата последнего обновления:</strong> 26 мая 2026 г.
       </p>
 
@@ -311,6 +385,6 @@ export const ConsentPersonalData = () => {
         является медицинским учреждением. Результаты расшифровки носят
         ознакомительный характер и не заменяют консультацию врача.
       </p>
-    </>
+    </div>
   );
 };

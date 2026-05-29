@@ -5,12 +5,28 @@ export const PolicyPersonalData = () => {
   const title = "Политика обработки персональных данных";
   useDocumentTitle(title);
   return (
-    <>
-      <h1>{title}</h1>
-      <p>
+    <div className={"mx-auto lg:w-8/12 sm:w-full text-left content"}>
+      <h1
+        className={
+          "text-2xl text-center font-light lg:text-4xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        {title}
+      </h1>
+      <p
+        className={
+          "text-cyan-950 text text-center font-light lg:text-lg font-sans"
+        }
+      >
         <strong>Дата последнего обновления</strong>: 26 мая 2026 г.
       </p>
-      <h2>1. Общие положения</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        1. Общие положения
+      </h2>
       <p>
         Настоящая Политика обработки персональных данных (далее — «Политика»)
         составлена в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ
@@ -20,7 +36,13 @@ export const PolicyPersonalData = () => {
       </p>
       <p>Адрес сайта: https://proanalize.ru/</p>
       <p>Оператор персональных данных: Владелец сайта proanalize.ru</p>
-      <h2>2. Основные понятия</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        2. Основные понятия
+      </h2>
       <p>
         Для целей настоящей Политики используются следующие определения:
         <ul>
@@ -49,7 +71,13 @@ export const PolicyPersonalData = () => {
           </li>
         </ul>
       </p>
-      <h2>3. Какие данные обрабатывает Сайт</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        3. Какие данные обрабатывает Сайт
+      </h2>
       <h3>3.1. Данные, предоставляемые пользователем</h3>
       <p>
         Для предоставления услуги расшифровки медицинских анализов пользователь
@@ -122,7 +150,13 @@ export const PolicyPersonalData = () => {
           <li>Отслеживающие пиксели и веб-маяки.</li>
         </ul>
       </p>
-      <h2>5. Хранение данных. Уникальная зашифрованная ссылка</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        5. Хранение данных. Уникальная зашифрованная ссылка
+      </h2>
       <h3>5.1. Принцип хранения</h3>
       <p>
         Сайт предоставляет пользователю возможность сохранить введенные
@@ -190,7 +224,13 @@ export const PolicyPersonalData = () => {
         </ul>
       </p>
 
-      <h2>6. Яндекс Метрика (сбор статистики)</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        6. Яндекс Метрика (сбор статистики)
+      </h2>
 
       <h3>6.1. Общие сведения</h3>
       <p>
@@ -324,25 +364,57 @@ export const PolicyPersonalData = () => {
         Файлы Cookie, устанавливаемые Яндекс Метрикой, имеют следующие сроки
         хранения:
       </p>
-      <table>
+      <table
+        className={
+          "result-table m-auto w-full border border-cyan-800 dark:border-white mb-4"
+        }
+      >
         <thead>
-          <tr>
-            <th>Назначение</th>
-            <th>Срок хранения</th>
+          <tr className={"bg-cyan-800 text-white"}>
+            <th className="border-r border-white last:border-r-cyan-800 dark:last:border-r-white px-4 py-3 text-start text-sm font-medium">
+              Назначение
+            </th>
+            <th className="border-r border-white last:border-r-cyan-800 dark:last:border-r-white px-4 py-3 text-start text-sm font-medium">
+              Срок хранения
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Идентификация уникального посетителя</td>
-            <td>До 1 года</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Идентификация уникального посетителя
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              До 1 года
+            </td>
           </tr>
-          <tr>
-            <td>Идентификация сессии</td>
-            <td>До 30 минут бездействия</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Идентификация сессии
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              До 30 минут бездействия
+            </td>
           </tr>
-          <tr>
-            <td>Хранение выбора пользователя (отказ от сбора)</td>
-            <td>До 1 года</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Хранение выбора пользователя (отказ от сбора)
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              До 1 года
+            </td>
           </tr>
         </tbody>
       </table>
@@ -376,7 +448,13 @@ export const PolicyPersonalData = () => {
         </li>
       </ul>
 
-      <h2>7. Цели обработки данных</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        7. Цели обработки данных
+      </h2>
 
       <h3>7.1. Обработка параметров анализов, пола и возраста</h3>
       <p>Указанные данные обрабатываются исключительно в следующих целях:</p>
@@ -409,7 +487,13 @@ export const PolicyPersonalData = () => {
         <li>Обеспечения безопасности и предотвращения атак.</li>
       </ul>
 
-      <h2>8. Правовые основания обработки</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        8. Правовые основания обработки
+      </h2>
       <p>Обработка данных осуществляется на следующих правовых основаниях:</p>
       <ul>
         <li>
@@ -427,7 +511,13 @@ export const PolicyPersonalData = () => {
         </li>
       </ul>
 
-      <h2>9. Передача данных третьим лицам</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        9. Передача данных третьим лицам
+      </h2>
 
       <h3>9.1. Яндекс Метрика</h3>
       <p>
@@ -456,47 +546,113 @@ export const PolicyPersonalData = () => {
         политикой конфиденциальности ООО «ЯНДЕКС».
       </p>
 
-      <h2>10. Меры защиты информации</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        10. Меры защиты информации
+      </h2>
       <p>Оператор принимает следующие меры для защиты данных:</p>
-      <table>
+      <table
+        className={
+          "result-table m-auto w-full border border-cyan-800 dark:border-white mb-4"
+        }
+      >
         <thead>
-          <tr>
-            <th>Мера</th>
-            <th>Описание</th>
+          <tr className={"bg-cyan-800 text-white"}>
+            <th className="border-r border-white last:border-r-cyan-800 dark:last:border-r-white px-4 py-3 text-start text-sm font-medium">
+              Мера
+            </th>
+            <th className="border-r border-white last:border-r-cyan-800 dark:last:border-r-white px-4 py-3 text-start text-sm font-medium">
+              Описание
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Шифрование</td>
-            <td>Все сохраняемые данные шифруются перед записью на сервер</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Шифрование
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Все сохраняемые данные шифруются перед записью на сервер
+            </td>
           </tr>
-          <tr>
-            <td>HTTPS</td>
-            <td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              HTTPS
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
               Используется защищенный протокол для передачи данных между
               пользователем и сайтом
             </td>
           </tr>
-          <tr>
-            <td>Отсутствие Cookie</td>
-            <td>Исключен риск утечки данных через Cookie</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Отсутствие Cookie
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Исключен риск утечки данных через Cookie
+            </td>
           </tr>
-          <tr>
-            <td>Ограниченный доступ</td>
-            <td>Доступ к серверам имеют только авторизованные сотрудники</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Ограниченный доступ
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Доступ к серверам имеют только авторизованные сотрудники
+            </td>
           </tr>
-          <tr>
-            <td>Регулярное обновление ПО</td>
-            <td>Установка обновлений безопасности</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Регулярное обновление ПО
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Установка обновлений безопасности
+            </td>
           </tr>
-          <tr>
-            <td>Автоматическое удаление</td>
-            <td>Данных по истечении срока хранения (30 дней)</td>
+          <tr
+            className={
+              "border-t border-gray-300 hover:bg-cyan-50 hover:dark:bg-cyan-900 first:border-t-0"
+            }
+          >
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Автоматическое удаление
+            </td>
+            <td className="px-3 py-2 text-sm text-gray-900 dark:text-white border-r border-gray-300 dark:border-white">
+              Данных по истечении срока хранения (30 дней)
+            </td>
           </tr>
         </tbody>
       </table>
 
-      <h2>11. Права пользователей</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        11. Права пользователей
+      </h2>
       <p>Пользователь, чьи данные обрабатываются, имеет право:</p>
       <ul>
         <li>
@@ -534,7 +690,13 @@ export const PolicyPersonalData = () => {
         полученную при сохранении результатов.
       </p>
 
-      <h2>12. Управление LocalStorage</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        12. Управление LocalStorage
+      </h2>
 
       <h3>12.1. Как очистить LocalStorage</h3>
       <p>Пользователь может в любой момент очистить данные LocalStorage:</p>
@@ -583,7 +745,13 @@ export const PolicyPersonalData = () => {
         сервере.
       </p>
 
-      <h2>13. Обработка персональных данных несовершеннолетних</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        13. Обработка персональных данных несовершеннолетних
+      </h2>
       <p>
         Сайт не предназначен для использования лицами младше 18 лет без согласия
         законных представителей. Если Оператору станет известно, что данные
@@ -605,7 +773,13 @@ export const PolicyPersonalData = () => {
         дней до вступления изменений в силу.
       </p>
 
-      <h2>15. Контактная информация</h2>
+      <h2
+        className={
+          "text-xl text-center font-light lg:text-2xl font-sans text-gray-900 dark:text-white mb-4"
+        }
+      >
+        15. Контактная информация
+      </h2>
       <p>
         По вопросам, связанным с настоящей Политикой, пользователи могут
         обратиться по электронной почте{" "}
@@ -616,8 +790,6 @@ export const PolicyPersonalData = () => {
         момента получения.
       </p>
 
-      <hr />
-
       <div>
         <p>
           <strong>Важно:</strong> Сайт предоставляет информационные услуги и не
@@ -627,6 +799,6 @@ export const PolicyPersonalData = () => {
           квалифицированным специалистом.
         </p>
       </div>
-    </>
+    </div>
   );
 };
