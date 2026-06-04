@@ -335,7 +335,7 @@ export const ConsentPersonalData = () => {
         По вопросам, связанным с обработкой данных, отзывом согласия или
         удалением сохраненных результатов, пользователи могут обратиться{" "}
         <strong>По электронной почте:</strong>{" "}
-        <a href="mailto:privacy@proanalize.ru">privacy@proanalize.ru</a>
+        <a href="mailto:proanalize@yandex.ru">proanalize@yandex.ru</a>
       </p>
 
       <h2
