@@ -46,7 +46,7 @@ export const Accordion: FC<AccordionContainerProps> = ({
   };
 
   return (
-      <ul className={`space-y-3 ${className}`}>
+      <ul className={` ${className}`}>
         {items.map((item) => {
           const isOpen = openIds.includes(item.id);
 
