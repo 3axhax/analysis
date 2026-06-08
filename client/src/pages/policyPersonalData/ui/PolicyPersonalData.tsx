@@ -783,7 +783,7 @@ export const PolicyPersonalData = () => {
       <p>
         По вопросам, связанным с настоящей Политикой, пользователи могут
         обратиться по электронной почте{" "}
-        <a href="mailto:privacy@proanalize.ru">privacy@proanalize.ru</a>
+        <a href="mailto:proanalize@yandex.ru">proanalize@yandex.ru</a>
       </p>
       <p>
         Срок рассмотрения обращений — <strong>30 (тридцать) дней</strong> с
