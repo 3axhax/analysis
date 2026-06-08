@@ -11,7 +11,6 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { NavigationUI, NavItem } from "./NavigationUI.tsx";
 import {
   Donwload,
-  Laboratory,
   ListsIcon,
   LogoutIcon,
   SettingsIcon,
@@ -29,9 +28,9 @@ export const Navigation = () => {
     {
       key: "preparation",
       path: "preparation",
-      label: "Подготовка",
+      label: "Список анализов",
       iconLink: (
-        <Laboratory
+        <ListsIcon
           className={
             "lg:absolute mr-2 lg:mr-0 h-5 w-5 lg:-left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50"
           }

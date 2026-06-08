@@ -19,9 +19,9 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GenderType } from "@shared/lib/types";
 import { DropFile } from "@pages/analysis/Dropfile.tsx";
-import { Laboratory, Donwload } from "@shared/ui/Icons";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { Donwload, ListsIcon} from "@shared/ui/Icons";
 import { AgeInDaysSelector } from "@features/ageInDaysSelector";
+import {ExistedAnalysisList} from "@widgets/existedAnalysisList";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");
@@ -73,39 +73,46 @@ export const AnalysisPage = () => {
 
   return (
     <div className="app w-full bg-white dark:bg-gray-900">
-      <div className="mb-8 lg:w-6/12 sm:w-full" id={"preparation"}>
+      <div className="mb-8 lg:w-4/12 sm:w-full" id={"preparation"}>
         <h2 className="text-2xl font-light lg:text-4xl font-sans text-gray-900 dark:text-white mb-4">
-          <Laboratory className={"inline size-6 lg:size-8 mr-2 mb-2"} />
-          Подготовка к сдаче анализа
+          <ListsIcon className={"inline size-6 lg:size-8 mr-2 mb-2"} />
+          Список анализов
         </h2>
-        <p
-          className={
-            "text-2xl font-light text-center text-gray-900 dark:text-white mb-4"
-          }
-        >
-          Основные рекомендации:
-        </p>
-        <ul className={"text-left mb-4"}>
-          <li>
-            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
-            минимальные физические нагрузки в течение суток;
+        {/*<ul className={"text-left mb-4"}>
+          <li className={'mb-2'}>
+                <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+                Общий анализ крови с лейкоцитарной формулой и СОЭ
           </li>
-          <li>
-            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
-            не принимать алкоголь за трое суток;
+          <li className={'mb-2'}>
+            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+            Анемия или избыток железа
           </li>
-          <li>
-            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
-            не курить за пару часов;
+          <li className={'mb-2'}>
+          <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+            Оценка работы печени
           </li>
-          <li>
-            <CheckIcon className="inline h-4 w-4 text-cyan-600 dark:text-white" />{" "}
-            анализы сдаются натощак (12-14 часов воздержания от приема пищи),
-            желательно соблюдать диетический режим питания (не употреблять
-            острую, жирную, соленую пищу), можно выпить 100-200г теплой воды
-            утром;
+          <li className={'mb-2'}>
+            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+            Оценка работы почек
           </li>
-        </ul>
+          <li className={'mb-2'}>
+            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+            Углеводный обмен
+          </li>
+          <li className={'mb-2'}>
+            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+            Липидный обмен
+          </li>
+          <li className={'mb-2'}>
+            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+            Белковый обмен
+          </li>
+          <li className={'mb-2'}>
+            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
+            Минеральный обмен
+          </li>
+        </ul>*/}
+        <ExistedAnalysisList/>
       </div>
       <div className="mb-20 lg:w-8/12 sm:w-full" id={"analysis"}>
         <h2 className="text-2xl font-light lg:text-4xl font-sans text-gray-900 mb-2 dark:text-white">
