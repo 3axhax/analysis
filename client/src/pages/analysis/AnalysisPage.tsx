@@ -73,7 +73,7 @@ export const AnalysisPage = () => {
 
   return (
     <div className="app w-full bg-white dark:bg-gray-900">
-      <div className="mb-8 lg:w-4/12 sm:w-full" id={"preparation"}>
+      <div className="mb-8 lg:w-8/12 sm:w-full" id={"preparation"}>
         <h2 className="text-2xl font-light lg:text-4xl font-sans text-gray-900 dark:text-white mb-4">
           <ListsIcon className={"inline size-6 lg:size-8 mr-2 mb-2"} />
           Список анализов
