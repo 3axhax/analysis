@@ -78,40 +78,6 @@ export const AnalysisPage = () => {
           <ListsIcon className={"inline size-6 lg:size-8 mr-2 mb-2"} />
           Список анализов
         </h2>
-        {/*<ul className={"text-left mb-4"}>
-          <li className={'mb-2'}>
-                <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-                Общий анализ крови с лейкоцитарной формулой и СОЭ
-          </li>
-          <li className={'mb-2'}>
-            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-            Анемия или избыток железа
-          </li>
-          <li className={'mb-2'}>
-          <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-            Оценка работы печени
-          </li>
-          <li className={'mb-2'}>
-            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-            Оценка работы почек
-          </li>
-          <li className={'mb-2'}>
-            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-            Углеводный обмен
-          </li>
-          <li className={'mb-2'}>
-            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-            Липидный обмен
-          </li>
-          <li className={'mb-2'}>
-            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-            Белковый обмен
-          </li>
-          <li className={'mb-2'}>
-            <CheckCircleIcon className="inline h-5 w-5 text-cyan-600 mr-2 dark:text-white"/>
-            Минеральный обмен
-          </li>
-        </ul>*/}
         <ExistedAnalysisList/>
       </div>
       <div className="mb-20 lg:w-8/12 sm:w-full" id={"analysis"}>
