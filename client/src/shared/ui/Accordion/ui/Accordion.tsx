@@ -60,16 +60,16 @@ export const Accordion: FC<AccordionContainerProps> = ({
                 <button
                     onClick={() => !item.disabled && toggle(item.id)}
                     disabled={item.disabled}
-                    className={`border-1 border-cyan-600 rounded-xl hover:shadow-md w-full px-4 py-3 h-full text-left flex justify-between items-center transition-colors transition-border duration-300 ease-in-out hover:bg-cyan-50 ${
-                        isOpen ? 'bg-cyan-50 rounded-b-none' : 'bg-white'
+                    className={`border-1 border-cyan-600 dark:border-cyan-800 rounded-xl hover:shadow-md w-full px-4 py-3 h-full text-left flex justify-between items-center transition-colors transition-border duration-300 ease-in-out hover:bg-cyan-50 dark:hover:bg-gray-700 ${
+                        isOpen ? 'bg-cyan-50 dark:bg-gray-900 rounded-b-none' : 'bg-white dark:bg-gray-900'
                     } ${headerClassName}`}
                 >
                   <div className="flex items-center gap-3">
-                    {item.icon && <span className="text-gray-500">{item.icon}</span>}
-                    <span className="font-semibold text-gray-800">{item.title}</span>
+                    {item.icon && <span className="text-gray-500 dark:text-white">{item.icon}</span>}
+                    <span className="font-semibold text-gray-800 dark:text-white">{item.title}</span>
                   </div>
                   <svg
-                      className={`w-5 h-5 text-gray-400 transition-all duration-300 ${
+                      className={`w-5 h-5 flex-shrink-0 text-gray-400 dark:text-white transition-all duration-300 ${
                           isOpen ? 'rotate-180' : ''
                       }`}
                       fill="none"
@@ -84,7 +84,7 @@ export const Accordion: FC<AccordionContainerProps> = ({
                         isOpen ? 'max-h-[2000px]' : 'max-h-0'
                     } ${contentClassName}  ${isOpen ? openedContentClassName : ''}`}
                 >
-                  <div className={`px-5 pb-5 pt-3 text-gray-800`}>
+                  <div className={`px-5 pb-5 pt-3 text-gray-800 dark:text-white`}>
                     {item.content}
                   </div>
                 </div>
