@@ -11,13 +11,15 @@ export const accordionItems: AccordionItemType[] = [
     ),
     title: "Безопасно",
     content: (
-      <ul>
+      <ul className={"list-disc p-4 space-y-3"}>
         <li>
           Мы не сканируем ваши персональные данные (телефон, возраст, время
           сдачи, ФИО) и тем более не передаем их третьим лицам
         </li>
         <li>Сканер анализирует исключительно показатели анализов</li>
-        <li>Важно указать возраст на момент сдачи анализа</li>
+        <li>
+          В связи с этим важно указать возраст на момент сдачи анализа и пол
+        </li>
       </ul>
     ),
   },
@@ -26,7 +28,7 @@ export const accordionItems: AccordionItemType[] = [
     icon: <SpeedIcon className={"inline size-10 text-white dark:text-white"} />,
     title: "Быстро",
     content: (
-      <ul>
+      <ul className={"list-disc p-4 space-y-3"}>
         <li>Результаты расшифровываются мгновенно</li>
         <li>Вы можете скачать файл или поделиться ссылкой</li>
       </ul>
@@ -39,7 +41,7 @@ export const accordionItems: AccordionItemType[] = [
     ),
     title: "Точно",
     content: (
-      <ul>
+      <ul className={"list-disc p-4 space-y-3"}>
         <li>Референсы для каждого месяца для детей до 1 года</li>
         <li>Референсы для всех возрастов в зависимости от пола</li>
         <li>

@@ -76,7 +76,7 @@ export const AnalysisPage = () => {
     <div className="app w-full">
       <div className="mb-8 lg:w-8/12 sm:w-full" id={"main"}>
         <h1 className="text-4xl lg:text-6xl font-sans mb-8">
-          <span className={"text-cyan-600 text-shadow-sm"}>
+          <span className={"text-cyan-600 dark:text-cyan-200 text-shadow-sm"}>
             Мгновенная расшифровка анализов
           </span>
           <br />

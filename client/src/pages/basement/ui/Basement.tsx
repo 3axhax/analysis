@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { MailIcon } from "@shared/ui/Icons/MailIcon.tsx";
 
 export const Basement = () => {
   return (
@@ -21,6 +22,12 @@ export const Basement = () => {
           >
             Согласие на обработку персональных данных
           </Link>
+        </li>
+        <li>
+          <a href={"mailto:proanalize@yandex.ru "} className={"text-cyan-600"}>
+            <MailIcon className={"inline size-5 mr-1"} />
+            <span className={"bg-underline-hover"}>proanalize@yandex.ru</span>
+          </a>
         </li>
       </ul>
     </div>
