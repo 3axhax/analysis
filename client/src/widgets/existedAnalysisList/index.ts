@@ -1,1 +1,1 @@
-export {ExistedAnalysisList} from './ui/ExistedAnalysisList';
+export { ExistedAnalysisList } from "./ui/ExistedAnalysisList";

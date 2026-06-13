@@ -19,9 +19,10 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GenderType } from "@shared/lib/types";
 import { DropFile } from "@pages/analysis/Dropfile.tsx";
-import { Donwload, ListsIcon} from "@shared/ui/Icons";
+import { Donwload, ListsIcon } from "@shared/ui/Icons";
 import { AgeInDaysSelector } from "@features/ageInDaysSelector";
-import {ExistedAnalysisList} from "@widgets/existedAnalysisList";
+import { ExistedAnalysisList } from "@widgets/existedAnalysisList";
+import { OpportunityList } from "@widgets/opportunityList";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");
@@ -73,12 +74,24 @@ export const AnalysisPage = () => {
 
   return (
     <div className="app w-full">
-      <div className="mb-8 lg:w-8/12 sm:w-full" id={"preparation"}>
+      <div className="mb-8 lg:w-8/12 sm:w-full" id={"main"}>
+        <h1 className="text-4xl lg:text-6xl font-sans mb-8">
+          <span className={"text-cyan-600 text-shadow-sm"}>
+            Мгновенная расшифровка анализов
+          </span>
+          <br />
+          <span className={"outlined-heading font-light"}>
+            бесплатно и без регистрации
+          </span>
+        </h1>
+        <OpportunityList />
+      </div>
+      <div className="mb-8 lg:w-8/12 sm:w-full" id={"list"}>
         <h2 className="text-2xl font-light lg:text-4xl font-sans text-gray-900 dark:text-white mb-4">
           <ListsIcon className={"inline size-6 lg:size-8 mr-2 mb-2"} />
-          Список анализов
+          Список расшифровываемых анализов
         </h2>
-        <ExistedAnalysisList/>
+        <ExistedAnalysisList />
       </div>
       <div className="mb-20 lg:w-8/12 sm:w-full" id={"analysis"}>
         <h2 className="text-2xl font-light lg:text-4xl font-sans text-gray-900 mb-2 dark:text-white">

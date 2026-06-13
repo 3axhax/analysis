@@ -26,8 +26,8 @@ export const Navigation = () => {
 
   const navItems: NavItem[] = [
     {
-      key: "preparation",
-      path: "preparation",
+      key: "list",
+      path: "list",
       label: "Список анализов",
       iconLink: (
         <ListsIcon
