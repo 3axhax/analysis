@@ -31,6 +31,7 @@ export class MigrationsService implements OnModuleInit {
           case 'analysisPoint':
             await this.migrationsAnalysisPoint.addTranslationRuENParsingColumn();
             await this.migrationsAnalysisPoint.addPointHintRuENColumn();
+            await this.migrationsAnalysisPoint.addParsingOrderColumn();
             break;
           case 'ages':
             await this.migrationsAges.addIntervalsColumn();

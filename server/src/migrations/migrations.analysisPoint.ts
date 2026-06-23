@@ -45,4 +45,22 @@ export class MigrationsAnalysisPoint {
       console.log('Migration add_pointHintRuEN_to_analysisPoint executed');
     }
   }
+
+  async addParsingOrderColumn() {
+    const [results] = await this.sequelize.query(
+      `SELECT * FROM "migrations" WHERE name = 'add_parsingOrder_to_analysisPoint'`,
+      { type: QueryTypes.SELECT },
+    );
+
+    if (!results) {
+      await this.sequelize.query(`
+          ALTER TABLE "analysisPoint" 
+          ADD COLUMN IF NOT EXISTS "parsingOrder" int DEFAULT 0
+        `);
+      await this.sequelize.query(
+        `INSERT INTO "migrations" (name) VALUES ('add_parsingOrder_to_analysisPoint')`,
+      );
+      console.log('Migration add_parsingOrder_to_analysisPoint executed');
+    }
+  }
 }

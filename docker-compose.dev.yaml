@@ -15,6 +15,8 @@ services:
     depends_on:
       postgres_analysis:
         condition: service_healthy
+      python_pdf_parser:
+        condition: service_healthy
 
   postgres_analysis:
     container_name: postgresAnalysis
@@ -46,5 +48,26 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+
+  python_pdf_parser:
+    container_name: pythonPDFParser
+    build:
+      context: ./python-microservice
+      dockerfile: DockerfilePythonMicroservice
+    ports:
+      - "8000:8000"  # Пробрасываем порт для отладки
+    volumes:
+      - ./python-microservice:/app
+      - /app/__pycache__  # Игнорируем кэш Python
+    environment:
+      - PYTHONUNBUFFERED=1
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+#      start_period: 10s
+    restart: unless-stopped
+
 volumes:
   pgdata_dev:

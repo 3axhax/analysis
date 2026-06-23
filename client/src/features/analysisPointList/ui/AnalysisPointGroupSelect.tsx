@@ -32,6 +32,10 @@ export const AnalysisPointGroupSelect = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    setSelectedOptions([]);
+  }, []);
+
+  useEffect(() => {
     dispatch(setSelectedPoint(selectedOptions.map((point) => point.value)));
   }, [selectedOptions, dispatch]);
 

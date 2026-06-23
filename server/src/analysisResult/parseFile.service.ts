@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PDFParse } from 'pdf-parse';
 import {
   AnalysisPointService,
   AnalysisPointWithTranslation,
 } from '../analysisPoint/analysisPoint.service';
+import { PdfParserService } from '../pdf-parser/pdf-parser.service';
 
 interface FindingPoint {
   id: number;
@@ -17,150 +17,85 @@ export class ParseFileService {
   findingPoints: FindingPoint[] = [];
   pointsList: AnalysisPointWithTranslation[] = [];
 
-  constructor(private analysisPointService: AnalysisPointService) {}
+  rowDataValueMaxLimit: number = 3000;
+
+  constructor(
+    private analysisPointService: AnalysisPointService,
+    private readonly pdfParserService: PdfParserService,
+  ) {}
   parseFile = async (file: Express.Multer.File) => {
     this.findingPoints = [];
 
-    this.pointsList = await this.analysisPointService.getAllWithTranslation();
+    this.pointsList = (
+      await this.analysisPointService.getAllWithTranslation()
+    ).sort((a, b) => {
+      return a.parsingOrder === b.parsingOrder
+        ? a.parsingWords.length > b.parsingWords.length
+          ? -1
+          : 1
+        : a.parsingOrder > b.parsingOrder
+          ? -1
+          : 1;
+    });
 
-    await this.parseBufferByTables(file.buffer);
-    await this.parseBufferByLines(file.buffer);
+    await this.parseBufferByPythonMicroservice(file.buffer);
 
     return {
       message: 'success',
-      findingPoints: this.findingPoints,
+      findingPoints: this.findingPoints.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      ),
       pointsList: this.pointsList,
     };
   };
 
-  async parseBufferByLines(buffer: Buffer) {
-    try {
-      const parser = new PDFParse({ data: buffer });
-
-      const text = await parser.getText();
-      const lines = text.text.split('\n');
-      lines.forEach((line, index) => {
-        this.pointsList.forEach((point) => {
-          const referenceList = (
-            point.parsingWords !== ''
-              ? point.parsingWords.split('_')
-              : [point.translationRu, point.translationEn]
-          )
-            .map((r) => r.trim().toLowerCase())
-            .filter((r) => r !== '');
-          referenceList.forEach((reference) => {
-            if (line.toLowerCase().includes(reference)) {
-              let value = this._checkLineForValue({
-                line,
-                reference: reference,
-                skipRef: true,
-              });
-              if (value === 0 && lines[index + 1]) {
-                value = this._checkLineForValue({
-                  line: lines[index + 1],
-                  reference: reference,
-                  skipRef: true,
-                });
-              }
-              if (value === 0 && lines[index + 2]) {
-                value = this._checkLineForValue({
-                  line: lines[index + 2],
-                  reference: reference,
-                  skipRef: true,
-                });
-              }
-              this._addFindingPoints({
-                id: point.id,
-                name: point.name,
-                value: value,
-                unit: 0,
+  async parseBufferByPythonMicroservice(buffer: Buffer) {
+    const result = await this.pdfParserService.extractTables(
+      buffer,
+      'document.pdf',
+      {
+        pages: '1-5',
+        tableSettings: {
+          vertical_strategy: 'lines',
+          horizontal_strategy: 'lines',
+        },
+      },
+    );
+    if (result && result.tables.length > 0) {
+      result.tables.forEach((mainTable) => {
+        if (mainTable.tables.length > 0) {
+          mainTable.tables.forEach((table) => {
+            if (table.data.length > 0) {
+              table.data.forEach((row) => {
+                if (row.length > 0) {
+                  let rowDetected: boolean = false;
+                  this.pointsList.forEach((point) => {
+                    if (rowDetected) return;
+                    this._getReferenceList(point).forEach((reference) => {
+                      if (this.findReferenceInString(row[0], reference)) {
+                        const value =
+                          row.length === 1
+                            ? this._findNumberAfterSubstring(row[0], reference)
+                            : this._findNumberAfterSubstring(row[1], '');
+                        if (value > 0 && value < this.rowDataValueMaxLimit) {
+                          rowDetected = true;
+                          this._addFindingPoints({
+                            id: point.id,
+                            name: point.name,
+                            value,
+                            unit: 0,
+                          });
+                        }
+                      }
+                    });
+                  });
+                }
               });
             }
           });
-        });
-      });
-      return { ...text, test: text.text.split('\n') };
-    } catch (error) {
-      console.log('Ошибка парсинга PDF:', error);
-    }
-  }
-
-  async parseBufferByTables(buffer: Buffer) {
-    try {
-      const parser = new PDFParse({ data: buffer });
-
-      const result = await parser.getTable();
-      result.pages.forEach((page) => {
-        page.tables.forEach((table) => {
-          table.forEach((row) => {
-            row.forEach((cell, cellIndex) => {
-              this.pointsList.forEach((point) => {
-                const referenceList = (
-                  point.parsingWords !== ''
-                    ? point.parsingWords.split('_')
-                    : [point.translationRu, point.translationEn]
-                )
-                  .map((r) => r.trim().toLowerCase())
-                  .filter((r) => r !== '');
-                referenceList.forEach((reference) => {
-                  if (cell.toLowerCase().includes(reference)) {
-                    let value = 0;
-                    if (row[cellIndex + 1]) {
-                      value = this._checkLineForValue({
-                        line: row[cellIndex + 1],
-                        reference: reference,
-                        skipRef: true,
-                      });
-                    }
-
-                    this._addFindingPoints({
-                      id: point.id,
-                      name: point.name,
-                      value: value,
-                      unit: 0,
-                    });
-                  }
-                });
-              });
-            });
-          });
-        });
-      });
-    } catch (error) {
-      console.log('Ошибка парсинга PDF:', error);
-    }
-  }
-
-  _checkLineForValue({
-    line,
-    reference,
-    skipRef,
-  }: {
-    line: string;
-    reference: string;
-    skipRef?: boolean;
-  }): number {
-    const lineData = line.split(/\s+/);
-    let value = 0;
-    let isNameFind = skipRef;
-    for (const data of lineData) {
-      if (isNameFind) {
-        value = this._parseNumber(data);
-        if (value > 0) {
-          break;
         }
-      }
-      if (!isNameFind && data.toLowerCase().includes(reference)) {
-        isNameFind = true;
-      }
+      });
     }
-    return value;
-  }
-
-  _parseNumber(str: string) {
-    const normalized = str.replace(/\s+/g, '').replace(',', '.');
-    const num = parseFloat(normalized);
-    return isNaN(num) ? 0 : num;
   }
 
   _addFindingPoints(point: {
@@ -172,5 +107,40 @@ export class ParseFileService {
     if (!this.findingPoints.find((p) => p.id === point.id)) {
       this.findingPoints.push(point);
     }
+  }
+
+  _getReferenceList(point: AnalysisPointWithTranslation): string[] {
+    return (
+      point.parsingWords !== ''
+        ? point.parsingWords.split('_')
+        : [point.translationRu, point.translationEn]
+    )
+      .map((r) => r.trim().toLowerCase())
+      .filter((r) => r !== '');
+  }
+
+  _findNumberAfterSubstring(text: string, searchString: string): number {
+    const searchIndex =
+      searchString !== ''
+        ? text.toLowerCase().indexOf(searchString.toLowerCase())
+        : 0;
+    if (searchIndex === -1) return 0;
+    const match = text
+      .slice(searchIndex + searchString.length)
+      .match(/(\d+[.,]\d+|\d+)/);
+    if (!match) return 0;
+    return parseFloat(match[1].replace(',', '.'));
+  }
+
+  findReferenceInString(string: string, reference: string): boolean {
+    if (reference.includes(' ')) {
+      return string.toLowerCase().includes(reference.toLowerCase());
+    }
+    const wordsInString = string.split(/[\s()[\]{}\n]/).filter(Boolean);
+    return wordsInString
+      ? !!wordsInString.find(
+          (word) => reference.toLowerCase() === word.toLowerCase(),
+        )
+      : false;
   }
 }

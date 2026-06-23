@@ -29,6 +29,7 @@ export interface AnalysisPointWithTranslation {
   translationRu: string;
   translationEn: string;
   parsingWords: string;
+  parsingOrder: number;
 }
 
 @Injectable()

@@ -17,6 +17,7 @@ export interface AnalysisPointCreationAttrs {
   translationParsing?: string;
   pointHintRu?: string;
   pointHintEn?: string;
+  parsingOrder?: number;
 }
 
 @Table({
@@ -71,6 +72,13 @@ export class AnalysisPoint extends Model<
     unique: true,
   })
   declare pointHintEn: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    unique: false,
+    defaultValue: 0,
+  })
+  declare parsingOrder: number;
 
   @BelongsToMany(() => AnalysisPointUnits, () => AnalysisPointsUnits)
   declare units: AnalysisPointUnits[];

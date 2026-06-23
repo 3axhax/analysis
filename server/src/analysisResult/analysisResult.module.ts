@@ -13,6 +13,7 @@ import { AnalysisResultDescriptionConditionModule } from '../analysisResultDescr
 import { AnalysisPointMinValueModule } from '../analysisPointMinValue/analysisPointMinValue.module';
 import { AnalysisPointMaxValueModule } from '../analysisPointMaxValue/analysisPointMaxValue.module';
 import { ParseFileService } from './parseFile.service';
+import { PdfParserModule } from '../pdf-parser/pdf-parser.module';
 
 @Module({
   providers: [AnalysisResultService, ParseFileService],
@@ -28,6 +29,7 @@ import { ParseFileService } from './parseFile.service';
     AnalysisResultDescriptionConditionModule,
     AnalysisPointMinValueModule,
     AnalysisPointMaxValueModule,
+    PdfParserModule,
   ],
   exports: [AnalysisResultService],
 })

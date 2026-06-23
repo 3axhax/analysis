@@ -65,6 +65,20 @@ services:
       - app_network
     restart: unless-stopped
 
+  python_pdf_parser:
+    container_name: pythonPDFParser
+    build:
+      context: ./python-microservice
+      dockerfile: DockerfilePythonMicroservice
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./python-microservice:/app
+      - /app/__pycache__
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
 networks:
   app_network:
     driver: bridge
