@@ -6,7 +6,7 @@ WORKDIR /app/server
 
 COPY package*.json ./
 
-RUN npm install --force --no-audit
+RUN npm ci
 
 COPY . .
 
