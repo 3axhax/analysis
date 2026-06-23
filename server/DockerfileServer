@@ -2,6 +2,8 @@ ARG NODE_VERSION=22.14.0
 
 FROM node:${NODE_VERSION}-alpine AS builder
 
+RUN npm config set registry https://registry.npmmirror.com
+
 WORKDIR /app/server
 
 COPY package*.json ./
