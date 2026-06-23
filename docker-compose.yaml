@@ -22,7 +22,7 @@ services:
       context: ./server
       dockerfile: DockerfileServer
     env_file:
-      - ./server/.development.env
+      - ./server/.env
     volumes:
       - ./server/uploads:/app/server/uploads
     expose:
@@ -77,6 +77,8 @@ services:
       - /app/__pycache__
     environment:
       - PYTHONUNBUFFERED=1
+    networks:
+      - app_network
     restart: unless-stopped
 
 networks:
