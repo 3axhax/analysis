@@ -2,10 +2,9 @@ FROM python:3.11-alpine
 
 WORKDIR /app
 
-# Устанавливаем зависимости для Alpine (apk вместо apt-get)
+# Минимальный набор для компиляции
 RUN apk update && apk add --no-cache \
-    gcc \
-    g++ \
+    build-base \
     musl-dev \
     curl \
     && rm -rf /var/cache/apk/*
