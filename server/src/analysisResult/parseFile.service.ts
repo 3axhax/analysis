@@ -1,23 +1,16 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import {
-  AnalysisPointService,
-  AnalysisPointWithTranslation,
-} from '../analysisPoint/analysisPoint.service';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { AnalysisPointService } from '../analysisPoint/analysisPoint.service';
 import { PdfParserService } from '../pdf-parser/pdf-parser.service';
-import { ExtractTablesResponse } from '../pdf-parser/pdf-parser.types';
+import {
+  HybridPdfFindingMatcher,
+  LegacyPdfFindingMatcher,
+  StructuredPdfFindingMatcher,
+} from './pdf-finding-matcher';
+import { PdfMatcherResult, PdfParsingFinding } from './pdf-matching.types';
 
 export type ParsingStatus = 'complete' | 'partial' | 'unsupported';
-
-export interface ParsingFinding {
-  id: number;
-  name: string;
-  value: number;
-  unitId: number | null;
-  unit: string | null;
-  confidence: number;
-  page: number;
-  warnings: string[];
-}
+export type ParsingFinding = PdfParsingFinding;
+type PdfMatcherMode = 'legacy' | 'shadow' | 'structured' | 'hybrid';
 
 export interface ParsingFileResponse {
   status: ParsingStatus;
@@ -32,17 +25,14 @@ export interface ParsingFileResponse {
   };
 }
 
-interface LegacyFinding {
-  id: number;
-  name: string;
-  value: number;
-}
-
 @Injectable()
 export class ParseFileService {
+  private readonly logger = new Logger(ParseFileService.name);
+  private readonly legacyMatcher = new LegacyPdfFindingMatcher();
+  private readonly structuredMatcher = new StructuredPdfFindingMatcher();
+  private readonly hybridMatcher = new HybridPdfFindingMatcher();
   private activeRequests = 0;
   private readonly maxConcurrentRequests = 2;
-  private readonly rowDataValueMaxLimit = 3000;
 
   constructor(
     private readonly analysisPointService: AnalysisPointService,
@@ -58,53 +48,57 @@ export class ParseFileService {
     }
     this.activeRequests += 1;
     try {
-      const points = (
-        await this.analysisPointService.getAllWithTranslation()
-      ).sort((a, b) =>
-        a.parsingOrder === b.parsingOrder
-          ? b.parsingWords.length - a.parsingWords.length
-          : b.parsingOrder - a.parsingOrder,
-      );
-      const extraction = await this.pdfParserService.extractTables(file.buffer, {
-        pages: '1-5',
-        tableSettings: {
-          vertical_strategy: 'lines',
-          horizontal_strategy: 'lines',
+      const points = await this.analysisPointService.getAllWithTranslation();
+      const extraction = await this.pdfParserService.extractTables(
+        file.buffer,
+        {
+          pages: '1-5',
+          tableSettings: {
+            vertical_strategy: 'lines',
+            horizontal_strategy: 'lines',
+          },
         },
-      });
-      const legacy = this.findLegacyFindings(extraction, points);
-      const warnings: string[] = [];
+      );
+      const mode = this.getMatcherMode();
+      const legacy = this.legacyMatcher.match(extraction, points);
+      let selected = legacy;
+
+      if (mode === 'hybrid') {
+        selected = this.hybridMatcher.match(extraction, points);
+      } else if (mode !== 'legacy') {
+        const structured = this.structuredMatcher.match(extraction, points);
+        if (mode === 'structured') {
+          selected = structured;
+        } else {
+          this.logShadowComparison(legacy, structured);
+        }
+      }
+
+      const warnings = [...selected.warnings];
       if (extraction.total_pages > extraction.pages_processed) {
         warnings.push('page_limit_reached');
       }
-      if (legacy.findings.length === 0) {
-        warnings.push('no_supported_findings');
-      }
-      const findings: ParsingFinding[] = legacy.findings
-        .map((finding) => ({
-          ...finding,
-          unitId: null,
-          unit: null,
-          confidence: 0.5,
-          page: legacy.pages.get(finding.id) ?? 1,
-          warnings: [],
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name));
+      const uniqueWarnings = [...new Set(warnings)];
+      const hasFindingWarnings = selected.findings.some(
+        (finding) => finding.warnings.length > 0,
+      );
       return {
         status:
-          findings.length === 0
+          selected.findings.length === 0
             ? 'unsupported'
-            : warnings.length > 0
+            : uniqueWarnings.length > 0 || hasFindingWarnings
               ? 'partial'
               : 'complete',
-        findings,
-        warnings,
+        findings: [...selected.findings].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        ),
+        warnings: uniqueWarnings,
         stats: {
           pagesTotal: extraction.total_pages,
           pagesProcessed: extraction.pages_processed,
           pagesOcr: extraction.pages_ocr,
-          candidates: legacy.candidateRows,
-          matched: findings.length,
+          candidates: selected.stats.logicalRows,
+          matched: selected.findings.length,
         },
       };
     } finally {
@@ -112,77 +106,28 @@ export class ParseFileService {
     }
   }
 
-  private findLegacyFindings(
-    extraction: ExtractTablesResponse,
-    points: AnalysisPointWithTranslation[],
-  ): {
-    findings: LegacyFinding[];
-    pages: Map<number, number>;
-    candidateRows: number;
-  } {
-    const findings: LegacyFinding[] = [];
-    const pages = new Map<number, number>();
-    let candidateRows = 0;
-    for (const page of extraction.tables) {
-      for (const table of page.tables) {
-        for (const row of table.data) {
-          candidateRows += 1;
-          if (row.length === 0) continue;
-          let rowDetected = false;
-          for (const point of points) {
-            if (rowDetected) break;
-            for (const reference of this._getReferenceList(point)) {
-              if (!this.findReferenceInString(row[0], reference)) continue;
-              const value =
-                row.length === 1
-                  ? this._findNumberAfterSubstring(row[0], reference)
-                  : this._findNumberAfterSubstring(row[1] ?? '', '');
-              if (value > 0 && value < this.rowDataValueMaxLimit) {
-                rowDetected = true;
-                if (!findings.some((item) => item.id === point.id)) {
-                  findings.push({ id: point.id, name: point.name, value });
-                  pages.set(point.id, page.page);
-                }
-                break;
-              }
-            }
-          }
-        }
-      }
+  private getMatcherMode(): PdfMatcherMode {
+    const configured = process.env.PDF_MATCHER_MODE;
+    if (
+      configured === 'structured' ||
+      configured === 'shadow' ||
+      configured === 'hybrid'
+    ) {
+      return configured;
     }
-    return { findings, pages, candidateRows };
+    return 'legacy';
   }
 
-  _getReferenceList(point: AnalysisPointWithTranslation): string[] {
-    return (
-      point.parsingWords !== ''
-        ? point.parsingWords.split('_')
-        : [point.translationRu, point.translationEn]
-    )
-      .map((reference) => reference.trim().toLowerCase())
-      .filter((reference) => reference !== '');
-  }
-
-  _findNumberAfterSubstring(text: string, searchString: string): number {
-    const searchIndex =
-      searchString !== ''
-        ? text.toLowerCase().indexOf(searchString.toLowerCase())
-        : 0;
-    if (searchIndex === -1) return 0;
-    const match = text
-      .slice(searchIndex + searchString.length)
-      .match(/(\d+[.,]\d+|\d+)/);
-    if (!match) return 0;
-    return parseFloat(match[1].replace(',', '.'));
-  }
-
-  findReferenceInString(string: string, reference: string): boolean {
-    if (reference.includes(' ')) {
-      return string.toLowerCase().includes(reference.toLowerCase());
-    }
-    const wordsInString = string.split(/[\s()[\]{}\n]/).filter(Boolean);
-    return wordsInString.some(
-      (word) => reference.toLowerCase() === word.toLowerCase(),
-    );
+  private logShadowComparison(
+    legacy: PdfMatcherResult,
+    structured: PdfMatcherResult,
+  ): void {
+    this.logger.log({
+      event: 'pdf_matcher_shadow_comparison',
+      legacyMatched: legacy.findings.length,
+      structuredMatched: structured.findings.length,
+      structuredAmbiguous: structured.stats.ambiguous,
+      logicalRows: structured.stats.logicalRows,
+    });
   }
 }

@@ -30,6 +30,10 @@ export interface AnalysisPointWithTranslation {
   translationEn: string;
   parsingWords: string;
   parsingOrder: number;
+  units?: Array<{
+    id: number;
+    name: string;
+  }>;
 }
 
 @Injectable()

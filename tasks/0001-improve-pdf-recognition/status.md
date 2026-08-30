@@ -1,6 +1,6 @@
 # Статус задачи 0001
 
-Обновлено: 2026-08-29.
+Обновлено: 2026-08-30.
 
 ## Принятое ограничение runtime
 
@@ -169,3 +169,168 @@
 - smoke на 10 PDF: 8 ответов `complete`, 2 `unsupported`, HTTP 201 во всех случаях; findings по файлам: 27, 27, 12, 4, 13, 0, 0, 21, 8, 7;
 - targeted NestJS tests: 5/5 passed, build passed;
 - изменения `AnalysisResultService` и сервисного поля `units`, не относящиеся к новому контракту, откатлены.
+
+## Этап: повторный анализ NestJS matching
+
+Статус: `принят` как проектное решение; реализация не начата.
+
+Обновление 2026-08-30:
+
+- повторно сверены текущий legacy matcher, сохранённая экспериментальная conflict-aware реализация и агрегатные прогоны корпуса;
+- подтверждено, что эксперимент дедуплицировал extractor-кандидаты после matching и удалял весь point при любом расхождении value/unit;
+- подтверждено, что result/reference/date/note числа не имели разных ролей, из-за чего 66 из 72 findings получили `multiple_numeric_candidates`;
+- зафиксированы дополнительные причины регрессии: глобальное исключение collision aliases, смешение canonical/confusable normalization, глобальный warning и противоречивый порядок `parsingOrder`/длины alias;
+- принято ограничение следующего среза: Python parser, схема БД и данные справочника не меняются;
+- выбран структурный TypeScript matcher с дедупликацией до matching, слоистым alias index, явными ролями колонок и legacy compatibility gate;
+- до переключения endpoint обязательны ignored expected manifest и сравнение legacy/new по point precision/recall, exact value accuracy и unit accuracy;
+- подробная архитектура, отклонённые варианты, этапы и тестовая матрица зафиксированы в `matching-solution.md`.
+
+Осталось:
+
+- получить решение пользователя о начале реализации предложенного среза;
+- создать локальный expected manifest и benchmark harness;
+- реализовать pure matcher и пройти compatibility gate до изменения рабочего ответа API.
+
+## Этап: реализация структурного matcher
+
+Статус: `на проверке`.
+
+Обновление 2026-08-30:
+
+- пользователь подтвердил реализацию этапов из `matching-solution.md`;
+- рабочее дерево перед началом содержало только документальные изменения задачи 0001, созданные на предыдущем этапе анализа;
+- существующая проверенная резервная копия PostgreSQL остаётся достаточной: Python, схема и данные БД не изменяются;
+- принят безопасный порядок: characterization и benchmark harness → pure matcher → structure/dedup/aliases/units → shadow/feature flag → tests/build;
+- рабочий ответ endpoint не переключается на новый matcher до прохождения compatibility gate по локальному expected manifest.
+
+Реализовано:
+
+- legacy matcher вынесен в отдельный pure-класс и покрыт characterization tests; его поведение по первой ячейке, первому числу и порогу 3000 сохранено;
+- добавлен pure `StructuredPdfFindingMatcher`, не зависящий от HTTP, NestJS DI и БД-запросов;
+- добавлены явные роли name/result/unit/reference, перенос совместимого контекста на таблицы-продолжения и отбрасывание header rows;
+- одинаковые physical rows объединяются между extractors до matching по page + canonical row fingerprint; семантически одинаковые point/value кандидаты объединяются до разрешения конфликтов;
+- alias index разделяет primary и RU/EN fallback, canonical и tolerant keys; короткие, collision и tolerant aliases требуют explicit name/result context;
+- collision alias разрешается только по контексту конкретной строки, в том числе по однозначной разрешённой unit; глобальный warning не создаётся;
+- result выбирается из структурной колонки, затем через контролируемые adjacent/same-cell fallbacks; range, date и multi-number cells не считаются scalar result;
+- decimal comma/dot, scientific notation, inequality, zero, negative и большие числа разбираются без прежнего silent drop и получают review warnings;
+- unit ищется только среди разрешённых units point и не назначается автоматически только потому, что разрешённая unit одна;
+- добавлен агрегатный benchmark runner `npm run benchmark:pdf-matcher -- <dataset.json>`; он сравнивает legacy/structured по point precision/recall, exact value, unit accuracy/coverage и категориям ошибок без вывода строк документа;
+- добавлен полностью синтетический benchmark fixture; локальный expected manifest с реальными данными остаётся ignored и не создан автоматически;
+- режимы интеграции: `legacy` по умолчанию, `shadow` возвращает legacy и логирует только агрегатные counts, `structured` явно включает новый matcher через `PDF_MATCHER_MODE`;
+- Python parser, схема и данные PostgreSQL не менялись.
+
+Проверка:
+
+- targeted matcher/service/benchmark tests: 30/30 passed;
+- полный backend suite: 4 suites, 31/31 tests passed;
+- backend build в dev-контейнере: passed;
+- read-only ESLint затронутых TypeScript-файлов: passed;
+- synthetic benchmark CLI: legacy miss и structured exact match корректно отражены только агрегатами;
+- shadow test подтверждает отсутствие point name/value в aggregate log payload;
+- server health внутри контейнера: `status=ok`.
+
+Осталось до переключения default:
+
+- вручную сформировать локальный ignored expected manifest для согласованного корпуса;
+- прогнать benchmark и подтвердить, что structured не уступает legacy по point precision/recall и exact value accuracy;
+- проверить unit accuracy на подтверждённых expected units;
+- только после выполнения gate изменить runtime `PDF_MATCHER_MODE` с `legacy`/`shadow` на `structured`.
+
+### Повторный прогон локального корпуса от 2026-08-30
+
+- добавлен standalone runner `npm run benchmark:pdf-corpus -- <corpus>`: справочник читается в `READ ONLY` transaction с rollback, Python extraction и оба matcher выполняются без перезапуска NestJS;
+- runner выводит только псевдоним файла, counts, status и warning codes; имена, строки, point names, значения и raw extraction не выводятся и не сохраняются;
+- повторный legacy-контроль воспроизвёл прежние 119 findings и статусы 8 `complete` / 2 `unsupported`;
+- structured matcher вернул 62 findings на 233 структурно посчитанные строки (26,6%), 7 `partial`, 3 `unsupported`, 0 `complete`;
+- 47 findings не получили однозначную unit и имеют warnings; зафиксированы 4 ambiguous candidate groups в трёх документах;
+- structured результат ниже legacy на 57 findings и ниже откатанного эксперимента на 10 findings;
+- compatibility gate не пройден, runtime default остаётся `legacy`; `structured` разрешён только для benchmark/debug;
+- обезличенная таблица и итоговое сравнение трёх прогонов добавлены в `test-results.md`.
+
+## Этап: hybrid matcher с legacy fallback
+
+Статус: `на проверке`.
+
+Обновление 2026-08-30:
+
+- пользователь подтвердил предметное допущение: короткие английские медицинские аббревиатуры в русскоязычных документах считаются точными aliases;
+- пользователь разрешил допущение, что единственная разрешённая для point unit обычно является единицей документа;
+- выбран упрощённый hybrid-подход: structured finding имеет приоритет, отсутствующий point дополняется legacy first-cell/second-cell finding с явным warning;
+- короткий canonical English alias разрешается в первой/name ячейке без обязательного explicit header, но collision и tolerant aliases сохраняют строгий контекст;
+- unit assumption применяется только при `point.units.length === 1`, не выбирает первую unit из нескольких и остаётся явно отмеченным warning;
+- legacy runtime default сохраняется до прохождения expected benchmark.
+
+Реализовано:
+
+- добавлен pure `HybridPdfFindingMatcher`: structured findings имеют приоритет, legacy дополняет только отсутствующие point;
+- каждый fallback finding получает `legacy_compatibility_fallback`, поэтому источник упрощённого решения остаётся видимым;
+- canonical короткий английский alias длиной до трёх символов принимается в первой ячейке либо определённой name-column без обязательного заголовка;
+- collision и tolerant aliases не ослаблены и по-прежнему требуют явного структурного контекста;
+- если у point ровно одна разрешённая unit, она назначается с `unit_assumed_from_single_allowed`; при нескольких либо нуле units автоматического выбора нет;
+- добавлен явный runtime-режим `PDF_MATCHER_MODE=hybrid`; default не изменён;
+- corpus runner и synthetic benchmark расширены сравнением hybrid без вывода чувствительных данных.
+
+Проверка:
+
+- targeted matcher/service/benchmark tests: 35/35 passed;
+- полный backend suite: 4 suites, 36/36 tests passed;
+- backend build в dev-контейнере: passed;
+- read-only ESLint затронутых TypeScript-файлов: passed;
+- TypeScript compile check: passed;
+- повторный read-only corpus benchmark: legacy 119, structured 71, hybrid 122 findings на 233 структурно посчитанные строки;
+- короткие English aliases добавили structured matcher 9 findings относительно предыдущего прогона;
+- hybrid добавил 51 legacy fallback finding и получил 3 findings сверх baseline;
+- число findings без однозначной unit сократилось с 47 до 8; 90 units назначены по правилу единственной разрешённой unit;
+- 98 hybrid findings имеют warnings; 8 документов получили `partial`, 2 — `unsupported`;
+- подробные обезличенные результаты и выводы зафиксированы в `test-results.md`.
+
+Решение:
+
+- hybrid является кандидатом на expected benchmark, но raw coverage не подтверждает precision, exact value и unit accuracy;
+- default остаётся `legacy`; `hybrid` разрешён для явной проверки, `shadow` — для безопасного сравнения агрегатов;
+- до cutover необходимо проверить локальным expected manifest 51 fallback finding, 3 findings сверх legacy, 90 assumed units, четыре ambiguous groups и два документа без findings.
+
+### Включение hybrid в test/dev окружении
+
+Статус: `на проверке`.
+
+Обновление 2026-08-30:
+
+- по решению пользователя `PDF_MATCHER_MODE=hybrid` задан только для `server_analysis` в `docker-compose.dev.yaml`;
+- production compose и безопасный runtime fallback `legacy` в коде не изменены;
+- переключение не меняет схему или данные PostgreSQL и не требует миграции;
+- пересоздан только контейнер `serverAnalysis`; остальные сервисы не перезапускались;
+- внутри нового контейнера подтверждено значение `PDF_MATCHER_MODE=hybrid`;
+- server health после старта: `status=ok`, environment=`development`;
+- медицинские PDF для этой проверки не обрабатывались;
+- rollback test/dev окружения: удалить override `PDF_MATCHER_MODE` из dev compose и пересоздать только server-контейнер.
+
+### Минимальные правки abbreviation/legacy fallback
+
+Статус: `на проверке`.
+
+Обновление 2026-08-30:
+
+- legacy first-cell matching переведён на общую canonical normalization, поэтому пунктуация вокруг однословного alias не блокирует совпадение;
+- для одной строки сначала собираются допустимые point-кандидаты; уникальная English abbreviation длиной 2–5 символов имеет приоритет над generic alias;
+- при отсутствии abbreviation-кандидата сохраняется прежний порядок `parsingOrder`/длины `translationParsing`;
+- hybrid fallback помечает ячейку с несколькими числовыми токенами warning `legacy_multiple_numeric_candidates`;
+- DB aliases, units, схема PostgreSQL и Python parser не менялись;
+- добавлены synthetic regression tests для пунктуации, abbreviation-vs-generic и multi-number fallback;
+- целевой smoke подтвердил наличие обоих ранее пропущенных point; findings выбранного документа: 28 → 30;
+- повторный corpus-аудит: legacy 126, structured 72, hybrid 130 findings; подробности зафиксированы в `test-results.md`;
+- synthetic matcher regression tests: 30/30 passed;
+- полный backend suite: 4 suites, 40/40 tests passed;
+- backend build и read-only ESLint затронутых файлов: passed;
+- один обезличенный документ снизился на 1 finding, поэтому raw count не заменяет expected point/value verification.
+
+## Этап: очистка отладочных артефактов и синхронизация документации
+
+Статус: `на проверке`.
+
+Обновление 2026-08-30:
+
+- удалены локальные сгенерированные файлы expected-list из `testData`, не являющиеся частью тестового набора;
+- `test-results.md` сохранён как источник агрегированных результатов и выводов;
+- итоговое состояние hybrid, counts корпуса и целевой smoke-проверки отражены в `implementation.md`;
+- изменённые TypeScript-файлы отформатированы Prettier, read-only ESLint выполнен без дополнительных тестовых прогонов.
