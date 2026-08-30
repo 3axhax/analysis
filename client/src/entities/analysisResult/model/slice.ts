@@ -62,10 +62,10 @@ export const analysisResultSlice = createSlice({
           state: WritableDraft<AnalysisResultState>,
           action: PayloadAction<AnalysisParsingFileResult>,
         ) => {
-          state.selectedList = action.payload.findingPoints.map(
+          state.selectedList = action.payload.findings.map(
             (point) => point.id,
           );
-          state.preparedData.pointData = action.payload.findingPoints.reduce(
+          state.preparedData.pointData = action.payload.findings.reduce(
             (acc, point) => {
               acc[point.name] = {
                 name: point.name,

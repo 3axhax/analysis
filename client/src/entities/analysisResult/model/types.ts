@@ -73,10 +73,23 @@ export interface AnalysisResultState {
 }
 
 export interface AnalysisParsingFileResult {
-  findingPoints: {
+  status: "complete" | "partial" | "unsupported";
+  findings: {
     id: number;
     name: string;
-    unit: number;
+    unitId: number | null;
+    unit: string | null;
     value: number;
+    confidence: number;
+    page: number;
+    warnings: string[];
   }[];
+  warnings: string[];
+  stats: {
+    pagesTotal: number;
+    pagesProcessed: number;
+    pagesOcr: number;
+    candidates: number;
+    matched: number;
+  };
 }
