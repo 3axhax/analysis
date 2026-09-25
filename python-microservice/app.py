@@ -2,7 +2,9 @@ import asyncio
 import json
 import multiprocessing
 import os
+import re
 import resource
+import unicodedata
 from io import BytesIO
 from typing import Any, Optional
 
@@ -10,6 +12,7 @@ import pdfplumber
 import pytesseract
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
+from PIL import ImageEnhance, ImageOps
 from pytesseract import Output
 
 
@@ -19,6 +22,18 @@ PROCESS_TIMEOUT_SECONDS = int(os.getenv("PDF_PROCESS_TIMEOUT_SECONDS", "45"))
 WORKER_MEMORY_MB = int(os.getenv("PDF_WORKER_MEMORY_MB", "512"))
 MAX_CONCURRENT_REQUESTS = int(os.getenv("PDF_MAX_CONCURRENT_REQUESTS", "2"))
 OCR_LANGUAGES = os.getenv("PDF_OCR_LANGUAGES", "rus+eng")
+CYRILLIC_HOMOGLYPHS = str.maketrans(
+    {
+        "А": "A", "В": "B", "С": "C", "Е": "E", "Н": "H",
+        "К": "K", "М": "M", "О": "O", "Р": "P", "Т": "T",
+        "Х": "X", "У": "Y",
+    },
+)
+MIXED_CODE_PATTERN = re.compile(
+    r"(?<![0-9A-Za-zА-Яа-яЁё])"
+    r"[0-9A-Za-zА-Яа-яЁё%][0-9A-Za-zА-Яа-яЁё%-]{1,20}"
+    r"(?![0-9A-Za-zА-Яа-яЁё])",
+)
 ALLOWED_TABLE_SETTINGS = {
     "vertical_strategy", "horizontal_strategy", "snap_tolerance",
     "join_tolerance", "intersection_tolerance", "text_tolerance",
@@ -88,10 +103,104 @@ async def read_limited(file: UploadFile) -> bytes:
     return b"".join(chunks)
 
 
+def is_probable_encoding_artifact(value: str) -> bool:
+    compact = "".join(character for character in value.strip() if not character.isspace())
+    if len(compact) < 16 or any(character.isalpha() for character in compact):
+        return False
+    punctuation_or_symbols = sum(
+        unicodedata.category(character)[0] in {"P", "S"}
+        for character in compact
+    )
+    digits = sum(character.isdigit() for character in compact)
+    return (
+        punctuation_or_symbols / len(compact) >= 0.6
+        and digits / len(compact) <= 0.3
+    )
+
+
+def strip_leading_encoding_artifact(value: str) -> str:
+    tokens = value.strip().split()
+    first_letter_token = next(
+        (
+            index
+            for index, token in enumerate(tokens)
+            if any(character.isalpha() for character in token)
+        ),
+        None,
+    )
+    if first_letter_token is None or first_letter_token < 2:
+        return value.strip()
+    numeric_tail_index = first_letter_token - 1
+    numeric_tail = tokens[numeric_tail_index]
+    if not re.fullmatch(r"[+-]?\d+(?:[.,]\d+)?", numeric_tail):
+        return value.strip()
+    prefix = " ".join(tokens[:numeric_tail_index])
+    if not is_probable_encoding_artifact(prefix):
+        return value.strip()
+    return " ".join(tokens[numeric_tail_index:])
+
+
+def trim_ocr_label(value: str) -> Optional[str]:
+    match = re.search(r"\([A-Za-z][A-Za-z0-9%-]{1,11}\)", value)
+    if match is None:
+        return None
+    label = value[:match.end()].strip()
+    if sum(character.isalpha() for character in label) < 4:
+        return None
+    return label
+
+
+def normalize_mixed_script_codes(value: str) -> str:
+    def replace(match: re.Match[str]) -> str:
+        token = match.group(0)
+        letters = [character for character in token if character.isalpha()]
+        if not 2 <= len(letters) <= 12 or not all(
+            character.isupper() for character in letters
+        ):
+            return token
+        has_latin = any("A" <= character <= "Z" for character in letters)
+        cyrillic = [
+            character
+            for character in letters
+            if "А" <= character <= "Я" or character == "Ё"
+        ]
+        if not has_latin or not cyrillic:
+            return token
+        if any(
+            ord(character) not in CYRILLIC_HOMOGLYPHS
+            for character in cyrillic
+        ):
+            return token
+        return token.translate(CYRILLIC_HOMOGLYPHS)
+
+    return MIXED_CODE_PATTERN.sub(replace, value)
+
+
 def clean_table(table: list[list[Any]]) -> list[list[str]]:
     cleaned: list[list[str]] = []
     for row in table:
         clean_row = [str(cell).strip() if cell is not None else "" for cell in row]
+        if is_probable_encoding_artifact(" ".join(clean_row)):
+            continue
+        first_letter_cell = next(
+            (
+                index
+                for index, cell in enumerate(clean_row)
+                if any(character.isalpha() for character in cell)
+            ),
+            None,
+        )
+        if first_letter_cell and is_probable_encoding_artifact(
+            " ".join(clean_row[:first_letter_cell]),
+        ):
+            clean_row[:first_letter_cell] = [""] * first_letter_cell
+        clean_row = [
+            ""
+            if is_probable_encoding_artifact(cell)
+            else strip_leading_encoding_artifact(cell)
+            for cell in clean_row
+        ]
+        clean_row = [normalize_mixed_script_codes(cell) for cell in clean_row]
         if any(clean_row):
             cleaned.append(clean_row)
     return cleaned
@@ -136,6 +245,78 @@ def extract_ocr_rows(page: Any) -> list[list[str]]:
     return group_words_by_rows(words, tolerance=8)
 
 
+def extract_encoding_repair_rows(page: Any) -> list[list[str]]:
+    words = page.extract_words(
+        use_text_flow=True,
+        keep_blank_chars=False,
+        extra_attrs=["fontname"],
+    ) or []
+    grouped_rows: list[dict[str, Any]] = []
+    for word in sorted(words, key=lambda item: (float(item["top"]), float(item["x0"]))):
+        top = float(word["top"])
+        row = next(
+            (item for item in grouped_rows if abs(item["top"] - top) <= 4),
+            None,
+        )
+        if row is None:
+            row = {"top": top, "words": []}
+            grouped_rows.append(row)
+        row["words"].append(word)
+
+    repaired: list[list[str]] = []
+    for row in grouped_rows:
+        artifact_words = [
+            word for word in row["words"] if word.get("fontname") == "unknown"
+        ]
+        artifact_text = " ".join(str(word["text"]) for word in artifact_words)
+        if not artifact_words or not is_probable_encoding_artifact(artifact_text):
+            continue
+        tail_words = [
+            word for word in row["words"] if word.get("fontname") != "unknown"
+        ]
+        if not tail_words:
+            continue
+
+        left = max(0, min(float(word["x0"]) for word in artifact_words) - 8)
+        first_tail_x = min(float(word["x0"]) for word in tail_words)
+        right = min(page.width, first_tail_x + 25)
+        top = max(0, min(float(word["top"]) for word in row["words"]) - 7)
+        bottom = min(
+            page.height,
+            max(float(word["bottom"]) for word in row["words"]) + 7,
+        )
+        if right <= left or bottom <= top:
+            continue
+
+        image = page.crop((left, top, right, bottom)).to_image(
+            resolution=400,
+            antialias=True,
+        ).original
+        image = ImageEnhance.Contrast(
+            ImageOps.autocontrast(ImageOps.grayscale(image)),
+        ).enhance(2.0)
+        try:
+            label = trim_ocr_label(
+                pytesseract.image_to_string(
+                    image,
+                    lang=OCR_LANGUAGES,
+                    config="--psm 13",
+                ),
+            )
+        except pytesseract.TesseractError:
+            label = None
+        if label is None:
+            continue
+        tail = " ".join(
+            str(word["text"]).strip()
+            for word in sorted(tail_words, key=lambda item: float(item["x0"]))
+            if str(word["text"]).strip()
+        )
+        if tail:
+            repaired.append([label, tail])
+    return repaired
+
+
 def add_table(
     tables: list[dict[str, Any]], seen: set[tuple[tuple[str, ...], ...]],
     method: str, data: list[list[Any]],
@@ -164,6 +345,7 @@ def process_pdf(content: bytes, requested_pages: list[int], table_settings: dict
             page = pdf.pages[page_number - 1]
             tables: list[dict[str, Any]] = []
             seen: set[tuple[tuple[str, ...], ...]] = set()
+            page_used_ocr = False
 
             try:
                 for table in page.extract_tables(table_settings) or []:
@@ -182,6 +364,13 @@ def process_pdf(content: bytes, requested_pages: list[int], table_settings: dict
             words = page.extract_words(use_text_flow=True, keep_blank_chars=False) or []
             if words:
                 add_table(tables, seen, "coordinates", group_words_by_rows(words))
+            try:
+                repair_rows = extract_encoding_repair_rows(page)
+                if repair_rows:
+                    add_table(tables, seen, "ocr-repair", repair_rows)
+                    page_used_ocr = True
+            except Exception:
+                pass
             page_text = (page.extract_text() or "").strip()
             needs_ocr = (
                 not words or len(page_text) < 20
@@ -191,7 +380,9 @@ def process_pdf(content: bytes, requested_pages: list[int], table_settings: dict
                 ocr_rows = extract_ocr_rows(page)
                 if ocr_rows:
                     add_table(tables, seen, "ocr", ocr_rows)
-                    result["pages_ocr"] += 1
+                    page_used_ocr = True
+            if page_used_ocr:
+                result["pages_ocr"] += 1
             if tables:
                 result["tables"].append({"page": page_number, "tables": tables})
             result["pages_processed"] += 1

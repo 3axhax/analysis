@@ -2,9 +2,11 @@ import axios from 'axios';
 import FormData from 'form-data';
 import { readFile, readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { PDFParse } from 'pdf-parse';
 import { QueryTypes, Sequelize, Transaction } from 'sequelize';
 import { AnalysisPointWithTranslation } from '../src/analysisPoint/analysisPoint.service';
 import {
+  canonicalPdfText,
   HybridPdfFindingMatcher,
   LegacyPdfFindingMatcher,
   StructuredPdfFindingMatcher,
@@ -24,13 +26,30 @@ interface PointRow {
 
 interface SafeRunResult {
   alias: string;
+  sourceParameterRows: number;
+  pythonSourceParameterMentions: number;
+  visibleParameterRows: number;
+  exactCatalogMentions: SafeMentionResult;
+  pythonSourceCatalogMentions: SafeMentionResult;
+  pythonRecognizedMentions: number;
   legacy: SafeMatcherResult;
   structured: SafeMatcherResult;
   hybrid: SafeMatcherResult;
 }
 
+interface SafeMentionResult {
+  confirmed: number;
+  includingCollisions: number;
+}
+
+interface MentionedPointIds {
+  confirmed: Set<number>;
+  includingCollisions: Set<number>;
+}
+
 interface SafeMatcherResult {
   findings: number;
+  logicalRows: number;
   status: 'complete' | 'partial' | 'unsupported';
   ambiguous: number;
   nullUnits: number;
@@ -160,6 +179,7 @@ function safeResult(result: PdfMatcherResult): SafeMatcherResult {
         : 'complete';
   return {
     findings: result.findings.length,
+    logicalRows: result.stats.logicalRows,
     status,
     ambiguous: result.stats.ambiguous,
     nullUnits: result.findings.filter((finding) => finding.unitId === null)
@@ -183,6 +203,9 @@ function aggregate(runs: SafeRunResult[]): {
   hybridAmbiguous: number;
   hybridNullUnits: number;
   hybridFindingsWithWarnings: number;
+  exactCatalogMentionsConfirmed: number;
+  exactCatalogMentionsIncludingCollisions: number;
+  visibleParameterRows: number;
   structuredWarningCodes: Record<string, number>;
   hybridWarningCodes: Record<string, number>;
 } {
@@ -237,9 +260,152 @@ function aggregate(runs: SafeRunResult[]): {
       (sum, run) => sum + run.hybrid.findingsWithWarnings,
       0,
     ),
+    exactCatalogMentionsConfirmed: runs.reduce(
+      (sum, run) => sum + run.exactCatalogMentions.confirmed,
+      0,
+    ),
+    exactCatalogMentionsIncludingCollisions: runs.reduce(
+      (sum, run) => sum + run.exactCatalogMentions.includingCollisions,
+      0,
+    ),
+    visibleParameterRows: runs.reduce(
+      (sum, run) => sum + run.visibleParameterRows,
+      0,
+    ),
     structuredWarningCodes,
     hybridWarningCodes,
   };
+}
+
+function visibleParameterNames(extraction: ExtractTablesResponse): string[] {
+  return parameterNamesFromRows(
+    extraction.tables
+      .flatMap((page) => page.tables)
+      .flatMap((table) => table.data),
+  );
+}
+
+function parameterNamesFromRows(rows: string[][]): string[] {
+  const names = new Set<string>();
+  const metadataLabels = [
+    'возраст',
+    'дата',
+    'время',
+    'заказ',
+    'образец',
+    'пациент',
+    'пол',
+    'инз',
+    'врач',
+    'ооо',
+    'доктор',
+    'телефон',
+    'стр',
+    'челябинск',
+    'улица',
+    'ул',
+    'набережная',
+    'адрес',
+  ];
+  for (const row of rows) {
+    if (row.length === 0) continue;
+    const firstNumberIndex = (row[0] ?? '').search(/[-+]?\d/u);
+    const singleCell = row.length === 1 && firstNumberIndex > 0;
+    const name = canonicalPdfText(
+      singleCell ? row[0].slice(0, firstNumberIndex) : (row[0] ?? ''),
+    );
+    const result = singleCell
+      ? row[0].slice(firstNumberIndex).trim()
+      : row.slice(1).join(' ').trim();
+    if (!/[\p{L}]/u.test(name) || !/[-+]?\d+(?:[.,]\d+)?/u.test(result)) {
+      continue;
+    }
+    if (
+      /^\d{1,2}[./]\d{1,2}[./]\d{2,4}/u.test(result) ||
+      /^\d{1,2}:\d{2}/u.test(result) ||
+      metadataLabels.some((label) => ` ${name} `.includes(` ${label} `))
+    ) {
+      continue;
+    }
+    names.add(name);
+  }
+  const normalizedNames = [...names];
+  return normalizedNames.filter(
+    (name) =>
+      !normalizedNames.some(
+        (candidate) =>
+          candidate !== name &&
+          name.length > candidate.length + 20 &&
+          ` ${name} `.includes(` ${candidate} `),
+      ),
+  );
+}
+
+function sourceParameterNames(text: string): string[] {
+  return parameterNamesFromRows(
+    text.split(/\r?\n/u).map((line) => [line.trim()]),
+  );
+}
+
+function catalogAliases(point: AnalysisPointWithTranslation): string[] {
+  return [
+    ...point.parsingWords.split('_'),
+    point.translationRu,
+    point.translationEn,
+    point.name.replace(/[-_]/gu, ' '),
+  ]
+    .map(canonicalPdfText)
+    .filter((alias) => alias.length >= 2);
+}
+
+function mentionedPointIds(
+  text: string,
+  points: AnalysisPointWithTranslation[],
+): MentionedPointIds {
+  const canonicalText = ` ${canonicalPdfText(text)} `;
+  const aliasOwners = new Map<string, Set<number>>();
+  for (const point of points) {
+    for (const alias of catalogAliases(point)) {
+      const owners = aliasOwners.get(alias) ?? new Set<number>();
+      owners.add(point.id);
+      aliasOwners.set(alias, owners);
+    }
+  }
+  const confirmed = new Set<number>();
+  const includingCollisions = new Set<number>();
+  for (const point of points) {
+    for (const alias of catalogAliases(point)) {
+      if (!canonicalText.includes(` ${alias} `)) continue;
+      includingCollisions.add(point.id);
+      if (aliasOwners.get(alias)?.size === 1) confirmed.add(point.id);
+    }
+  }
+  return { confirmed, includingCollisions };
+}
+
+function safeMentionResult(pointIds: MentionedPointIds): SafeMentionResult {
+  return {
+    confirmed: pointIds.confirmed.size,
+    includingCollisions: pointIds.includingCollisions.size,
+  };
+}
+
+function extractionText(extraction: ExtractTablesResponse): string {
+  return extraction.tables
+    .flatMap((page) => page.tables)
+    .flatMap((table) => table.data)
+    .flat()
+    .join(' ');
+}
+
+async function sourcePdfText(path: string): Promise<string> {
+  const parser = new PDFParse({ data: await readFile(path) });
+  try {
+    const result = await parser.getText({ first: 5 });
+    return result.text;
+  } finally {
+    await parser.destroy();
+  }
 }
 
 async function main(): Promise<void> {
@@ -250,24 +416,69 @@ async function main(): Promise<void> {
     )
     .map((entry) => entry.name)
     .sort((left, right) => left.localeCompare(right));
-  if (entries.length !== 10) throw new Error('Unexpected corpus size');
+  if (entries.length === 0) throw new Error('Empty PDF corpus');
 
   const catalog = await loadCatalog();
   const legacyMatcher = new LegacyPdfFindingMatcher();
   const structuredMatcher = new StructuredPdfFindingMatcher();
   const hybridMatcher = new HybridPdfFindingMatcher();
-  const runs: SafeRunResult[] = [];
-  for (let index = 0; index < entries.length; index += 1) {
-    const extraction = await extractPdf(resolve(corpusPath, entries[index]));
-    runs.push({
-      alias: `noname_file_${String(index + 1).padStart(2, '0')}`,
-      legacy: safeResult(legacyMatcher.match(extraction, catalog)),
-      structured: safeResult(structuredMatcher.match(extraction, catalog)),
-      hybrid: safeResult(hybridMatcher.match(extraction, catalog)),
-    });
-  }
+  const runs = new Array<SafeRunResult>(entries.length);
+  let nextIndex = 0;
+  const worker = async (): Promise<void> => {
+    while (nextIndex < entries.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      const alias = entries[index];
+      const extraction = await extractPdf(resolve(corpusPath, entries[index]));
+      const visibleNames = visibleParameterNames(extraction);
+      const sourceText = await sourcePdfText(
+        resolve(corpusPath, entries[index]),
+      );
+      const sourceNames = sourceParameterNames(sourceText);
+      const canonicalExtraction = ` ${canonicalPdfText(
+        extractionText(extraction),
+      )} `;
+      const sourceMentionedPointIds = mentionedPointIds(sourceText, catalog);
+      const pythonMentionedIds = mentionedPointIds(
+        extractionText(extraction),
+        catalog,
+      );
+      const hybrid = hybridMatcher.match(extraction, catalog);
+      runs[index] = {
+        alias,
+        sourceParameterRows: sourceNames.length,
+        pythonSourceParameterMentions: sourceNames.filter((name) =>
+          canonicalExtraction.includes(` ${name} `),
+        ).length,
+        visibleParameterRows: visibleNames.length,
+        exactCatalogMentions: safeMentionResult(sourceMentionedPointIds),
+        pythonSourceCatalogMentions: {
+          confirmed: [...sourceMentionedPointIds.confirmed].filter((pointId) =>
+            pythonMentionedIds.includingCollisions.has(pointId),
+          ).length,
+          includingCollisions: [
+            ...sourceMentionedPointIds.includingCollisions,
+          ].filter((pointId) =>
+            pythonMentionedIds.includingCollisions.has(pointId),
+          ).length,
+        },
+        pythonRecognizedMentions: hybrid.findings.filter((finding) =>
+          pythonMentionedIds.includingCollisions.has(finding.id),
+        ).length,
+        legacy: safeResult(legacyMatcher.match(extraction, catalog)),
+        structured: safeResult(structuredMatcher.match(extraction, catalog)),
+        hybrid: safeResult(hybrid),
+      };
+      process.stderr.write(`${alias}: processed\n`);
+    }
+  };
+  await Promise.all([worker(), worker()]);
   process.stdout.write(
-    `${JSON.stringify({ runs, aggregate: aggregate(runs) }, null, 2)}\n`,
+    `${JSON.stringify(
+      { catalogPoints: catalog.length, runs, aggregate: aggregate(runs) },
+      null,
+      2,
+    )}\n`,
   );
 }
 
