@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import {
-  comparePdfMatchers,
+  benchmarkLegacyPdfMatcher,
   isPdfMatcherDataset,
 } from '../src/analysisResult/pdf-matching-benchmark';
 
@@ -15,7 +15,7 @@ async function main(): Promise<void> {
     throw new Error('Invalid benchmark input');
   }
   process.stdout.write(
-    `${JSON.stringify(comparePdfMatchers(input), null, 2)}\n`,
+    `${JSON.stringify(benchmarkLegacyPdfMatcher(input), null, 2)}\n`,
   );
 }
 

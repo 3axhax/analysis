@@ -83,7 +83,7 @@ export class AnalysisResultService {
           await this.analysisPointUnitsService.getAnalysisPointUnitsByName(
             item.units,
           );
-        if (point && units && item.value > 0) {
+        if (point && units && Number.isFinite(item.value) && item.value >= 0) {
           await this.analysisResultPointDataService.savePointData({
             resultId: result.id,
             pointId: point.id,

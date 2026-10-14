@@ -6,8 +6,6 @@ services:
       dockerfile: DockerfileDevServer
     env_file:
       - ./server/.development.env
-    environment:
-      PDF_MATCHER_MODE: hybrid
     volumes:
       - ./server:/app/server
       - /app/server/node_modules

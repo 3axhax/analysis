@@ -1,10 +1,5 @@
 import { AnalysisPointWithTranslation } from '../analysisPoint/analysisPoint.service';
-import {
-  ExtractTablesResponse,
-  ExtractionMethod,
-} from '../pdf-parser/pdf-parser.types';
-
-export type PdfAliasSource = 'primary' | 'translationRu' | 'translationEn';
+import { ExtractTablesResponse } from '../pdf-parser/pdf-parser.types';
 
 export interface PdfParsingFinding {
   id: number;
@@ -35,31 +30,4 @@ export interface PdfFindingMatcher {
     extraction: ExtractTablesResponse,
     points: AnalysisPointWithTranslation[],
   ): PdfMatcherResult;
-}
-
-export interface PdfAliasEntry {
-  point: AnalysisPointWithTranslation;
-  source: PdfAliasSource;
-  raw: string;
-  canonicalKey: string;
-  tolerantKey: string;
-  short: boolean;
-  canonicalCollision: boolean;
-  tolerantCollision: boolean;
-}
-
-export interface PdfColumnRoles {
-  name?: number;
-  result?: number;
-  unit?: number;
-  reference: number[];
-  explicit: boolean;
-}
-
-export interface PdfLogicalRow {
-  page: number;
-  cells: string[];
-  canonicalCells: string[];
-  methods: Set<ExtractionMethod>;
-  roles: PdfColumnRoles;
 }

@@ -1,4 +1,4 @@
-export type ExtractionMethod = 'lines' | 'text' | 'coordinates' | 'ocr';
+export type ExtractionMethod = 'lines' | 'text' | 'coordinates' | 'ocr' | 'ocr-repair';
 
 export interface ExtractedTable {
   method: ExtractionMethod;

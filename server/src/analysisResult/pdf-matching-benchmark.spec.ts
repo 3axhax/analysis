@@ -1,6 +1,6 @@
 import { ExtractTablesResponse } from '../pdf-parser/pdf-parser.types';
 import {
-  comparePdfMatchers,
+  benchmarkLegacyPdfMatcher,
   PdfBenchmarkDataset,
 } from './pdf-matching-benchmark';
 
@@ -27,7 +27,7 @@ const extraction: ExtractTablesResponse = {
   ],
 };
 
-describe('comparePdfMatchers', () => {
+describe('benchmarkLegacyPdfMatcher', () => {
   it('reports aggregate metrics without document payloads', () => {
     const dataset: PdfBenchmarkDataset = {
       catalog: [
@@ -49,21 +49,13 @@ describe('comparePdfMatchers', () => {
       ],
     };
 
-    const result = comparePdfMatchers(dataset);
+    const result = benchmarkLegacyPdfMatcher(dataset);
 
-    expect(result.legacy.pointPrecision).toBe(0);
-    expect(result.legacy.pointRecall).toBe(0);
-    expect(result.legacy.errors.missingPoint).toBe(1);
-    expect(result.structured).toEqual(
-      expect.objectContaining({
-        documentsExact: 1,
-        pointPrecision: 1,
-        pointRecall: 1,
-        valueAccuracy: 1,
-        unitAccuracy: 1,
-      }),
-    );
-    expect(result.hybrid).toEqual(result.structured);
+    expect(result.pointPrecision).toBe(1);
+    expect(result.pointRecall).toBe(1);
+    expect(result.valueAccuracy).toBe(1);
+    expect(result.unitAccuracy).toBe(0);
+    expect(result.errors.missingPoint).toBe(0);
     expect(JSON.stringify(result)).not.toContain('Synthetic marker');
     expect(JSON.stringify(result)).not.toContain('12.5');
   });

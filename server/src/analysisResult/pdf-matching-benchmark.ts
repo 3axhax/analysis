@@ -1,10 +1,6 @@
 import { AnalysisPointWithTranslation } from '../analysisPoint/analysisPoint.service';
 import { ExtractTablesResponse } from '../pdf-parser/pdf-parser.types';
-import {
-  HybridPdfFindingMatcher,
-  LegacyPdfFindingMatcher,
-  StructuredPdfFindingMatcher,
-} from './pdf-finding-matcher';
+import { LegacyPdfFindingMatcher } from './pdf-finding-matcher';
 import { PdfFindingMatcher } from './pdf-matching.types';
 
 export interface PdfBenchmarkExpectedFinding {
@@ -43,12 +39,6 @@ export interface PdfBenchmarkMetrics {
     wrongValue: number;
     wrongUnit: number;
   };
-}
-
-export interface PdfBenchmarkComparison {
-  legacy: PdfBenchmarkMetrics;
-  structured: PdfBenchmarkMetrics;
-  hybrid: PdfBenchmarkMetrics;
 }
 
 const emptyMetrics = (): PdfBenchmarkMetrics => ({
@@ -158,14 +148,10 @@ function measure(
   return metrics;
 }
 
-export function comparePdfMatchers(
+export function benchmarkLegacyPdfMatcher(
   dataset: PdfBenchmarkDataset,
-): PdfBenchmarkComparison {
-  return {
-    legacy: measure(new LegacyPdfFindingMatcher(), dataset),
-    structured: measure(new StructuredPdfFindingMatcher(), dataset),
-    hybrid: measure(new HybridPdfFindingMatcher(), dataset),
-  };
+): PdfBenchmarkMetrics {
+  return measure(new LegacyPdfFindingMatcher(), dataset);
 }
 
 export function isPdfMatcherDataset(

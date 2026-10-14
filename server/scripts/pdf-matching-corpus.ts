@@ -7,9 +7,7 @@ import { QueryTypes, Sequelize, Transaction } from 'sequelize';
 import { AnalysisPointWithTranslation } from '../src/analysisPoint/analysisPoint.service';
 import {
   canonicalPdfText,
-  HybridPdfFindingMatcher,
   LegacyPdfFindingMatcher,
-  StructuredPdfFindingMatcher,
 } from '../src/analysisResult/pdf-finding-matcher';
 import { PdfMatcherResult } from '../src/analysisResult/pdf-matching.types';
 import { ExtractTablesResponse } from '../src/pdf-parser/pdf-parser.types';
@@ -33,8 +31,6 @@ interface SafeRunResult {
   pythonSourceCatalogMentions: SafeMentionResult;
   pythonRecognizedMentions: number;
   legacy: SafeMatcherResult;
-  structured: SafeMatcherResult;
-  hybrid: SafeMatcherResult;
 }
 
 interface SafeMentionResult {
@@ -189,77 +185,22 @@ function safeResult(result: PdfMatcherResult): SafeMatcherResult {
   };
 }
 
-function aggregate(runs: SafeRunResult[]): {
-  files: number;
-  legacyFindings: number;
-  structuredFindings: number;
-  hybridFindings: number;
-  legacyStatuses: Record<string, number>;
-  structuredStatuses: Record<string, number>;
-  hybridStatuses: Record<string, number>;
-  structuredAmbiguous: number;
-  structuredNullUnits: number;
-  structuredFindingsWithWarnings: number;
-  hybridAmbiguous: number;
-  hybridNullUnits: number;
-  hybridFindingsWithWarnings: number;
-  exactCatalogMentionsConfirmed: number;
-  exactCatalogMentionsIncludingCollisions: number;
-  visibleParameterRows: number;
-  structuredWarningCodes: Record<string, number>;
-  hybridWarningCodes: Record<string, number>;
-} {
-  const structuredWarningCodes: Record<string, number> = {};
-  const hybridWarningCodes: Record<string, number> = {};
+function aggregate(runs: SafeRunResult[]) {
   const legacyStatuses: Record<string, number> = {};
-  const structuredStatuses: Record<string, number> = {};
-  const hybridStatuses: Record<string, number> = {};
+  const legacyWarningCodes: Record<string, number> = {};
   for (const run of runs) {
     legacyStatuses[run.legacy.status] =
       (legacyStatuses[run.legacy.status] ?? 0) + 1;
-    structuredStatuses[run.structured.status] =
-      (structuredStatuses[run.structured.status] ?? 0) + 1;
-    hybridStatuses[run.hybrid.status] =
-      (hybridStatuses[run.hybrid.status] ?? 0) + 1;
-    for (const [warning, count] of Object.entries(
-      run.structured.warningCodes,
-    )) {
-      structuredWarningCodes[warning] =
-        (structuredWarningCodes[warning] ?? 0) + count;
-    }
-    for (const [warning, count] of Object.entries(run.hybrid.warningCodes)) {
-      hybridWarningCodes[warning] = (hybridWarningCodes[warning] ?? 0) + count;
+    for (const [warning, count] of Object.entries(run.legacy.warningCodes)) {
+      legacyWarningCodes[warning] = (legacyWarningCodes[warning] ?? 0) + count;
     }
   }
   return {
     files: runs.length,
     legacyFindings: runs.reduce((sum, run) => sum + run.legacy.findings, 0),
-    structuredFindings: runs.reduce(
-      (sum, run) => sum + run.structured.findings,
-      0,
-    ),
-    hybridFindings: runs.reduce((sum, run) => sum + run.hybrid.findings, 0),
     legacyStatuses,
-    structuredStatuses,
-    hybridStatuses,
-    structuredAmbiguous: runs.reduce(
-      (sum, run) => sum + run.structured.ambiguous,
-      0,
-    ),
-    structuredNullUnits: runs.reduce(
-      (sum, run) => sum + run.structured.nullUnits,
-      0,
-    ),
-    structuredFindingsWithWarnings: runs.reduce(
-      (sum, run) => sum + run.structured.findingsWithWarnings,
-      0,
-    ),
-    hybridAmbiguous: runs.reduce((sum, run) => sum + run.hybrid.ambiguous, 0),
-    hybridNullUnits: runs.reduce((sum, run) => sum + run.hybrid.nullUnits, 0),
-    hybridFindingsWithWarnings: runs.reduce(
-      (sum, run) => sum + run.hybrid.findingsWithWarnings,
-      0,
-    ),
+    legacyNullUnits: runs.reduce((sum, run) => sum + run.legacy.nullUnits, 0),
+    legacyWarningCodes,
     exactCatalogMentionsConfirmed: runs.reduce(
       (sum, run) => sum + run.exactCatalogMentions.confirmed,
       0,
@@ -272,8 +213,6 @@ function aggregate(runs: SafeRunResult[]): {
       (sum, run) => sum + run.visibleParameterRows,
       0,
     ),
-    structuredWarningCodes,
-    hybridWarningCodes,
   };
 }
 
@@ -420,8 +359,6 @@ async function main(): Promise<void> {
 
   const catalog = await loadCatalog();
   const legacyMatcher = new LegacyPdfFindingMatcher();
-  const structuredMatcher = new StructuredPdfFindingMatcher();
-  const hybridMatcher = new HybridPdfFindingMatcher();
   const runs = new Array<SafeRunResult>(entries.length);
   let nextIndex = 0;
   const worker = async (): Promise<void> => {
@@ -443,7 +380,7 @@ async function main(): Promise<void> {
         extractionText(extraction),
         catalog,
       );
-      const hybrid = hybridMatcher.match(extraction, catalog);
+      const legacy = legacyMatcher.match(extraction, catalog);
       runs[index] = {
         alias,
         sourceParameterRows: sourceNames.length,
@@ -462,12 +399,10 @@ async function main(): Promise<void> {
             pythonMentionedIds.includingCollisions.has(pointId),
           ).length,
         },
-        pythonRecognizedMentions: hybrid.findings.filter((finding) =>
+        pythonRecognizedMentions: legacy.findings.filter((finding) =>
           pythonMentionedIds.includingCollisions.has(finding.id),
         ).length,
-        legacy: safeResult(legacyMatcher.match(extraction, catalog)),
-        structured: safeResult(structuredMatcher.match(extraction, catalog)),
-        hybrid: safeResult(hybrid),
+        legacy: safeResult(legacy),
       };
       process.stderr.write(`${alias}: processed\n`);
     }

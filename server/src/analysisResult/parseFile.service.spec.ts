@@ -1,7 +1,6 @@
 import { ParseFileService } from './parseFile.service';
 import { AnalysisPointWithTranslation } from '../analysisPoint/analysisPoint.service';
 import { ExtractTablesResponse } from '../pdf-parser/pdf-parser.types';
-import { Logger } from '@nestjs/common';
 
 const point = (
   overrides: Partial<AnalysisPointWithTranslation> = {},
@@ -160,82 +159,36 @@ describe('ParseFileService', () => {
     await Promise.all([first, second]);
   });
 
-  it('uses the structured matcher only after explicit feature-flag opt-in', async () => {
-    process.env.PDF_MATCHER_MODE = 'structured';
-    const service = new ParseFileService(
-      {
-        getAllWithTranslation: jest.fn().mockResolvedValue([point()]),
-      } as never,
-      {
-        extractTables: jest.fn().mockResolvedValue(
-          extraction([
-            ['Результат', 'Показатель'],
-            ['12.75', 'Synthetic marker'],
-          ]),
-        ),
-      } as never,
-    );
-
-    const result = await service.parseFile(file());
-
-    expect(result.status).toBe('complete');
-    expect(result.findings).toEqual([
-      expect.objectContaining({ id: 1, value: 12.75 }),
-    ]);
-  });
-
-  it('keeps the legacy response in shadow mode and logs aggregate counts only', async () => {
-    process.env.PDF_MATCHER_MODE = 'shadow';
-    const log = jest.spyOn(Logger.prototype, 'log').mockImplementation();
-    const service = new ParseFileService(
-      {
-        getAllWithTranslation: jest.fn().mockResolvedValue([point()]),
-      } as never,
-      {
-        extractTables: jest.fn().mockResolvedValue(
-          extraction([
-            ['Результат', 'Показатель'],
-            ['12.75', 'Synthetic marker'],
-          ]),
-        ),
-      } as never,
-    );
-
-    const result = await service.parseFile(file());
-
-    expect(result.status).toBe('unsupported');
-    expect(result.findings).toHaveLength(0);
-    expect(log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        event: 'pdf_matcher_shadow_comparison',
-        legacyMatched: 0,
-        structuredMatched: 1,
-      }),
-    );
-    expect(JSON.stringify(log.mock.calls)).not.toContain('Synthetic marker');
-    expect(JSON.stringify(log.mock.calls)).not.toContain('12.75');
-  });
-
-  it('uses hybrid mode to restore a legacy-compatible candidate', async () => {
-    process.env.PDF_MATCHER_MODE = 'hybrid';
-    const service = new ParseFileService(
-      {
-        getAllWithTranslation: jest
-          .fn()
-          .mockResolvedValue([point({ units: [{ id: 7, name: 'mmol_l' }] })]),
-      } as never,
-      {
-        extractTables: jest
-          .fn()
-          .mockResolvedValue(extraction([['Synthetic marker', '12.75 4-10']])),
-      } as never,
-    );
-
-    const result = await service.parseFile(file());
-
-    expect(result.findings).toEqual([
-      expect.objectContaining({ id: 1, value: 12.75, unitId: 7 }),
-    ]);
-    expect(result.status).toBe('partial');
-  });
+  it.each(['hybrid', 'structured', 'shadow'])(
+    'always uses legacy when obsolete configuration is %s',
+    async (mode) => {
+      process.env.PDF_MATCHER_MODE = mode;
+      const service = new ParseFileService(
+        {
+          getAllWithTranslation: jest
+            .fn()
+            .mockResolvedValue([point({ units: [{ id: 7, name: 'mmol_l' }] })]),
+        } as never,
+        {
+          extractTables: jest
+            .fn()
+            .mockResolvedValue(
+              extraction([['Synthetic marker', '12.75 4-10']]),
+            ),
+        } as never,
+      );
+      const result = await service.parseFile(file());
+      expect(result.status).toBe('complete');
+      expect(result.findings).toEqual([
+        expect.objectContaining({
+          id: 1,
+          value: 12.75,
+          unitId: null,
+          unit: null,
+          confidence: 0.5,
+          warnings: [],
+        }),
+      ]);
+    },
+  );
 });
