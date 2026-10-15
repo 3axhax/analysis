@@ -50,6 +50,28 @@ describe('PDF text normalization', () => {
 });
 
 describe('LegacyPdfFindingMatcher characterization', () => {
+  it('reads a separate scalar/unit cell before age-specific reference prose without a header', () => {
+    const result = new LegacyPdfFindingMatcher().match(
+      extraction([
+        {
+          page: 1,
+          tables: [
+            table([
+              ['СОЭ (автоматический анализатор)', '', ''],
+              ['ESR СОЭ', '12 мм/ч', 'Мужчины (до 45 лет) 1 18'],
+            ]),
+          ],
+        },
+      ]),
+      [point(1, { name: 'esr', parsingWords: 'ESR_СОЭ' })],
+    );
+    expect(result.findings).toHaveLength(1);
+    expect(result.findings[0]).toMatchObject({
+      id: 1,
+      value: 12,
+      unitId: null,
+    });
+  });
   it.each([false, true])(
     'does not let a generic unsupported width block the catalog CV phrase (reverse=%s)',
     (reverse) => {

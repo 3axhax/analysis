@@ -6,6 +6,29 @@ export interface PreparedSourceRow {
   unit: string | null;
 }
 
+export interface PreparedDbRow extends PreparedSourceRow {
+  id: number;
+}
+
+export function isPreparedDbRows(value: unknown): value is PreparedDbRow[] {
+  return (
+    Array.isArray(value) &&
+    value.every((candidate: unknown) => {
+      if (!candidate || typeof candidate !== 'object') return false;
+      const row = candidate as Record<string, unknown>;
+      return (
+        Object.keys(row).sort().join(',') === 'id,name,unit,value' &&
+        Number.isSafeInteger(row.id) &&
+        Number(row.id) > 0 &&
+        isPreparedRows(
+          [{ name: row.name, value: row.value, unit: row.unit }],
+          true,
+        )
+      );
+    })
+  );
+}
+
 export function isPreparedRows(
   value: unknown,
   allowNull: boolean,

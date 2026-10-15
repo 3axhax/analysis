@@ -121,6 +121,29 @@ export function resultRegion(
   ) {
     const result = nameCell + 1;
     const tail = row.cells.slice(result + 1).filter((cell) => cell.trim());
+    // Physical ruled cells delimit the result even when reference text contains
+    // ages and several numbers. Never apply this to text/coordinate word cuts.
+    const scalarUnit =
+      /^\s*[*↑↓]*\s*[+-]?\s*(?:\d+(?:\s*[.,]\s*\d+)?|[.,]\d+)\s+(?:%|(?:\p{L}+|10\^\d+)\/\p{L}+|fl|pg|фл|пг|с|s)\s*$/iu;
+    const demographicReference =
+      tail.length > 0 &&
+      tail.every(
+        (cell) =>
+          /^\s*(?:мужчин\p{L}*|женщин\p{L}*|дет\p{L}*|взросл\p{L}*|men|women|children|male|female|референ\p{L}*|норм\p{L}*|reference)(?=\s|[(:]|$)/iu.test(
+            cell,
+          ) && /\d/u.test(cell),
+      );
+    if (
+      numericTokens(row.cells[nameCell]).length === 0 &&
+      demographicReference &&
+      scalarUnit.test(row.cells[result] ?? '') &&
+      parseResult(row.cells[result]).value !== undefined
+    )
+      return {
+        text: row.cells[result],
+        start: row.spans[result].start,
+        rule: 'separate_result_unit_cell',
+      };
     const explicitReference =
       tail.length > 0 &&
       tail.every(

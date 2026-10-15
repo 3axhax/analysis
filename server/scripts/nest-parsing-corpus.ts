@@ -1,187 +1,182 @@
-import { readFile, readdir } from 'node:fs/promises';
-import { resolve, basename } from 'node:path';
-import { createRequire } from 'node:module';
-import { createHash } from 'node:crypto';
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { LegacyPdfFindingMatcher } from '../src/analysisResult/pdf-finding-matcher';
 import {
   measurePdfPairs,
   sumPdfPairMetrics,
-  ExpectedPdfPair,
 } from '../src/analysisResult/pdf-pair-benchmark';
-import { PdfFindingMatcher } from '../src/analysisResult/pdf-matching.types';
-import { AnalysisPointWithTranslation } from '../src/analysisPoint/analysisPoint.service';
 import {
   isPreparedRows,
+  isPreparedDbRows,
   isPreparedExtraction,
 } from '../src/analysisResult/pdf-corpus-input';
+import {
+  resolveCorpusExpected,
+  CorpusCatalogPoint,
+} from '../src/analysisResult/pdf-corpus-expected';
+import type { PdfFindingMatcher } from '../src/analysisResult/pdf-matching.types';
+import { loadCurrentCorpusCatalog } from './nest-corpus-catalog';
 
-interface CorpusCase {
-  base: string;
-  alias: string;
-  expected: ExpectedPdfPair[];
-  sourceCount: number;
-  fingerprint: string;
-  expectedFingerprint: string;
-  structure: string;
-  subset: 'development' | 'holdout';
+const preparedFolders = [
+  { folder: 'sources', suffix: '.json', missing: 'missing_source' },
+  {
+    folder: 'python-results',
+    suffix: '-python.json',
+    missing: 'missing_python_json',
+  },
+  { folder: 'DB-results', suffix: '-db.json', missing: 'missing_db_json' },
+] as const;
+
+async function files(directory: string) {
+  try {
+    return (await readdir(directory, { withFileTypes: true }))
+      .filter((entry) => entry.isFile())
+      .map((entry) => entry.name);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+    throw error;
+  }
 }
 
-async function main() {
-  const root = resolve(process.argv[2] ?? '../testData');
-  const snapshot = resolve(process.argv[3] ?? `${root}/.nest-benchmark`);
-  const mode = process.argv[4] ?? 'current';
-  const subset = process.argv[5] ?? 'all';
-  if (
-    !['baseline', 'current'].includes(mode) ||
-    !['all', 'development', 'holdout'].includes(subset)
-  )
-    throw new Error('Invalid selection');
-  const catalog = JSON.parse(
-    await readFile(`${snapshot}/catalog.json`, 'utf8'),
-  ) as AnalysisPointWithTranslation[];
-  const manifest = JSON.parse(
-    await readFile(`${snapshot}/expected.json`, 'utf8'),
-  ) as { cases: CorpusCase[] };
-  let matcher: PdfFindingMatcher = new LegacyPdfFindingMatcher();
-  if (mode === 'baseline') {
-    const module = createRequire(__filename)(`${snapshot}/baseline.cjs`) as {
-      LegacyPdfFindingMatcher: new () => PdfFindingMatcher;
-    };
-    matcher = new module.LegacyPdfFindingMatcher();
-  }
-  const fileNames = new Set(
-    (await readdir(root))
-      .filter((n) => n.toLowerCase().endsWith('.pdf'))
-      .map((n) => n.slice(0, -4)),
+export async function runNestCorpus(
+  root: string,
+  catalog: CorpusCatalogPoint[],
+  matcher: PdfFindingMatcher = new LegacyPdfFindingMatcher(),
+) {
+  const pdfs = new Set(
+    (await files(root))
+      .filter((name) => /\.pdf$/i.test(name))
+      .map((name) => name.slice(0, -4)),
   );
+  const prepared = await Promise.all(
+    preparedFolders.map(async (spec) => ({
+      ...spec,
+      names: new Set(
+        (await files(resolve(root, spec.folder)))
+          .filter((name) => name.endsWith(spec.suffix))
+          .map((name) => name.slice(0, -spec.suffix.length)),
+      ),
+    })),
+  );
+  const bases = [
+    ...new Set([...pdfs, ...prepared.flatMap((spec) => [...spec.names])]),
+  ].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   const warnings: { alias: string; code: string }[] = [];
   const runs: {
     alias: string;
-    subset: string;
-    fingerprint: string;
-    metrics: ReturnType<typeof measurePdfPairs>;
-    warningCodes: string[];
-    unsupported: number;
+    status: string;
+    expectedRows?: number;
+    unresolvedExpectedRows?: number;
+    issues?: { row: number; code: string }[];
+    metrics?: ReturnType<typeof measurePdfPairs>;
+    warningCodes?: string[];
+    unsupported?: number;
+    findings?: number;
   }[] = [];
-  for (const item of manifest.cases) {
-    if (subset !== 'all' && item.subset !== subset) continue;
-    if (
-      basename(item.base) !== item.base ||
-      item.base === '..' ||
-      !Array.isArray(item.expected) ||
-      item.expected.some(
-        (e) =>
-          !Number.isInteger(e.pointId) ||
-          typeof e.value !== 'number' ||
-          !Number.isFinite(e.value),
-      )
-    ) {
-      warnings.push({ alias: item.alias, code: 'invalid_expected_snapshot' });
-      continue;
-    }
-    if (!fileNames.has(item.base)) {
-      warnings.push({ alias: item.alias, code: 'missing_pdf' });
-      continue;
-    }
-    const paths = [
-      `${root}/sources/${item.base}.json`,
-      `${root}/python-results/${item.base}-python.json`,
-      `${root}/DB-results/${item.base}-db.json`,
+  for (const [index, base] of bases.entries()) {
+    const alias = `doc-${String(index + 1).padStart(2, '0')}`;
+    const missing = [
+      ...(!pdfs.has(base) ? ['missing_pdf'] : []),
+      ...prepared
+        .filter((spec) => !spec.names.has(base))
+        .map((spec) => spec.missing),
     ];
-    let bytes: Buffer[];
-    try {
-      bytes = await Promise.all(paths.map((p) => readFile(p)));
-    } catch {
-      warnings.push({ alias: item.alias, code: 'missing_prepared_json' });
+    if (missing.length) {
+      warnings.push(...missing.map((code) => ({ alias, code })));
+      runs.push({ alias, status: 'incomplete' });
       continue;
     }
     let source: unknown, extraction: unknown, expected: unknown;
     try {
-      [source, extraction, expected] = bytes.map(
-        (b): unknown => JSON.parse(b.toString()) as unknown,
+      [source, extraction, expected] = await Promise.all(
+        preparedFolders.map(
+          async (spec) =>
+            JSON.parse(
+              await readFile(
+                resolve(root, spec.folder, base + spec.suffix),
+                'utf8',
+              ),
+            ) as unknown,
+        ),
       );
     } catch {
-      warnings.push({ alias: item.alias, code: 'invalid_json' });
+      warnings.push({ alias, code: 'invalid_json' });
+      runs.push({ alias, status: 'invalid' });
       continue;
     }
     if (
       !isPreparedRows(source, false) ||
-      !isPreparedRows(expected, true) ||
+      !isPreparedDbRows(expected) ||
       !isPreparedExtraction(extraction)
     ) {
-      warnings.push({ alias: item.alias, code: 'invalid_schema' });
+      warnings.push({ alias, code: 'invalid_schema' });
+      runs.push({ alias, status: 'invalid' });
       continue;
     }
-    const fingerprint = createHash('sha256')
-      .update(bytes[1])
-      .update(bytes[0])
-      .digest('hex');
-    if (
-      fingerprint !== item.fingerprint ||
-      createHash('sha256').update(bytes[2]).digest('hex') !==
-        item.expectedFingerprint ||
-      expected.length !== item.expected.length
-    ) {
-      warnings.push({ alias: item.alias, code: 'snapshot_inputs_changed' });
-      continue;
-    }
+    // Every complete valid prepared input exercises the current matcher, even
+    // when prepared gold IDs are no longer present in the current database.
     const result = matcher.match(extraction, catalog);
+    const resolved = resolveCorpusExpected(expected, catalog);
+    if (resolved.issues.length) {
+      warnings.push({ alias, code: 'unresolved_expected' });
+      runs.push({
+        alias,
+        status: 'unresolved_expected',
+        expectedRows: expected.length,
+        unresolvedExpectedRows: resolved.issues.length,
+        issues: resolved.issues,
+        findings: result.findings.length,
+        warningCodes: result.warnings,
+      });
+      continue;
+    }
     runs.push({
-      alias: item.alias,
-      subset: item.subset,
-      fingerprint,
-      metrics: measurePdfPairs(item.expected, result.findings),
+      alias,
+      status: 'tested',
+      expectedRows: expected.length,
+      metrics: measurePdfPairs(resolved.pairs, result.findings),
       warningCodes: result.warnings,
       unsupported: source.length - expected.length,
     });
   }
-  const seen = new Set<string>();
-  const uniqueRuns = runs.filter((run) => {
-    if (seen.has(run.fingerprint)) return false;
-    seen.add(run.fingerprint);
-    return true;
-  });
-  for (const base of fileNames)
-    if (!manifest.cases.some((c) => c.base === base))
-      warnings.push({ alias: 'unmapped', code: 'missing_expected_snapshot' });
-  for (const [folder, suffix] of [
-    ['sources', '.json'],
-    ['python-results', '-python.json'],
-    ['DB-results', '-db.json'],
-  ]) {
-    for (const name of await readdir(`${root}/${folder}`))
-      if (
-        name.endsWith(suffix) &&
-        !fileNames.has(name.slice(0, -suffix.length))
-      )
-        warnings.push({ alias: 'orphan', code: `missing_pdf_for_${folder}` });
-  }
+  const tested = runs.filter((run) => run.metrics !== undefined);
+  return {
+    catalogSource: 'current_database',
+    catalogPoints: catalog.length,
+    documents: bases.length,
+    files: runs.filter(
+      (run) => run.status === 'tested' || run.status === 'unresolved_expected',
+    ).length,
+    scoredFiles: tested.length,
+    knownExpectedRows: runs.reduce(
+      (sum, run) => sum + (run.expectedRows ?? 0),
+      0,
+    ),
+    warnings,
+    runs,
+    unscoredExpectedRows: runs
+      .filter((run) => run.status === 'unresolved_expected')
+      .reduce((sum, run) => sum + (run.expectedRows ?? 0), 0),
+    totals: sumPdfPairMetrics(tested.map((run) => run.metrics!)),
+  };
+}
+
+export async function main() {
+  if (process.argv.slice(2).length > 1)
+    throw new Error('Only the prepared input directory is supported');
+  const root = resolve(process.argv[2] ?? '../testData');
+  if (!(await stat(root)).isDirectory())
+    throw new Error('Input directory unavailable');
+  const catalog = await loadCurrentCorpusCatalog();
   process.stdout.write(
-    JSON.stringify(
-      {
-        mode,
-        subset,
-        files: runs.length,
-        warnings,
-        runs: runs.map((r) => ({
-          alias: r.alias,
-          subset: r.subset,
-          metrics: r.metrics,
-          warningCodes: r.warningCodes,
-          unsupported: r.unsupported,
-        })),
-        totals: sumPdfPairMetrics(runs.map((r) => r.metrics)),
-        uniqueInputTotals: sumPdfPairMetrics(uniqueRuns.map((r) => r.metrics)),
-      },
-      null,
-      2,
-    ) + '\n',
+    JSON.stringify(await runNestCorpus(root, catalog), null, 2) + '\n',
   );
 }
 
-void main().catch(() => {
-  process.stderr.write(
-    'Nest corpus check failed; sensitive details suppressed\n',
-  );
-  process.exitCode = 1;
-});
+if (require.main === module)
+  void main().catch(() => {
+    process.stderr.write(
+      'Nest corpus check failed; sensitive details suppressed\n',
+    );
+    process.exitCode = 1;
+  });

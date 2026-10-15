@@ -21,6 +21,54 @@ const row = (cells: string[]) =>
   rowEvidence(cells, { page: 1, table: 0, row: 0, method: 'text' });
 
 describe('deterministic name and value parsing', () => {
+  it.each(['12', '0', '0,5'])(
+    'isolates scalar %s with unit before demographic references in a ruled grid',
+    (value) => {
+      const evidence = rowEvidence(
+        ['ABC', `${value} мм/ч`, 'Мужчины (до 45 лет) 1 18'],
+        { page: 1, table: 0, row: 0, method: 'lines' },
+      );
+      const region = resultRegion(evidence, 3);
+      expect(region.rule).toBe('separate_result_unit_cell');
+      expect(parseResult(region.text).value).toBe(
+        Number(value.replace(',', '.')),
+      );
+      expect(
+        evidence.text.slice(region.start, region.start + region.text.length),
+      ).toBe(region.text);
+    },
+  );
+  it.each([
+    '12 15 мм/ч',
+    '< 12 мм/ч',
+    '- 12 мм/ч',
+    '3000 мм/ч',
+    'метод 12 мм/ч',
+    '12 произвольный',
+  ])('does not isolate unsafe result cell %s', (cell) => {
+    const evidence = rowEvidence(['ABC', cell, 'Мужчины (до 45 лет) 1 18'], {
+      page: 1,
+      table: 0,
+      row: 0,
+      method: 'lines',
+    });
+    expect(parseResult(resultRegion(evidence, 3).text).value).toBeUndefined();
+  });
+  it('does not treat text-strategy cuts or another result as a reference cell', () => {
+    expect(
+      parseResult(
+        resultRegion(row(['ABC', '12 мм/ч', 'Мужчины (до 45 лет) 1 18']), 3)
+          .text,
+      ).value,
+    ).toBeUndefined();
+    const evidence = rowEvidence(['ABC', '12 мм/ч', 'Другой показатель 27'], {
+      page: 1,
+      table: 0,
+      row: 0,
+      method: 'lines',
+    });
+    expect(parseResult(resultRegion(evidence, 3).text).value).toBeUndefined();
+  });
   it('uses the catalog CV phrase, not a generic erythrocyte width as an alias', () => {
     const index = new PdfNameIndex([
       point(1, 'RDW_Точность ширины распределения эритроцитов', 'rdw'),

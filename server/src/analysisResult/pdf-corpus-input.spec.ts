@@ -1,6 +1,22 @@
-import { isPreparedRows, isPreparedExtraction } from './pdf-corpus-input';
+import {
+  isPreparedRows,
+  isPreparedDbRows,
+  isPreparedExtraction,
+} from './pdf-corpus-input';
 
 describe('prepared corpus inputs', () => {
+  it('requires explicit positive safe integer ids only in DB gold', () => {
+    const row = { name: 'Synthetic', value: 0, unit: null };
+    expect(isPreparedDbRows([])).toBe(true);
+    expect(isPreparedDbRows([{ id: 7, ...row }])).toBe(true);
+    expect(isPreparedDbRows([row])).toBe(false);
+    for (const id of [0, -1, 1.5, '7', null, Number.MAX_SAFE_INTEGER + 1])
+      expect(isPreparedDbRows([{ id, ...row }])).toBe(false);
+    expect(isPreparedDbRows([{ id: 7, ...row, extra: true }])).toBe(false);
+    expect(
+      isPreparedRows([{ id: 7, name: 'Synthetic', value: 0, unit: '' }], false),
+    ).toBe(false);
+  });
   it('accepts an empty DB set and rejects malformed or additional fields', () => {
     expect(isPreparedRows([], true)).toBe(true);
     expect(

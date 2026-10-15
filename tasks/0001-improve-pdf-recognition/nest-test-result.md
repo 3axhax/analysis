@@ -1,5 +1,111 @@
 # Результаты тестирования NestJS parsing
 
+## 2026-10-15 15:10 UTC+05:00 — прямое сравнение по ID эталона
+
+По явному запросу пользователя добавлен id=analysisPoint.id непосредственно в18 существующих DB-results JSON (288 записей;3 пустых массива сохранены). Исходные name/value/unit/order не изменены. Назначение ID проверено по текущей семантике БД независимо от matcher/findings; RDW/RDW-CV используют rdw, абсолютные/процентные формы различаются. Для GGT выбран ggtp по явному коду GGT в его DB aliases, не по результату matcher. БД и production matcher не менялись. Отдельного manifest/mapping/snapshot нет. Это новый формат эталона, поэтому прежние unresolved name lookup ограничения ниже являются историческими.
+
+Команда: `cd server && npm run benchmark:nest-parsing -- ../testData`. Текущий LegacyPdfFindingMatcher, HEAD fc14c73 + рабочее дерево; текущая локальная БД read-only,67 показателей. Оценщик сравнивает gold.id/value с finding.id/value напрямую, не ищет ID по названию. Units не оцениваются. Комплектность/schema:18/18; обработаны и полностью оценены все18 документов,288 строк; неоценённых0, неизвестных ID0, errors0.48 source строк вне поддерживаемого DB-набора;23 gold строки с unit=null остаются в знаменателе пар.
+
+| Документ | Gold строк | Findings | Point recall | Value recall | Point precision | Pair precision | Missing/extra/wrong |
+|---|---:|---:|---|---|---|---|---|
+| doc-01 | 20 | 20 | 20/20 | 20/20 | 20/20 | 20/20 | 0/0/0 |
+| doc-02 | 7 | 7 | 7/7 | 7/7 | 7/7 | 7/7 | 0/0/0 |
+| doc-03 | 30 | 30 | 30/30 | 30/30 | 30/30 | 30/30 | 0/0/0 |
+| doc-04 | 30 | 30 | 30/30 | 30/30 | 30/30 | 30/30 | 0/0/0 |
+| doc-05 | 21 | 21 | 21/21 | 21/21 | 21/21 | 21/21 | 0/0/0 |
+| doc-06 | 27 | 27 | 27/27 | 27/27 | 27/27 | 27/27 | 0/0/0 |
+| doc-07 | 20 | 20 | 20/20 | 20/20 | 20/20 | 20/20 | 0/0/0 |
+| doc-08 | 0 | 0 | н/д | н/д | н/д | н/д | 0/0/0 |
+| doc-09 | 0 | 0 | н/д | н/д | н/д | н/д | 0/0/0 |
+| doc-10 | 33 | 33 | 33/33 | 33/33 | 33/33 | 33/33 | 0/0/0 |
+| doc-11 | 8 | 8 | 8/8 | 8/8 | 8/8 | 8/8 | 0/0/0 |
+| doc-12 | 21 | 21 | 21/21 | 21/21 | 21/21 | 21/21 | 0/0/0 |
+| doc-13 | 23 | 23 | 23/23 | 23/23 | 23/23 | 23/23 | 0/0/0 |
+| doc-14 | 1 | 1 | 1/1 | 1/1 | 1/1 | 1/1 | 0/0/0 |
+| doc-15 | 0 | 0 | н/д | н/д | н/д | н/д | 0/0/0 |
+| doc-16 | 1 | 1 | 1/1 | 1/1 | 1/1 | 1/1 | 0/0/0 |
+| doc-17 | 23 | 23 | 23/23 | 23/23 | 23/23 | 23/23 | 0/0/0 |
+| doc-18 | 23 | 23 | 23/23 | 23/23 | 23/23 | 23/23 | 0/0/0 |
+| Итого | 288 | 288 | 288/288 (100%) | 288/288 (100%) | 288/288 (100%) | 288/288 (100%) | 0/0/0 |
+
+Нулевой знаменатель — н/д; пустой gold не даёт100%. Doc-18:23/23 пары автоматически, без отдельного ручного обхода оценщика. Повторных expected пар0. Эти100% относятся к текущему подготовленному DB-набору, не ко всем336 source строкам и не к точности единиц/новых PDF.
+
+Остались диагностические предупреждения matcher на других кандидатных строках (ambiguous_name, result_not_found, result_region_ambiguous, unrecognized_name, unsupported_name, unsupported_numeric_result, no_supported_findings). Они не привели к пропускам/лишним/неверным значениям в текущем эталоне; предупреждения не подавлялись.
+
+Проверки:104 tests/10 suites на host и в существующем server-контейнере, build/read-only ESLint успешны, health HTTP200; существующее ts-jest warning не мешало выполнению.54 PDF/source/Python файла побайтно неизменны; у всех18 DB JSON сохранены исходные поля, права0600 и Git-ignore, все ID существуют в текущей БД. Backup создан и проверен. Python/PDF extraction не запускались, результаты в БД не сохранялись.
+
+
+## 2026-10-15 14:53 UTC+05:00 — отдельная ячейка результата
+
+После separated-result-plan.md повторён весь текущий corpus без Python/PDF extraction и snapshots.18/18 комплектных наборов обработаны, текущая БД read-only. На полностью оценённой части без регрессий:9 файлов,95/95 пар, missing/extra/wrong=0. Ограничение автоматического gold lookup остаётся:9 файлов/193 строки не оценены,38 неразрешённых соответствий; полный процент корпуса не заявляется. Для doc-18 findings выросли с22 до23; статус unresolved_expected по строке10 gold остаётся отдельной проблемой оценщика.
+
+Дополнительная независимая диагностика doc-18: вручную проверенные семантические соответствия23 source/gold показателей текущим стабильным DB names использованы только в памяти, без файла mapping/manifest и не из findings. По ним23/23 пары point/value правильны, пропусков0, СОЭ найдена. Это проверка исправления doc-18, а не замена автоматических метрик всего корпуса. Медицинские значения не публиковались. Все72 входа побайтно неизменны, код Python/БД/эталоны не менялись.
+
+Проверки:103/103 tests,10 suites на host и в существующем server-контейнере; build успешно, read-only ESLint успешно, health HTTP200. Новые synthetic cases покрывают scalar/unit/demographic reference, ноль/десятичную запятую, offset, отрицательные/слишком большие/сравнительные/множественные результаты, произвольный текст и ненадёжные text-cuts. До исправления три положительных regression cases воспроизводили ошибку.
+
+## 2026-10-15 14:00 UTC+05:00 — все18 подготовленных наборов
+
+Команда: `cd server && npm run benchmark:nest-parsing -- ../testData`. Matcher — текущий единственный LegacyPdfFindingMatcher (без hybrid); HEAD fc14c73 + существующее незакоммиченное рабочее дерево. Каталог — текущая локальная БД, 67 показателей, read-only, только в памяти. Без snapshots/manifest/fingerprint gates и фиксированных подмножеств. PDF использованы только для inventory, Python не вызывался; входы не пересоздавались.
+
+Комплектность:18 PDF,18 sources,18 Python JSON,18 DB JSON; missing/invalid/errors нет. Matcher обработал все18. Source:336 строк; DB gold:288 (48 строк вне поддерживаемого DB-набора), unit=null:23. Единицы в текущем этапе не оцениваются, null не исключает строку из пар. Проверены72 входных файла до/после — изменений нет. Backup БД создан и проверен; БД не менялась.
+
+Полностью оценены9 документов (95 строк), из них3 с пустым gold. Point recall, value recall, point precision и pair precision на оценённой части:95/95 (100%); missing/extra/wrong=0/0/0, дубли expected=0. Остальные9 имеют unresolved_expected:38 строк не сопоставлены независимо с текущими DB IDs, поэтому все193 строки этих файлов явно не включены в численные итоги. Это ограничение оценщика, а не установленный список пропусков matcher. **Полного результата корпуса нет; 100% относится только к95/288 эталонным строкам.** Количество findings само по себе не подтверждает правильность ID/значения.
+
+| Документ | Gold строк | Findings | Point recall | Value recall | Point precision | Pair precision | Неразрешённых gold строк |
+|---|---:|---:|---|---|---|---|---:|
+| doc-01 | 20 | 20 | 20/20 | 20/20 | 20/20 | 20/20 | 0 |
+| doc-02 | 7 | 7 | не оценено | не оценено | не оценено | не оценено | 3 |
+| doc-03 | 30 | 30 | не оценено | не оценено | не оценено | не оценено | 3 |
+| doc-04 | 30 | 30 | не оценено | не оценено | не оценено | не оценено | 3 |
+| doc-05 | 21 | 21 | не оценено | не оценено | не оценено | не оценено | 2 |
+| doc-06 | 27 | 27 | не оценено | не оценено | не оценено | не оценено | 11 |
+| doc-07 | 20 | 20 | 20/20 | 20/20 | 20/20 | 20/20 | 0 |
+| doc-08 | 0 | 0 | н/д | н/д | н/д | н/д | 0 |
+| doc-09 | 0 | 0 | н/д | н/д | н/д | н/д | 0 |
+| doc-10 | 33 | 33 | не оценено | не оценено | не оценено | не оценено | 3 |
+| doc-11 | 8 | 8 | 8/8 | 8/8 | 8/8 | 8/8 | 0 |
+| doc-12 | 21 | 21 | не оценено | не оценено | не оценено | не оценено | 11 |
+| doc-13 | 23 | 23 | 23/23 | 23/23 | 23/23 | 23/23 | 0 |
+| doc-14 | 1 | 1 | 1/1 | 1/1 | 1/1 | 1/1 | 0 |
+| doc-15 | 0 | 0 | н/д | н/д | н/д | н/д | 0 |
+| doc-16 | 1 | 1 | не оценено | не оценено | не оценено | не оценено | 1 |
+| doc-17 | 23 | 23 | 23/23 | 23/23 | 23/23 | 23/23 | 0 |
+| doc-18 | 23 | 22 | не оценено | не оценено | не оценено | не оценено | 1 |
+| Итого | 288 | 287 | 95/95 оценённых | 95/95 оценённых | 95/95 оценённых | 95/95 оценённых | 38 |
+
+Для файлов без полной оценки missing/extra/wrong не определены, не заменяются нулями. Нулевой знаменатель показан как н/д. Для doc-18:23 gold строки,22 findings,1 неразрешённое соответствие; утверждать, что причина расхождения именно в этой строке, нельзя без независимой проверки.
+
+Предупреждения и номера строк относятся к gold lookup, а не перечню медицинских параметров; значения и названия не публикуются:
+
+- doc-01: ambiguous_name, result_region_ambiguous.
+- doc-02: result_not_found, result_region_ambiguous; gold lookup: строка1=unmapped_expected_point, строка3=unmapped_expected_point, строка4=unmapped_expected_point.
+- doc-03: ambiguous_name, result_not_found, result_region_ambiguous, unrecognized_name, unsupported_name, unsupported_numeric_result; gold lookup: строка4=ambiguous_expected_point, строка8=ambiguous_expected_point, строка17=unmapped_expected_point.
+- doc-04: ambiguous_name, result_not_found, result_region_ambiguous, unrecognized_name, unsupported_name, unsupported_numeric_result; gold lookup: строка4=ambiguous_expected_point, строка8=ambiguous_expected_point, строка17=unmapped_expected_point.
+- doc-05: result_not_found, result_region_ambiguous, unsupported_name; gold lookup: строка8=unmapped_expected_point, строка11=ambiguous_expected_point.
+- doc-06: result_not_found, result_region_ambiguous, unrecognized_name; gold lookup: строка3=unmapped_expected_point, строка4=unmapped_expected_point, строка5=unmapped_expected_point, строка8=unmapped_expected_point, строка10=unmapped_expected_point, строка11=unmapped_expected_point, строка12=unmapped_expected_point, строка14=unmapped_expected_point, строка16=unmapped_expected_point, строка17=unmapped_expected_point, строка19=unmapped_expected_point.
+- doc-07: ambiguous_name, result_region_ambiguous.
+- doc-08: no_supported_findings.
+- doc-09: no_supported_findings.
+- doc-10: ambiguous_name, result_not_found, result_region_ambiguous, unrecognized_name, unsupported_name, unsupported_numeric_result; gold lookup: строка14=unmapped_expected_point, строка29=ambiguous_expected_point, строка33=ambiguous_expected_point.
+- doc-11: result_not_found, result_region_ambiguous.
+- doc-12: result_not_found, result_region_ambiguous, unrecognized_name; gold lookup: строка3=unmapped_expected_point, строка4=unmapped_expected_point, строка5=unmapped_expected_point, строка8=unmapped_expected_point, строка10=unmapped_expected_point, строка11=unmapped_expected_point, строка12=unmapped_expected_point, строка14=unmapped_expected_point, строка16=unmapped_expected_point, строка17=unmapped_expected_point, строка19=unmapped_expected_point.
+- doc-13: unsupported_name.
+- doc-14: result_region_ambiguous.
+- doc-15: no_supported_findings.
+- doc-16: unsupported_numeric_result; gold lookup: строка1=unmapped_expected_point.
+- doc-17: unsupported_name.
+- doc-18: result_not_found, result_region_ambiguous, unrecognized_name, unsupported_name; gold lookup: строка10=unmapped_expected_point.
+
+Backend:10 suites/92 tests успешно, build успешно, health HTTP200. Jest выдаёт существующее предупреждение ts-jest о hybrid module kind; тесты не упали. Код, справочник и эталоны ради результата не исправлялись. Следующий необходимый шаг для полного оценивания — предметная проверка соответствия эталонных названий текущему справочнику, без expected-ID manifest и использования matcher как oracle.
+
+## 2026-10-15 — проверка перехода на установленную методологию
+
+Текущая БД (67 показателей), текущий matcher, подготовленные JSON без snapshots, fingerprint gates и фиксированных подмножеств. Python/PDF extraction не запускались, входы и БД не менялись. Все прежние результаты ниже являются историческими, не актуальной приёмкой корпуса.
+
+Обнаружено18 документов; matcher обработал17 комплектных наборов. Полностью оценены9 файлов: 95/95 пар, без лишних показателей и неверных значений. Для8 файлов (02–06,10,12,16) независимое сопоставление названий эталона текущим DB IDs требует проверки: 37 строк не разрешены; все170 строк этих файлов явно остаются вне численных итогов. Это ограничение оценивания, а не подтверждённые пропуски matcher; общий процент успешности корпуса не заявляется. Для18 предупреждения missing_python_json и missing_db_json, файлы автоматически не создавались.
+
+Проверки инфраструктуры: 92/92 теста, 10 suites; build и read-only ESLint успешны. Дополнительные фиксации/каталоги/manifest для обхода предупреждений не создавались.
+
 ## 2026-10-14 21:07:37 UTC+05:00 — повторный прогон без перечня параметров
 
 По запросу пользователя новый блок содержит только метрики и статусы файлов, без названий ненайденных параметров. Предыдущие исторические блоки не удалены.
