@@ -51,6 +51,7 @@ import { MigrationsAnalysisResult } from './migrations/migrations.analysisResult
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
+      logging: false,
       host: process.env.POSTGRES_HOST,
       port: Number(process.env.POSTGRES_PORT),
       username: process.env.POSTGRES_USER,

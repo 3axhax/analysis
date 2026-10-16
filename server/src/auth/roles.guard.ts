@@ -67,8 +67,7 @@ export class RolesGuard implements CanActivate {
       return plainUserDB.roles.some((role) =>
         requiredRoles.includes(role.value),
       );
-    } catch (e) {
-      console.log(e);
+    } catch {
       throw new HttpException('Request Forbidden', HttpStatus.FORBIDDEN);
     }
   }

@@ -1,6 +1,7 @@
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { selectAnalysisPointLimits } from "@entities/analysisPoint";
 import { useTranslation } from "react-i18next";
+import { unitLabel } from "@entities/units";
 
 export const AnalysisPointDataLimits = ({
   analysisPointId,
@@ -22,7 +23,7 @@ export const AnalysisPointDataLimits = ({
               : limit.maxValue === 0
                 ? ` > ${limit.minValue}`
                 : `${limit.minValue} - ${limit.maxValue}`) +
-            ` ${t(`units.${limit.unit}`)}`;
+            ` ${unitLabel(limit.unit)}`;
 
           return (
             <tr

@@ -1,0 +1,5 @@
+# pointId и unitId DB-эталонов
+
+Дата:2026-10-15. По запросу пользователя заменить id на pointId во всех18 DB-results JSON и добавить unitId текущей БД. Сохранить name/value/unit/order и прежнюю идентичность point. unitId проверять по разрешённым units именно point, null при unit=null; единицы сопоставлять независимо от matcher, с RU/EN эквивалентами без пересчёта значения. Не изменять Python/production matcher/БД/sources, не создавать snapshots/manifest. Backup проверен.
+
+Обновить schema/resolver/тестовые данные/методологию на pointId/name/value/unit/unitId. Оценщик проверяет существование pointId и разрешённость unitId, не назначает единицы по единственному варианту. Текущие point/value метрики сохранить; подготовить явную оценку unit/triple по ID без реализации runtime unit parsing, ожидая честный нулевой unit recall при null findings. Schema/relation tests, build/health/corpus и контроль неизменности исходных полей обязательны. Пустые наборы сохранить. Rollback обратной правкой формата по отдельному запросу, без DB restore.

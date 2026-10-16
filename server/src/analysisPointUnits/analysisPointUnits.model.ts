@@ -3,6 +3,9 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 export interface AnalysisPointUnitsCreationAttrs {
   name: string;
   id?: number;
+  code?: string | null;
+  translationParsing?: string;
+  quantityKind?: string | null;
 }
 
 @Table({
@@ -27,4 +30,13 @@ export class AnalysisPointUnits extends Model<
     allowNull: false,
   })
   declare name: string;
+
+  @Column({ type: DataType.STRING(64), allowNull: true })
+  declare code: string | null;
+
+  @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
+  declare translationParsing: string;
+
+  @Column({ type: DataType.STRING(64), allowNull: true })
+  declare quantityKind: string | null;
 }

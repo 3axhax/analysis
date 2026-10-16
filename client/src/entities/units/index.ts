@@ -16,3 +16,4 @@ export {
 } from "./model";
 export type { UnitsState, UnitsListItem } from "./model";
 export { useUnitsLoad, useUnitsWithTranslateLoad } from "./units.hooks";
+export { unitLabel } from "./lib/unit-label";

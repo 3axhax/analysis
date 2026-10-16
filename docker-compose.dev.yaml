@@ -17,6 +17,9 @@ services:
         condition: service_healthy
       python_pdf_parser:
         condition: service_healthy
+    networks:
+      - default
+      - parser_internal
 
   postgres_analysis:
     container_name: postgresAnalysis
@@ -61,13 +64,23 @@ services:
       - /app/__pycache__  # Игнорируем кэш Python
     environment:
       - PYTHONUNBUFFERED=1
-#    healthcheck:
-#      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
-#      start_period: 10s
+      - PDF_MAX_PAGES=5
+      - PDF_PROCESS_TIMEOUT_SECONDS=45
+      - PDF_WORKER_MEMORY_MB=512
+      - PDF_MAX_CONCURRENT_REQUESTS=2
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - parser_internal
     restart: unless-stopped
+
+networks:
+  parser_internal:
+    internal: true
 
 volumes:
   pgdata_dev:

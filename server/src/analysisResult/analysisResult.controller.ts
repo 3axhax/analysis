@@ -31,7 +31,7 @@ export class AnalysisResultController {
     @Body('pointData') pointData: [],
     @User() user: UserModel | undefined,
   ): Promise<SaveResultResponse> {
-    if (!ageInDays || !gender) {
+    if (ageInDays === undefined || ageInDays === null || !gender) {
       return { error: 'No required parameters: age, gender' };
     }
     return this.AnalysisResultService.saveResult({
@@ -46,7 +46,7 @@ export class AnalysisResultController {
   async getResult(
     @Body('resultId') resultId: string,
   ): Promise<GetResultResponse> {
-    if (!resultId) {
+    if (typeof resultId !== 'string' || !resultId || resultId.length > 128) {
       return { error: 'No required parameters: resultId' };
     }
     const analysisResult = this.AnalysisResultService.getResultByResultId({

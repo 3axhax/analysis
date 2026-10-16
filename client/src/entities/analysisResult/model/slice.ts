@@ -40,7 +40,7 @@ export const analysisResultSlice = createSlice({
           state: WritableDraft<AnalysisResultState>,
           action: PayloadAction<AnalysisResult>,
         ) => {
-          if (action.payload.resultId) {
+          if (action.payload?.resultId) {
             state.redirectTo = `/result/${action.payload.resultId}`;
           }
         },
@@ -62,15 +62,17 @@ export const analysisResultSlice = createSlice({
           state: WritableDraft<AnalysisResultState>,
           action: PayloadAction<AnalysisParsingFileResult>,
         ) => {
-          state.selectedList = action.payload.findingPoints.map(
-            (point) => point.id,
-          );
-          state.preparedData.pointData = action.payload.findingPoints.reduce(
+          state.selectedList = action.payload.findings.map((point) => point.id);
+          state.preparedData.pointData = action.payload.findings.reduce(
             (acc, point) => {
               acc[point.name] = {
                 name: point.name,
                 value: point.value,
-                units: "",
+                units: point.unitId !== null ? (point.unit ?? "") : "",
+                sourceUnitText:
+                  point.unitId !== null
+                    ? (point.unitText ?? point.unit ?? undefined)
+                    : undefined,
               };
               return acc;
             },
@@ -84,9 +86,12 @@ export const analysisResultSlice = createSlice({
           action.type.startsWith("analysisResult"),
         (
           state: WritableDraft<AnalysisResultState>,
-          action: ErrorActionType,
+          action: ErrorActionType & { payload?: unknown },
         ) => {
-          state.error = action.error.message ? action.error.message : "";
+          state.error =
+            typeof action.payload === "string"
+              ? action.payload
+              : (action.error.message ?? "");
         },
       )
       .addMatcher(

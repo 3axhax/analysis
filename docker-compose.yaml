@@ -30,8 +30,11 @@ services:
     depends_on:
       postgres_analysis:
         condition: service_healthy
+      python_pdf_parser:
+        condition: service_healthy
     networks:
       - app_network
+      - parser_internal
     restart: unless-stopped
 
   postgres_analysis:
@@ -70,20 +73,33 @@ services:
     build:
       context: ./python-microservice
       dockerfile: DockerfilePythonMicroservice
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./python-microservice:/app
-      - /app/__pycache__
+    expose:
+      - "8000"
     environment:
       - PYTHONUNBUFFERED=1
+      - PDF_MAX_PAGES=5
+      - PDF_PROCESS_TIMEOUT_SECONDS=45
+      - PDF_WORKER_MEMORY_MB=512
+      - PDF_MAX_CONCURRENT_REQUESTS=2
     networks:
-      - app_network
+      - parser_internal
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,noexec,nosuid
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 768m
     restart: unless-stopped
 
 networks:
   app_network:
     driver: bridge
+  parser_internal:
+    driver: bridge
+    internal: true
 
 volumes:
   pgdata:

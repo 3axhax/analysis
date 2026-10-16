@@ -17,6 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "benchmark:pdf-matcher": "ts-node --transpile-only scripts/pdf-matching-benchmark.ts",
+    "benchmark:nest-parsing": "ts-node --transpile-only scripts/nest-parsing-corpus.ts",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
@@ -30,8 +32,8 @@
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "decimal.js": "10.4.3",
     "form-data": "^4.0.6",
-    "pdf-parse": "^2.4.5",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
@@ -51,7 +53,6 @@
     "@types/jest": "^30.0.0",
     "@types/multer": "^2.0.0",
     "@types/node": "^22.10.7",
-    "@types/pdf-parse": "^1.1.5",
     "@types/sequelize": "^4.28.20",
     "@types/supertest": "^6.0.2",
     "eslint": "^9.18.0",

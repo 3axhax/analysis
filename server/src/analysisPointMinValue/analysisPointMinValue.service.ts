@@ -45,16 +45,18 @@ export class AnalysisPointMinValueService {
     pointId,
     ageId,
     genderId,
+    unitId,
   }: {
     pointId: number;
     ageId: number;
     genderId: number;
-  }): Promise<number> => {
-    const foundValue = await this.analysisPointMinValueRepository.findOne({
-      where: { pointId, ageId, genderId },
+    unitId: number;
+  }): Promise<number | null> => {
+    const foundValues = await this.analysisPointMinValueRepository.findAll({
+      where: { pointId, ageId, genderId, unitId },
     });
 
-    return foundValue ? foundValue.value : 0;
+    return foundValues.length === 1 ? foundValues[0].value : null;
   };
 
   getMinValueByParameters = async (

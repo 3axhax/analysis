@@ -1,0 +1,11 @@
+# Возврат к установленной методологии без промежуточных фиксаций
+
+Дата: 2026-10-15. Пользователь явно потребовал убрать snapshots/дополнительные expected, вернуться к prepared inputs + текущий matcher/БД и закрепить запрет в документации; дополнительно удалить лишние ресурсы.
+
+Реализация: CLI читает источники только из sources/python-results/DB-results, PDF использует лишь как inventory. Каталог получает свежим read-only запросом PostgreSQL в рамках запуска без старта Nest App и startup migrations. Независимое соответствие gold names→current IDs вычисляется в памяти по текущим DB names/aliases, не через проверяемый matcher или его findings; при неразрешимости не вычислять метрики файла с молчаливым сокращением expected. Не создавать manifest/expected mapping/catalog copies/fingerprints, не фильтровать изменённые inputs или автоматически пересоздавать их. Missing/invalid предупреждаются, файлы не генерируются. Старые CLI snapshot/mode/subset параметры удалить.
+
+Проверки: synthetic cases live catalog injection (не файл каталога), новые/изменённые prepared inputs, missing/orphan/invalid, ambiguous expected, независимость mapper от matcher, отсутствие побочных записей и утечек. Live запуск в существующем server-контейнере с inherited DB config (без вывода env), build/tests/read-only lint/health. Состояние каталога/commit фиксировать только в отчёте как metadata, не как новые данные запуска.
+
+Ресурсы: удалить старый диагностический corpus script, который заново читает PDF/вызывает Python вне обычной методологии, и его npm-команду. Синтетический benchmark и тестовые fixtures сохранить. .nest-benchmark/.nest-benchmark-rdw-phrase и ignored архив устаревших snapshots переместить в отдельную корзину (recoverable), не создавать новые snapshots/архивы на замену. PDF/sources/python-results/DB-results, локальные backup БД и существующие пользовательские правки сохранить. Backup БД до работы создан и проверен; БД не меняется.
+
+Документация: текущие инструкции methodology/AGENTS запрещают дополнительные промежуточные фиксации реального корпуса. Историю экспериментов оставить с явной отметкой отмены, не переписывать результаты. Rollback кодом предыдущей версии и восстановлением из корзины по отдельному запросу, без DB restore.

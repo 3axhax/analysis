@@ -13,6 +13,8 @@ export interface AnalysisPointUnitResponse {
   name: string;
   translationRu: string;
   translationEn: string;
+  code?: string | null;
+  translationParsing?: string;
 }
 
 export interface AnalysisPointUnitsListResponse {

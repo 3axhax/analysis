@@ -10,9 +10,11 @@ import {
 export const AnalysisPointDataListStatus = ({
   status,
 }: {
-  status: StatusValue;
+  status: StatusValue | null;
 }) => {
   const { t } = useTranslation("common");
+  if (status === null)
+    return <span className="text-gray-500">Нет интерпретации</span>;
 
   return (
     <span

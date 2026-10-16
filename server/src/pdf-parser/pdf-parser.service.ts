@@ -1,9 +1,17 @@
 // pdf-parser/pdf-parser.service.ts
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import FormData from 'form-data';
-import { ExtractTablesResponse } from './pdf-parser.types';
+import axios from 'axios';
+import {
+  ExtractTablesOptions,
+  ExtractTablesResponse,
+} from './pdf-parser.types';
 
 @Injectable()
 export class PdfParserService {
@@ -16,16 +24,14 @@ export class PdfParserService {
 
   async extractTables(
     fileBuffer: Buffer,
-    filename: string = 'document.pdf',
-    options?: {
-      pages?: string;
-      tableSettings?: Record<string, any>;
-    },
-  ): Promise<ExtractTablesResponse | null> {
+    options?: ExtractTablesOptions,
+  ): Promise<ExtractTablesResponse> {
     try {
-      // Создаем FormData
       const formData = new FormData();
-      formData.append('file', fileBuffer, { filename });
+      formData.append('file', fileBuffer, {
+        filename: 'document.pdf',
+        contentType: 'application/pdf',
+      });
 
       if (options?.pages) {
         formData.append('pages', options.pages);
@@ -43,14 +49,21 @@ export class PdfParserService {
           headers: {
             ...formData.getHeaders(),
           },
-          timeout: 60000,
+          maxBodyLength: 10 * 1024 * 1024,
+          maxContentLength: 5 * 1024 * 1024,
+          timeout: 50000,
         }),
       );
 
       return response.data as ExtractTablesResponse;
     } catch (error) {
-      console.error('PDF Parser Service Error:', error);
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status && [400, 413, 422].includes(status)) {
+          throw new HttpException('PDF cannot be processed', status);
+        }
+      }
+      throw new ServiceUnavailableException('PDF parser is unavailable');
     }
-    return null;
   }
 }
