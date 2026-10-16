@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Select, { GroupBase, MultiValue } from "react-select";
 import { selectAnalysisTypeListForMultiSelect } from "@entities/analysisType";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
@@ -26,51 +26,29 @@ export const AnalysisPointGroupSelect = () => {
     })),
   }));
 
-  const [selectedOptions, setSelectedOptions] = useState<
-    SelectUIOption<number>[]
-  >([]);
+  // Redux is the only source of selection; mounting must not write stale IDs back.
+  const availableOptions = groupedOptions.flatMap((group) => group.options);
+  const selectedOptions = selectedPointsList
+    .map((id) => availableOptions.find((option) => option.value === id))
+    .filter((option): option is SelectUIOption<number> => option !== undefined);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    setSelectedOptions([]);
-  }, []);
-
-  useEffect(() => {
-    dispatch(setSelectedPoint(selectedOptions.map((point) => point.value)));
-  }, [selectedOptions, dispatch]);
-
-  useEffect(() => {
-    if (selectedPointsList.length !== selectedOptions.length) {
-      setSelectedOptions(
-        groupedOptions.reduce<SelectUIOption<number>[]>((acc, group) => {
-          return [
-            ...acc,
-            ...group.options.filter((option) =>
-              selectedPointsList.includes(option.value),
-            ),
-          ];
-        }, []),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPointsList]);
 
   // Обработчик изменения выбора
   const handleChange = (selected: MultiValue<SelectUIOption<number>>) => {
-    const selectedList = selected ? [...selected] : [];
-    setSelectedOptions(selectedList);
+    dispatch(setSelectedPoint(selected.map((option) => option.value)));
   };
 
   const groupClick = (label: string | undefined) => {
-    const selectedOptionsValue = selectedOptions.map((option) => option.value);
     const addingGroup = groupedOptions.find((group) => group.label === label);
     if (addingGroup) {
-      setSelectedOptions([
-        ...selectedOptions,
-        ...addingGroup.options.filter(
-          (option) => !selectedOptionsValue.includes(option.value),
-        ),
-      ]);
+      dispatch(
+        setSelectedPoint([
+          ...new Set([
+            ...selectedPointsList,
+            ...addingGroup.options.map((option) => option.value),
+          ]),
+        ]),
+      );
     }
   };
 
