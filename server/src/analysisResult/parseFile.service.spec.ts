@@ -178,7 +178,7 @@ describe('ParseFileService', () => {
         } as never,
       );
       const result = await service.parseFile(file());
-      expect(result.status).toBe('complete');
+      expect(result.status).toBe('partial');
       expect(result.findings).toEqual([
         expect.objectContaining({
           id: 1,
@@ -186,7 +186,7 @@ describe('ParseFileService', () => {
           unitId: null,
           unit: null,
           confidence: 0.5,
-          warnings: [],
+          warnings: ['unit_not_found'],
         }),
       ]);
     },

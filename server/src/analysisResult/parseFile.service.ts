@@ -1,8 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Optional,
+} from '@nestjs/common';
 import { AnalysisPointService } from '../analysisPoint/analysisPoint.service';
 import { PdfParserService } from '../pdf-parser/pdf-parser.service';
 import { LegacyPdfFindingMatcher } from './pdf-finding-matcher';
 import { PdfParsingFinding } from './pdf-matching.types';
+import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 
 export type ParsingStatus = 'complete' | 'partial' | 'unsupported';
 export type ParsingFinding = PdfParsingFinding;
@@ -29,6 +35,7 @@ export class ParseFileService {
   constructor(
     private readonly analysisPointService: AnalysisPointService,
     private readonly pdfParserService: PdfParserService,
+    @Optional() private readonly unitsService?: AnalysisPointUnitsService,
   ) {}
 
   async parseFile(file: Express.Multer.File): Promise<ParsingFileResponse> {
@@ -51,7 +58,14 @@ export class ParseFileService {
           },
         },
       );
-      const selected = this.legacyMatcher.match(extraction, points);
+      const unitCatalog = this.unitsService
+        ? ((await this.unitsService.getAll()) ?? [])
+        : undefined;
+      const selected = this.legacyMatcher.match(
+        extraction,
+        points,
+        unitCatalog,
+      );
 
       const warnings = [...selected.warnings];
       if (extraction.total_pages > extraction.pages_processed) {

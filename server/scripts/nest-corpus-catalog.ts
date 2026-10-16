@@ -10,7 +10,12 @@ interface CatalogRow {
   translationEn: string;
   parsingWords: string;
   parsingOrder: number;
-  units: { id: number; name: string }[];
+  units: {
+    id: number;
+    name: string;
+    code: string | null;
+    translationParsing: string;
+  }[];
 }
 
 /** Direct read-only query; never boot Nest or execute startup migrations. */
@@ -68,7 +73,7 @@ export async function loadCurrentCorpusCatalog(
           COALESCE((SELECT t.value FROM translation t WHERE t.namespace='entities' AND t.module='analysisPoint' AND t.submodule=p.name AND t.lang='en' ORDER BY t.id LIMIT 1), '') AS "translationEn",
           COALESCE(p."translationParsing", '') AS "parsingWords",
           COALESCE(p."parsingOrder", 0) AS "parsingOrder",
-          COALESCE((SELECT json_agg(json_build_object('id', u.id, 'name', u.name) ORDER BY u.id) FROM analysis_point_units l JOIN "analysisPointUnits" u ON u.id=l."unitsId" WHERE l."pointId"=p.id), '[]'::json) AS units
+          COALESCE((SELECT json_agg(json_build_object('id', u.id, 'name', u.name, 'code',u.code, 'translationParsing',u."translationParsing") ORDER BY u.id) FROM analysis_point_units l JOIN "analysisPointUnits" u ON u.id=l."unitsId" WHERE l."pointId"=p.id), '[]'::json) AS units
         FROM "analysisPoint" p ORDER BY p.id
       `,
           { transaction, type: QueryTypes.SELECT },

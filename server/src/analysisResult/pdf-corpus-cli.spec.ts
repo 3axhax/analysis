@@ -61,7 +61,9 @@ describe('prepared-only Nest corpus runner without intermediate fixtures', () =>
     );
     await writeFile(
       join(root, 'DB-results', '01-db.json'),
-      JSON.stringify([{ id: 1, name: 'Marker', value: 12, unit: null }]),
+      JSON.stringify([
+        { pointId: 1, name: 'Marker', value: 12, unit: null, unitId: null },
+      ]),
     );
   };
   it('handles missing folders without creating inputs or snapshots', async () => {
@@ -87,7 +89,9 @@ describe('prepared-only Nest corpus runner without intermediate fixtures', () =>
     expect(changed.totals.wrongValues).toBe(1);
     await writeFile(
       join(root, 'DB-results', '01-db.json'),
-      JSON.stringify([{ id: 1, name: 'Marker', value: 13, unit: null }]),
+      JSON.stringify([
+        { pointId: 1, name: 'Marker', value: 13, unit: null, unitId: null },
+      ]),
     );
     expect((await runNestCorpus(root, catalog)).totals.correctPairs).toBe(1);
     expect((await readdir(root)).sort()).toEqual(
@@ -102,7 +106,9 @@ describe('prepared-only Nest corpus runner without intermediate fixtures', () =>
     ]);
     await writeFile(
       join(root, 'DB-results', '01-db.json'),
-      JSON.stringify([{ id: 7, name: 'Marker', value: 12, unit: null }]),
+      JSON.stringify([
+        { pointId: 7, name: 'Marker', value: 12, unit: null, unitId: null },
+      ]),
     );
     const empty = {
       match: jest

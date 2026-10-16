@@ -1,7 +1,6 @@
 import { SelectUI } from "@shared/ui";
 import { useAppSelector } from "@shared/store/hooks.ts";
-import { useTranslation } from "react-i18next";
-import { useUnitsLoad } from "@entities/units";
+import { useUnitsLoad, unitLabel } from "@entities/units";
 import { selectUnitsListForSelect } from "@entities/units";
 
 interface AgeSelectorProps {
@@ -12,7 +11,6 @@ interface AgeSelectorProps {
 export const UnitSelector = ({ unit, setUnit }: AgeSelectorProps) => {
   const unitsOptions = useAppSelector(selectUnitsListForSelect);
   useUnitsLoad();
-  const { t: tEntities } = useTranslation("entities");
 
   return (
     <SelectUI<string>
@@ -20,7 +18,7 @@ export const UnitSelector = ({ unit, setUnit }: AgeSelectorProps) => {
       name={"units"}
       options={unitsOptions.map((item) => ({
         ...item,
-        label: tEntities(`units.${item.label}`),
+        label: unitLabel(item.label),
       }))}
       value={unit}
       onChange={setUnit}

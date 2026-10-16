@@ -8,11 +8,28 @@ describe('prepared corpus inputs', () => {
   it('requires explicit positive safe integer ids only in DB gold', () => {
     const row = { name: 'Synthetic', value: 0, unit: null };
     expect(isPreparedDbRows([])).toBe(true);
-    expect(isPreparedDbRows([{ id: 7, ...row }])).toBe(true);
+    expect(isPreparedDbRows([{ pointId: 7, ...row, unitId: null }])).toBe(true);
     expect(isPreparedDbRows([row])).toBe(false);
     for (const id of [0, -1, 1.5, '7', null, Number.MAX_SAFE_INTEGER + 1])
-      expect(isPreparedDbRows([{ id, ...row }])).toBe(false);
-    expect(isPreparedDbRows([{ id: 7, ...row, extra: true }])).toBe(false);
+      expect(isPreparedDbRows([{ pointId: id, ...row, unitId: null }])).toBe(
+        false,
+      );
+    expect(
+      isPreparedDbRows([{ pointId: 7, ...row, unitId: null, extra: true }]),
+    ).toBe(false);
+    expect(isPreparedDbRows([{ id: 7, ...row }])).toBe(false);
+    expect(isPreparedDbRows([{ pointId: 7, ...row }])).toBe(false);
+    expect(isPreparedDbRows([{ pointId: 7, ...row, unitId: 2 }])).toBe(false);
+    expect(
+      isPreparedDbRows([{ pointId: 7, ...row, unit: 'g/l', unitId: null }]),
+    ).toBe(false);
+    expect(
+      isPreparedDbRows([{ pointId: 7, ...row, unit: 'g/l', unitId: 2 }]),
+    ).toBe(true);
+    for (const unitId of [0, -1, 1.5, '2', Number.MAX_SAFE_INTEGER + 1])
+      expect(
+        isPreparedDbRows([{ pointId: 7, ...row, unit: 'g/l', unitId }]),
+      ).toBe(false);
     expect(
       isPreparedRows([{ id: 7, name: 'Synthetic', value: 0, unit: '' }], false),
     ).toBe(false);

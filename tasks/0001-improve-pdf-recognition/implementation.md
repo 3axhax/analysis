@@ -1,5 +1,19 @@
 # Реализация задачи 0001
 
+## 2026-10-15 15:46 UTC+05:00 — runtime unit recognition
+
+Выполнен unit-recognition-plan.md. Новый pdf-unit-parser.ts проверяет только prefix после точного конца выбранного числового результата в той же логической строке. Поддерживает соседние cells, RU/EN, micro/superscript, пробелы/разбиение букв, result flags и численно эквивалентные единицы без преобразования результата. Словарь unit spelling не зависит от gold. Разрешённость проверяется по point.units текущей БД; g/dl не подменяется g/l, единицы другого масштаба не конвертируются. Без явного evidence unit остаётся null, единственная DB unit не назначается автоматически. Более одной разрешённой identity либо несколько units в prefix дают ambiguous_unit/null. Для отсутствующего/неразрешённого evidence предусмотрены unit_not_found/unit_not_allowed при наличии point.units.
+
+PdfFindingMatcher передаёт unitEvidence в PairCandidate; resolvePdfPairs объединяет подтверждения разных extraction methods. Один и тот же point/value с несовместимыми units сохраняется с null/conflicting_units, а не первым unit. Несколько одинаковых подтверждений и missing evidence не подавляют единственный подтверждённый unit. Находка возвращает unitId и unit=DB unit.name; warnings проходят в ParseFileService и дают partial. Состояние request-local; БД/Python/DTO/клиент не менялись. Пробелы/эквивалентность не меняют числовое значение.
+
+123 tests/12 suites host/container, build/read-only ESLint и health200 успешны. Synthetic coverage: RU/EN/Unicode/flags, count scales, запрет другой unit/scale, отсутствие default, reference-only text, неоднозначные DB IDs, конфликт strategies, повторный запрос без утечки состояния, интеграция matcher. Corpus18 полностью оценён:288/288 пар,265/265 gold units,280/288 triples.8 несовпадений — найденные эквивалентные единицы против null в gold (2 doc-10,6 doc-18), явно не засчитаны; существующие эталоны требуют отдельной предметной проверки, не подгонялись. Все72 входа побайтно неизменны. Backup проверен; никаких snapshots/manifest. Rollback обратной правкой helper/matcher/resolver, без DB restore. Ограничение: units перед значением и отдельные несвязанные строки не угадываются, новые неизвестные обозначения остаются null.
+
+## 2026-10-15 15:23 UTC+05:00 — pointId/unitId DB-эталонов
+
+Выполнен gold-unit-id-plan.md:18 существующих DB JSON теперь содержат pointId/name/value/unit/unitId. Прежний id переименован без изменения идентичности; unitId получен независимо от matcher из разрешённых units каждого point.265 ненулевых unitId,23 null;3 пустых массива сохранены. Единицы RU/EN и численно эквивалентные обозначения сопоставлены без изменения значения, неподдерживаемые unit=null оставлены. Проверены все288 строк, исходные поля/порядок сохранены,54 других входа неизменны,0600/ignore сохранены. Отдельного manifest нет.
+
+Строгая schema требует pointId/unitId и отвергает старый id, отсутствующие/небезопасные ID, несогласованные unit/unitId null. Resolver проверяет point и разрешённую связь unit→point, не назначает unit автоматически. Новый pdf-unit-benchmark вычисляет unit/triple coverage по ID построчно, включая null-unit triple, и агрегирует счётчики отдельно от pair metrics. Runtime matcher/API/Python/БД не менялись; единицы по-прежнему возвращаются null, поэтому unit recall честно0/265, triple23/288 — исключительно null-unit строки. Все18 файлов оценены, пары288/288, missing/extra/wrong0.107 tests/11 suites, host/container build, read-only ESLint, health200 успешны; существующее ts-jest warning сохраняется. Backup проверен. Rollback формата и кода обратной правкой по отдельному запросу, без DB restore. Прежние id-only инструкции ниже исторические.
+
 ## 2026-10-15 15:10 UTC+05:00 — явный id DB-эталона
 
 По gold-id-plan.md в существующие18 DB-results JSON добавлен id=analysisPoint.id для288 записей;3 пустых массива сохранены. ID назначены по семантике текущего read-only справочника независимо от matcher/findings/числового результата. Сохранены name/value/unit/order; все ID существуют,0600/ignore проверены. Для GGT выбран ggtp по явному DB alias GGT, не gamma-glutamyl-transpeptidase с кодом GGTP; словарь/БД не объединялись. Никаких отдельных mapping/snapshot файлов нет.
@@ -333,3 +347,7 @@ Fuzzy matching, внешние aliases и медицинские синоним�
 В эталоны вошли 305 лабораторных записей: 303 числовых и 2 качественных. Персональные данные, референсные диапазоны, комментарии и служебные поля исключены. После первичного переноса отдельно проверены сокращения и единицы, затем выполнен независимый второй проход с визуальной сверкой переносов строк и посимвольной проверкой результатов.
 
 Автоматическая проверка подтвердила 17/17 пар PDF/JSON, валидный JSON, точный набор ключей, ожидаемые количества записей, права доступа `0600` и отсутствие смешанных Unicode-кодов показателей. Две пустые единицы относятся только к качественным результатам без единицы в источнике. Приложение, схема БД и медицинская логика не изменялись.
+
+## Уточнение 2026-10-15
+
+Runtime/corpus использует DB aliases задачи0002; source units и decimal-конверсия описаны в ../0002-unit-normalization/implementation.md. Текущий отчёт — nest-test-result.md. Исторический hardcoded словарь не является production источником aliases.

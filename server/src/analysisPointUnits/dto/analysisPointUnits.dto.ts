@@ -1,5 +1,12 @@
 import { Transform, TransformFnParams } from 'class-transformer';
-import { IsNumber, IsObject, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  Min,
+  MaxLength,
+} from 'class-validator';
 
 interface AnalysisPointUnitsFilters {
   name?: string;
@@ -57,6 +64,15 @@ export class GetAnalysisPointUnitsListQueryDto {
 }
 
 export class AddNewAnalysisPointUnitsQueryDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(4096)
+  translationParsing?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  code?: string;
   @IsString()
   name: string;
 

@@ -6,7 +6,7 @@ import { setPending } from "@entities/analysisResult";
 
 export const sendAnalysisData = createAsyncThunk(
   "analysisResult/sendData",
-  async (_, { getState, dispatch }) => {
+  async (_, { getState, dispatch, rejectWithValue }) => {
     const state = getState() as RootState;
     if (!state.analysisResult.pending) {
       try {
@@ -21,9 +21,11 @@ export const sendAnalysisData = createAsyncThunk(
         });
         dispatch(setPending(false));
         return response.data;
-      } catch (e) {
+      } catch {
         dispatch(setPending(false));
-        HandlerAxiosError(e);
+        return rejectWithValue(
+          "Не удалось сохранить результат: проверьте единицы измерения и наличие нормативов.",
+        );
       }
     }
   },

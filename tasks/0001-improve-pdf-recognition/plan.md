@@ -1,5 +1,9 @@
 # Задача 0001: повышение полноты и корректности распознавания PDF
 
+Текущий runtime этап: [unit-recognition-plan.md](unit-recognition-plan.md) — выполнено распознавание явной единицы после результата среди разрешённых point units без пересчёта значения. Полные результаты/ограничения в начале implementation.md и nest-test-result.md; прежние unit-null инструкции ниже исторические.
+
+Актуальный формат DB gold по [gold-unit-id-plan.md](gold-unit-id-plan.md): pointId/name/value/unit/unitId. Старый id переименован, разрешённые unitId заданы непосредственно в DB JSON; runtime unit parsing не менялся. Результат — в начале nest-test-result.md.
+
 Уточнение2026-10-15: [gold-id-plan.md](gold-id-plan.md) выполнен по новому явному запросу пользователя. DB-results содержит id/name/value/unit, оценщик сравнивает id/value напрямую; прежний name lookup отменён. Отдельных manifest/snapshots по-прежнему нет. Текущий итог — в начале nest-test-result.md.
 
 Актуальное решение от 2026-10-15: [methodology-return-plan.md](methodology-return-plan.md). Обычный тест использует только подготовленные JSON и текущую БД/код, без промежуточных фиксаций. Snapshot/frozen/subset инструкции ниже отменены и сохранены только как история. Актуальные результаты и ограничения — в начале implementation.md и nest-test-result.md.

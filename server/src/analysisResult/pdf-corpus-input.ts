@@ -7,7 +7,8 @@ export interface PreparedSourceRow {
 }
 
 export interface PreparedDbRow extends PreparedSourceRow {
-  id: number;
+  pointId: number;
+  unitId: number | null;
 }
 
 export function isPreparedDbRows(value: unknown): value is PreparedDbRow[] {
@@ -17,9 +18,16 @@ export function isPreparedDbRows(value: unknown): value is PreparedDbRow[] {
       if (!candidate || typeof candidate !== 'object') return false;
       const row = candidate as Record<string, unknown>;
       return (
-        Object.keys(row).sort().join(',') === 'id,name,unit,value' &&
-        Number.isSafeInteger(row.id) &&
-        Number(row.id) > 0 &&
+        Object.keys(row).sort().join(',') ===
+          'name,pointId,unit,unitId,value' &&
+        Number.isSafeInteger(row.pointId) &&
+        Number(row.pointId) > 0 &&
+        (row.unit === null
+          ? row.unitId === null
+          : typeof row.unit === 'string' &&
+            row.unit.trim().length > 0 &&
+            Number.isSafeInteger(row.unitId) &&
+            Number(row.unitId) > 0) &&
         isPreparedRows(
           [{ name: row.name, value: row.value, unit: row.unit }],
           true,

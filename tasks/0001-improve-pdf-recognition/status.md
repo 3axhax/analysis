@@ -2,6 +2,14 @@
 
 Обновлено: 2026-10-15.
 
+## Runtime распознавание единиц
+
+Статус: `на проверке`. Выполнен unit-recognition-plan.md: result-adjacent unit parser, разрешённые point units, безопасные RU/EN/Unicode/spaces/count scale equivalents без преобразования значения. unitId/unit возвращаются только при единственном подтверждённом соответствии; отсутствие/ambiguity/conflict остаются null. Point/value не меняются.123 tests/12 suites, host/container build, read-only ESLint и health200 успешны. Corpus18:288/288 пар,265/265 ненулевых gold units,280/288 triples;8 null-gold конфликтов явно показаны (2 doc-10,6 doc-18), gold не менялся. Все72 входа неизменны, БД/Python не менялись, backup проверен. Отчёт15:46 добавлен.
+
+## pointId и unitId DB-эталонов
+
+Статус: `на проверке`. Выполнен gold-unit-id-plan.md:18 DB JSON,288 записей приведены к pointId/name/value/unit/unitId;265 разрешённых unitId,23 null. point identity/name/value/unit/order сохранены,54 PDF/source/Python файла неизменны,0600/ignore проверены. Schema/relation validation и unit/triple evaluation обновлены без runtime unit parsing.107 tests/11 suites, host/container build, read-only ESLint, health200 успешны. Corpus18/18:288/288 пар, unit0/265, triple23/288 (только null-unit строки), unresolved0. Отчёт15:23 добавлен. БД/production matcher не менялись, backup проверен, дополнительных фиксаций нет.
+
 ## Явные ID DB-эталонов
 
 Статус: `на проверке`. Выполнен gold-id-plan.md: id добавлен в288 записей18 DB JSON, без дополнительных manifest. Все id проверены по текущему справочнику независимо от findings; исходные name/value/unit/order сохранены. Оценщик сравнивает id/value напрямую, строгая схема требует положительный safe integer id, неизвестный ID диагностируется без name fallback. Методология/AGENTS обновлены. Полностью оценены18/18 документов:288/288 пар, missing/extra/wrong=0, неоценённых0.104 tests/10 suites, build/ESLint/health200 успешны.54 PDF/source/Python файла неизменны, DB gold0600/ignored, backup проверен. БД/production matcher не менялись. Отчёт15:10 добавлен в nest-test-result.md.
@@ -734,3 +742,7 @@
 - проверены 305 эталонных записей: name recall 305/305 (100,0%), value recall 305/305 (100,0%), unit recall 303/303 (100,0%), triple recoverability 305/305 (100,0%);
 - две качественные записи с пустой единицей не включены в знаменатель unit recall;
 - новый обезличенный блок добавлен в `python-test-result.md`; raw responses и медицинские данные в отчёт не включены.
+
+## Уточнение 2026-10-15, 18:26 UTC+05:00
+
+Задача0002 подключила DB aliases единиц и нормализацию save/get. Corpus: 288/288 пар, 265/265 ненулевых gold units, 273/288 triples; 15 несовпадений с null gold отражены в nest-test-result.md. Входы неизменны. Детали — ../0002-unit-normalization/implementation.md. Выше сохранена история задачи0001.

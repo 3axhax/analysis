@@ -33,7 +33,14 @@ export const AnalysisResultReducers = {
     state: WritableDraft<AnalysisResultState>,
     action: PayloadAction<PreparePointData>,
   ) => {
-    state.preparedData.pointData[action.payload.name] = action.payload;
+    const previous = state.preparedData.pointData[action.payload.name];
+    state.preparedData.pointData[action.payload.name] = {
+      ...action.payload,
+      sourceUnitText:
+        previous?.units === action.payload.units
+          ? (action.payload.sourceUnitText ?? previous.sourceUnitText)
+          : undefined,
+    };
   },
   removePointData: (
     state: WritableDraft<AnalysisResultState>,

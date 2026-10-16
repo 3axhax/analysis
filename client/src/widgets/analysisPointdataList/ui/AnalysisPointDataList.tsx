@@ -8,10 +8,10 @@ import cn from "classnames";
 import { StatusValue } from "@entities/analysisResult/model/types.ts";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { Tooltip } from "react-tooltip";
+import { unitLabel } from "@entities/units";
 
 export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
   const { t: tWidgets } = useTranslation("widgets");
-  const { t: tEntities } = useTranslation("entities");
   const pointDataList = useAppSelector((state) =>
     SelectAnalysisResultPointData(state, resultId),
   );
@@ -49,7 +49,10 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
       },
       {
         name: "interval",
-        data: `${row.minValue} - ${row.maxValue} ${tEntities(`units.${row.pointUnit.name}`)}`,
+        data:
+          row.minValue === null || row.maxValue === null
+            ? "Нет подходящего норматива"
+            : `${row.minValue} - ${row.maxValue} ${unitLabel(row.pointUnit.name, row.sourceUnitText)}`,
       },
       {
         name: "value",
@@ -63,8 +66,18 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
                 row.pointDataStatus === StatusValue.LOW,
             })}
           >
-            {`${row.value} ${tEntities(`units.${row.pointUnit.name}`)}`}&nbsp;
+            {`${row.value} ${unitLabel(row.pointUnit.name, row.sourceUnitText)}`}
+            &nbsp;
             <AnalysisPointDataListStatus status={row.pointDataStatus} />{" "}
+            {row.calculation && row.calculation.unitId !== row.pointUnit.id && (
+              <span
+                className="ml-2 text-gray-500"
+                title={`Для расчёта: ${row.calculation.value} ${unitLabel(row.calculation.unit)}`}
+                aria-label="Значение в расчётных единицах"
+              >
+                ⓘ
+              </span>
+            )}
           </span>
         ),
       },

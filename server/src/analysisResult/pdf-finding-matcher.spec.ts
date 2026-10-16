@@ -50,6 +50,92 @@ describe('PDF text normalization', () => {
 });
 
 describe('LegacyPdfFindingMatcher characterization', () => {
+  it('returns allowed unit IDs from the result row and never a reference-only unit', () => {
+    const p = point(1, {
+      name: 'esr',
+      parsingWords: 'ESR',
+      units: [{ id: 8, name: 'mm/hour' }],
+    });
+    for (const method of ['lines', 'text', 'coordinates'] as const) {
+      const result = new LegacyPdfFindingMatcher().match(
+        extraction([
+          { page: 1, tables: [table([['ESR', '12', 'мм/ч', '< 20']], method)] },
+        ]),
+        [p],
+      );
+      expect(result.findings[0]).toMatchObject({
+        id: 1,
+        value: 12,
+        unitId: 8,
+        unit: 'mm/hour',
+        warnings: [],
+      });
+    }
+    const missing = new LegacyPdfFindingMatcher().match(
+      extraction([
+        { page: 1, tables: [table([['ESR', '12', 'референс < 20 мм/ч']])] },
+      ]),
+      [p],
+    );
+    expect(missing.findings[0]).toMatchObject({
+      value: 12,
+      unitId: null,
+      warnings: ['unit_not_found'],
+    });
+  });
+  it('retains point/value but rejects conflicting units across duplicate extraction strategies', () => {
+    const p = point(1, {
+      parsingWords: 'ABC',
+      units: [
+        { id: 2, name: 'g/l' },
+        { id: 3, name: 'g/dl' },
+      ],
+    });
+    const result = new LegacyPdfFindingMatcher().match(
+      extraction([
+        {
+          page: 1,
+          tables: [
+            table([['ABC', '12 g/l']]),
+            table([['ABC', '12 g/dl']], 'coordinates'),
+          ],
+        },
+      ]),
+      [p],
+    );
+    expect(result.findings[0]).toMatchObject({
+      value: 12,
+      unitId: null,
+      warnings: ['conflicting_units'],
+    });
+    expect(result.warnings).toContain('conflicting_units');
+  });
+  it('uses one observed allowed unit even when another strategy has no unit, without sharing request state', () => {
+    const matcher = new LegacyPdfFindingMatcher();
+    const p = point(1, {
+      parsingWords: 'ABC',
+      units: [{ id: 2, name: 'g/l' }],
+    });
+    const result = matcher.match(
+      extraction([
+        {
+          page: 1,
+          tables: [
+            table([['ABC', '12']]),
+            table([['ABC', '12 г/л']], 'coordinates'),
+          ],
+        },
+      ]),
+      [p],
+    );
+    expect(result.findings[0]).toMatchObject({ unitId: 2, warnings: [] });
+    expect(
+      matcher.match(
+        extraction([{ page: 1, tables: [table([['ABC', '12']])] }]),
+        [p],
+      ).findings[0],
+    ).toMatchObject({ unitId: null, warnings: ['unit_not_found'] });
+  });
   it('reads a separate scalar/unit cell before age-specific reference prose without a header', () => {
     const result = new LegacyPdfFindingMatcher().match(
       extraction([

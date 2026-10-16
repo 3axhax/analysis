@@ -13,6 +13,7 @@ import {
 import { TranslationService } from '../translation/translation.service';
 import { LangValue } from '../gender/lang-value.enum';
 import { Op } from 'sequelize';
+import { UnitAliasIndex } from '../unitConversion/unit-alias-index';
 
 @Injectable()
 export class AnalysisPointUnitsService {
@@ -29,6 +30,46 @@ export class AnalysisPointUnitsService {
     return this.analysisPointUnitsRepository.findAll({
       include: { all: true },
     });
+  }
+
+  private async validateParsing(
+    parameters: AddNewAnalysisPointUnitsQueryDto,
+    id?: number,
+  ) {
+    const units = await this.analysisPointUnitsRepository.findAll();
+    const previous = units.find((unit) => unit.id === id);
+    const candidate = {
+      id: id ?? Math.max(0, ...units.map((unit) => unit.id)) + 1,
+      name: parameters.name,
+      code: parameters.code ?? previous?.code ?? null,
+      translationParsing:
+        parameters.translationParsing ?? previous?.translationParsing ?? '',
+    };
+    if (
+      typeof candidate.name !== 'string' ||
+      !candidate.name.trim() ||
+      candidate.name.length > 255 ||
+      typeof candidate.translationParsing !== 'string' ||
+      candidate.translationParsing.length > 4096 ||
+      (candidate.code !== null &&
+        (typeof candidate.code !== 'string' ||
+          !candidate.code.trim() ||
+          candidate.code.length > 64))
+    )
+      throw new HttpException(
+        'invalid_unit_definition',
+        HttpStatus.BAD_REQUEST,
+      );
+    const index = new UnitAliasIndex([
+      ...units.filter((unit) => unit.id !== id),
+      candidate,
+    ]);
+    if (index.issues.some((issue) => issue.unitId === candidate.id))
+      throw new HttpException(
+        'conflicting_or_invalid_unit_parsing',
+        HttpStatus.CONFLICT,
+      );
+    return candidate;
   }
 
   async getAnalysisPointUnitsByName(
@@ -77,6 +118,7 @@ export class AnalysisPointUnitsService {
   async addNewAnalysisPointUnits(
     parameters: AddNewAnalysisPointUnitsQueryDto,
   ): Promise<AnalysisPointUnitResponse> {
+    const definition = await this.validateParsing(parameters);
     const existingUnit = await this.analysisPointUnitsRepository.findOne({
       where: { name: parameters.name },
     });
@@ -90,6 +132,8 @@ export class AnalysisPointUnitsService {
 
     const unit = await this.analysisPointUnitsRepository.create({
       name: parameters.name,
+      code: definition.code,
+      translationParsing: definition.translationParsing,
     });
     if (!unit) {
       throw new HttpException('Error in DB', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -117,6 +161,8 @@ export class AnalysisPointUnitsService {
     return {
       id: unit.id,
       name: unit.name,
+      code: unit.code,
+      translationParsing: unit.translationParsing,
       translationRu: ru ? ru.value : '',
       translationEn: en ? en.value : '',
     };
@@ -125,6 +171,7 @@ export class AnalysisPointUnitsService {
   async editAnalysisPointUnits(
     parameters: EditAnalysisPointUnitsQueryDto,
   ): Promise<AnalysisPointUnitResponse> {
+    const definition = await this.validateParsing(parameters, parameters.id);
     const existingUnit = await this.analysisPointUnitsRepository.findByPk(
       parameters.id,
     );
@@ -150,7 +197,11 @@ export class AnalysisPointUnitsService {
       );
     }
 
-    await existingUnit?.update(parameters);
+    await existingUnit.update({
+      name: definition.name,
+      code: definition.code,
+      translationParsing: definition.translationParsing,
+    });
 
     const [ru, en] = await Promise.all([
       this.translationService.editTranslationByParameters({
@@ -172,6 +223,8 @@ export class AnalysisPointUnitsService {
     return {
       id: existingUnit.id,
       name: existingUnit.name,
+      code: existingUnit.code,
+      translationParsing: existingUnit.translationParsing,
       translationRu: ru ? ru.value : '',
       translationEn: en ? en.value : '',
     };

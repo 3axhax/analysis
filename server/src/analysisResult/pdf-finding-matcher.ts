@@ -11,6 +11,11 @@ import {
 } from './pdf-result-region';
 import { parseResult, numericTokens } from './pdf-value-parser';
 import { PairCandidate, resolvePdfPairs } from './pdf-pair-resolver';
+import { recognizePdfUnit } from './pdf-unit-parser';
+import {
+  UnitAliasIndex,
+  ConfiguredUnit,
+} from '../unitConversion/unit-alias-index';
 
 export const canonicalPdfText = canonicalName;
 
@@ -19,8 +24,10 @@ export class LegacyPdfFindingMatcher implements PdfFindingMatcher {
   match(
     extraction: ExtractTablesResponse,
     points: AnalysisPointWithTranslation[],
+    unitCatalog?: ConfiguredUnit[],
   ): PdfMatcherResult {
     const index = new PdfNameIndex(points);
+    const unitIndex = unitCatalog ? new UnitAliasIndex(unitCatalog) : undefined;
     const candidates: PairCandidate[] = [];
     const warnings = new Set<string>();
     let candidateRows = 0,
@@ -170,12 +177,23 @@ export class LegacyPdfFindingMatcher implements PdfFindingMatcher {
             row: view,
             valueStart: region.start + token.start,
             rule: region.rule,
+            unitEvidence: unitIndex
+              ? unitIndex.recognizePrefix(
+                  view.text.slice(region.start + token.end),
+                  (name.point.units ?? []).map((unit) => unit.id),
+                )
+              : recognizePdfUnit(
+                  view.text.slice(region.start + token.end),
+                  name.point.units,
+                ),
           });
         }
       }
     }
     const resolved = resolvePdfPairs(candidates);
     if (resolved.conflicts) warnings.add('conflicting_values');
+    for (const finding of resolved.findings)
+      for (const warning of finding.warnings) warnings.add(warning);
     if (!resolved.findings.length) warnings.add('no_supported_findings');
     return {
       findings: resolved.findings,

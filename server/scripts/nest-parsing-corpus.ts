@@ -16,6 +16,11 @@ import {
 } from '../src/analysisResult/pdf-corpus-expected';
 import type { PdfFindingMatcher } from '../src/analysisResult/pdf-matching.types';
 import { loadCurrentCorpusCatalog } from './nest-corpus-catalog';
+import type { ConfiguredUnit } from '../src/unitConversion/unit-alias-index';
+import {
+  measurePdfUnits,
+  sumPdfUnitMetrics,
+} from '../src/analysisResult/pdf-unit-benchmark';
 
 const preparedFolders = [
   { folder: 'sources', suffix: '.json', missing: 'missing_source' },
@@ -43,6 +48,18 @@ export async function runNestCorpus(
   catalog: CorpusCatalogPoint[],
   matcher: PdfFindingMatcher = new LegacyPdfFindingMatcher(),
 ) {
+  const units = [
+    ...new Map(
+      catalog
+        .flatMap((point) => point.units ?? [])
+        .map((unit) => [unit.id, unit]),
+    ).values(),
+  ];
+  const unitCatalog =
+    units.length &&
+    units.every((unit) => typeof unit.translationParsing === 'string')
+      ? (units as ConfiguredUnit[])
+      : undefined;
   const pdfs = new Set(
     (await files(root))
       .filter((name) => /\.pdf$/i.test(name))
@@ -69,6 +86,7 @@ export async function runNestCorpus(
     unresolvedExpectedRows?: number;
     issues?: { row: number; code: string }[];
     metrics?: ReturnType<typeof measurePdfPairs>;
+    unitMetrics?: ReturnType<typeof measurePdfUnits>;
     warningCodes?: string[];
     unsupported?: number;
     findings?: number;
@@ -115,7 +133,7 @@ export async function runNestCorpus(
     }
     // Every complete valid prepared input exercises the current matcher, even
     // when prepared gold IDs are no longer present in the current database.
-    const result = matcher.match(extraction, catalog);
+    const result = matcher.match(extraction, catalog, unitCatalog);
     const resolved = resolveCorpusExpected(expected, catalog);
     if (resolved.issues.length) {
       warnings.push({ alias, code: 'unresolved_expected' });
@@ -135,6 +153,7 @@ export async function runNestCorpus(
       status: 'tested',
       expectedRows: expected.length,
       metrics: measurePdfPairs(resolved.pairs, result.findings),
+      unitMetrics: measurePdfUnits(expected, result.findings),
       warningCodes: result.warnings,
       unsupported: source.length - expected.length,
     });
@@ -158,6 +177,7 @@ export async function runNestCorpus(
       .filter((run) => run.status === 'unresolved_expected')
       .reduce((sum, run) => sum + (run.expectedRows ?? 0), 0),
     totals: sumPdfPairMetrics(tested.map((run) => run.metrics!)),
+    unitTotals: sumPdfUnitMetrics(tested.map((run) => run.unitMetrics!)),
   };
 }
 

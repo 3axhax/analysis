@@ -19,6 +19,24 @@ export const EditUnitForm = ({ values, handlerInput }: EditUnitFormProps) => {
       className={"space-y-2 text-gray-600 dark:text-gray-300"}
     >
       <InputWithLabel
+        label="Код единицы"
+        name="code"
+        placeholder="g/dL"
+        value={values.code ?? ""}
+        className="justify-between"
+        onChange={(value) => handlerInput({ name: "code", value })}
+      />
+      <InputWithLabel
+        label="Варианты для распознавания (через _)"
+        name="translationParsing"
+        placeholder="г/дл_g/dl_g/dL"
+        value={values.translationParsing ?? ""}
+        className="justify-between"
+        onChange={(value) =>
+          handlerInput({ name: "translationParsing", value })
+        }
+      />
+      <InputWithLabel
         label={t("unit.name")}
         name={"name"}
         placeholder={"g/l"}

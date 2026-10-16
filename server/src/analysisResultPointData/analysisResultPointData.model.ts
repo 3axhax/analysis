@@ -18,6 +18,15 @@ export interface AnalysisResultPointDataAttrs {
   unitId: number;
   minValue?: number;
   maxValue?: number;
+  sourceValue?: string | null;
+  sourceUnitId?: number | null;
+  sourceUnitText?: string | null;
+  calculationValue?: string | null;
+  conversionRuleId?: number | null;
+  conversionRuleVersion?: number | null;
+  appliedCoefficient?: string | null;
+  referenceMin?: string | null;
+  referenceMax?: string | null;
 }
 @Table({
   tableName: 'analysisResultPointData',
@@ -65,6 +74,25 @@ export class AnalysisResultPointData extends Model<
     allowNull: false,
   })
   declare unitId: number;
+
+  @Column({ type: DataType.DECIMAL(38, 18), allowNull: true })
+  declare sourceValue: string | null;
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  declare sourceUnitId: number | null;
+  @Column({ type: DataType.STRING(128), allowNull: true })
+  declare sourceUnitText: string | null;
+  @Column({ type: DataType.DECIMAL(76, 36), allowNull: true })
+  declare calculationValue: string | null;
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  declare conversionRuleId: number | null;
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  declare conversionRuleVersion: number | null;
+  @Column({ type: DataType.DECIMAL(38, 18), allowNull: true })
+  declare appliedCoefficient: string | null;
+  @Column({ type: DataType.DECIMAL(38, 18), allowNull: true })
+  declare referenceMin: string | null;
+  @Column({ type: DataType.DECIMAL(38, 18), allowNull: true })
+  declare referenceMax: string | null;
 
   @BelongsTo(() => AnalysisResult)
   analysisResult: AnalysisResult;

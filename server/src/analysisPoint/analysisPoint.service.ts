@@ -33,6 +33,8 @@ export interface AnalysisPointWithTranslation {
   units?: Array<{
     id: number;
     name: string;
+    code?: string | null;
+    translationParsing?: string;
   }>;
 }
 

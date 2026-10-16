@@ -4,6 +4,7 @@ export interface PreparePointData {
   name: string;
   value: number;
   units: string;
+  sourceUnitText?: string;
 }
 
 export enum StatusValue {
@@ -39,9 +40,21 @@ export interface PointData {
   };
   pointUnit: { id: number; name: string };
   value: number;
-  minValue: number;
-  maxValue: number;
-  pointDataStatus: StatusValue;
+  minValue: number | null;
+  maxValue: number | null;
+  pointDataStatus: StatusValue | null;
+  sourceUnitText?: string;
+  interpretationWarning?: string | null;
+  calculation?: {
+    value: string;
+    unitId: number;
+    unit: string;
+    coefficient: string;
+    ruleId: number | null;
+    ruleVersion: number | null;
+    minValue: string;
+    maxValue: string;
+  };
 }
 
 interface Result {
@@ -79,6 +92,7 @@ export interface AnalysisParsingFileResult {
     name: string;
     unitId: number | null;
     unit: string | null;
+    unitText?: string | null;
     value: number;
     confidence: number;
     page: number;
