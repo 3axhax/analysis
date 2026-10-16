@@ -1,22 +1,5 @@
--- MANUAL, APPROVAL REQUIRED. Not registered in startup migrations.
--- Run on a disposable DB copy first. Never run this file as part of an audit.
-\set ON_ERROR_STOP on
-BEGIN;
-SELECT pg_advisory_xact_lock(20002);
-CREATE TABLE IF NOT EXISTS migrations (
-  id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL UNIQUE,
-  executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-SELECT EXISTS(SELECT 1 FROM migrations WHERE name='0002-unit-normalization') AS already_applied \gset
-\if :already_applied
-\echo '0002-unit-normalization already applied; no changes'
-\else
-DO $$ BEGIN
-  IF EXISTS(SELECT 1 FROM migrations WHERE name='0002-unit-normalization') THEN
-    RAISE EXCEPTION 'Migration already applied; verify rather than reapply seed';
-  END IF;
-END $$;
-
+// Shared startup SQL. Marker checks and transactions live in runRecordedMigration.
+export const UNIT_NORMALIZATION_SQL = String.raw`
 ALTER TABLE "analysisPointUnits"
   ADD COLUMN code VARCHAR(64),
   ADD COLUMN "translationParsing" TEXT NOT NULL DEFAULT '',
@@ -127,6 +110,55 @@ BEGIN
  RETURN NEW;
 END $$;
 CREATE TRIGGER protect_used_conversion_rule BEFORE UPDATE OR DELETE ON "unitConversionRule" FOR EACH ROW EXECUTE FUNCTION protect_used_unit_conversion_rule();
-INSERT INTO migrations(name) VALUES('0002-unit-normalization');
-\endif
-COMMIT;
+`;
+
+export const FERRITIN_SOURCE_UNIT_SQL = String.raw`
+DO $$
+DECLARE p INTEGER; src INTEGER; dst INTEGER;
+BEGIN
+  IF NOT EXISTS(SELECT 1 FROM migrations WHERE name='0002-unit-normalization') THEN
+    RAISE EXCEPTION 'Unit normalization prerequisite missing';
+  END IF;
+  SELECT id INTO STRICT p FROM "analysisPoint" WHERE name='ferritin';
+  SELECT id INTO STRICT src FROM "analysisPointUnits" WHERE name='ng/ml' AND "quantityKind"='mass-concentration';
+  SELECT id INTO STRICT dst FROM "analysisPointUnits" WHERE name='mkg/l' AND "quantityKind"='mass-concentration';
+  IF (SELECT count(*) FROM "unitConversionRule" WHERE "fromUnitId"=src AND "toUnitId"=dst AND active AND ("pointId" IS NULL OR "pointId"=p))<>1
+     OR NOT EXISTS(SELECT 1 FROM "unitConversionRule" WHERE "fromUnitId"=src AND "toUnitId"=dst AND active AND coefficient=1 AND ("pointId" IS NULL OR "pointId"=p))
+     OR (SELECT count(*) FROM analysis_point_units WHERE "pointId"=p AND "unitsId"=dst)<>1 THEN
+    RAISE EXCEPTION 'Reviewed conversion or target applicability differs';
+  END IF;
+  -- Refuse to adopt an unowned link: down must remove only our own change.
+  IF EXISTS(SELECT 1 FROM analysis_point_units WHERE "pointId"=p AND "unitsId"=src) THEN
+    RAISE EXCEPTION 'Source link already exists without migration marker';
+  END IF;
+  INSERT INTO analysis_point_units("pointId","unitsId") VALUES(p,src);
+END $$;
+`;
+
+export const SOURCE_MEASUREMENTS_SQL = String.raw`
+DO $$ BEGIN
+ IF NOT EXISTS(SELECT 1 FROM migrations WHERE name='0002-unit-normalization') THEN
+  RAISE EXCEPTION 'Normalization prerequisite missing';
+ END IF;
+ IF NOT EXISTS(SELECT 1 FROM pg_constraint WHERE conrelid='"analysisResultPointData"'::regclass AND conname='normalized_source_fields') THEN
+  RAISE EXCEPTION 'Reviewed source constraint missing';
+ END IF;
+END $$;
+ALTER TABLE "analysisResultPointData" DROP CONSTRAINT normalized_source_fields;
+ALTER TABLE "analysisResultPointData" ADD CONSTRAINT normalized_source_fields CHECK(
+ ("sourceValue" IS NULL AND "sourceUnitId" IS NULL AND "sourceUnitText" IS NULL AND "calculationValue" IS NULL AND "conversionRuleId" IS NULL AND "conversionRuleVersion" IS NULL AND "appliedCoefficient" IS NULL AND "referenceMin" IS NULL AND "referenceMax" IS NULL)
+ OR
+ ("sourceValue" IS NOT NULL AND "sourceUnitId" IS NOT NULL AND "sourceValue">=0 AND "sourceValue"<1e20
+  AND "sourceUnitId"="unitId" AND "sourceUnitText" IS NOT NULL
+  AND "calculationValue" IS NULL AND "conversionRuleId" IS NULL AND "conversionRuleVersion" IS NULL
+  AND "appliedCoefficient" IS NULL AND "referenceMin" IS NULL AND "referenceMax" IS NULL)
+ OR
+ ("sourceValue" IS NOT NULL AND "sourceUnitId" IS NOT NULL AND "sourceValue">=0 AND "sourceValue"<1e20
+  AND "calculationValue" IS NOT NULL AND "calculationValue">=0 AND "calculationValue"<1e40
+  AND "appliedCoefficient" IS NOT NULL AND "appliedCoefficient">0 AND "appliedCoefficient"<1e20
+  AND "referenceMin" IS NOT NULL AND "referenceMax" IS NOT NULL AND "referenceMin"<="referenceMax"
+  AND "calculationValue"="sourceValue"*"appliedCoefficient"
+  AND (("sourceUnitId"="unitId" AND "conversionRuleId" IS NULL AND "conversionRuleVersion" IS NULL AND "appliedCoefficient"=1)
+   OR ("sourceUnitId"<>"unitId" AND "conversionRuleId" IS NOT NULL AND "conversionRuleVersion" IS NOT NULL AND "conversionRuleVersion">0)))
+);
+`;

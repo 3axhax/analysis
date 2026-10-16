@@ -3,6 +3,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { MigrationsAnalysisPoint } from './migrations.analysisPoint';
 import { MigrationsAges } from './migrations.ages';
 import { MigrationsAnalysisResult } from './migrations.analysisResult';
+import { MigrationsAnalysisPointUnits } from './migrations.analysisPointUnits';
 
 @Injectable()
 export class MigrationsService implements OnModuleInit {
@@ -11,6 +12,7 @@ export class MigrationsService implements OnModuleInit {
     private migrationsAnalysisPoint: MigrationsAnalysisPoint,
     private migrationsAges: MigrationsAges,
     private migrationsAnalysisResult: MigrationsAnalysisResult,
+    private migrationsAnalysisPointUnits: MigrationsAnalysisPointUnits,
   ) {}
 
   async onModuleInit() {
@@ -42,5 +44,9 @@ export class MigrationsService implements OnModuleInit {
         }
       }),
     );
+    // These depend on each other and must never be part of the parallel legacy batch.
+    await this.migrationsAnalysisPointUnits.addUnitNormalization();
+    await this.migrationsAnalysisPointUnits.addFerritinSourceUnit();
+    await this.migrationsAnalysisResult.allowSourceOnlyMeasurements();
   }
 }

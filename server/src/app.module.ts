@@ -43,6 +43,7 @@ import { MigrationsService } from './migrations/migrations.service';
 import { MigrationsAnalysisPoint } from './migrations/migrations.analysisPoint';
 import { MigrationsAges } from './migrations/migrations.ages';
 import { MigrationsAnalysisResult } from './migrations/migrations.analysisResult';
+import { MigrationsAnalysisPointUnits } from './migrations/migrations.analysisPointUnits';
 
 @Module({
   imports: [
@@ -103,6 +104,7 @@ import { MigrationsAnalysisResult } from './migrations/migrations.analysisResult
     MigrationsAnalysisPoint,
     MigrationsAges,
     MigrationsAnalysisResult,
+    MigrationsAnalysisPointUnits,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
