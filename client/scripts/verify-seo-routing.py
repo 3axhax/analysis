@@ -35,7 +35,98 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
+class PageHead(HTMLParser):
+    def __init__(self, body):
+        super().__init__()
+        self.lang = None
+        self.title = ""
+        self.descriptions = []
+        self.icons = []
+        self.structured_data = []
+        self.in_title = False
+        self.in_json = False
+        self.json_text = ""
+        self.feed(body.decode())
+
+    def handle_starttag(self, tag, attrs):
+        values = dict(attrs)
+        if tag == "html":
+            self.lang = values.get("lang")
+        if tag == "title":
+            self.in_title = True
+        if tag == "meta" and values.get("name") == "description":
+            self.descriptions.append(values.get("content"))
+        if tag == "link" and values.get("rel") == "icon":
+            self.icons.append(values.get("href"))
+        if tag == "script" and values.get("type") == "application/ld+json":
+            self.in_json = True
+            self.json_text = ""
+
+    def handle_data(self, data):
+        if self.in_title:
+            self.title += data
+        if self.in_json:
+            self.json_text += data
+
+    def handle_endtag(self, tag):
+        if tag == "title":
+            self.in_title = False
+        if tag == "script" and self.in_json:
+            self.structured_data.append(json.loads(self.json_text))
+            self.in_json = False
+
+
 class RoutingChecks(unittest.TestCase):
+    def test_public_metadata_and_schema(self):
+        titles = {
+            "/": "Расшифровка анализов онлайн — Проанализируй",
+            "/about": "О проекте — Проанализируй",
+            "/contacts": "Контакты — Проанализируй",
+            "/privacy-policy": "Политика обработки персональных данных — Проанализируй",
+            "/consent-personal-data": "Согласие на обработку персональных данных — Проанализируй",
+        }
+        for path, title in titles.items():
+            with self.subTest(path=path):
+                _, _, body = self.get(path + "?seo_probe=1")
+                head = PageHead(body)
+                self.assertEqual(head.lang, "ru")
+                self.assertEqual(head.title, title)
+                self.assertEqual(len(head.descriptions), 1)
+                self.assertTrue(head.descriptions[0])
+                self.assertNotIn("точная диагностика", body.decode().lower())
+                self.assertEqual(len(head.structured_data), 1)
+                graph = head.structured_data[0]["@graph"]
+                page = next(item for item in graph if item["@type"] in ["WebPage", "AboutPage", "ContactPage"])
+                self.assertEqual(page["url"], "https://proanalize.ru" + path)
+                self.assertEqual(page["name"], title)
+                self.assertEqual(page["description"], head.descriptions[0])
+                self.assertEqual(page["inLanguage"], "ru")
+                organization = next(item for item in graph if item["@type"] == "Organization")
+                self.assertEqual(organization["logo"], "https://proanalize.ru/pa.svg")
+                self.assertFalse(any("specialty" in item or "aspect" in item for item in graph))
+
+    def test_service_metadata_and_no_schema(self):
+        for path in ["/result/synthetic", "/admin/units", "/logout", "/test", "/seo-missing"]:
+            with self.subTest(path=path):
+                _, _, body = self.get(path)
+                head = PageHead(body)
+                self.assertEqual(head.lang, "ru")
+                self.assertTrue(head.title.endswith("— Проанализируй"))
+                self.assertNotIn("synthetic", head.title)
+                self.assertEqual(len(head.descriptions), 1)
+                self.assertEqual(head.structured_data, [])
+
+    def test_icon_and_logo_available(self):
+        _, _, body = self.get("/")
+        head = PageHead(body)
+        self.assertEqual(head.icons, ["/pa.svg"])
+        status, headers, body = self.get(head.icons[0])
+        self.assertEqual(status, 200)
+        self.assertIn("image/svg+xml", headers["Content-Type"])
+        svg = ET.fromstring(body)
+        self.assertEqual(svg.tag, "{http://www.w3.org/2000/svg}svg")
+        self.assertEqual(svg.get("viewBox"), "0 0 300 300")
+
     def canonicals(self, body):
         class Links(HTMLParser):
             def __init__(self):
@@ -200,6 +291,7 @@ class RoutingChecks(unittest.TestCase):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dist", type=Path, required=True)
+    parser.add_argument("--client-image", help="Test a built runtime image instead of mounting dist/config")
     args = parser.parse_args()
     if not (args.dist / "index.html").is_file():
         parser.error("Build the client first")
@@ -220,7 +312,7 @@ def main():
             }''')
             docker("network", "create", network)
 
-            def start(role, alias, mounts, ports=()):
+            def start(role, alias, mounts, ports=(), image="nginx:alpine"):
                 name = network + "-" + role
                 containers.append(name)
                 command = ["run", "-d", "--name", name, "--network", network, "--network-alias", alias]
@@ -228,13 +320,14 @@ def main():
                     command += ["-v", f"{source.resolve()}:{target}:ro"]
                 for port in ports:
                     command += ["-p", f"127.0.0.1::{port}"]
-                docker(*command, "nginx:alpine")
+                docker(*command, image)
                 return name
 
-            client = start("client", "client_analysis", [
+            client_mounts = [] if args.client_image else [
                 (args.dist, "/usr/share/nginx/html"),
                 (ROOT / "client/nginx/client.conf", "/etc/nginx/conf.d/default.conf"),
-            ], (80,))
+            ]
+            client = start("client", "client_analysis", client_mounts, (80,), args.client_image or "nginx:alpine")
             start("api", "server_analysis", [(temp / "api.conf", "/etc/nginx/conf.d/default.conf")])
             proxy = start("proxy", "seo_proxy", [
                 (ROOT / "nginx/default.conf", "/etc/nginx/conf.d/default.conf"),

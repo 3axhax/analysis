@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
 import {
   selectAnalysisPointsEditAnalysisPointId,
@@ -17,7 +16,6 @@ export const AnalysisPointsPage: React.FC = () => {
   const { t } = useTranslation("common");
   const { t: tFeatures } = useTranslation("features");
   const title = t("pageTitle.analysisPoints");
-  useDocumentTitle(title);
 
   const error = useAppSelector(selectAnalysisPointsError);
 

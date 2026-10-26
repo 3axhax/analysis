@@ -1,11 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { renderPageHead } from './src/shared/lib/seo/page-metadata.mjs'
 
 export default defineConfig({
   plugins: [
       react(),
-    tailwindcss()
+    tailwindcss(),
+    {
+      name: 'page-metadata-dev',
+      apply: 'serve',
+      transformIndexHtml(html, context) {
+        const pathname = new URL(context.originalUrl ?? context.path, 'http://localhost').pathname;
+        return renderPageHead(html, pathname);
+      },
+    },
   ],
   resolve: {
     alias: {

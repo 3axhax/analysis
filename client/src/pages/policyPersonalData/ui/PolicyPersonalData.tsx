@@ -1,9 +1,7 @@
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { Link } from "react-router-dom";
 
 export const PolicyPersonalData = () => {
   const title = "Политика обработки персональных данных";
-  useDocumentTitle(title);
   return (
     <div className={"mx-auto lg:w-8/12 sm:w-full text-left content"}>
       <h1

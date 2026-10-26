@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
 import { selectUnitsError, useUnitsWithTranslateLoad } from "@entities/units";
 import { UnitsList } from "@features/Admin/units/unitsList";
@@ -10,7 +9,6 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 export const UnitsPage: React.FC = () => {
   const { t } = useTranslation("common");
   const title = t("pageTitle.units");
-  useDocumentTitle(title);
 
   const [editUnitId, setEditUnitId] = useState<number>(0);
 

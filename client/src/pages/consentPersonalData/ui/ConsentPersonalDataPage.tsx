@@ -1,8 +1,6 @@
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 
 export const ConsentPersonalData = () => {
   const title = "Согласие на обработку персональных данных";
-  useDocumentTitle(title);
   return (
     <div className={"mx-auto lg:w-8/12 sm:w-full text-left content"}>
       <h1

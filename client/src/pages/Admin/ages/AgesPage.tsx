@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
 import { selectAgesError, useAgesWithTranslateLoad } from "@entities/ages";
 import { AgesList } from "@features/Admin/ages/agesList";
@@ -10,7 +9,6 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 export const AgesPage: React.FC = () => {
   const { t } = useTranslation("common");
   const title = t("pageTitle.ages");
-  useDocumentTitle(title);
 
   const [editAgeId, setEditAgeId] = useState<number>(0);
 

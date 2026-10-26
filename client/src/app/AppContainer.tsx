@@ -22,6 +22,7 @@ import { ConsentPersonalData } from "@pages/consentPersonalData";
 import { PolicyPersonalData } from "@pages/policyPersonalData";
 import { Basement } from "@pages/basement";
 import { usePageCanonical } from "@shared/hooks/usePageCanonical.ts";
+import { usePageMetadata } from "@shared/hooks/usePageMetadata.ts";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
@@ -29,6 +30,7 @@ function AppContainer() {
   const acceptYm = localStorage.getItem("accept_ym");
   const { pathname, search, hash } = useLocation();
   usePageCanonical(pathname);
+  usePageMetadata(pathname);
 
   useEffect(() => {
     dispatch(checkLSUser());

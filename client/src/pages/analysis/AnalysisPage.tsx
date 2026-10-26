@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useDocumentTitle from "@shared/hooks/useDocumentTitle";
 import { GenderSelector } from "@features/genderSelector";
 import { AnalysisPointList } from "@features/analysisPointList";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks";
@@ -26,7 +25,6 @@ import { OpportunityList } from "@widgets/opportunityList";
 
 export const AnalysisPage = () => {
   const { t } = useTranslation("common");
-  useDocumentTitle(t("pageTitle.analysis"));
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

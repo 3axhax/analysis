@@ -141,3 +141,50 @@ Build и client Nginx поставляются вместе: новая конф
 Rollback canonical: вернуть before-seo-canonical-551eb67 как latest, точечно пересоздать только client_analysis через действующий compose без build/deps/pull и nginx -t/reload. Если потребуется, сохранён также прежний proxy config; в этой поставке он не менялся. Перед rollback проверить отсутствие последующих пользовательских поставок. Backend/БД/PDF не трогать.
 
 Как и при первой поставке, compose label у клиента относится к прежнему manifest с прежним build context. Для будущей сборки использовать актуальный source seo-canonical-551eb67 либо новый согласованный Git release, не запускать --build из старого manifest. Git push в рамках публикации не выполнялся: клиент доставлен проверенным образом из отдельного source release.
+
+## Lang, title/description, favicon/logo и JSON-LD — локально, 2026-10-26
+
+Выполнен отдельный пункт по запросу пользователя. Production в этой части ещё не обновлялся; коммит не создавался.
+
+### Итог
+
+- lang=ru в HTML и DOM. Для 5 публичных страниц заданы собственные title/description, совпадающие до и после JavaScript. Главная: «Расшифровка анализов онлайн — Проанализируй»; описание объясняет PDF/ручной ввод и сравнение с референсами, прямо указывает справочный характер без диагноза.
+- Для 8 служебных маршрутов, результата и 404 также подготовлены нейтральные route-specific title/description. Ни значения анализов, ни имена пользователей, ни resultId не используются в metadata/JSON-LD. Служебные страницы остаются noindex без canonical и JSON-LD.
+- Удалены конкурирующие useDocumentTitle на страницах и сам устаревший hook; H1/тексты страниц не менялись. Head управляется централизованно по pathname, включая Back/SPA-переходы, без сброса title на «Загрузите анализы».
+- Удалены прежние MedicalWebPage/MedicalDiagnostics/aspect и обещание «точной диагностики». Публичная JSON-LD — единый graph Organization, WebSite и соответствующая WebPage/AboutPage/ContactPage. URL/name/description/inLanguage страницы совпадают с её canonical/title/meta description, @id стабильны и связаны внутри графа. Нет вымышленных врачей, квалификации, рейтингов, адресов или медицинских гарантий.
+- Organization.logo исправлен с несуществующего /public/pa.svg на https://proanalize.ru/pa.svg. Favicon использует тот же SVG, type=image/svg+xml и sizes=any; файл не перерисовывался. На момент начала этой части production /pa.svg уже отвечал 200, а /public/pa.svg — 404: правка касается ошибочного URL разметки, а не изменения изображения или отключения защиты.
+
+### Устройство и файлы
+
+Единый config: client/src/shared/config/page-metadata.json. Общий engine client/src/shared/lib/seo/page-metadata.mjs применяется в postbuild и браузере, декларация .d.mts обеспечивает TypeScript-контракт. canonical.ts теперь делегирует тому же engine, сохраняя public allowlist из canonical-pages.json. Новых dependencies нет.
+
+Генератор scripts/generate-page-html.mjs формирует те же public HTML-оболочки, дополнительные оболочки известных служебных страниц, _result.html и _spa.html для 404. Client Nginx выбирает соответствующую оболочку; CSS/JS общие. Служебные файлы не становятся самостоятельными публичными URL, статус/noindex сохраняются. Основной контент ещё рендерится React: это не SSR контента.
+
+usePageMetadata устанавливает title/description/lang/favicon и единственный JSON-LD script, убирает дубли и удаляет graph на служебном/неизвестном пути. Query/hash не входят в metadata. Vite dev transformIndexHtml использует тот же engine, поэтому исходный HTML dev-сервера также соответствует DOM. Vite preview не заменяет production Nginx-проверки маршрутов.
+
+### Проверка
+
+- До исправления добавлены regression tests на язык, title/description, JSON-LD и favicon; исходные metadata/schema ошибки воспроизведены. Старые canonical/routing tests продолжили проходить.
+- Client build/postbuild и lint успешны. В ходе реализации устранено новое предупреждение о разных JSON import attributes; остались только прежние CSS optimization/chunk size warnings.
+- Все 16 групп HTTP test methods с подслучаями прошли на изолированном Nginx с dist/config, затем на отдельно собранном финальном Nginx runtime-слое с теми же COPY из dist. Во втором случае HTML/config не монтировались поверх image: проверены фактическая упаковка и доступ nginx worker к SVG. Runtime image собран только из публичного dist/config, без env/секретов в build context, и удалён после тестов. Это проверка финального runtime-слоя; полный повторный npm ci/Docker builder не запускался, TypeScript/Vite build выполнен отдельно выше.
+- В harness проверяются source title/description, lang, JSON parsing/graph consistency, page URL/type/name/description, logo URL, отсутствие obsolete properties/диагностического обещания, GET SVG с правильным MIME и viewBox, прежние canonical/robots/sitemap/noindex/404/redirect/API/assets. Неверный JSON-LD не подменяется фикстурами. Внешний Schema.org/Rich Results validator не вызывался, eligibility расширенного результата не заявляется.
+- Raw HTML Vite dev на всех 5 публичных страницах совпал с config до JS. В браузере на всех 5 страницах совпали lang/title/description/schema; SPA-переход на policy, Back, /test и 404 не дали дубликатов/старых metadata. Служебные страницы не содержат JSON-LD. Формы/анализы не отправлялись.
+- Свежий локальный backup создан и проверен до изменений, БД/API/медицинская логика не менялись. git diff --check успешен, старые untracked 0007/0008 сохранены.
+
+Опциональная проверка готового runtime image:
+
+```bash
+python3 client/scripts/verify-seo-routing.py --dist client/dist --client-image IMAGE_TAG
+```
+
+Без --client-image harness использует nginx:alpine с mounts dist/config. В обоих режимах proxy/API mocks находятся в отдельной сети без БД, порты опубликованы только на loopback, временные контейнеры/сеть удаляются.
+
+### Ограничения и следующая поставка
+
+Видимые about/contacts и тексты политики остаются прежними: достоверные сведения о проекте и редакционная/правовая проверка — отдельные пункты, metadata не должны считаться их подтверждением. Sitemap пока не расширялся. SSR, медицинский контент, вебмастеры и CWV не затрагивались.
+
+При разрешённой публикации сохранить актуальные production изменения и dependencies, добавить metadata engine/config/type declarations/hook, генератор, шаблон, Vite config и обновлённый client Nginx. Удалить page-level useDocumentTitle imports/calls и файл hook, не откатывая другие изменения страниц production. Текущие production образы содержат более свежую групповую выборку: нельзя без проверки заменять весь production client устаревшей локальной копией. Проверить final build/image и всю HTTP-матрицу до переключения. Client HTML и Nginx поставляются вместе: новый config требует дополнительных служебных оболочек. Внешний proxy/БД не нуждаются в правках.
+
+После публикации проверить source и DOM главной/самостоятельных/служебных/404 страниц, SVG, schema URLs и отсутствие обещания диагностики. Откат — предыдущий цельный client image и reload proxy для DNS при смене client container; backend/БД/PDF не трогать. В рамках текущего запроса публикация не выполнялась.
+
+Источники: [Schema.org WebPage](https://schema.org/WebPage), [Google Organization](https://developers.google.com/search/docs/appearance/structured-data/organization), [Google favicon](https://developers.google.com/search/docs/appearance/favicon-in-search), [Vite transformIndexHtml](https://vite.dev/guide/api-plugin.html#transformindexhtml).
