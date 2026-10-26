@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { InfoModal } from "@features/infoModal";
 import { Navigation } from "@widgets/navigation";
@@ -21,11 +21,14 @@ import { PoliticsAgreementBlock } from "@features/politicsAgreementBlock";
 import { ConsentPersonalData } from "@pages/consentPersonalData";
 import { PolicyPersonalData } from "@pages/policyPersonalData";
 import { Basement } from "@pages/basement";
+import { usePageCanonical } from "@shared/hooks/usePageCanonical.ts";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
   const isUserAdmin = useAppSelector(selectIsUserAdmin);
   const acceptYm = localStorage.getItem("accept_ym");
+  const { pathname, search, hash } = useLocation();
+  usePageCanonical(pathname);
 
   useEffect(() => {
     dispatch(checkLSUser());
@@ -37,7 +40,10 @@ function AppContainer() {
       <Routes>
         <Route path="/" element={<AnalysisPage />} />
         <Route path="/test" element={<TestPage />} />
-        <Route path="/analysis" element={<AnalysisPage />} />
+        <Route
+          path="/analysis"
+          element={<Navigate to={{ pathname: "/", search, hash }} replace />}
+        />
         <Route path="/result/:resultId" element={<AnalysisResultPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/about" element={<AboutPage />} />
