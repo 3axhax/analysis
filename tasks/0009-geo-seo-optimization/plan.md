@@ -113,3 +113,26 @@ Production client Nginx реализует строгую матрицу пут�
 Проверить favicon/logo HTTP GET/HEAD и MIME, валидность SVG, отсутствие блокировки robots; обеспечить читаемость статических файлов nginx worker в финальном client image. Существующий SVG не перерисовывать. Пути в metadata и JSON-LD должны совпадать, /public/pa.svg не использовать.
 
 До реализации добавить regression cases на язык, page-specific title/description, согласованную JSON-LD и загрузку icon/logo. После: build/postbuild, lint, полный Nginx harness, проверка собранного production image (не только dist mounts), browser initial/SPA/Back/service/404. Внешние валидаторы могут проверяться только на синтетическом публичном HTML без результатов/секретов; гарантии rich results не даются. БД/нормативы/API не меняются. Rollback — предыдущий client image; обновлённые оболочки и client Nginx поставляются вместе. Для последующей публикации сохранить более свежую production-базу и её зависимости.
+
+## Рендеринг публичного контента — 2026-10-26
+
+Пользователь разрешил реализацию этапа рендеринга. Выбран build-time prerender/SSG на существующих React/Vite: пять public paths из allowlist, без Node server в production и без сети/БД в сборке. SSR entry рендерит тот же AppContainer через StaticRouter и новый пустой Redux store на каждую страницу. Персональные пути/служебные endpoints SSR entry отвергает; их HTML остаётся пустой CSR-оболочкой с noindex, без preloaded state/JSON результатов. Server bundle расположен вне dist и не копируется в runtime image.
+
+Границы hydration: статическая публичная часть (навигационная guest-оболочка, H1/описание/категории, about/contacts/документы, footer) совпадает между server HTML и первым client render. Browser-only зоны — форма с select/dropzone, авторизация, cookie-баннер и модальные окна — включаются после hydration через ClientOnly/useSyncExternalStore. Никаких window/localStorage polyfills в сборке, suppressed hydration warnings или обхода авторизации. Публичные React-компоненты не заменяются отдельным SEO-текстом.
+
+Выделить форму главной из статического содержимого, сохранить её Redux/actions/валидацию/загрузку PDF. До JS показывать понятное сообщение о необходимости JS для формы. Публичные аккордеоны перевести на native details/summary, чтобы список и текст можно было раскрывать без JS; сохранить визуальный стиль и multiple-семантику. Добавить обычные внутренние ссылки public pages в footer. About/contacts/политики не редактировать медицински/юридически: известные шаблоны и несоответствия остаются редакционным этапом и должны быть проверены до контентного продвижения.
+
+Сборка: Vite client build, отдельный SSR build вне dist, генератор metadata+body только public paths, в HTML marker для hydrateRoot; для CSR-only путей createRoot. Dev transformIndexHtml использует тот же SSR entry через ssrLoadModule, чтобы проверять hydration локально. Инициализацию i18n и обращения к справочникам оставить только browser-side после ClientOnly; static labels берутся из уже существующего публичного текста.
+
+Проверки: до реализации воспроизвести пустой body; HTTP H1/смысловой текст/ссылки всех public pages без JS; отсутствие prerender на результатах/admin/404 и недоступность SSR bundle; предыдущие metadata/routing tests. SSR entry tests reject private/unknown paths; запрет сетевых обращений при рендеринге, независимость пустых store. Browser: hydration без recoverable errors, нативный accordion, SPA/Back, mobile/desktop, ручная валидация формы без сохранения; синтетический PDF/PDF response flow — без реальных документов и записи в рабочую БД. Никаких health-only выводов о версии. Build/lint и изолированный Nginx runtime check, git diff --check/status.
+
+БД/API/нормативы не меняются. Перед работой создан и проверен локальный backup в игнорируемом sqlDump. Публикация/коммит — отдельным запросом. Откат — предыдущий client image; builder server bundle и runtime dist не смешивать. CWV/CrUX не доступны из локальных unit checks, полевых улучшений не обещать.
+
+### 2026-10-26 — скачок при гидратации
+Воспроизведение в коде: ClientOnly заменяет FormPlaceholder фиксированной приблизительной высоты реальной формой; sticky cookie-баннер добавляется в поток после гидратации. Решение: рендерить начальную пустую форму в HTML, сделать select SSR-совместимыми со стабильными ID, не приостанавливать форму ради переводов, вывести cookie-баннер поверх страницы. Проверка: сборка, SSR без сети, lint, браузер. БД и медицинские расчёты не меняются; ранее проверенный backup сохраняется.
+
+### 2026-10-26 — размер SVG в header до CSS
+У SVG логотипа и публичных пунктов header нет атрибутов width/height; Tailwind задаёт размер только после CSS. Добавить intrinsic размеры, сохранив responsive классы. Regression: каждая SVG публичного header должна иметь положительные width/height в SSR HTML. БД не меняется, проверенный backup задачи сохранён.
+
+### 2026-10-26 — CSS до первого отображения
+Уточнение: Vite dev инжектирует импортированный из main.tsx CSS через JS, что даёт FOUC при SSR HTML. Перенести оба глобальных CSS в link rel=stylesheet в head; Vite обрабатывает их и при build. Проверить dev HTML и content-type CSS, собранные ссылки, lint/SSR.

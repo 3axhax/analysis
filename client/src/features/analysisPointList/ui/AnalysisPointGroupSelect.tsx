@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useId } from "react";
 import Select, { GroupBase, MultiValue } from "react-select";
 import { selectAnalysisTypeListForMultiSelect } from "@entities/analysisType";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
@@ -10,9 +10,10 @@ import {
 } from "@entities/analysisResult";
 
 export const AnalysisPointGroupSelect = () => {
+  const instanceId = useId();
   const dispatch = useAppDispatch();
 
-  const { t } = useTranslation("entities");
+  const { t } = useTranslation("entities", { useSuspense: false });
 
   const selectedPointsList = useAppSelector(SelectAnalysisResultSelectedList);
 
@@ -108,8 +109,10 @@ export const AnalysisPointGroupSelect = () => {
       </label>
       <div style={{ position: "relative" }}>
         <Select<SelectUIOption<number>, true>
+          instanceId={instanceId}
+          inputId="analysisPoints"
           name={"analysisPoints"}
-          menuPortalTarget={document.body}
+          menuPortalTarget={typeof document === "undefined" ? undefined : document.body}
           isMulti
           options={groupedOptions}
           value={selectedOptions}

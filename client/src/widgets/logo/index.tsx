@@ -1,13 +1,11 @@
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Laboratory } from "@shared/ui/Icons";
 
 export const Logo = () => {
-  const { t } = useTranslation();
   return (
     <Link
       to={"/"}
-      title={t("logo")}
+      title="Расшифровка анализов онлайн"
       className={
         "group flex items-center font-light my-4 mx-6 relative z-2 text-xl rounded-full border-1 border-white/80 py-1 px-3"
       }

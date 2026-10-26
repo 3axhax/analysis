@@ -1,6 +1,8 @@
 export const Laboratory = ({ className }: { className?: string }) => {
   return (
     <svg
+      width={16}
+      height={16}
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
       y="0px"

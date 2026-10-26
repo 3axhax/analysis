@@ -1,5 +1,5 @@
 import Select from "react-select";
-import { JSX } from "react";
+import { JSX, useId } from "react";
 
 export interface SelectUIOption<T = string> {
   value: T;
@@ -35,6 +35,7 @@ export const SelectUI = <T extends string | number = string>({
   className = "",
   ...other
 }: SelectUIProps<T>) => {
+  const instanceId = useId();
   const handleChange = (selectedOption: SelectUIOption<T> | null) => {
     if (selectedOption) {
       onChange(selectedOption.value);
@@ -56,7 +57,7 @@ export const SelectUI = <T extends string | number = string>({
         </label>
       ) : null}
       <Select<SelectUIOption<T>>
-        menuPortalTarget={document.body}
+        menuPortalTarget={typeof document === "undefined" ? undefined : document.body}
         menuPosition="fixed"
         styles={{
           menuPortal: (base) => ({ ...base, zIndex: 9999 }),
@@ -64,6 +65,7 @@ export const SelectUI = <T extends string | number = string>({
         value={selectedValue}
         onChange={handleChange}
         options={options}
+        instanceId={instanceId}
         inputId={name}
         placeholder={placeholder}
         aria-required={required}

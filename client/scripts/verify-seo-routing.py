@@ -77,6 +77,44 @@ class PageHead(HTMLParser):
 
 
 class RoutingChecks(unittest.TestCase):
+    def test_public_body_without_javascript(self):
+        headings = {
+            "/": "Мгновенная расшифровка анализов",
+            "/about": "О проекте",
+            "/contacts": "Контакты",
+            "/privacy-policy": "Политика обработки персональных данных",
+            "/consent-personal-data": "Согласие на обработку персональных данных",
+        }
+        for path, heading in headings.items():
+            with self.subTest(path=path):
+                status, _, body = self.get(path)
+                html = body.decode()
+                self.assertEqual(status, 200)
+                self.assertIn('data-prerendered="true"', html)
+                self.assertRegex(html, r'<h1\b')
+                self.assertIn(heading, html)
+                self.assertIn('href="/privacy-policy"', html)
+                self.assertIn('href="/about"', html)
+                self.assertIn('href="/contacts"', html)
+                if path == "/":
+                    self.assertIn("Ферритин", html)
+                    self.assertIn("Список расшифровываемых анализов", html)
+                    self.assertIn("<details", html)
+                    self.assertIn("<summary", html)
+                    self.assertIn('type="file"', html)
+                    self.assertIn('<form', html)
+                    self.assertNotIn('data-client-placeholder', html)
+
+    def test_no_prerender_on_private_or_error(self):
+        for path in ["/result/synthetic", "/admin/units", "/test", "/logout", "/seo-missing"]:
+            with self.subTest(path=path):
+                _, _, body = self.get(path)
+                html = body.decode()
+                self.assertNotIn('data-prerendered="true"', html)
+                self.assertNotRegex(html, r'<h1\b')
+                self.assertIn('<div id="root"></div>', html)
+        self.assertEqual(self.get('/.prerender/entry-server.mjs')[0], 404)
+
     def test_public_metadata_and_schema(self):
         titles = {
             "/": "Расшифровка анализов онлайн — Проанализируй",

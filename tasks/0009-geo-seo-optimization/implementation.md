@@ -206,3 +206,75 @@ ID/image/StartedAt backend/PostgreSQL/PDF/proxy совпали с baseline пе�
 Rollback: before-seo-metadata-9fca0f9 вернуть как latest, точечно пересоздать только client_analysis через прежний manifest без build/deps/pull, nginx -t/reload и проверка HTTPS/главной/API. Proxy config сохранён, но в этой поставке не менялся; перед rollback учитывать последующие пользовательские релизы. БД/backend/PDF не трогать.
 
 Текущий актуальный source — seo-metadata-9fca0f9. Прежний compose manifest всё ещё имеет старый build context: для следующей сборки использовать актуальный source/new согласованный Git release, не выполнять --build из старого manifest. Git push в origin не выполнялся: публикация сделана проверенным client image из отдельного source release. Локальные документы задач 0007/0008 оставлены вне SEO-коммитов.
+
+## Рендеринг публичного контента — локально, 2026-10-26
+
+Реализован этап build-time prerender/SSG для пяти публичных страниц: /, /about, /contacts, /privacy-policy, /consent-personal-data. На рабочий сервер эта часть не опубликована, коммит не создавался.
+
+### Поведение
+
+Исходный HTML теперь содержит реальное содержимое React-страниц: H1/описания, категории и названия показателей, текст документов, публичные ссылки. Это тот же AppContainer и те же компоненты, которые используются браузером; отдельной версии для роботов и проверки User-Agent нет. На главной видимым абзацем показано уже согласованное описание из metadata config, без новых медицинских интерпретаций.
+
+React гидратирует публичный HTML через hydrateRoot. Форма, авторизационная часть навигации, модальные окна и cookie-блок подключаются через ClientOnly/useSyncExternalStore после первого согласованного прохода hydration. До JavaScript доступны текст и ссылки; вместо формы — сообщение о необходимости JS. ClientOnly также изолирует Suspense переводов: ожидание i18n не должно скрывать публичное содержимое.
+
+Результаты, admin, logout/test и 404 не пререндерятся: остаются пустые CSR-оболочки, прежние noindex/status/metadata сохранены. Персональные значения, tokens, результатные ссылки и Redux state не сериализуются. Загрузка справочников и PDF по-прежнему происходит в браузере через существующие API после подключения формы.
+
+Публичные аккордеоны используют native details/summary, поэтому раскрытие доступно без скриптов и с клавиатуры. Для списка с multiple=false используется нативная группировка name. В footer добавлены обычные ссылки «О проекте» и «Контакты». Тексты about/contacts остались прежними шаблонами: их достоверность и редактура по-прежнему отдельная задача, особенно перед расширением sitemap/продвижением.
+
+### Устройство
+
+- src/entry-server.tsx: renderPublicPage со строгой allowlist и новым пустым Redux store для каждой страницы, StaticRouter/InfoModalProvider. Используется React renderToString для синхронного статического контента, без ожидания данных.
+- shared/store/index.ts: factory createAppStore; обычный browser singleton сохранён. Новых persisted/preloaded данных нет.
+- AnalysisPage разделён на статический AnalysisIntroduction и прежний AnalysisForm. Обработчики формы/Redux actions/валидация перенесены без изменения алгоритма. Форму не разбивали на отдельный dynamic chunk: пробный lazy-вариант создал предупреждения циклических chunks существующих barrels, поэтому от него отказались.
+- PublicNavigation и publicNavigationItems разделяют существующие гостевые пункты с Navigation. Logo tooltip стал статическим русским текстом и больше не требует i18n для SSR. LocalStorage чтение cookie-выбора осталось внутри browser-only компонента.
+- postbuild собирает Vite SSR bundle в .prerender вне dist, затем generator добавляет body только public paths. Root получает data-prerendered=true; main.tsx выбирает hydrateRoot либо createRoot для CSR-only оболочек. .prerender игнорируется Git, runtime Dockerfile по-прежнему копирует только dist и Nginx config, Node runtime не добавлялся.
+- Generator запрещает fetch/http/https обращения до импорта SSR entry и не использует API/БД. Повторный запуск на уже заполненном HTML отклоняется до записи, чтобы публичный body нельзя было случайно размножить на служебные пути; повторять нужно полную npm run build.
+- Dev HTML plugin использует тот же entry через ssrLoadModule; типы/metadata/canonical предыдущих этапов сохранены.
+
+### Исправление обнаруженной HTML-проблемы
+
+Браузерная проверка выявила hydration mismatch в прежней политике: девять внешних p содержали ul либо вложенный p. Заменены только эти контейнеры на div с сохранением отступов; слова/ссылки/юридические утверждения не редактировались. Добавлен AST regression check для блоков внутри p. После правки все пять public pages гидратируются без отмеченных React hydration errors. Предупреждения не подавлялись, fallback на принудительный CSR вместо исправления не применялся.
+
+### Проверки
+
+- До реализации HTTP regression test воспроизвёл отсутствие H1/body на всех пяти public paths.
+- Client build/postbuild и lint успешны. Остались только прежние CSS optimization/chunk size warnings. Новые JSON import/circular chunk warnings устранены.
+- scripts/verify-public-render.mjs: строгая public allowlist, отказ private/unknown/query paths, детерминированный повторный render, отсутствие browser file input при build, запрет сети, проверка валидной вложенности документов; повторная генерация готового HTML отказывается и не меняет artifacts.
+- 18 HTTP test methods с подслучаями успешны на dist/config и повторно на отдельном собранном Nginx runtime image. Проверены исходные H1/текст/ссылки/native details без JS, отсутствие prerender у private/service/error, недоступность server bundle, все прежние metadata/schema/canonical/robots/sitemap/noindex/redirect/API/assets cases. nginx -t успешен, runtime не содержит .prerender или node_modules.
+- Финальный runtime-слой проверен из публичного dist/config без env/секретов в build context; полный повторный Docker npm ci не запускался, обычный tsc/Vite и SSR build прошли отдельно. Временные image/network/containers удалены.
+- В браузере на всех 5 public pages проверены data-prerendered, один H1 и отсутствие hydration errors после исправления политики. На главной форма появляется вместо placeholder, пустая отправка показывает ожидаемую ошибку до сохранения. SPA-переход в about и Back сохраняют единственный H1 и возвращают рабочую форму.
+- Дополнительно тестировалась временная копия фактического SSG HTML с удалёнными script tags (это не переключение глобального JS setting браузера): script count=0, содержимое читается, details открывается мышью и закрывается Enter, ссылка about открывает статическую страницу без скриптов. Desktop viewport 1365×900 и mobile 390×844: горизонтального переполнения не обнаружено. Viewport override сброшен. Скриншот mobile-проверки сохранён вне Git.
+- Локальный POST /result/fromFile на одном синтетическом одностраничном PDF без медицинских значений вернул ожидаемое отсутствие findings; агрегированные количества сохранённых результатов/точек до и после совпали. UI file chooser upload и сохранение результата не выполнялись; реальные PDF/значения не использовались. Backend/Python код не менялся.
+- Перед изменениями создан и проверен локальный backup в игнорируемом sqlDump. Схема/данные БД не менялись. git diff --check успешен, build/server bundles/dumps не входят в diff, старые untracked 0007/0008 сохранены.
+
+Повторная проверка:
+
+```bash
+docker exec clientAnalysis npm run build
+docker exec clientAnalysis npm run lint
+docker exec clientAnalysis node scripts/verify-public-render.mjs
+python3 client/scripts/verify-seo-routing.py --dist client/dist
+```
+
+### Поставка, откат и ограничения
+
+Для следующей разрешённой публикации исходить из актуального production metadata-release, сохранить его дополнительные изменения группового выбора/dependencies. Добавить SSG entry/ClientOnly/разделение формы/navigation/native accordion/footer, перенести только структурную правку политики и обновить postbuild, main, generator, store factory и Vite config. Не перезаписывать старой локальной копией более свежие production компоненты группового выбора. Полная production сборка должна создать .prerender в builder и заполненный public dist; runtime по-прежнему только Nginx. Backend/БД/PDF перезапускать не требуется.
+
+После поставки проверить raw body и DOM всех public paths, console hydration errors, работоспособность формы и публичной навигации; повторить private/noindex/404/metadata проверки. Откат — предыдущий цельный client image, nginx -t/reload для обновления upstream после смены контейнера. Изменений БД/down нет.
+
+SSG обновляет публичный текст при сборке, динамические справочники остаются client-side. Полевые CWV/CrUX/Lighthouse не измерялись: улучшение ранжирования/скорости/CLS не заявляется. Существующие шаблоны контактов/описания проекта и фактическая точность текстов политики требуют отдельной редакционной проверки. Рендеринг не исправляет автоматически их содержание, нормативы или медицинские алгоритмы. Публикация и коммит этой части пока не выполнялись.
+
+Источники: [React renderToString](https://react.dev/reference/react-dom/server/renderToString), [React hydrateRoot](https://react.dev/reference/react-dom/client/hydrateRoot), [Vite SSG/SSR](https://vite.dev/guide/ssr.html#pre-rendering-ssg).
+
+### 2026-10-26 — устранение скачка рендеринга (на проверке)
+- Вместо приблизительной заглушки SSR выводит начальную пустую форму; справочники загружаются только в браузере. Select используют useId и безопасный portal target; переводы справочников не скрывают форму через Suspense.
+- Под поле пола зарезервирована ширина: загрузка вариантов больше не переносит подписи возраста (остаточное смещение 24 px выявлено и устранено).
+- Cookie-баннер fixed, с ограничением высоты и прокруткой: появление/закрытие не меняет поток страницы.
+- Найдено отдельное смещение около 44 px из-за шрифта. Sofia Sans загружается через preload, font-display optional исключает позднюю замену при медленной загрузке. Удалена внешняя загрузка Roboto; запасной шрифт системный Arial. При медленной сети первая загрузка может остаться с системным шрифтом.
+- В браузере при ширине 1280 после загрузки шрифта геометрия header/H1/list/analysis/form совпала у статической копии без scripts и гидратированной страницы; ошибок гидратации нет, горизонтального overflow нет. Это сравнение геометрии, не измерение полевого CLS.
+- Regression checks теперь требуют форму в публичном HTML и отсутствие приблизительной заглушки; private/service страницы остаются CSR. Сборка, lint, SSR без сети и 18 групп Nginx-проверок выполнены.
+- Ранее выбранное разделение «вся форма ClientOnly» заменено: только навигация/модальные окна/consent остаются ClientOnly. Никаких изменений БД, API или медицинской логики. Коммит и публикация не выполнялись.
+
+### 2026-10-26 — header и CSS до первого отображения (на проверке)
+Уточнена причина FOUC: SSR HTML показывался до CSS, импортированного из main.tsx через JS в Vite dev. Оба глобальных CSS перенесены в обычные блокирующие stylesheet-ссылки в head, импорты из main удалены. Vite build преобразует ссылки в assets CSS. SVG публичного header и иконки авторизованной навигации получили intrinsic width/height; responsive классы сохранены.
+Regression на отсутствие размеров сначала воспроизвёл дефект (Laboratory без width), после исправления проходит; добавлена проверка stylesheet в head собранных публичных страниц. Build, lint и SSR checks проходят. HTTP dev с Accept:text/css возвращает оба CSS 200 text/css. Браузер после перезагрузки показывает обе таблицы в document.styleSheets, header 72 px и публичные иконки 20×20 px; ошибок нет. Это исправление порядка CSS, полевой CLS не измерялся. БД не затрагивалась. Коммит/публикация не выполнены.

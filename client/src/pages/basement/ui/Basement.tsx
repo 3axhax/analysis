@@ -8,6 +8,16 @@ export const Basement = () => {
         className={"flex max-sm:flex-col mx-auto justify-center gap-2 lg:gap-5"}
       >
         <li>
+          <Link to="/about" className="bg-underline-hover text-cyan-600">
+            О проекте
+          </Link>
+        </li>
+        <li>
+          <Link to="/contacts" className="bg-underline-hover text-cyan-600">
+            Контакты
+          </Link>
+        </li>
+        <li>
           <Link
             to={"privacy-policy"}
             className={"bg-underline-hover text-cyan-600"}

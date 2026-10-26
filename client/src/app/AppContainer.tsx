@@ -23,11 +23,12 @@ import { PolicyPersonalData } from "@pages/policyPersonalData";
 import { Basement } from "@pages/basement";
 import { usePageCanonical } from "@shared/hooks/usePageCanonical.ts";
 import { usePageMetadata } from "@shared/hooks/usePageMetadata.ts";
+import { ClientOnly } from "@shared/ui/ClientOnly.tsx";
+import { PublicNavigation } from "@widgets/navigation/ui/PublicNavigation.tsx";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
   const isUserAdmin = useAppSelector(selectIsUserAdmin);
-  const acceptYm = localStorage.getItem("accept_ym");
   const { pathname, search, hash } = useLocation();
   usePageCanonical(pathname);
   usePageMetadata(pathname);
@@ -38,7 +39,9 @@ function AppContainer() {
 
   return (
     <div className="page min-h-screen flex flex-col">
-      <Navigation />
+      <ClientOnly fallback={<PublicNavigation />}>
+        <Navigation />
+      </ClientOnly>
       <Routes>
         <Route path="/" element={<AnalysisPage />} />
         <Route path="/test" element={<TestPage />} />
@@ -71,8 +74,10 @@ function AppContainer() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Basement />
-      <InfoModal />
-      {!acceptYm && <PoliticsAgreementBlock />}
+      <ClientOnly>
+        <InfoModal />
+        <PoliticsAgreementBlock />
+      </ClientOnly>
     </div>
   );
 }

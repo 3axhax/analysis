@@ -75,6 +75,8 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                         {item.label}
                       </span>
                       <ChevronDownIcon
+                        width={16}
+                        height={16}
                         className={`inline-flex h-4 w-4 ml-1 text-white transition-transform group-hover:text-orange-300 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
                       />
                     </span>
