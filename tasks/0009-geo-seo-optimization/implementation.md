@@ -1,6 +1,6 @@
 # GEO И SEO оптимизация — реализация этапа 1
 
-Дата: 2026-10-26. Реализованы и опубликованы этап управления индексацией и отдельное исправление canonical по явным запросам пользователя. Код закоммичен в 551eb67; остальные пункты метаданных и следующие этапы SEO не реализованы.
+Дата: 2026-10-26. Реализованы и опубликованы управление индексацией, canonical и lang/title/description/favicon/logo/JSON-LD по явным запросам пользователя. Коммиты кода: 551eb67 и 9fca0f9. Следующие этапы рендеринга контента/редактуры/аналитики не реализованы.
 
 ## Итоговое поведение
 
@@ -142,9 +142,9 @@ Rollback canonical: вернуть before-seo-canonical-551eb67 как latest, �
 
 Как и при первой поставке, compose label у клиента относится к прежнему manifest с прежним build context. Для будущей сборки использовать актуальный source seo-canonical-551eb67 либо новый согласованный Git release, не запускать --build из старого manifest. Git push в рамках публикации не выполнялся: клиент доставлен проверенным образом из отдельного source release.
 
-## Lang, title/description, favicon/logo и JSON-LD — локально, 2026-10-26
+## Lang, title/description, favicon/logo и JSON-LD — реализация 2026-10-26
 
-Выполнен отдельный пункт по запросу пользователя. Production в этой части ещё не обновлялся; коммит не создавался.
+Выполнен отдельный пункт по запросу пользователя. Сначала проверен локально, затем по отдельному разрешению закоммичен и опубликован; результат поставки приведён ниже.
 
 ### Итог
 
@@ -185,6 +185,24 @@ python3 client/scripts/verify-seo-routing.py --dist client/dist --client-image I
 
 При разрешённой публикации сохранить актуальные production изменения и dependencies, добавить metadata engine/config/type declarations/hook, генератор, шаблон, Vite config и обновлённый client Nginx. Удалить page-level useDocumentTitle imports/calls и файл hook, не откатывая другие изменения страниц production. Текущие production образы содержат более свежую групповую выборку: нельзя без проверки заменять весь production client устаревшей локальной копией. Проверить final build/image и всю HTTP-матрицу до переключения. Client HTML и Nginx поставляются вместе: новый config требует дополнительных служебных оболочек. Внешний proxy/БД не нуждаются в правках.
 
-После публикации проверить source и DOM главной/самостоятельных/служебных/404 страниц, SVG, schema URLs и отсутствие обещания диагностики. Откат — предыдущий цельный client image и reload proxy для DNS при смене client container; backend/БД/PDF не трогать. В рамках текущего запроса публикация не выполнялась.
+После публикации проверить source и DOM главной/самостоятельных/служебных/404 страниц, SVG, schema URLs и отсутствие обещания диагностики. Откат — предыдущий цельный client image и reload proxy для DNS при смене client container; backend/БД/PDF не трогать. Первоначальная локальная проверка завершилась без публикации; последующая разрешённая поставка описана ниже.
 
 Источники: [Schema.org WebPage](https://schema.org/WebPage), [Google Organization](https://developers.google.com/search/docs/appearance/structured-data/organization), [Google favicon](https://developers.google.com/search/docs/appearance/favicon-in-search), [Vite transformIndexHtml](https://vite.dev/guide/api-plugin.html#transformindexhtml).
+
+## Метаданные: коммит и production-поставка — 2026-10-26
+
+Пользователь явно разрешил коммит и публикацию. Коммит 9fca0f9 — fix(seo): unify page metadata and structured data, без задач 0007/0008, secrets, дампов и generated artifacts. Результаты поставки записаны следующим документационным коммитом.
+
+Перед сборкой running client image совпал с действующим canonical-release. Все изменяемые существующие source files проверены по SHA-256 на совпадение с родительской версией коммита; не было перезаписи неизвестных production-правок. Новый source /var/analysis/releases/seo-metadata-9fca0f9 подготовлен из /var/analysis/releases/seo-canonical-551eb67/client; файлы взяты строго из git show коммита, устаревший useDocumentTitle удалён. Более свежие production package/dependencies и групповая выборка сохранены.
+
+Новый image analysis-client_analysis:seo-metadata-9fca0f9 собран на сервере. До переключения на фактическом image (без mounts поверх HTML/config) прошли nginx -t и все 16 HTTP test methods с подслучаями. Тестовые контейнеры/сеть удалены. Предыдущий image сохранён как analysis-client_analysis:before-seo-metadata-9fca0f9; image ID/proxy config/private diagnostics — в /var/analysis/backups/seo-metadata-9fca0f9 (0700).
+
+Новый image помечен штатным latest, точечно пересоздан только client_analysis через действующий project analysis/compose b94f38614ee2 с --no-deps --no-build --pull never. Внешний proxy config не менялся, nginx -t/reload выполнены для обновления upstream DNS. Автоматический rollback подготовлен в rollout.py, не потребовался.
+
+После поставки прошли 31 HTTP check этапа 1, 24 canonical source checks и 21 metadata/schema/icon check (76 всего) с сервера и повторно извне. Проверены GET/HEAD SVG (200, image/svg+xml, валидный SVG), метаданные публичных и служебных маршрутов, JSON-LD/URL/logo, отсутствие обещания диагностики, прежние redirects/noindex/404/API/assets. В браузере production на всех 5 public pages title/description/lang/favicon/schema согласованы; SPA-переход на policy, Back, /test и 404 также проверены. Внешний Rich Results/Schema.org валидатор не запускался, расширенные результаты не обещаются.
+
+ID/image/StartedAt backend/PostgreSQL/PDF/proxy совпали с baseline перед сборкой и после поставки. Backend/БД/PDF не перезапускались, proxy получил только reload. Данные анализов не читались/не создавались, миграции и медицинская логика не менялись.
+
+Rollback: before-seo-metadata-9fca0f9 вернуть как latest, точечно пересоздать только client_analysis через прежний manifest без build/deps/pull, nginx -t/reload и проверка HTTPS/главной/API. Proxy config сохранён, но в этой поставке не менялся; перед rollback учитывать последующие пользовательские релизы. БД/backend/PDF не трогать.
+
+Текущий актуальный source — seo-metadata-9fca0f9. Прежний compose manifest всё ещё имеет старый build context: для следующей сборки использовать актуальный source/new согласованный Git release, не выполнять --build из старого manifest. Git push в origin не выполнялся: публикация сделана проверенным client image из отдельного source release. Локальные документы задач 0007/0008 оставлены вне SEO-коммитов.
