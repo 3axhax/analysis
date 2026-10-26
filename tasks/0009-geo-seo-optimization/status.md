@@ -1,6 +1,6 @@
 # GEO И SEO оптимизация — статус
 
-2026-10-19. По запросу пользователя оформлена задача. Реализация и поставка этапа 1 выполнены 2026-10-26. Canonical исправлен локально отдельным следующим изменением; остальные пункты метаданных и последующие этапы не начаты.
+2026-10-19. По запросу пользователя оформлена задача. Реализация и поставка этапа 1 выполнены 2026-10-26. Canonical исправлен, закоммичен и опубликован отдельным следующим изменением; остальные пункты метаданных и последующие этапы не начаты.
 
 | Этап | Статус | Результат и проверка | Осталось |
 |---|---|---|---|
@@ -51,3 +51,16 @@
 - Реализация — на проверке: canonical для 5 публичных страниц формируется в исходном HTML после build и синхронизируется hook при SPA-переходах. Для noindex/404 убран неверный canonical главной. Общие hreflang главной удалены, остальные metadata не менялись.
 - Проверка — принят: build/postbuild, lint и все 13 HTTP test methods с подслучаями успешны. Браузер подтвердил /about query/hash → canonical /about, SPA-переход privacy-policy, Back и отсутствие canonical на /test. Предыдущие этапы маршрутизации не сломаны; БД/API не менялись.
 - Поставка canonical — не начат: production пока с этапом 1. Порядок согласованной сборки client image, проверки оболочек и rollback добавлен в implementation.md. Title/description/lang/JSON-LD/favicon/контент остаются следующими пунктами.
+
+## Canonical: коммит и разрешённая поставка — 2026-10-26
+
+- Коммит — принят: 551eb67 (fix(seo): configure indexing and page-specific canonical URLs); включает SEO-код и документы 0009. Не связанные задачи 0007/0008 оставлены вне коммита; secrets и generated files не включались.
+- Поставка — в работе: пользователь явно разрешил. Текущий production image соответствует предыдущему SEO-release; кандидат готовится на его source с сохранением новых production dependencies. В production package.json добавляется только postbuild, без замены его локальной устаревшей копией. Предыдущий client image/config сохраняются для rollback; БД/backend/PDF не меняются.
+
+### Результат canonical-поставки — 2026-10-26
+
+- Коммит кода — принят: 551eb67, только SEO и задача 0009, без задач 0007/0008 и секретов.
+- Кандидат — принят: source на основе текущего production-release, сохранены более свежие зависимости/выбор групп, добавлен только canonical scope. Docker build, nginx -t и 13 групп HTTP regression checks на реальном build успешны.
+- Поставка — принят: опубликован image seo-canonical-551eb67, предыдущий закреплён для rollback. Обновлён только client, proxy reload без изменения config. ID/image/StartedAt backend/БД/PDF/proxy не изменились.
+- Приёмка — принят: 31 HTTP check и 24 canonical source HTML checks прошли с сервера и извне; production DOM /about → privacy-policy → Back содержит правильный единственный canonical. Миграции/изменения данных отсутствуют, rollback не потребовался.
+- Документация — принят: source/image/rollback и ограничение старого compose build context записаны в implementation.md. Lang/title/description/JSON-LD/favicon остаются вне этой поставки.

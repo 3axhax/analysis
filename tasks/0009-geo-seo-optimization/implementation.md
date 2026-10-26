@@ -1,6 +1,6 @@
 # GEO И SEO оптимизация — реализация этапа 1
 
-Дата: 2026-10-26. Реализован и опубликован этап управления индексацией по явному запросу пользователя. Коммит/push не выполнялись; остальные этапы SEO не начаты.
+Дата: 2026-10-26. Реализованы и опубликованы этап управления индексацией и отдельное исправление canonical по явным запросам пользователя. Код закоммичен в 551eb67; остальные пункты метаданных и следующие этапы SEO не реализованы.
 
 ## Итоговое поведение
 
@@ -88,7 +88,7 @@ ID, image ID и StartedAt backend/PostgreSQL/PDF совпали с baseline до
 
 ## Исправление canonical — 2026-10-26, локальная реализация
 
-По отдельному запросу пользователя исправлены canonical самостоятельных публичных страниц. Эта часть ещё не опубликована; production содержит предыдущий этап 1.
+По отдельному запросу пользователя исправлены canonical самостоятельных публичных страниц. Сначала изменение проверено локально; затем по отдельному явному запросу закоммичено и опубликовано, результат поставки ниже.
 
 | Публичный путь | Canonical исходного production HTML и DOM |
 |---|---|
@@ -123,3 +123,21 @@ usePageCanonical/getCanonicalUrl обновляют ровно один тег �
 Для публикации собрать новый client image на базе действующего production SEO-release, сохранив более свежие production изменения, и добавить hook/config/generator, package postbuild, обновлённые index/AppContainer/client Nginx. Не переносить целиком старый локальный package.json поверх более свежего production: добавить только postbuild. Проверить, что npm run build создал все оболочки, и прогнать HTTP harness до переключения. Внешний proxy не требует новых изменений.
 
 Build и client Nginx поставляются вместе: новая конфигурация требует _spa.html и _pages/*.html. Rollback — предыдущий цельный client image, затем reload proxy для обновления адреса upstream при необходимости; backend/БД не трогать. Текущая локальная реализация сама по себе не является публикацией. Перед очередной поставкой отдельно проверить прямые HTTP canonical на production и SPA-навигацию после обновления.
+
+## Canonical: коммит и поставка — 2026-10-26
+
+Код SEO и документы задачи 0009 включены в коммит 551eb67 — fix(seo): configure indexing and page-specific canonical URLs. Задачи 0007/0008, игнорируемые секреты, дампы и generated artifacts в коммит не включались. После поставки её результаты оформлены отдельным документационным коммитом.
+
+Перед сборкой проверено совпадение текущего running client image с предыдущим SEO-stage1 image. Новый source release /var/analysis/releases/seo-canonical-551eb67 скопирован из действующего /var/analysis/releases/seo-20261026-stage1/client с добавлением canonical-файлов из коммита. В более свежий production package.json добавлен только postbuild; dependencies и другие production-изменения сохранены.
+
+Новый образ analysis-client_analysis:seo-canonical-551eb67 собран на сервере. Его фактические HTML/assets извлечены в изолированный release для regression harness: client nginx -t и все 13 HTTP test methods с подслучаями успешны до публикации. Тестовые контейнеры/сеть удалены.
+
+Предыдущий образ сохранён как analysis-client_analysis:before-seo-canonical-551eb67, image ID и proxy config — в /var/analysis/backups/seo-canonical-551eb67 (0700). Новый образ помечен штатным latest; точечно пересоздан только client_analysis через действующий compose project analysis с --no-deps --no-build --pull never. Внешний proxy config не менялся, выполнены nginx -t/reload для обновления upstream DNS после смены client container.
+
+После переключения на сервере и повторно извне прошли 31 HTTP check этапа 1 и 24 проверки canonical исходного HTML: 5 публичных страниц, trailing slash/query, отсутствие canonical для noindex/404/вспомогательных оболочек. На production браузер подтвердил один canonical /about при query/hash, обновление на /privacy-policy при React Link и восстановление /about при Back.
+
+Идентичность, image ID и StartedAt backend/PostgreSQL/PDF/proxy совпали с baseline перед подготовкой релиза; эти контейнеры не пересоздавались и не перезапускались. Proxy получил только reload. Медицинские данные не читались/не создавались, миграции не выполнялись. Автоматический rollback подготовлен, но не потребовался.
+
+Rollback canonical: вернуть before-seo-canonical-551eb67 как latest, точечно пересоздать только client_analysis через действующий compose без build/deps/pull и nginx -t/reload. Если потребуется, сохранён также прежний proxy config; в этой поставке он не менялся. Перед rollback проверить отсутствие последующих пользовательских поставок. Backend/БД/PDF не трогать.
+
+Как и при первой поставке, compose label у клиента относится к прежнему manifest с прежним build context. Для будущей сборки использовать актуальный source seo-canonical-551eb67 либо новый согласованный Git release, не запускать --build из старого manifest. Git push в рамках публикации не выполнялся: клиент доставлен проверенным образом из отдельного source release.
