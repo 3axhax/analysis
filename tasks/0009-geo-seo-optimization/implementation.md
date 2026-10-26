@@ -307,3 +307,11 @@ Build/lint, SSR checks без сети и 18 групп HTTP Nginx проход�
 
 ### Уточнение 26.10.2026
 На основании прямого ответа пользователя добавлен подтверждённый автор/владелец на /about и /contacts, текущий публичный mailbox подтверждён. Новые квалификации/рецензенты не заявлены; оговорка об отсутствии подтверждённых источников и медицинского рецензирования сохранена. Regression проверяет видимое имя автора в обеих страницах.
+
+## Поставка этапа 3 — 26.10.2026
+
+Код 6df6e23 опубликован из /var/analysis/releases/seo-trust-6df6e23/client; current image analysis-client_analysis:seo-trust-6df6e23. Релиз основан на seo-render-a412aa4 с побайтовой проверкой каждого заменяемого source-файла относительно parent-коммита; более свежие production dependencies и group selector сохранены. Build, проверка фактического HTML кандидата, nginx -t и 18 групп Nginx harness успешны. После публикации 91 проверка HTTPS с сервера и извне и browser about/contacts/SPA/Back без ошибок. Backend/БД/PDF не перезапускались, proxy только reload.
+
+Backup /var/analysis/backups/seo-trust-6df6e23, previous image analysis-client_analysis:before-seo-trust-6df6e23. Rollback после проверки отсутствия следующего релиза: пометить previous image как analysis-client_analysis:latest, точечно recreate client_analysis с project analysis через /var/analysis/releases/b94f38614ee2/docker-compose.yaml и --no-deps --no-build --pull never --force-recreate; nginx -t/reload в nginxProxy, повторить HTTPS-проверки. Не собирать из старого compose build context. Будущие сборки начинать от seo-trust-6df6e23 source; БД/down не требуются.
+
+Владельцем подтверждены только авторство/владение и публичный контакт. Источники интервалов, медицинское рецензирование и полное юридическое согласование остаются открытыми; в опубликованном контенте они не вымышлены. Данные анализов и контакты пользователей не выгружались. Push в origin не выполнялся; поставлен проверенный client image.
