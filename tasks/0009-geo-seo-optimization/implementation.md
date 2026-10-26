@@ -278,3 +278,19 @@ SSG обновляет публичный текст при сборке, дин
 ### 2026-10-26 — header и CSS до первого отображения (на проверке)
 Уточнена причина FOUC: SSR HTML показывался до CSS, импортированного из main.tsx через JS в Vite dev. Оба глобальных CSS перенесены в обычные блокирующие stylesheet-ссылки в head, импорты из main удалены. Vite build преобразует ссылки в assets CSS. SVG публичного header и иконки авторизованной навигации получили intrinsic width/height; responsive классы сохранены.
 Regression на отсутствие размеров сначала воспроизвёл дефект (Laboratory без width), после исправления проходит; добавлена проверка stylesheet в head собранных публичных страниц. Build, lint и SSR checks проходят. HTTP dev с Accept:text/css возвращает оба CSS 200 text/css. Браузер после перезагрузки показывает обе таблицы в document.styleSheets, header 72 px и публичные иконки 20×20 px; ошибок нет. Это исправление порядка CSS, полевой CLS не измерялся. БД не затрагивалась. Коммит/публикация не выполнены.
+
+## Public rendering production deployment - 2026-10-26
+
+Status: accepted after automated and browser verification. User explicitly authorized commit and deployment. Code commit: a412aa4 (feat(seo): prerender public pages with stable initial styles).
+
+Current production source: /var/analysis/releases/seo-render-a412aa4/client. Current image: analysis-client_analysis:seo-render-a412aa4, also tagged latest. Built from the previous metadata production source, applying the committed client patch. Initial check rejected package.json and AnalysisPointGroupSelect differences without changing the running site. The compatible patch was checked/applied; only postbuild and SSR compatibility (useId, portal guard, non-suspending translations) were transferred into these two divergent files. Production dependencies/package-lock and Redux group selection logic were preserved and verified.
+
+Backup: /var/analysis/backups/seo-render-a412aa4 (0700), including previous image identity, proxy config and private build/rollout diagnostics. Rollback image: analysis-client_analysis:before-seo-render-a412aa4. No secrets or medical data included in Git or task artifacts.
+
+Candidate: full Docker client build passed. The actual runtime image passed nginx -t and all 18 isolated Nginx routing/rendering/metadata test groups. Runtime has no prerender bundle or node_modules. Only client_analysis was recreated using the existing analysis compose manifest with --no-deps --no-build --pull never; external proxy received nginx -t/reload for upstream DNS. Original backend/PostgreSQL/PDF/proxy IDs, images and StartedAt remained unchanged through preparation and rollout. No database operations or result saves were performed.
+
+After rollout, 86 HTTPS checks passed both from the server and externally: 9 rendering/isolation, 32 HTTP/HEAD/routes/assets/API, 24 canonical and 21 metadata/schema/icon checks. Browser: all five public paths have a prerender marker, one H1, loaded built CSS and 20px header icons, with no console errors/hydration failures. Native accordion, SPA navigation and Back to the form passed; no horizontal overflow at the tested desktop width. Field CWV/CLS, slow-network and real PDF/save flows were not measured in this deployment.
+
+Rollback: first confirm no subsequent release; tag before-seo-render-a412aa4 as latest, recreate only client_analysis through /var/analysis/releases/b94f38614ee2/docker-compose.yaml with project analysis and --no-deps --no-build --pull never --force-recreate, then nginx -t/reload in nginxProxy and rerun HTTPS checks. Do not rebuild from that older compose build context. Future builds must start from the current seo-render source to retain production-only improvements. Backend/database/PDF need no restart or rollback.
+
+Git push was not performed; publication used the verified image from the isolated release. Local tasks 0007/0008 remain untracked and excluded.
