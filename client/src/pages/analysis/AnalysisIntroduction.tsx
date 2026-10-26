@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ListsIcon } from "@shared/ui/Icons";
 import { ExistedAnalysisList } from "@widgets/existedAnalysisList";
 import { OpportunityList } from "@widgets/opportunityList";
@@ -16,6 +17,7 @@ export const AnalysisIntroduction = () => (
         </span>
       </h1>
       <p className="text-lg mb-5">{metadata.pages["/"].description}</p>
+      <p className="mb-5"><Link className="underline text-cyan-700 dark:text-cyan-200" to="/about">Как работает сравнение и какие у него ограничения</Link></p>
       <OpportunityList />
     </div>
     <div className="mb-8 lg:w-8/12 sm:w-full" id={"list"}>

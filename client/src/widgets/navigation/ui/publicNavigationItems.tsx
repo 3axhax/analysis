@@ -26,4 +26,6 @@ export const publicNavigationItems = (): NavItem[] => [
       />
     ),
   },
+  { key: "about", path: "/about", label: "О проекте" },
+  { key: "contacts", path: "/contacts", label: "Контакты" },
 ];

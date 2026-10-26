@@ -294,3 +294,16 @@ After rollout, 86 HTTPS checks passed both from the server and externally: 9 ren
 Rollback: first confirm no subsequent release; tag before-seo-render-a412aa4 as latest, recreate only client_analysis through /var/analysis/releases/b94f38614ee2/docker-compose.yaml with project analysis and --no-deps --no-build --pull never --force-recreate, then nginx -t/reload in nginxProxy and rerun HTTPS checks. Do not rebuild from that older compose build context. Future builds must start from the current seo-render source to retain production-only improvements. Backend/database/PDF need no restart or rollback.
 
 Git push was not performed; publication used the verified image from the isolated release. Local tasks 0007/0008 remain untracked and excluded.
+
+## Этап 3 — доверие и методология, локально 26.10.2026
+
+Подготовлены содержательные /about и /contacts с обычными ссылками из header и главной, без нового маршрута или API. Методология опирается на AnalysisResultService, unitConversion/reference-normalization.ts, ParseFileService, Python MAX_PAGES/MAX_FILE_SIZE и AgeInDaysSelector. Дата на странице — дата технической сверки, не медицинской рецензии. Общие сведения о различии лабораторных референсов и ограниченности одного результата сверены с https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/; эта публикация не объявляется источником значений в БД.
+
+Заменены шаблонные реквизиты и неподтверждённые продуктовые обещания. Используется уже публичный адрес из footer, новый контакт не придуман. Библиография интервалов, авторы/рецензенты и квалификация не вымышлены, их отсутствие в публикации обозначено. Обновлены только descriptions двух страниц, existing JSON-LD остаётся без вымышленных author/reviewedBy/dateReviewed.
+
+В политике и согласии исправлены утверждения о реализации: нет application-level шифрования значений, автоматического TTL30, гарантированной анонимности capability-ссылки; PDF обрабатывается на сервере, cookie аналитики возможны после согласия. Нельзя обещать непередачу URL результатов в Метрику при текущем tracking. Новую аналитику и обработку данных не добавляли. Остальные юридические положения и реквизиты оператора не считаются согласованными этим изменением; перед публикацией требуется содержательное согласование владельца. Сбор источников и медицинская рецензия остаются открытыми.
+
+Build/lint, SSR checks без сети и 18 групп HTTP Nginx проходят. Regression подтверждён на предыдущей сборке и исправленной. Браузерные проверки контента/ссылок/canonical/hydration успешны. Миграции и медицинская логика не затронуты. Изменения пока локальные; при следующей поставке стартовать от seo-render-a412aa4, сохраняя production dependencies и group selector. Откат — прежний цельный клиентский image, без БД.
+
+### Уточнение 26.10.2026
+На основании прямого ответа пользователя добавлен подтверждённый автор/владелец на /about и /contacts, текущий публичный mailbox подтверждён. Новые квалификации/рецензенты не заявлены; оговорка об отсутствии подтверждённых источников и медицинского рецензирования сохранена. Regression проверяет видимое имя автора в обеих страницах.

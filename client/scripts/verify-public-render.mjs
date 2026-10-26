@@ -28,6 +28,23 @@ for (const file of ['pages/policyPersonalData/ui/PolicyPersonalData.tsx', 'pages
 for (const path of publicPaths) {
   const html = renderPublicPage(path);
   assert.ok(html.includes('<h1'), 'Public heading missing');
+  if (path === '/about' || path === '/contacts') {
+    assert.ok(html.includes('Захарова Татьяна Владимировна'), 'Confirmed author/owner must be visible');
+  }
+  if (path === '/about') {
+    for (const text of ['Как работает сравнение', 'Источники референсов', 'Распознавание PDF', 'Данные и доступ', '360', '2026-10-26', 'medlineplus.gov', 'пока не опубликованы']) {
+      assert.ok(html.includes(text), 'Methodology section missing: ' + text);
+    }
+    assert.ok(!html.includes('Feature-Sliced Design'), 'Demo about content must not return');
+  }
+  if (path === '/contacts') {
+    assert.ok(!/contact@example\.com|123-45-67|Примерная/.test(html), 'Placeholder contact details must not return');
+    assert.ok(html.includes('mailto:') && html.includes('Не отправляйте медицинские PDF'), 'Feedback channel and privacy guidance missing');
+  }
+  if (path === '/privacy-policy' || path === '/consent-personal-data') {
+    assert.ok(!/зашифрованном виде|до 30 дней|данные автоматически удаляются/.test(html), 'Unimplemented encryption/retention promise returned');
+    assert.ok(html.includes('нет автоматического удаления'), 'Actual retention limitation missing');
+  }
   const header = html.match(/<header\b[^>]*>([\s\S]*?)<\/header>/)?.[1];
   assert.ok(header, 'Public header missing');
   for (const svg of header.matchAll(/<svg\b[^>]*>/g)) {
