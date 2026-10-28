@@ -7,9 +7,6 @@ export const PoliticsAgreementBlock = () => {
   );
 
   const acceptHandler = () => {
-    if (typeof initYM === "function") {
-      initYM();
-    }
     localStorage.setItem("accept_ym", "1");
     setShowBlock(false);
   };

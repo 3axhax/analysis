@@ -166,3 +166,9 @@ Source: /var/analysis/releases/seo-trust-6df6e23/client. Image: analysis-client_
 91 HTTPS-проверка прошла с сервера и повторно извне: 5 trust/ownership + 9 render/isolation + 32 HTTP + 24 canonical + 21 metadata/schema/icon. Браузер подтвердил имя владельца в about/contacts, корректный canonical, один H1, SPA/Back и отсутствие console/hydration errors.
 
 Открытые содержательные вопросы этапа 3 остаются: происхождение/версии референсов, медицинские рецензенты/квалификация и полное юридическое согласование документов. Их публикация не подменяется подтверждением технической поставки. Git push не выполнялся. Задачи 0007/0008 оставлены вне коммита.
+
+## Этап 5 — в работе, 28.10.2026
+Локальный backup создан и проверен. Внешних коннекторов Search Console/Вебмастера нет; браузерный inventory вернул «Local browser use is disabled in Work settings». Доступ/выгрузки запрошены у пользователя. Найдена отправка полного URL/referrer и включённые session/form interaction collectors в текущем Yandex init; готовится отключение collector, безопасный публичный baseline и методика агрегатов.
+
+### Этап 5 — промежуточный результат 28.10.2026
+Публичный production baseline снят: 5/5 страниц 200, canonical/H1/SSG/CSS согласованы; sitemap 200, 1 URL. PSI mobile/desktop: 429, CWV не получены. GSC/Яндекс и отправка sitemap ожидают доступа, browser disabled в Work. AI referral count=null — нет безопасного collector. Старую Метрику и предложение включить её отключили локально; документы уточнены. Build/lint, SSR, 18 Nginx-групп, build privacy scan и 3 Python-теста проходят. Планируется поставка клиентского исправления в рамках явно порученного этапа «Измерение и поставка»; полное завершение измерений не заявляется.

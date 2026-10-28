@@ -17,7 +17,6 @@ import { AgesPage } from "@pages/Admin/ages";
 import { AnalysisPointsPage } from "@pages/Admin/analysisPoints";
 import { DescriptionsPage } from "@pages/Admin/descriptions";
 import { AnalysisTypePage } from "@pages/Admin/analysisType";
-import { PoliticsAgreementBlock } from "@features/politicsAgreementBlock";
 import { ConsentPersonalData } from "@pages/consentPersonalData";
 import { PolicyPersonalData } from "@pages/policyPersonalData";
 import { Basement } from "@pages/basement";
@@ -76,7 +75,6 @@ function AppContainer() {
       <Basement />
       <ClientOnly>
         <InfoModal />
-        <PoliticsAgreementBlock />
       </ClientOnly>
     </div>
   );
