@@ -356,3 +356,10 @@ Commit 0e5cc67 подготовлен и проверен локально. SSH 
 Уточнение 02.11.2026: по запросу пользователя порог подвала изменён с sm на lg (1024px), включая перенос длинных ссылок. Build/postbuild и lint успешны.
 
 Уточнение 02.11.2026: последнее пожелание пользователя заменяет два столбца одним до 1024px (grid-cols-1); начиная с lg сохраняется flex. Build/postbuild и lint успешны. Изменения локальные.
+
+### Публикация изменений главной и подвала, 02.11.2026
+Релиз ui-b1be03b: /var/analysis/releases/ui-b1be03b/client; image analysis-client_analysis:ui-b1be03b (latest). Основа — текущий production seo-trust-6df6e23. Три изменённых source-файла проверены по хешам относительно исходной версии и заменены файлами из b1be03b. Production dependencies, package-lock и другая логика сохранены. Коммит 0e5cc67 не поставлялся.
+
+Backup /var/analysis/backups/ui-b1be03b (0700), rollback image analysis-client_analysis:before-ui-b1be03b. Поставлен только клиент через действующий compose project analysis, manifest /var/analysis/releases/b94f38614ee2/docker-compose.yaml, с --no-deps --no-build --pull never --force-recreate. Собирать из старого compose context нельзя. nginxProxy получил nginx -t/reload. Backend/БД/PDF не менялись и не перезапускались.
+
+Кандидат: nginx -t, новые/удалённые тексты, grid-cols-1 lg:flex, canonical, prerender успешны. После поставки 91 HTTPS-проверка из существующего harness успешна; дополнительно извне проверены пять публичных страниц, тексты и CSS подвала. Проверка мобильного устройства не выполнялась. Откат после проверки отсутствия более нового релиза: вернуть before-ui-b1be03b как latest, точечно пересоздать только client_analysis указанным compose без build/deps/pull, nginx -t/reload и повторить HTTPS-проверки.
