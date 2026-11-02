@@ -5,7 +5,7 @@
   src: url("./fonts/SofiaSans_v.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -13,12 +13,12 @@
   src: url("./fonts/SofiaSans-Italic_v.woff2") format("woff2");
   font-weight: 100 900;
   font-style: italic;
-  font-display: swap;
+  font-display: optional;
 }
 
 @layer base {
   :root {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+    font-family: "Sofia Sans", Arial, sans-serif;
     font-weight: 400;
     line-height: 1.5;
     font-synthesis: none;
@@ -81,7 +81,7 @@
   }
 
   body {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+    font-family: "Sofia Sans", Arial, sans-serif;
     @apply m-0 flex items-stretch justify-center min-w-[320px] min-h-screen bg-white dark:bg-gray-950 min-h-screen;
     /*    background: linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size), linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
         -webkit-mask: linear-gradient(-20deg, transparent 50%, white);*/
@@ -183,12 +183,12 @@
   }
 
   .form-control {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+    font-family: "Sofia Sans", Arial, sans-serif;
     @apply text-cyan-800 w-full px-5 py-3 border border-cyan-800 bg-white text-base/5 rounded-md shadow-sm hover:shadow-cyan-900 focus:outline-none focus:border-green-900 focus:shadow-gray-400 dark:bg-cyan-950 dark:text-white;
   }
 
   .form-label {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+    font-family: "Sofia Sans", Arial, sans-serif;
     @apply absolute top-3 left-4 bg-white text-base/5 rounded-xs text-cyan-800 dark:bg-cyan-950 dark:text-white transition-all duration-300 ease-in-out py-0.25 px-1;
   }
 
@@ -218,7 +218,7 @@
   }
 
   .page-title {
-    font-family: "Sofia Sans", "Roboto", "Arial Black", sans-serif;
+    font-family: "Sofia Sans", Arial, sans-serif;
     @apply text-4xl text-gray-900 dark:text-white mb-4;
   }
 

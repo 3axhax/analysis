@@ -5,8 +5,18 @@ export const Basement = () => {
   return (
     <div className="border-t-2 border-cyan-600 py-4 px-8 mt-auto text-center">
       <ul
-        className={"flex max-sm:flex-col mx-auto justify-center gap-2 lg:gap-5"}
+        className={"grid grid-cols-1 lg:flex mx-auto justify-center gap-x-4 gap-y-2 lg:gap-5 max-lg:[overflow-wrap:anywhere] [&>li]:min-w-0"}
       >
+        <li>
+          <Link to="/about" className="bg-underline-hover text-cyan-600">
+            О проекте
+          </Link>
+        </li>
+        <li>
+          <Link to="/contacts" className="bg-underline-hover text-cyan-600">
+            Контакты
+          </Link>
+        </li>
         <li>
           <Link
             to={"privacy-policy"}

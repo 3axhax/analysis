@@ -1,4 +1,4 @@
-import { useState, ReactNode, FC, JSX } from "react";
+import { useId, useState, ReactNode, FC, JSX } from "react";
 
 export interface AccordionItemType {
   id: string | number;
@@ -36,20 +36,7 @@ export const Accordion: FC<AccordionContainerProps> = ({
   onToggle,
 }) => {
   const [openIds, setOpenIds] = useState<(string | number)[]>(defaultOpenIds);
-
-  const toggle = (id: string | number): void => {
-    const isOpen = openIds.includes(id);
-
-    if (multiple) {
-      setOpenIds((prev) =>
-        isOpen ? prev.filter((i) => i !== id) : [...prev, id],
-      );
-    } else {
-      setOpenIds(isOpen ? [] : [id]);
-    }
-
-    onToggle?.(id, !isOpen);
-  };
+  const groupName = useId();
 
   return (
     <ul className={` ${className}`}>
@@ -57,42 +44,51 @@ export const Accordion: FC<AccordionContainerProps> = ({
         const isOpen = openIds.includes(item.id);
 
         return (
-          <li
-            key={item.id}
-            className={`${itemClassName} ${item.disabled ? "opacity-60" : ""}`}
-          >
-            <button
-              onClick={() => !item.disabled && toggle(item.id)}
-              disabled={item.disabled}
-              className={`size-full cursor-pointer flex justify-between items-center rounded-xl ${isOpen ? headerOpenedClassName : headerClosedClassName} ${headerClassName}`}
+          <li key={item.id} className={itemClassName}>
+            <details
+              name={multiple ? undefined : groupName}
+              open={defaultOpenIds.includes(item.id) || undefined}
+              className={item.disabled ? "opacity-60" : ""}
+              onToggle={(event) => {
+                const open = event.currentTarget.open;
+                setOpenIds((previous) => {
+                  const others = previous.filter((id) => id !== item.id);
+                  return open ? [...(multiple ? others : []), item.id] : others;
+                });
+                onToggle?.(item.id, open);
+              }}
             >
-              <div className="flex items-center gap-3">
-                {item.icon && <span className={"shrink-0"}>{item.icon}</span>}
-                {item.title}
-              </div>
-              <svg
-                className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${dropdownIconClassName} ${
-                  isOpen ? "rotate-180" : ""
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <summary
+                onClick={(event) => {
+                  if (item.disabled) event.preventDefault();
+                }}
+                aria-disabled={item.disabled || undefined}
+                className={`w-full list-none [&::-webkit-details-marker]:hidden cursor-pointer flex justify-between items-center rounded-xl ${isOpen ? headerOpenedClassName : headerClosedClassName} ${headerClassName}`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-            <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${contentClassName} ${
-                isOpen ? "max-h-[500px]" : "max-h-0"
-              }`}
-            >
-              <div className={`px-5 pb-5 pt-3 text-left`}>{item.content}</div>
-            </div>
+                <span className="flex items-center gap-3">
+                  {item.icon && <span className={"shrink-0"}>{item.icon}</span>}
+                  {item.title}
+                </span>
+                <svg
+                  className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${dropdownIconClassName} ${
+                    isOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </summary>
+              <div className={`overflow-hidden ${contentClassName}`}>
+                <div className={`px-5 pb-5 pt-3 text-left`}>{item.content}</div>
+              </div>
+            </details>
           </li>
         );
       })}

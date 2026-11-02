@@ -75,6 +75,8 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                         {item.label}
                       </span>
                       <ChevronDownIcon
+                        width={16}
+                        height={16}
                         className={`inline-flex h-4 w-4 ml-1 text-white transition-transform group-hover:text-orange-300 duration-200 ${isDropdownOpen === item.key ? "rotate-180" : ""}`}
                       />
                     </span>
@@ -127,7 +129,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                 </button>
               ) : (
                 <a
-                  href={"/#" + item.key}
+                  href={item.path.startsWith("/") ? item.path : "/#" + item.key}
                   className={`relative flex w-full overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
                           flex-gap-2 pr-10 pl-3 lg:pl-0 py-2 lg:py-6 bg-cyan-600 dark:bg-cyan-950 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
                             location.pathname === item.path

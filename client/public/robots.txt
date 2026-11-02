@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Results and service pages remain crawlable to expose their HTTP noindex.
+Sitemap: https://proanalize.ru/sitemap.xml

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { InfoModal } from "@features/infoModal";
 import { Navigation } from "@widgets/navigation";
@@ -17,15 +17,20 @@ import { AgesPage } from "@pages/Admin/ages";
 import { AnalysisPointsPage } from "@pages/Admin/analysisPoints";
 import { DescriptionsPage } from "@pages/Admin/descriptions";
 import { AnalysisTypePage } from "@pages/Admin/analysisType";
-import { PoliticsAgreementBlock } from "@features/politicsAgreementBlock";
 import { ConsentPersonalData } from "@pages/consentPersonalData";
 import { PolicyPersonalData } from "@pages/policyPersonalData";
 import { Basement } from "@pages/basement";
+import { usePageCanonical } from "@shared/hooks/usePageCanonical.ts";
+import { usePageMetadata } from "@shared/hooks/usePageMetadata.ts";
+import { ClientOnly } from "@shared/ui/ClientOnly.tsx";
+import { PublicNavigation } from "@widgets/navigation/ui/PublicNavigation.tsx";
 
 function AppContainer() {
   const dispatch = useAppDispatch();
   const isUserAdmin = useAppSelector(selectIsUserAdmin);
-  const acceptYm = localStorage.getItem("accept_ym");
+  const { pathname, search, hash } = useLocation();
+  usePageCanonical(pathname);
+  usePageMetadata(pathname);
 
   useEffect(() => {
     dispatch(checkLSUser());
@@ -33,11 +38,16 @@ function AppContainer() {
 
   return (
     <div className="page min-h-screen flex flex-col">
-      <Navigation />
+      <ClientOnly fallback={<PublicNavigation />}>
+        <Navigation />
+      </ClientOnly>
       <Routes>
         <Route path="/" element={<AnalysisPage />} />
         <Route path="/test" element={<TestPage />} />
-        <Route path="/analysis" element={<AnalysisPage />} />
+        <Route
+          path="/analysis"
+          element={<Navigate to={{ pathname: "/", search, hash }} replace />}
+        />
         <Route path="/result/:resultId" element={<AnalysisResultPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -63,8 +73,9 @@ function AppContainer() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Basement />
-      <InfoModal />
-      {!acceptYm && <PoliticsAgreementBlock />}
+      <ClientOnly>
+        <InfoModal />
+      </ClientOnly>
     </div>
   );
 }

@@ -11,21 +11,24 @@ import { unitsSlice } from "@entities/units";
 import { descriptionsSlice } from "@entities/descriptions";
 import { adminAnalysisTypeSlice } from "@entities/adminAnalysisType";
 
-export const store = configureStore({
-  reducer: {
-    user: userSlice.reducer,
-    counter: counterSlice.reducer,
-    ages: agesSlice.reducer,
-    gender: genderSlice.reducer,
-    analysisPoint: analysisPointSlice.reducer,
-    analysisType: analysisTypeSlice.reducer,
-    analysisResult: analysisResultSlice.reducer,
-    translations: translationsSlice.reducer,
-    units: unitsSlice.reducer,
-    descriptions: descriptionsSlice.reducer,
-    adminAnalysisType: adminAnalysisTypeSlice.reducer,
-  },
-});
+export const createAppStore = () =>
+  configureStore({
+    reducer: {
+      user: userSlice.reducer,
+      counter: counterSlice.reducer,
+      ages: agesSlice.reducer,
+      gender: genderSlice.reducer,
+      analysisPoint: analysisPointSlice.reducer,
+      analysisType: analysisTypeSlice.reducer,
+      analysisResult: analysisResultSlice.reducer,
+      translations: translationsSlice.reducer,
+      units: unitsSlice.reducer,
+      descriptions: descriptionsSlice.reducer,
+      adminAnalysisType: adminAnalysisTypeSlice.reducer,
+    },
+  });
+
+export const store = createAppStore();
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

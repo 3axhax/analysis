@@ -1,4 +1,3 @@
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useAppSelector } from "@shared/store/hooks.ts";
 import { useParams } from "react-router-dom";
 import { SelectAnalysisResultData } from "@entities/analysisResult";
@@ -21,7 +20,6 @@ export const AnalysisResultPage = () => {
   const { t: tEntities } = useTranslation("entities");
 
   const title = `Результат расшифровки`;
-  useDocumentTitle(title);
 
   useAnalysisResultsLoad(resultId || "");
   const analysisResult = useAppSelector((state) =>

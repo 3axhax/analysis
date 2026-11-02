@@ -1,0 +1,398 @@
+#!/usr/bin/env python3
+"""HTTP regression checks against isolated Nginx, with no application DB.
+
+Run from the repository root after client build:
+  python3 client/scripts/verify-seo-routing.py --dist client/dist
+Requires Docker (nginx:alpine) and openssl. Published ports bind only to loopback.
+The proxy's certificate is generated for this test; HTTPS verification uses that CA.
+"""
+
+import argparse
+from html.parser import HTMLParser
+import json
+from pathlib import Path
+import re
+import ssl
+import subprocess
+import tempfile
+import time
+import unittest
+import urllib.error
+import urllib.request
+import uuid
+import xml.etree.ElementTree as ET
+
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def docker(*args):
+    return subprocess.check_output(["docker", *args], stderr=subprocess.STDOUT).decode().strip()
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+class PageHead(HTMLParser):
+    def __init__(self, body):
+        super().__init__()
+        self.lang = None
+        self.title = ""
+        self.descriptions = []
+        self.icons = []
+        self.structured_data = []
+        self.in_title = False
+        self.in_json = False
+        self.json_text = ""
+        self.feed(body.decode())
+
+    def handle_starttag(self, tag, attrs):
+        values = dict(attrs)
+        if tag == "html":
+            self.lang = values.get("lang")
+        if tag == "title":
+            self.in_title = True
+        if tag == "meta" and values.get("name") == "description":
+            self.descriptions.append(values.get("content"))
+        if tag == "link" and values.get("rel") == "icon":
+            self.icons.append(values.get("href"))
+        if tag == "script" and values.get("type") == "application/ld+json":
+            self.in_json = True
+            self.json_text = ""
+
+    def handle_data(self, data):
+        if self.in_title:
+            self.title += data
+        if self.in_json:
+            self.json_text += data
+
+    def handle_endtag(self, tag):
+        if tag == "title":
+            self.in_title = False
+        if tag == "script" and self.in_json:
+            self.structured_data.append(json.loads(self.json_text))
+            self.in_json = False
+
+
+class RoutingChecks(unittest.TestCase):
+    def test_public_body_without_javascript(self):
+        headings = {
+            "/": "Мгновенная расшифровка анализов",
+            "/about": "О проекте",
+            "/contacts": "Контакты",
+            "/privacy-policy": "Политика обработки персональных данных",
+            "/consent-personal-data": "Согласие на обработку персональных данных",
+        }
+        for path, heading in headings.items():
+            with self.subTest(path=path):
+                status, _, body = self.get(path)
+                html = body.decode()
+                self.assertEqual(status, 200)
+                self.assertIn('data-prerendered="true"', html)
+                self.assertRegex(html, r'<h1\b')
+                self.assertIn(heading, html)
+                self.assertIn('href="/privacy-policy"', html)
+                self.assertIn('href="/about"', html)
+                self.assertIn('href="/contacts"', html)
+                if path == "/":
+                    self.assertIn("Ферритин", html)
+                    self.assertIn("Список расшифровываемых анализов", html)
+                    self.assertIn("<details", html)
+                    self.assertIn("<summary", html)
+                    self.assertIn('type="file"', html)
+                    self.assertIn('<form', html)
+                    self.assertNotIn('data-client-placeholder', html)
+
+    def test_no_prerender_on_private_or_error(self):
+        for path in ["/result/synthetic", "/admin/units", "/test", "/logout", "/seo-missing"]:
+            with self.subTest(path=path):
+                _, _, body = self.get(path)
+                html = body.decode()
+                self.assertNotIn('data-prerendered="true"', html)
+                self.assertNotRegex(html, r'<h1\b')
+                self.assertIn('<div id="root"></div>', html)
+        self.assertEqual(self.get('/.prerender/entry-server.mjs')[0], 404)
+
+    def test_public_metadata_and_schema(self):
+        titles = {
+            "/": "Расшифровка анализов онлайн — Проанализируй",
+            "/about": "О проекте — Проанализируй",
+            "/contacts": "Контакты — Проанализируй",
+            "/privacy-policy": "Политика обработки персональных данных — Проанализируй",
+            "/consent-personal-data": "Согласие на обработку персональных данных — Проанализируй",
+        }
+        for path, title in titles.items():
+            with self.subTest(path=path):
+                _, _, body = self.get(path + "?seo_probe=1")
+                head = PageHead(body)
+                self.assertEqual(head.lang, "ru")
+                self.assertEqual(head.title, title)
+                self.assertEqual(len(head.descriptions), 1)
+                self.assertTrue(head.descriptions[0])
+                self.assertNotIn("точная диагностика", body.decode().lower())
+                self.assertEqual(len(head.structured_data), 1)
+                graph = head.structured_data[0]["@graph"]
+                page = next(item for item in graph if item["@type"] in ["WebPage", "AboutPage", "ContactPage"])
+                self.assertEqual(page["url"], "https://proanalize.ru" + path)
+                self.assertEqual(page["name"], title)
+                self.assertEqual(page["description"], head.descriptions[0])
+                self.assertEqual(page["inLanguage"], "ru")
+                organization = next(item for item in graph if item["@type"] == "Organization")
+                self.assertEqual(organization["logo"], "https://proanalize.ru/pa.svg")
+                self.assertFalse(any("specialty" in item or "aspect" in item for item in graph))
+
+    def test_service_metadata_and_no_schema(self):
+        for path in ["/result/synthetic", "/admin/units", "/logout", "/test", "/seo-missing"]:
+            with self.subTest(path=path):
+                _, _, body = self.get(path)
+                head = PageHead(body)
+                self.assertEqual(head.lang, "ru")
+                self.assertTrue(head.title.endswith("— Проанализируй"))
+                self.assertNotIn("synthetic", head.title)
+                self.assertEqual(len(head.descriptions), 1)
+                self.assertEqual(head.structured_data, [])
+
+    def test_icon_and_logo_available(self):
+        _, _, body = self.get("/")
+        head = PageHead(body)
+        self.assertEqual(head.icons, ["/pa.svg"])
+        status, headers, body = self.get(head.icons[0])
+        self.assertEqual(status, 200)
+        self.assertIn("image/svg+xml", headers["Content-Type"])
+        svg = ET.fromstring(body)
+        self.assertEqual(svg.tag, "{http://www.w3.org/2000/svg}svg")
+        self.assertEqual(svg.get("viewBox"), "0 0 300 300")
+
+    def canonicals(self, body):
+        class Links(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.urls = []
+
+            def handle_starttag(self, tag, attrs):
+                values = dict(attrs)
+                if tag == "link" and values.get("rel") == "canonical":
+                    self.urls.append(values.get("href"))
+
+        parser = Links()
+        parser.feed(body.decode())
+        return parser.urls
+
+    def test_public_canonical_in_source(self):
+        for path in ["/", "/about", "/contacts", "/privacy-policy", "/consent-personal-data"]:
+            for suffix in (["", "/"] if path != "/" else [""]):
+                for query in ["", "?utm_source=seo&probe=1"]:
+                    with self.subTest(path=path + suffix + query):
+                        status, _, body = self.get(path + suffix + query)
+                        self.assertEqual(status, 200)
+                        self.assertEqual(self.canonicals(body), ["https://proanalize.ru" + path])
+
+    def test_no_home_canonical_on_service_or_error(self):
+        for path in ["/result/synthetic", "/admin/units", "/test", "/logout", "/seo-missing", "/assets/missing.js", "/_pages/about.html", "/_spa.html"]:
+            with self.subTest(path=path):
+                _, headers, body = self.get(path)
+                self.assertEqual(self.canonicals(body), [])
+                self.assertEqual(headers.get("X-Robots-Tag"), "noindex")
+
+    def get(self, path, *, proxy=False, tls=False, host=None, headers=None):
+        port = self.https_port if tls else self.http_port if proxy else self.client_port
+        opener = urllib.request.build_opener(
+            NoRedirect(), urllib.request.HTTPSHandler(context=self.tls_context)
+        )
+        request_headers = dict(headers or {})
+        if host:
+            request_headers["Host"] = host
+        request = urllib.request.Request(
+            f"{'https' if tls else 'http'}://127.0.0.1:{port}{path}",
+            headers=request_headers,
+        )
+        try:
+            response = opener.open(request, timeout=5)
+        except urllib.error.HTTPError as error:
+            response = error
+        with response:
+            return response.code, response.headers, response.read()
+
+    def test_public_routes(self):
+        for path in ["/", "/about", "/contacts", "/privacy-policy", "/consent-personal-data"]:
+            for suffix in ["", "/"] if path != "/" else [""]:
+                with self.subTest(path=path + suffix):
+                    status, headers, body = self.get(path + suffix)
+                    self.assertEqual(status, 200)
+                    self.assertIn(b'id="root"', body)
+                    self.assertIsNone(headers.get("X-Robots-Tag"))
+
+    def test_service_routes(self):
+        for path in [
+            "/result/" + "0" * 40, "/result/synthetic-missing", "/test", "/logout",
+            "/admin/translations", "/admin/units", "/admin/ages",
+            "/admin/descriptions", "/admin/analysisPoints", "/admin/analysisType",
+        ]:
+            for suffix in ["", "/"]:
+                with self.subTest(path=path + suffix):
+                    status, headers, body = self.get(path + suffix)
+                    self.assertEqual(status, 200)
+                    self.assertEqual(headers.get("X-Robots-Tag"), "noindex")
+                    self.assertIn(b'id="root"', body)
+
+    def test_unknown_routes_and_files(self):
+        for path in [
+            "/seo-missing", "/about/child", "/admin", "/admin/missing",
+            "/result", "/result/id/child", "/assets/missing.js", "/missing.svg",
+            "/missing.xml", "/_seo-404.html", "/robots.txt/extra",
+        ]:
+            with self.subTest(path=path):
+                status, headers, _ = self.get(path)
+                self.assertEqual(status, 404)
+                self.assertEqual(headers.get("X-Robots-Tag"), "noindex")
+
+    def test_404_renders_spa_error(self):
+        status, _, body = self.get("/seo-missing")
+        self.assertEqual(status, 404)
+        self.assertIn(b'id="root"', body)
+
+    def test_analysis_redirect(self):
+        for path in ["/analysis", "/analysis/"]:
+            status, headers, _ = self.get(path + "?utm_source=seo&probe=1")
+            self.assertEqual(status, 301)
+            self.assertEqual(headers["Location"], "/?utm_source=seo&probe=1")
+
+    def test_robots_and_sitemap(self):
+        status, headers, body = self.get("/robots.txt")
+        self.assertEqual(status, 200)
+        self.assertIn("text/plain", headers["Content-Type"])
+        robots = body.decode()
+        self.assertIn("Sitemap: https://proanalize.ru/sitemap.xml", robots)
+        # noindex HTML must remain crawlable, including to remove old index entries.
+        from urllib.robotparser import RobotFileParser
+        parser = RobotFileParser()
+        parser.parse(robots.splitlines())
+        for agent in ["Googlebot", "YandexBot", "generic"]:
+            for path in ["/", "/assets/probe.js", "/admin/units", "/result/synthetic"]:
+                self.assertTrue(parser.can_fetch(agent, "https://proanalize.ru" + path))
+        status, headers, body = self.get("/sitemap.xml")
+        self.assertEqual(status, 200)
+        self.assertIn("xml", headers["Content-Type"])
+        document = ET.fromstring(body)
+        ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+        self.assertEqual(document.tag, ns + "urlset")
+        urls = [node.text for node in document.iter(ns + "loc")]
+        self.assertEqual(urls, ["https://proanalize.ru/"])
+
+    def test_actual_built_assets(self):
+        _, _, html = self.get("/")
+        assets = re.findall(r'(?:src|href)="(/assets/[^\"]+)"', html.decode())
+        self.assertTrue(assets)
+        for asset in assets:
+            status, headers, body = self.get(asset)
+            self.assertEqual(status, 200)
+            self.assertGreater(len(body), 0)
+            self.assertNotIn("text/html", headers["Content-Type"])
+            self.assertIn("immutable", ",".join(headers.get_all("Cache-Control", [])))
+
+    def test_noindex_on_conditional_response(self):
+        _, headers, _ = self.get("/admin/units")
+        status, headers, _ = self.get("/admin/units", headers={"If-None-Match": headers["ETag"]})
+        self.assertEqual(status, 304)
+        self.assertEqual(headers.get("X-Robots-Tag"), "noindex")
+
+    def test_proxy_host_redirects(self):
+        for host in ["proanalize.ru", "www.proanalize.ru", "unexpected.example"]:
+            status, headers, _ = self.get("/about?probe=1", proxy=True, host=host)
+            self.assertEqual(status, 301)
+            self.assertEqual(headers["Location"], "https://proanalize.ru/about?probe=1")
+        status, headers, _ = self.get("/contacts?probe=1", tls=True, host="www.proanalize.ru")
+        self.assertEqual(status, 301)
+        self.assertEqual(headers["Location"], "https://proanalize.ru/contacts?probe=1")
+
+    def test_proxy_preserves_client_status_headers(self):
+        for path, expected in [("/", 200), ("/result/synthetic", 200), ("/admin/units", 200), ("/seo-missing", 404)]:
+            status, headers, _ = self.get(path, tls=True, host="proanalize.ru")
+            self.assertEqual(status, expected)
+            self.assertEqual(headers.get("X-Robots-Tag"), None if path == "/" else "noindex")
+        status, headers, _ = self.get("/analysis?probe=1", tls=True, host="proanalize.ru")
+        self.assertEqual(status, 301)
+        self.assertEqual(headers["Location"], "/?probe=1")
+
+    def test_proxy_api_remains_separate(self):
+        status, headers, body = self.get("/api/health", tls=True, host="proanalize.ru")
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(body), {"status": "seo-test-backend"})
+        self.assertEqual(headers.get("X-Robots-Tag"), "noindex")
+        status, headers, _ = self.get("/api/missing", tls=True, host="proanalize.ru")
+        self.assertEqual(status, 404)
+        self.assertEqual(headers.get("X-Robots-Tag"), "noindex")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dist", type=Path, required=True)
+    parser.add_argument("--client-image", help="Test a built runtime image instead of mounting dist/config")
+    args = parser.parse_args()
+    if not (args.dist / "index.html").is_file():
+        parser.error("Build the client first")
+    containers = []
+    network = "analysis-seo-test-" + uuid.uuid4().hex[:10]
+    try:
+        with tempfile.TemporaryDirectory(prefix="analysis-seo-") as directory:
+            temp = Path(directory)
+            subprocess.run([
+                "openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "1",
+                "-keyout", str(temp / "privkey.pem"), "-out", str(temp / "fullchain.pem"),
+                "-subj", "/CN=seo-test.local", "-addext", "subjectAltName=IP:127.0.0.1",
+            ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            (temp / "api.conf").write_text('''server {
+                listen 5050;
+                location = /health { default_type application/json; return 200 '{"status":"seo-test-backend"}'; }
+                location / { return 404; }
+            }''')
+            docker("network", "create", network)
+
+            def start(role, alias, mounts, ports=(), image="nginx:alpine"):
+                name = network + "-" + role
+                containers.append(name)
+                command = ["run", "-d", "--name", name, "--network", network, "--network-alias", alias]
+                for source, target in mounts:
+                    command += ["-v", f"{source.resolve()}:{target}:ro"]
+                for port in ports:
+                    command += ["-p", f"127.0.0.1::{port}"]
+                docker(*command, image)
+                return name
+
+            client_mounts = [] if args.client_image else [
+                (args.dist, "/usr/share/nginx/html"),
+                (ROOT / "client/nginx/client.conf", "/etc/nginx/conf.d/default.conf"),
+            ]
+            client = start("client", "client_analysis", client_mounts, (80,), args.client_image or "nginx:alpine")
+            start("api", "server_analysis", [(temp / "api.conf", "/etc/nginx/conf.d/default.conf")])
+            proxy = start("proxy", "seo_proxy", [
+                (ROOT / "nginx/default.conf", "/etc/nginx/conf.d/default.conf"),
+                (temp, "/etc/nginx/ssl"),
+            ], (80, 443))
+            for name in [client, proxy]:
+                docker("exec", name, "nginx", "-t")
+            RoutingChecks.client_port = docker("port", client, "80/tcp").split(":")[-1]
+            RoutingChecks.http_port = docker("port", proxy, "80/tcp").split(":")[-1]
+            RoutingChecks.https_port = docker("port", proxy, "443/tcp").split(":")[-1]
+            RoutingChecks.tls_context = ssl.create_default_context(cafile=str(temp / "fullchain.pem"))
+            # Wait only for the isolated listeners; never probe the real backend.
+            for attempt in range(30):
+                try:
+                    RoutingChecks().get("/", tls=True, host="proanalize.ru")
+                    break
+                except (OSError, urllib.error.URLError):
+                    if attempt == 29:
+                        raise
+                    time.sleep(0.1)
+            result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(RoutingChecks))
+            return 0 if result.wasSuccessful() else 1
+    finally:
+        for name in reversed(containers):
+            subprocess.run(["docker", "rm", "-f", name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["docker", "network", "rm", network], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

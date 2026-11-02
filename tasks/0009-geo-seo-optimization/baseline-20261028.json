@@ -1,0 +1,104 @@
+{
+  "measured_at_utc": "2026-10-28T10:09:46.877938+00:00",
+  "origin": "https://proanalize.ru",
+  "scope": "published_public_pages_only",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "canonical": "https://proanalize.ru/",
+      "h1_count": 1,
+      "prerendered": true,
+      "stylesheet_links": 1,
+      "body_bytes": 62787,
+      "x_robots_tag": null,
+      "http_fetch_ms_not_cwv": 465,
+      "legacy_analytics_present": true
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "canonical": "https://proanalize.ru/about",
+      "h1_count": 1,
+      "prerendered": true,
+      "stylesheet_links": 1,
+      "body_bytes": 20829,
+      "x_robots_tag": null,
+      "http_fetch_ms_not_cwv": 392,
+      "legacy_analytics_present": true
+    },
+    {
+      "path": "/contacts",
+      "status": 200,
+      "canonical": "https://proanalize.ru/contacts",
+      "h1_count": 1,
+      "prerendered": true,
+      "stylesheet_links": 1,
+      "body_bytes": 14319,
+      "x_robots_tag": null,
+      "http_fetch_ms_not_cwv": 365,
+      "legacy_analytics_present": true
+    },
+    {
+      "path": "/privacy-policy",
+      "status": 200,
+      "canonical": "https://proanalize.ru/privacy-policy",
+      "h1_count": 1,
+      "prerendered": true,
+      "stylesheet_links": 1,
+      "body_bytes": 44426,
+      "x_robots_tag": null,
+      "http_fetch_ms_not_cwv": 453,
+      "legacy_analytics_present": true
+    },
+    {
+      "path": "/consent-personal-data",
+      "status": 200,
+      "canonical": "https://proanalize.ru/consent-personal-data",
+      "h1_count": 1,
+      "prerendered": true,
+      "stylesheet_links": 1,
+      "body_bytes": 28560,
+      "x_robots_tag": null,
+      "http_fetch_ms_not_cwv": 416,
+      "legacy_analytics_present": true
+    }
+  ],
+  "sitemap": {
+    "status": 200,
+    "public_urls": [
+      "https://proanalize.ru/"
+    ],
+    "unexpected_url_count": 0
+  },
+  "performance": [
+    {
+      "strategy": "mobile",
+      "status": "unavailable",
+      "http_status": 429
+    },
+    {
+      "strategy": "desktop",
+      "status": "unavailable",
+      "http_status": 429
+    }
+  ],
+  "search_console": {
+    "status": "access_required",
+    "indexed_pages": null,
+    "clicks": null,
+    "impressions": null,
+    "queries": null
+  },
+  "yandex_webmaster": {
+    "status": "access_required",
+    "indexed_pages": null,
+    "clicks": null,
+    "impressions": null,
+    "queries": null
+  },
+  "ai_referrals": {
+    "status": "unavailable_no_safe_collector",
+    "count": null
+  }
+}

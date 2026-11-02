@@ -16,8 +16,7 @@ export const GenderSelector = ({
   setGender,
 }: GenderSelectorProps) => {
   useGenderLoad();
-  const { t } = useTranslation("common");
-  const { t: tEntities } = useTranslation("entities");
+  const { t: tEntities } = useTranslation("entities", { useSuspense: false });
 
   const genderOptions = useAppSelector(selectGenderListForSelect);
 
@@ -25,7 +24,8 @@ export const GenderSelector = ({
     <>
       {type === "radio" ? (
         <RadioGroup<GenderType>
-          label={t("gender")}
+          label="Пол"
+          className="lg:w-[12.5rem] lg:shrink-0"
           name="gender"
           options={genderOptions.map((item) => ({
             ...item,
@@ -36,7 +36,7 @@ export const GenderSelector = ({
         />
       ) : type === "list" ? (
         <SelectUI<GenderType>
-          label={t("gender")}
+          label="Пол"
           name="gender"
           className={"w-[100px] mr-2"}
           onChange={setGender}

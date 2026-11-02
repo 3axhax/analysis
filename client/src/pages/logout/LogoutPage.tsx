@@ -1,11 +1,9 @@
 import { useEffect } from "react";
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useAppDispatch } from "@shared/store/hooks.ts";
 import { logoutUser } from "@entities/user";
 import { useNavigate } from "react-router-dom";
 
 export const LogoutPage = () => {
-  useDocumentTitle("Выйти");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

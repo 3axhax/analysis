@@ -1,0 +1,17 @@
+{
+  "observed_on": "2026-10-28",
+  "source": "Yandex Metrika UI via FSB, aggregate reports only",
+  "site": "proanalize.ru",
+  "period": {"start": "2026-09-29", "end": "2026-10-28", "preset": "month", "end_day_may_be_partial": true, "timezone_setting": "not_inspected"},
+  "attribution": "last_significant_cross_device",
+  "segment": "none_selected",
+  "totals": {"visits": 16, "visitors": 8, "pageviews": 21, "avg_visit_duration_display": "4m24s", "page_depth": 1.31, "bounce_rate_percent": 18.75},
+  "sources": [
+    {"source": "direct_undefined", "visits": 11, "visit_share_percent": 68.75, "pageviews": 16, "visitors": 5, "avg_visit_duration_display": "6m22s", "page_depth": 1.45, "bounce_rate_percent": 0},
+    {"source": "search_yandex", "visits": 3, "visit_share_percent": 18.75, "pageviews": 3, "visitors": 3, "avg_visit_duration_display": "5s", "page_depth": 1, "bounce_rate_percent": 66.67},
+    {"source": "referral_metrika.yandex.ru", "visits": 2, "visit_share_percent": 12.5, "pageviews": 2, "visitors": 1, "avg_visit_duration_display": "8s", "page_depth": 1, "bounce_rate_percent": 50}
+  ],
+  "goals": {"custom_used_display": "0 of 200", "automatic_types_visible": ["email_click", "contact_fields_filled", "form_submission", "contact_fields_submitted"], "achievement_counts": null, "service_funnel_goals_observed": false},
+  "ai_referral_assessment": "No named AI source observed in this report; direct/unknown may include unattributed visits",
+  "limitations": ["Small observed sample", "No inference that all direct visits belong to the owner", "Recorded visits do not equal all real visits", "No causal SEO before/after conclusion", "Individual visitors, replay sessions and personal result URLs were not opened", "Search queries and landing pages not inspected", "No counter settings changed"]
+}

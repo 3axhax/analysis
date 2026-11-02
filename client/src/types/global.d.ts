@@ -5,8 +5,4 @@ declare module "*.json" {
   export default value;
 }
 
-declare global {
-  function initYM(): void;
-}
-
 export {};

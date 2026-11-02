@@ -9,8 +9,8 @@ import { LoginForm } from "@features/loginForm/ui/LoginForm.tsx";
 import { useTranslation } from "react-i18next";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { NavigationUI, NavItem } from "./NavigationUI.tsx";
+import { publicNavigationItems } from "./publicNavigationItems";
 import {
-  Donwload,
   ListsIcon,
   LogoutIcon,
   SettingsIcon,
@@ -24,32 +24,7 @@ export const Navigation = () => {
   const userName = useAppSelector(selectUserName);
   const { openModal } = useInfoModalData();
 
-  const navItems: NavItem[] = [
-    {
-      key: "list",
-      path: "list",
-      label: "Список анализов",
-      iconLink: (
-        <ListsIcon
-          className={
-            "lg:absolute mr-2 lg:mr-0 h-5 w-5 lg:-left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50"
-          }
-        />
-      ),
-    },
-    {
-      key: "analysis",
-      path: "analysis",
-      label: "Загрузить анализы",
-      iconLink: (
-        <Donwload
-          className={
-            "lg:absolute mr-2 lg:mr-0 h-5 w-5 lg:-left-6 transition-[left] duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55) group-hover:left-0 group-hover:text-orange-50"
-          }
-        />
-      ),
-    },
-  ];
+  const navItems: NavItem[] = publicNavigationItems();
 
   if (isUserAdmin) {
     navItems.push({
@@ -94,7 +69,7 @@ export const Navigation = () => {
       label: `${userName}`,
       isDropdown: true,
       iconLink: (
-        <UserIcon className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
+        <UserIcon width={20} height={20} className="h-5 w-5 text-white group-hover:text-orange-300 mr-2" />
       ),
       items: [
         {

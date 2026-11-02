@@ -1,5 +1,4 @@
 import React from "react";
-import useDocumentTitle from "@shared/hooks/useDocumentTitle.tsx";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@shared/store/hooks";
 import { useFullAdminAnalysisTypesLoad } from "@entities/adminAnalysisType/adminAnalysisType.hooks.ts";
@@ -10,7 +9,6 @@ import { AnalysisTypeListPagination } from "@features/Admin/analysisType/analysi
 export const AnalysisTypePage: React.FC = () => {
   const { t } = useTranslation("common");
   const title = t("pageTitle.analysisType");
-  useDocumentTitle(title);
 
   const error = useAppSelector(selectAdminAnalysisTypeError);
 
