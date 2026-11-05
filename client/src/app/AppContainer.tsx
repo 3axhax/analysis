@@ -7,7 +7,9 @@ import { NotFoundPage } from "@pages/404";
 import { TestPage } from "@pages/test";
 import { AboutPage } from "@pages/about";
 import { ContactsPage } from "@pages/contacts";
+import { AnalysisGroupPage } from "@pages/analysis/AnalysisGroupPage";
 import { AnalysisPage } from "@pages/analysis";
+import { ArticlesPage } from "@pages/articles/ArticlesPage";
 import { AnalysisResultPage } from "@pages/analysisResult";
 import { LogoutPage } from "@pages/logout";
 import { checkLSUser, selectIsUserAdmin } from "@entities/user";
@@ -43,6 +45,8 @@ function AppContainer() {
       </ClientOnly>
       <Routes>
         <Route path="/" element={<AnalysisPage />} />
+        <Route path="/analizy/:slug" element={<AnalysisGroupPage />} />
+        <Route path="/articles" element={<ArticlesPage />} />
         <Route path="/test" element={<TestPage />} />
         <Route
           path="/analysis"

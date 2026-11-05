@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "obshchiy-analiz-krovi",
+    "title": "Общий анализ крови с лейкоцитарной формулой и СОЭ",
+    "path": "/analizy/obshchiy-analiz-krovi/"
+  },
+  {
+    "slug": "anemiya-i-zhelezo",
+    "title": "Анемия или избыток железа",
+    "path": "/analizy/anemiya-i-zhelezo/"
+  },
+  {
+    "slug": "pechen",
+    "title": "Оценка работы печени",
+    "path": "/analizy/pechen/"
+  },
+  {
+    "slug": "gormony",
+    "title": "Гормоны щитовидной железы",
+    "path": "/analizy/gormony/"
+  },
+  {
+    "slug": "pochki",
+    "title": "Оценка работы почек",
+    "path": "/analizy/pochki/"
+  },
+  {
+    "slug": "uglevodnyy-obmen",
+    "title": "Углеводный обмен",
+    "path": "/analizy/uglevodnyy-obmen/"
+  },
+  {
+    "slug": "lipidnyy-obmen",
+    "title": "Липидный обмен",
+    "path": "/analizy/lipidnyy-obmen/"
+  },
+  {
+    "slug": "belkovyy-obmen",
+    "title": "Белковый обмен",
+    "path": "/analizy/belkovyy-obmen/"
+  },
+  {
+    "slug": "elektrolity",
+    "title": "Электролиты",
+    "path": "/analizy/elektrolity/"
+  }
+]

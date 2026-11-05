@@ -13,7 +13,7 @@ export function getPageMetadata(pathname) {
   const service = config.servicePages[path];
   const entry = isPublic ? config.pages[path] : service ?? (isResult ? config.result : config.notFound);
   if (!entry) throw new Error('Missing public page metadata');
-  const url = isPublic ? `${canonical.origin}${path}` : null;
+  const url = isPublic ? `${canonical.origin}${path}${path.startsWith('/analizy/') ? '/' : ''}` : null;
   const organizationId = `${canonical.origin}/#organization`;
   const websiteId = `${canonical.origin}/#website`;
   const structuredData = isPublic ? {
@@ -22,6 +22,16 @@ export function getPageMetadata(pathname) {
       { '@type': 'Organization', '@id': organizationId, name: config.name, alternateName: config.alternateName, url: `${canonical.origin}/`, logo: `${canonical.origin}${config.favicon}` },
       { '@type': 'WebSite', '@id': websiteId, name: config.name, url: `${canonical.origin}/`, inLanguage: config.lang, publisher: { '@id': organizationId } },
       { '@type': entry.schemaType, '@id': `${url}#webpage`, url, name: entry.title, description: entry.description, inLanguage: config.lang, isPartOf: { '@id': websiteId } },
+      ...(path === '/' ? [{
+        '@type': 'WebApplication',
+        name: config.name,
+        url,
+        applicationCategory: 'HealthApplication',
+        operatingSystem: 'Web',
+        inLanguage: config.lang,
+        description: 'Онлайн-сервис справочной расшифровки лабораторных анализов',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' },
+      }] : []),
     ],
   } : null;
   const htmlFile = isPublic || service

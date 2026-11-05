@@ -1,4 +1,20 @@
 {
   "origin": "https://proanalize.ru",
-  "paths": ["/", "/about", "/contacts", "/privacy-policy", "/consent-personal-data"]
+  "paths": [
+    "/",
+    "/about",
+    "/contacts",
+    "/articles",
+    "/privacy-policy",
+    "/consent-personal-data",
+    "/analizy/obshchiy-analiz-krovi",
+    "/analizy/anemiya-i-zhelezo",
+    "/analizy/pechen",
+    "/analizy/gormony",
+    "/analizy/pochki",
+    "/analizy/uglevodnyy-obmen",
+    "/analizy/lipidnyy-obmen",
+    "/analizy/belkovyy-obmen",
+    "/analizy/elektrolity"
+  ]
 }

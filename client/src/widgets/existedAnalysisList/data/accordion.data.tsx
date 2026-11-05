@@ -9,7 +9,7 @@ export const accordionItems: AccordionItemType[] = [
         className={"inline size-5 text-cyan-600 mr-2 dark:text-white"}
       />
     ),
-    title: "Общий анализ крови с лейкоцитарной формулой и СОЭ",
+    title: "Общий анализ крови",
     content: (
       <ul>
         <li>Гемоглобин</li>
