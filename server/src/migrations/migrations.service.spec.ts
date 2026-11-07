@@ -61,6 +61,18 @@ describe('startup migration ordering', () => {
       20014,
       expect.any(String),
     );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0016-method45-reference-units',
+      20016,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0017-method45-reference-correction',
+      20017,
+      expect.any(String),
+    );
     expect(calls.indexOf('point-order')).toBeLessThan(calls.indexOf('0002'));
     expect(calls.indexOf('result-age')).toBeLessThan(calls.indexOf('0002'));
   });

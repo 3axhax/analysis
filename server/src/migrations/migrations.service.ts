@@ -12,6 +12,8 @@ import { SOPPI_IRON_SOURCE_SQL } from './soppi-iron-source.sql';
 import { NUTRITIONAL_IRON_SOURCE_SQL } from './nutritional-iron-source.sql';
 import { IRON_SOURCE_THRESHOLDS_SQL } from './iron-source-thresholds.sql';
 import { PMC_CLINICAL_DESCRIPTIONS_SQL } from './pmc-clinical-descriptions.sql';
+import { METHOD45_UNIT_CORRECTION_SQL } from './method45-unit-correction.sql';
+import { METHOD45_REFERENCE_CORRECTION_SQL } from './method45-reference-correction.sql';
 import { MigrationsAnalysisPointUnits } from './migrations.analysisPointUnits';
 
 @Injectable()
@@ -94,6 +96,18 @@ export class MigrationsService implements OnModuleInit {
       '0015-pmc-clinical-descriptions',
       20015,
       PMC_CLINICAL_DESCRIPTIONS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0016-method45-reference-units',
+      20016,
+      METHOD45_UNIT_CORRECTION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0017-method45-reference-correction',
+      20017,
+      METHOD45_REFERENCE_CORRECTION_SQL,
     );
   }
 }

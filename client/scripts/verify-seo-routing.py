@@ -42,6 +42,7 @@ class PageHead(HTMLParser):
         self.title = ""
         self.descriptions = []
         self.icons = []
+        self.canonicals = []
         self.structured_data = []
         self.in_title = False
         self.in_json = False
@@ -58,6 +59,8 @@ class PageHead(HTMLParser):
             self.descriptions.append(values.get("content"))
         if tag == "link" and values.get("rel") == "icon":
             self.icons.append(values.get("href"))
+        if tag == "link" and values.get("rel") == "canonical":
+            self.canonicals.append(values.get("href"))
         if tag == "script" and values.get("type") == "application/ld+json":
             self.in_json = True
             self.json_text = ""
@@ -117,7 +120,7 @@ class RoutingChecks(unittest.TestCase):
 
     def test_public_metadata_and_schema(self):
         titles = {
-            "/": "Расшифровка анализов онлайн — Проанализируй",
+            "/": "Расшифровка анализов крови онлайн бесплатно — Проанализируй",
             "/about": "О проекте — Проанализируй",
             "/contacts": "Контакты — Проанализируй",
             "/privacy-policy": "Политика обработки персональных данных — Проанализируй",
@@ -279,7 +282,17 @@ class RoutingChecks(unittest.TestCase):
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         self.assertEqual(document.tag, ns + "urlset")
         urls = [node.text for node in document.iter(ns + "loc")]
-        self.assertEqual(urls, ["https://proanalize.ru/"])
+        groups = json.loads((ROOT / "client/src/shared/config/analysis-groups.json").read_text())
+        expected = {"https://proanalize.ru/", "https://proanalize.ru/articles"}
+        expected.update("https://proanalize.ru" + group["path"] for group in groups)
+        self.assertEqual(len(urls), len(set(urls)))
+        self.assertEqual(set(urls), expected)
+        for url in urls:
+            path = url.removeprefix("https://proanalize.ru") or "/"
+            status, _, body = self.get(path)
+            self.assertEqual(status, 200, path)
+            head = PageHead(body)
+            self.assertEqual(head.canonicals, [url], path)
 
     def test_actual_built_assets(self):
         _, _, html = self.get("/")
