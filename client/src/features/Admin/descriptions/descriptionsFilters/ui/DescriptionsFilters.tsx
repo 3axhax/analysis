@@ -11,26 +11,34 @@ const initialFormValue = {
   analysisPoint: 0,
 };
 
-export const DescriptionsFilters = () => {
+export const DescriptionsFilters = ({
+  onApply,
+}: {
+  onApply?: (pointId: number) => void;
+}) => {
   const dispatch = useAppDispatch();
 
   const [formValue, setFormValue] = useState(initialFormValue);
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(getDescriptionsListWithTranslate());
+    if (onApply) onApply(formValue.analysisPoint);
+    else dispatch(getDescriptionsListWithTranslate());
   };
 
   const handlerInput = ({ name, value }: { name: string; value: number }) => {
     const filtersValues = { ...formValue, [name]: value };
     setFormValue(filtersValues);
-    dispatch(setFilters(filtersValues));
+    if (!onApply) dispatch(setFilters(filtersValues));
   };
 
   const handlerClear = () => {
     setFormValue(initialFormValue);
-    dispatch(setFilters({}));
-    dispatch(getDescriptionsListWithTranslate());
+    if (onApply) onApply(0);
+    else {
+      dispatch(setFilters({}));
+      dispatch(getDescriptionsListWithTranslate());
+    }
   };
 
   return (
@@ -49,12 +57,17 @@ export const DescriptionsFilters = () => {
           })
         }
       />
-      <button className={"btn p-2"}>
+      <button aria-label="Применить фильтр" className={"btn p-2"}>
         <MagnifyingGlassIcon
           className={"h-5 w-5 text-white group-hover:text-orange-300"}
         />
       </button>
-      <button type={"reset"} className={"btn p-2"} onClick={handlerClear}>
+      <button
+        type={"reset"}
+        aria-label="Сбросить фильтр"
+        className={"btn p-2"}
+        onClick={handlerClear}
+      >
         <XMarkIcon
           className={"h-5 w-5 text-white group-hover:text-orange-300"}
         />

@@ -3,6 +3,17 @@ import { AnalysisPointState } from "@entities/analysisPoint";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const AnalysisPointsReducers = {
+  resetAdminView: (state: WritableDraft<AnalysisPointState>) => {
+    state.adminRequestId = null;
+    state.pending = false;
+    state.currentPage = 1;
+    state.filters = {};
+    state.editAnalysisPointId = 0;
+    state.error = "";
+    state.loaded = false;
+    state.list = [];
+    state.totalRecord = 0;
+  },
   setPending: (
     state: WritableDraft<AnalysisPointState>,
     action: PayloadAction<boolean>,

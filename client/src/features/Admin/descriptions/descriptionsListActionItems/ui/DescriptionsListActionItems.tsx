@@ -1,4 +1,4 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { TableActions } from "@shared/ui";
 import { useAppDispatch } from "@shared/store/hooks.ts";
 import { useInfoModalData } from "@app/providers/infoModalProvider";
 import {
@@ -30,27 +30,5 @@ export const DescriptionsListActionItems = ({ rowId }: { rowId: number }) => {
     });
   };
 
-  return (
-    <>
-      <button
-        type={"button"}
-        className={
-          "text-cyan-600 cursor-pointer ml-[10px] hover:text-cyan-800 flex items-center transition-colors"
-        }
-        onClick={() => handlerEditRecord(rowId)}
-      >
-        <PencilSquareIcon className="w-5 h-5" />
-      </button>
-
-      <button
-        type={"button"}
-        className={
-          "text-red-600 cursor-pointer ml-[10px] hover:text-red-700 flex items-center transition-colors"
-        }
-        onClick={() => handlerDeleteRecord(rowId)}
-      >
-        <TrashIcon className="w-5 h-5" />
-      </button>
-    </>
-  );
+  return <TableActions onEdit={() => handlerEditRecord(rowId)} onDelete={() => handlerDeleteRecord(rowId)} />;
 };

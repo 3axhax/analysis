@@ -31,6 +31,7 @@ export const getDescriptionsListWithTranslate = createAsyncThunk(
       dispatch(setPending(true));
       try {
         const response = await Request.get("/descriptions/withTranslations", {
+          sourceId: "null",
           currentPage: state.descriptions.currentPage,
           recordPerPage: state.descriptions.recordPerPage,
           filters: state.descriptions.filters,
@@ -52,7 +53,7 @@ export const addNewDescription = createAsyncThunk(
     if (!state.descriptions.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/descriptions/add", data);
+        const response = await Request.post("/descriptions/add", { ...data, sourceId: null });
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -70,7 +71,7 @@ export const editDescription = createAsyncThunk(
     if (!state.descriptions.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/descriptions/edit", data);
+        const response = await Request.post("/descriptions/edit", { ...data, sourceId: null });
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);
@@ -88,7 +89,7 @@ export const deleteDescription = createAsyncThunk(
     if (!state.descriptions.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/descriptions/delete", { id });
+        const response = await Request.post("/descriptions/delete", { id, sourceId: null });
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);

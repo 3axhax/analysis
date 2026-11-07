@@ -2,8 +2,9 @@ export interface AnalysisPointLimit {
   age: string;
   unit: string;
   gender: string;
-  minValue: number;
-  maxValue: number;
+  minValue: number | null;
+  maxValue: number | null;
+  lowInclusive?: boolean;
 }
 
 export interface AnalysisPointResponse {

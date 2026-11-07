@@ -4,8 +4,9 @@ export interface AnalysisPointLimit {
   age: string[];
   unit: string;
   gender: GenderType[];
-  minValue: number;
-  maxValue: number;
+  minValue: number | string | null;
+  maxValue: number | string | null;
+  lowInclusive?: boolean;
   skipGender?: boolean;
   skipAge?: boolean;
 }
@@ -46,4 +47,5 @@ export interface AnalysisPointState {
   recordPerPage: number;
   filters: Record<string, string | number>;
   editAnalysisPointId: number;
+  adminRequestId: string | null;
 }

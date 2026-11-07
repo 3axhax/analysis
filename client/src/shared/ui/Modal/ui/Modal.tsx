@@ -14,6 +14,7 @@ interface ModalProps {
   icon?: JSX.Element;
   body?: JSX.Element | string;
   className?: string;
+  layerClassName?: string;
   hasButtons?: boolean;
   buttons?: {
     onClick?: () => void;
@@ -29,6 +30,7 @@ export const Modal = ({
   icon,
   body,
   className,
+  layerClassName = "z-10",
   hasButtons = true,
   buttons,
 }: ModalProps) => {
@@ -39,7 +41,7 @@ export const Modal = ({
   };
 
   return (
-    <Dialog open={open} onClose={setOpen} className={`relative z-10`}>
+    <Dialog open={open} onClose={setOpen} className={`relative ${layerClassName}`}>
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-800/75  backdrop-filter backdrop-blur-[1px] transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"

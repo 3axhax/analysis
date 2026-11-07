@@ -1,5 +1,6 @@
 import { Transform, TransformFnParams } from 'class-transformer';
 import {
+  Equals,
   IsArray,
   IsNumber,
   IsObject,
@@ -31,6 +32,10 @@ function isValidTranslationsFilters(
 }
 
 export class GetAnalysisResultDescriptionsListQueryDto {
+  @Transform(({ value }: TransformFnParams) => value === 'null' ? null : value)
+  @Equals(null)
+  sourceId: null;
+
   @Transform(({ value }: TransformFnParams) => {
     const num = value ? parseInt(value as string, 10) : 1;
     return isNaN(num) || num < 1 ? 1 : num;
@@ -66,6 +71,10 @@ export class GetAnalysisResultDescriptionsListQueryDto {
 }
 
 export class AddNewAnalysisResultDescriptionsQueryDto {
+  @Transform(({ value }: TransformFnParams) => value === 'null' ? null : value)
+  @Equals(null)
+  sourceId: null;
+
   @IsString()
   description_ru: string;
 

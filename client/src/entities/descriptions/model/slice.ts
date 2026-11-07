@@ -19,12 +19,24 @@ const initialState: DescriptionsState = {
   recordPerPage: 20,
   filters: {},
   editDescriptionId: 0,
+  adminRequestId: null,
 };
 
 export const descriptionsSlice = createSlice({
   name: "descriptions",
   initialState,
   reducers: {
+    resetAdminView: (state: WritableDraft<DescriptionsState>) => {
+      state.adminRequestId = null;
+      state.pending = false;
+      state.currentPage = 1;
+      state.filters = {};
+      state.editDescriptionId = 0;
+      state.error = "";
+      state.loaded = false;
+      state.list = [];
+      state.totalRecord = 0;
+    },
     setPending: (
       state: WritableDraft<DescriptionsState>,
       action: PayloadAction<boolean>,
@@ -74,6 +86,9 @@ export const descriptionsSlice = createSlice({
           state.pending = false;
         },
       )
+      .addCase(getDescriptionsListWithTranslate.pending, (state, action) => {
+        if (!state.pending) state.adminRequestId = action.meta.requestId;
+      })
       .addCase(
         getDescriptionsListWithTranslate.fulfilled,
         (
@@ -82,8 +97,10 @@ export const descriptionsSlice = createSlice({
             totalRecord: number;
             currentPage: number;
             rows: DescriptionsListItem[];
-          }>,
+          }, string, { requestId: string }>,
         ) => {
+          if (state.adminRequestId !== action.meta.requestId) return;
+          state.adminRequestId = null;
           if (action.payload) {
             state.list = action.payload.rows;
             state.totalRecord = action.payload.totalRecord;
@@ -112,6 +129,7 @@ export const descriptionsSlice = createSlice({
 });
 
 export const {
+  resetAdminView,
   setPending,
   setCurrentPage,
   resetError,

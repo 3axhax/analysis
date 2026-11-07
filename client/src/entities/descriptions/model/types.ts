@@ -20,6 +20,7 @@ export interface DescriptionsState {
   recordPerPage: number;
   filters: Record<string, string | number>;
   editDescriptionId: number;
+  adminRequestId: string | null;
 }
 
 export interface DescriptionGreatItem {
