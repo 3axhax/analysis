@@ -12,6 +12,7 @@ import { Age } from '../ages/ages.model';
 import { Gender } from '../gender/gender.model';
 
 export interface AnalysisPointMaxValueCreationAttrs {
+  sourceId?: number | null;
   id?: number;
   pointId: number;
   ageId: number;
@@ -63,6 +64,9 @@ export class AnalysisPointMaxValue extends Model<
     allowNull: false,
   })
   declare unitId: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  declare sourceId: number | null;
 
   @Column({
     type: DataType.FLOAT,

@@ -10,3 +10,5 @@ export { Modal } from "./Modal";
 export { Pagination } from "./Pagination";
 export { RadioGroup } from "./RadioGroup";
 export type { RadioOption } from "./RadioGroup";
+
+export { InfoPopover } from "./InfoPopover/InfoPopover";

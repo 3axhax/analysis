@@ -12,6 +12,8 @@ import { Age } from '../ages/ages.model';
 import { Gender } from '../gender/gender.model';
 
 export interface AnalysisPointMinValueCreationAttrs {
+  sourceId?: number | null;
+  lowInclusive?: boolean;
   id?: number;
   pointId: number;
   ageId: number;
@@ -63,6 +65,12 @@ export class AnalysisPointMinValue extends Model<
     allowNull: false,
   })
   declare unitId: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  declare sourceId: number | null;
+
+  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
+  declare lowInclusive: boolean;
 
   @Column({
     type: DataType.FLOAT,

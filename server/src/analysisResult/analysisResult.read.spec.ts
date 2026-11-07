@@ -68,7 +68,7 @@ describe('legacy result read unit normalization (synthetic)', () => {
       },
       {},
       { getDescriptionsByConditions: descriptions },
-      { normalize },
+      { normalize, sourceCatalog: jest.fn().mockResolvedValue([]) },
     ] as unknown as ConstructorParameters<typeof AnalysisResultService>;
     return {
       service: new AnalysisResultService(...args),
@@ -168,5 +168,92 @@ describe('legacy result read unit normalization (synthetic)', () => {
       interpretationWarning: 'no_convertible_reference_range',
     });
     expect(s.descriptions).toHaveBeenCalledWith({ 10: StatusValue.NORMAL });
+  });
+});
+
+describe('source specific result descriptions (synthetic)', () => {
+  it('keeps source statuses and inherited metadata separate from common results', async () => {
+    const point = {
+      pointId: 10,
+      unitId: 2,
+      value: 4,
+      sourceValue: '4',
+      sourceUnitId: 2,
+      sourceUnitText: null,
+      pointUnit: { id: 2, name: 'g/l' },
+    };
+    const norm = {
+      sourceValue: '4',
+      sourceUnitId: 2,
+      calculationValue: '4',
+      calculationUnitId: 2,
+      conversionRuleId: null,
+      conversionRuleVersion: null,
+      appliedCoefficient: '1',
+      calculationMin: '3',
+      calculationMax: '5',
+      displayMin: '3',
+      displayMax: '5',
+      status: StatusValue.NORMAL,
+    };
+    const sourceDescription = {
+      id: 7,
+      description_ru: 'synthetic',
+      sourceId: 2,
+      analysisResultDescriptionConditions: [],
+    };
+    const descriptions = jest.fn(
+      async (_conditions, sourceId?: number | null) =>
+        sourceId === 2 ? [sourceDescription] : [],
+    );
+    const normalization = {
+      normalize: jest.fn().mockResolvedValue(norm),
+      sourceCatalog: jest.fn().mockResolvedValue([
+        { id: 1, parentId: null, name: 'root', metadata: {} },
+        { id: 2, parentId: 1, name: 'document', metadata: {} },
+      ]),
+      normalizeForSource: jest
+        .fn()
+        .mockResolvedValue({ reference: norm, inherited: true }),
+    };
+    const args = [
+      {
+        findOne: jest.fn().mockResolvedValue({
+          get: () => ({
+            ageId: 1,
+            genderId: 1,
+            analysisResultPointData: [point],
+          }),
+        }),
+      },
+      {},
+      {},
+      {},
+      { getAll: jest.fn().mockResolvedValue([{ id: 2, name: 'g/l' }]) },
+      {},
+      {
+        getDescriptionsByConditions: descriptions,
+        getAllDescription: jest.fn().mockResolvedValue([
+          {
+            get: () => ({
+              sourceId: 2,
+              analysisResultDescriptionConditions: [{ pointId: 10 }],
+            }),
+          },
+        ]),
+      },
+      normalization,
+    ] as unknown as ConstructorParameters<typeof AnalysisResultService>;
+    const result = await new AnalysisResultService(...args).getResultByResultId(
+      { resultId: 'synthetic' },
+    );
+    expect(result.sourceDescriptions).toMatchObject([
+      {
+        source: { id: 2, rootId: 1 },
+        inheritedPointIds: [10],
+        descriptions: [{ id: 7 }],
+      },
+    ]);
+    expect(descriptions).toHaveBeenCalledWith({ 10: StatusValue.NORMAL }, 2);
   });
 });

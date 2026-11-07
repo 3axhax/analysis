@@ -5,6 +5,7 @@ export interface PreparePointData {
   value: number;
   units: string;
   sourceUnitText?: string;
+  unitWasDefaulted?: boolean;
 }
 
 export enum StatusValue {
@@ -64,9 +65,16 @@ interface Result {
   analysisResultPointData: PointData[];
 }
 
+export interface SourceDescriptionGroup {
+  source: { id: number; name: string; metadata: Record<string, unknown>; rootId: number; rootName: string };
+  descriptions: ResultDescription[];
+  inheritedPointIds: number[];
+}
+
 export interface AnalysisResult {
   resultId: string;
   descriptions: ResultDescription[];
+  sourceDescriptions?: SourceDescriptionGroup[];
   result: Result;
 }
 

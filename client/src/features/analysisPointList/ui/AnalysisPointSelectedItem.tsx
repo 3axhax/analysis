@@ -43,8 +43,25 @@ export const AnalysisPointSelectedItem = ({
   }, [pointData, pointValue]);
 
   useEffect(() => {
-    if (pointData) setUnits(pointData.units);
-  }, [pointData]);
+    if (!analysisPoint) return;
+    const defaultUnit = analysisPoint.units[0] ?? "";
+    if (pointData?.units) {
+      setUnits(pointData.units);
+    } else if (pointData && defaultUnit) {
+      setUnits(defaultUnit);
+      dispatch(
+        addPointData({
+          ...pointData,
+          units: defaultUnit,
+          unitWasDefaulted: true,
+        }),
+      );
+    } else {
+      setUnits((current) =>
+        analysisPoint.units.includes(current) ? current : defaultUnit,
+      );
+    }
+  }, [analysisPoint, pointData, dispatch]);
 
   const handlerClear = () => {
     dispatch(removeSelectedPoint(pointId));
@@ -70,7 +87,8 @@ export const AnalysisPointSelectedItem = ({
         addPointData({
           name: analysisPoint.name,
           value: !isNaN(value) ? value : 0,
-          units,
+          units: units || analysisPoint.units[0] || "",
+          unitWasDefaulted: pointData?.unitWasDefaulted,
         }),
       );
     }
@@ -87,6 +105,7 @@ export const AnalysisPointSelectedItem = ({
           name: analysisPoint.name,
           value: parseFloat(pointValue),
           units: value,
+          unitWasDefaulted: false,
         }),
       );
     }
@@ -138,24 +157,12 @@ export const AnalysisPointSelectedItem = ({
               />
             ) : analysisPoint.units.length === 1 ? (
               <div className="mt-2 min-w-0 break-words lg:mt-0 lg:ml-3 lg:w-40 lg:shrink-0">
-                {units === analysisPoint.units[0] ? (
-                  <span>{unitLabel(units, pointData?.sourceUnitText)}</span>
-                ) : (
-                  <div>
-                    <span className="text-gray-500">
-                      Единица не определена.{" "}
-                    </span>
-                    <button
-                      type="button"
-                      className="text-green-800 underline"
-                      onClick={() =>
-                        handlerOnUnitsSelect(analysisPoint.units[0])
-                      }
-                    >
-                      Выбрать {unitLabel(analysisPoint.units[0])}
-                    </button>
-                  </div>
-                )}
+                <span>
+                  {unitLabel(
+                    units || analysisPoint.units[0],
+                    pointData?.sourceUnitText,
+                  )}
+                </span>
               </div>
             ) : null}
             <button
@@ -168,6 +175,11 @@ export const AnalysisPointSelectedItem = ({
               <TrashIcon className="w-5 h-5" />
             </button>
           </div>
+          {pointData?.unitWasDefaulted && (
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-300">
+              Единица выбрана автоматически. Проверьте её по бланку анализа.
+            </p>
+          )}
         </>
       ) : null}
     </>

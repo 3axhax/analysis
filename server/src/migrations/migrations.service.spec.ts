@@ -1,4 +1,8 @@
 import { MigrationsService } from './migrations.service';
+import { runRecordedMigration } from './run-recorded-migration';
+jest.mock('./run-recorded-migration', () => ({
+  runRecordedMigration: jest.fn().mockResolvedValue(undefined),
+}));
 
 describe('startup migration ordering', () => {
   it('runs dependent unit/result migrations after the existing batch in order', async () => {
@@ -9,7 +13,7 @@ describe('startup migration ordering', () => {
         calls.push(name);
       });
     const args = [
-      { query: action('journal') },
+      { query: action('journal'), addModels: jest.fn() },
       {
         addTranslationRuENParsingColumn: action('point-columns'),
         addPointHintRuENColumn: action('point-hints'),
@@ -27,6 +31,36 @@ describe('startup migration ordering', () => {
     ] as unknown as ConstructorParameters<typeof MigrationsService>;
     await new MigrationsService(...args).onModuleInit();
     expect(calls.slice(-3)).toEqual(['0002', '0003', '0006']);
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0010-medical-sources',
+      20010,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0011-medical-source-parent-id',
+      20011,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0012-soppi-iron-source',
+      20012,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0013-nutritional-iron-source',
+      20013,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0014-iron-source-thresholds',
+      20014,
+      expect.any(String),
+    );
     expect(calls.indexOf('point-order')).toBeLessThan(calls.indexOf('0002'));
     expect(calls.indexOf('result-age')).toBeLessThan(calls.indexOf('0002'));
   });

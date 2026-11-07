@@ -17,7 +17,14 @@ export const sendAnalysisData = createAsyncThunk(
         const response = await Request.post("/result/save", {
           gender,
           ageInDays,
-          pointData: Object.values(pointData),
+          pointData: Object.values(pointData).map(
+            ({ name, value, units, sourceUnitText }) => ({
+              name,
+              value,
+              units,
+              ...(sourceUnitText === undefined ? {} : { sourceUnitText }),
+            }),
+          ),
         });
         dispatch(setPending(false));
         return response.data;

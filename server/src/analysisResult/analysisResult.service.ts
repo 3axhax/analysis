@@ -32,6 +32,7 @@ import {
   isSourceOnlyMeasurement,
 } from '../unitConversion/saved-measurement';
 import { UnitAliasIndex } from '../unitConversion/unit-alias-index';
+import { sourceAppliesToAge } from './source-age-scope';
 
 export interface SaveResultResponse {
   resultId?: string;
@@ -42,6 +43,17 @@ export interface GetResultResponse {
   error?: string;
   result?: ResultView | null;
   descriptions?: AnalysisResultDescription[];
+  sourceDescriptions?: Array<{
+    source: {
+      id: number;
+      name: string;
+      metadata: Record<string, unknown>;
+      rootId: number;
+      rootName: string;
+    };
+    descriptions: AnalysisResultDescription[];
+    inheritedPointIds: number[];
+  }>;
 }
 interface ResultPointView
   extends Omit<
@@ -59,8 +71,8 @@ interface ResultPointView
     coefficient: string;
     ruleId: number | null;
     ruleVersion: number | null;
-    minValue: string;
-    maxValue: string;
+    minValue: string | null;
+    maxValue: string | null;
   };
   interpretationWarning?: string | null;
 }
@@ -314,6 +326,91 @@ export class AnalysisResultService {
       await this.analysisResultDescriptionService.getDescriptionsByConditions(
         conditions,
       );
-    return { resultId: result.resultId, result: plain, descriptions };
+    const sourceDescriptions: NonNullable<
+      GetResultResponse['sourceDescriptions']
+    > = [];
+    const sources = await this.unitConversionService.sourceCatalog();
+    const allDescriptions = sources.length
+      ? await this.analysisResultDescriptionService.getAllDescription()
+      : [];
+    const byId = new Map(sources.map((source) => [source.id, source]));
+    for (const source of sources.filter((s) => s.parentId !== null)) {
+      if (!sourceAppliesToAge(source.metadata, plain.ageId)) continue;
+      const neededPointIds = new Set(
+        allDescriptions.flatMap((description) => {
+          const plainDescription = description.get({ plain: true });
+          return plainDescription.sourceId === source.id
+            ? plainDescription.analysisResultDescriptionConditions.map(
+                (condition) => condition.pointId,
+              )
+            : [];
+        }),
+      );
+      if (!neededPointIds.size) continue;
+      let root = source;
+      const visited = new Set<number>();
+      while (root.parentId !== null) {
+        if (visited.has(root.id) || !byId.has(root.parentId))
+          throw new Error('invalid_source_hierarchy');
+        visited.add(root.id);
+        root = byId.get(root.parentId)!;
+      }
+      const perPoint = new Map<number, Set<StatusValue | null>>();
+      const inheritedPointIds: number[] = [];
+      for (const data of plain.analysisResultPointData.filter((point) =>
+        neededPointIds.has(point.pointId),
+      )) {
+        let status: StatusValue | null = null;
+        try {
+          const normalized =
+            await this.unitConversionService.normalizeForSource(
+              {
+                pointId: data.pointId,
+                ageId: plain.ageId,
+                genderId: plain.genderId,
+                sourceUnitId: data.sourceUnitId ?? data.unitId,
+                sourceValue: data.sourceValue ?? data.value,
+              },
+              source.id,
+            );
+          status = normalized.reference.status;
+          if (normalized.inherited && !inheritedPointIds.includes(data.pointId))
+            inheritedPointIds.push(data.pointId);
+        } catch (error) {
+          if (!(error instanceof UnitNormalizationError)) throw error;
+        }
+        const group =
+          perPoint.get(data.pointId) ?? new Set<StatusValue | null>();
+        group.add(status);
+        perPoint.set(data.pointId, group);
+      }
+      const sourceConditions: Record<number, StatusValue> = {};
+      for (const [id, group] of perPoint)
+        if (group.size === 1 && !group.has(null))
+          sourceConditions[id] = [...group][0]!;
+      const sourceMatches =
+        await this.analysisResultDescriptionService.getDescriptionsByConditions(
+          sourceConditions,
+          source.id,
+        );
+      if (sourceMatches.length)
+        sourceDescriptions.push({
+          source: {
+            id: source.id,
+            name: source.name,
+            metadata: source.metadata,
+            rootId: root.id,
+            rootName: root.name,
+          },
+          descriptions: sourceMatches,
+          inheritedPointIds,
+        });
+    }
+    return {
+      resultId: result.resultId,
+      result: plain,
+      descriptions,
+      sourceDescriptions,
+    };
   };
 }

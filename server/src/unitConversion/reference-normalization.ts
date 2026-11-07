@@ -14,6 +14,7 @@ export interface ReferenceBound {
   genderId: number;
   unitId: number;
   value: number | string;
+  lowInclusive?: boolean;
 }
 export interface UnitConversionRule {
   id: number;

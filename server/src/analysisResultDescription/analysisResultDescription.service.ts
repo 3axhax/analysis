@@ -62,11 +62,15 @@ export class AnalysisResultDescriptionService {
     return await this.getDescriptionsByConditions(pointStatus);
   };
 
-  getDescriptionsByConditions = async (conditions: DescriptionConditions) => {
+  getDescriptionsByConditions = async (
+    conditions: DescriptionConditions,
+    sourceId: number | null = null,
+  ) => {
     const descriptions = await this.getAllDescription();
 
     return descriptions.filter((description) => {
       const plainDescription = description.get({ plain: true });
+      if ((plainDescription.sourceId ?? null) !== sourceId) return false;
       if (plainDescription.analysisResultDescriptionConditions.length === 0)
         return false;
       return !plainDescription.analysisResultDescriptionConditions.find(

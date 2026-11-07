@@ -2,6 +2,7 @@ import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { AnalysisResultDescriptionCondition } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
 
 export interface AnalysisResultDescriptionAttrs {
+  sourceId?: number | null;
   id?: number;
   description_ru: string;
 }
@@ -19,6 +20,9 @@ export class AnalysisResultDescription extends Model<
     primaryKey: true,
   })
   declare id: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  declare sourceId: number | null;
 
   @Column({
     type: DataType.TEXT,
