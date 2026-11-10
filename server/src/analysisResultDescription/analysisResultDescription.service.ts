@@ -103,25 +103,18 @@ export class AnalysisResultDescriptionService {
         include: [AnalysisPoint],
       },
       distinct: true,
-      attributes: ['id', 'description_ru'],
+      attributes: ['id', 'description_ru', 'sourceId'],
     };
-    if (
-      parameters.filters?.analysisPoint &&
-      parameters.filters.analysisPoint > 0
-    ) {
-      const sequelize = AnalysisResultDescription.sequelize;
-      if (sequelize) {
-        condition['where'] = {
-          id: {
-            [Op.in]: sequelize.literal(`
-            (SELECT DISTINCT "descriptionId" 
-             FROM "analysisResultDescriptionCondition" 
-             WHERE "pointId" = ${parameters.filters.analysisPoint})
-          `),
-          },
-        };
-      }
+    const pointFilter = Number(parameters.filters?.analysisPoint);
+    if (parameters.filters?.analysisPoint && (!Number.isSafeInteger(pointFilter) || pointFilter < 1)) {
+      throw new HttpException('Invalid analysis point filter', HttpStatus.BAD_REQUEST);
     }
+    const where: Record<string, unknown> = { sourceId: null };
+    if (pointFilter > 0) {
+      const matches = await AnalysisResultDescriptionCondition.findAll({ where: { pointId: pointFilter }, attributes: ['descriptionId'] });
+      where.id = { [Op.in]: matches.map((match) => match.descriptionId) };
+    }
+    condition['where'] = where;
     const { count, rows } =
       await this.analysisResultDescriptionRepository.findAndCountAll(condition);
 
@@ -170,7 +163,7 @@ export class AnalysisResultDescriptionService {
   ) => {
     const existDescription =
       await this.analysisResultDescriptionRepository.findOne({
-        where: { id: parameters.id },
+        where: { id: parameters.id, sourceId: null },
         include: {
           model: AnalysisResultDescriptionCondition,
           include: [AnalysisPoint],
@@ -209,7 +202,7 @@ export class AnalysisResultDescriptionService {
   deleteAnalysisResultDescriptions = async (descriptionId: number) => {
     const existDescription =
       await this.analysisResultDescriptionRepository.findOne({
-        where: { id: descriptionId },
+        where: { id: descriptionId, sourceId: null },
         include: {
           model: AnalysisResultDescriptionCondition,
           include: [AnalysisPoint],

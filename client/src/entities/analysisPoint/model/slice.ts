@@ -19,6 +19,7 @@ const initialState: AnalysisPointState = {
   recordPerPage: 20,
   filters: {},
   editAnalysisPointId: 0,
+  adminRequestId: null,
 };
 
 export const analysisPointSlice = createSlice({
@@ -40,6 +41,9 @@ export const analysisPointSlice = createSlice({
           state.pending = false;
         },
       )
+      .addCase(getFullAnalysisPointList.pending, (state, action) => {
+        if (!state.pending) state.adminRequestId = action.meta.requestId;
+      })
       .addCase(
         getFullAnalysisPointList.fulfilled,
         (
@@ -48,11 +52,14 @@ export const analysisPointSlice = createSlice({
             totalRecord: number;
             currentPage: number;
             rows: AnalysisPointListItem[];
-          }>,
+          }, string, { requestId: string }>,
         ) => {
+          if (state.adminRequestId !== action.meta.requestId) return;
+          state.adminRequestId = null;
           if (action.payload) {
             state.list = action.payload.rows;
             state.totalRecord = action.payload.totalRecord;
+            state.loaded = false;
           }
           state.pending = false;
         },
@@ -77,6 +84,7 @@ export const analysisPointSlice = createSlice({
 });
 
 export const {
+  resetAdminView,
   setPending,
   setLoaded,
   setCurrentPage,

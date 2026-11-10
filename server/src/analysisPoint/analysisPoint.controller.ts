@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { AnalysisPointService } from './analysisPoint.service';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
@@ -50,7 +50,8 @@ export class AnalysisPointController {
   @Post('delete')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  async deleteAnalysisPointUnits(@Body('id') id: number): Promise<boolean> {
-    return this.analysisPointService.deleteAnalysisPoint(id);
+  async deleteAnalysisPointUnits(@Body() body: { id: number; sourceId: null }): Promise<boolean> {
+    if (body.sourceId !== null || !Number.isSafeInteger(body.id) || body.id < 1) throw new BadRequestException('Explicit common source and valid id required');
+    return this.analysisPointService.deleteAnalysisPoint(body.id);
   }
 }

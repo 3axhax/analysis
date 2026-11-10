@@ -22,8 +22,8 @@ export const AnalysisPointDataLimitsEditableList = ({
         age: [],
         unit: "",
         gender: ["m"],
-        minValue: 0,
-        maxValue: 0,
+        minValue: null,
+        maxValue: null,
       },
     ]);
   };

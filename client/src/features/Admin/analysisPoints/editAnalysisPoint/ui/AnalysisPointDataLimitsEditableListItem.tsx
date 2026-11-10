@@ -41,18 +41,18 @@ export const AnalysisPointDataLimitsEditableListItem = React.memo(
         <InputWithLabel
           label={"Мин."}
           name={"minValue"}
-          placeholder={"0"}
+          placeholder={"Нет границы"}
           onChange={(value) => editItemHandler({ name: "minValue", value })}
           className={"justify-between mr-2"}
-          value={limit.minValue}
+          value={limit.minValue ?? ""}
         />
         <InputWithLabel
           label={"Макс."}
           name={"maxValue"}
-          placeholder={"0"}
+          placeholder={"Нет границы"}
           onChange={(value) => editItemHandler({ name: "maxValue", value })}
           className={"justify-between mr-2"}
-          value={limit.maxValue}
+          value={limit.maxValue ?? ""}
         />
         <UnitSelector
           unit={limit.unit}

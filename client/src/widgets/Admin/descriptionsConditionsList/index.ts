@@ -1,1 +1,1 @@
-export { DescriptionsConditionsList } from "./ui/DescriptionsConditionsList";
+export { DescriptionsConditionsList, ConditionsList } from "./ui/DescriptionsConditionsList";

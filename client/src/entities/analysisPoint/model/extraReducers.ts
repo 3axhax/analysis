@@ -37,6 +37,7 @@ export const getFullAnalysisPointList = createAsyncThunk(
       dispatch(setPending(true));
       try {
         const response = await Request.get("/analysisPoint/getFullList", {
+          sourceId: "null",
           currentPage: state.analysisPoint.currentPage,
           recordPerPage: state.analysisPoint.recordPerPage,
           filters: state.analysisPoint.filters,
@@ -60,7 +61,7 @@ export const addNewAnalysisPoint = createAsyncThunk(
       try {
         const response = await Request.post(
           "/analysisPoint/add",
-          formatAnalysisPointLimits(data),
+          { ...formatAnalysisPointLimits(data), sourceId: null },
         );
         return response.data;
       } catch (e) {
@@ -82,7 +83,7 @@ export const editAnalysisPoint = createAsyncThunk(
       try {
         const response = await Request.post(
           "/analysisPoint/edit",
-          formatAnalysisPointLimits(data),
+          { ...formatAnalysisPointLimits(data), sourceId: null },
         );
         return response.data;
       } catch (e) {
@@ -102,7 +103,7 @@ export const deleteAnalysisPoint = createAsyncThunk(
     if (!state.ages.pending) {
       dispatch(setPending(true));
       try {
-        const response = await Request.post("/analysisPoint/delete", { id });
+        const response = await Request.post("/analysisPoint/delete", { id, sourceId: null });
         return response.data;
       } catch (e) {
         HandlerAxiosError(e);

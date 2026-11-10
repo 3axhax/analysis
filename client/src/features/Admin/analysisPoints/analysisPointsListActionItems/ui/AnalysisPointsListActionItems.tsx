@@ -1,4 +1,4 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { TableActions } from "@shared/ui";
 import {
   deleteAnalysisPoint,
   getFullAnalysisPointList,
@@ -36,26 +36,5 @@ export const AnalysisPointsListActionItems = ({
     });
   };
 
-  return (
-    <>
-      <button
-        type={"button"}
-        onClick={() => handlerEditRecord(rowId)}
-        className={
-          "w-6 h-6 text-cyan-600 cursor-pointer ml-[10px] hover:text-cyan-800 transition-colors"
-        }
-      >
-        <PencilSquareIcon className="w-5 h-5" />
-      </button>
-      <button
-        type={"button"}
-        onClick={() => handlerDeleteRecord(rowId)}
-        className={
-          "w-6 h-6 text-red-600 cursor-pointer ml-[10px] hover:text-red-700 transition-colors"
-        }
-      >
-        <TrashIcon className="w-5 h-5" />
-      </button>
-    </>
-  );
+  return <TableActions onEdit={() => handlerEditRecord(rowId)} onDelete={() => handlerDeleteRecord(rowId)} />;
 };

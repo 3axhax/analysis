@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { SourceContext } from "@features/Admin/sourceAdmin/SourceAdmin";
+import React, { useEffect } from "react";
 import {
   selectAnalysisPointsEditAnalysisPointId,
   selectAnalysisPointsError,
@@ -9,17 +9,12 @@ import { AnalysisPointsList } from "@widgets/Admin/analysisPointsList";
 import { AnalysisPointsListPagination } from "@features/Admin/analysisPoints/analysisPointsListPagination";
 import { useAppSelector } from "@shared/store/hooks";
 import { EditAnalysisPointModal } from "@features/Admin/analysisPoints/editAnalysisPoint";
-import { AddButton } from "@shared/ui";
-import { AnalysisPointsFilters } from "@features/Admin/analysisPoints/analysisPointsFilters";
 
-export const AnalysisPointsPage: React.FC = () => {
-  const { t } = useTranslation("common");
-  const { t: tFeatures } = useTranslation("features");
-  const title = t("pageTitle.analysisPoints");
-
+const CommonAnalysisPointsPage: React.FC<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}> = ({ open, setOpen }) => {
   const error = useAppSelector(selectAnalysisPointsError);
-
-  const [openModal, setOpenModal] = useState<boolean>(false);
 
   useFullAnalysisPointsLoad();
 
@@ -29,36 +24,26 @@ export const AnalysisPointsPage: React.FC = () => {
 
   useEffect(() => {
     if (editAnalysisPointId && editAnalysisPointId > 0) {
-      setOpenModal(true);
+      setOpen(true);
     }
-  }, [editAnalysisPointId]);
+  }, [editAnalysisPointId, setOpen]);
 
   return (
     <>
-      <div className={"relative"}>
-        <h1 className={"p-4 text-3xl"}>{title}</h1>
-        <AddButton
-          className={"absolute right-[5%] top-[calc(50%-20px)]"}
-          title={tFeatures("editDialog.add")}
-          onClick={() => {
-            setOpenModal(true);
-          }}
-        />
-      </div>
       {error !== "" ? (
         <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>
       ) : null}
-      <AnalysisPointsFilters />
       <AnalysisPointsList />
       <AnalysisPointsListPagination />
-      <AddButton
-        className={"my-4 xl:sticky xl:bottom-5 xl:mr-[5%] xl:ml-auto flex"}
-        title={tFeatures("editDialog.add")}
-        onClick={() => {
-          setOpenModal(true);
-        }}
-      />
-      <EditAnalysisPointModal open={openModal} setOpen={setOpenModal} />
+      <EditAnalysisPointModal open={open} setOpen={setOpen} />
     </>
   );
 };
+
+export const AnalysisPointsPage: React.FC = () => (
+  <SourceContext kind="points">
+    {(open, setOpen) => (
+      <CommonAnalysisPointsPage open={open} setOpen={setOpen} />
+    )}
+  </SourceContext>
+);

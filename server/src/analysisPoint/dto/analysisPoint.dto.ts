@@ -1,5 +1,7 @@
+import { BadRequestException } from '@nestjs/common';
 import { Transform, TransformFnParams } from 'class-transformer';
 import {
+  Equals,
   IsArray,
   IsNumber,
   IsObject,
@@ -30,6 +32,10 @@ function isValidTranslationsFilters(obj: unknown): obj is AnalysisPointFilters {
 }
 
 export class GetAnalysisPointListQueryDto {
+  @Transform(({ value }: TransformFnParams) => value === 'null' ? null : value)
+  @Equals(null)
+  sourceId: null;
+
   @Transform(({ value }: TransformFnParams) => {
     const num = value ? parseInt(value as string, 10) : 1;
     return isNaN(num) || num < 1 ? 1 : num;
@@ -62,7 +68,19 @@ export class GetAnalysisPointListQueryDto {
   filters: AnalysisPointFilters = {};
 }
 
+function parseLimitValue(value: unknown): number | null {
+  if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) return null;
+  if (typeof value !== 'number' && typeof value !== 'string') throw new BadRequestException('Invalid limit value');
+  const parsed = Number(typeof value === 'string' ? value.trim().replace(',', '.') : value);
+  if (!Number.isFinite(parsed)) throw new BadRequestException('Invalid limit value');
+  return parsed;
+}
+
 export class AddNewAnalysisPointQueryDto {
+  @Transform(({ value }: TransformFnParams) => value === 'null' ? null : value)
+  @Equals(null)
+  sourceId: null;
+
   @IsString()
   name: string;
 
@@ -88,16 +106,13 @@ export class AddNewAnalysisPointQueryDto {
 
   @Transform(({ value }: TransformFnParams): AnalysisPointLimit[] => {
     if (!Array.isArray(value)) return [];
-    return value.map((limit: Record<string, string>) => ({
-      age: limit.age ?? '',
-      unit: limit.unit ?? '',
-      gender: limit.gender ?? '',
-      minValue: limit.minValue
-        ? parseFloat(limit.minValue.toString().replaceAll(',', '.'))
-        : 0,
-      maxValue: limit.maxValue
-        ? parseFloat(limit.maxValue.toString().replaceAll(',', '.'))
-        : 0,
+    return value.map((limit: Record<string, unknown>) => ({
+      age: String(limit.age ?? ''),
+      unit: String(limit.unit ?? ''),
+      gender: String(limit.gender ?? ''),
+      minValue: parseLimitValue(limit.minValue),
+      maxValue: parseLimitValue(limit.maxValue),
+      lowInclusive: limit.lowInclusive === true,
     }));
   })
   @IsArray()

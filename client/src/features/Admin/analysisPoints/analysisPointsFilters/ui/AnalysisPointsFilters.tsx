@@ -5,33 +5,37 @@ import React, { useState } from "react";
 import { useAppDispatch } from "@shared/store/hooks.ts";
 import { getFullAnalysisPointList, setFilters } from "@entities/analysisPoint";
 
-const initialFormValue = {
-  name: "",
-  translationRu: "",
-  translationEn: "",
-};
+import { initialPointFilters, type PointFilters } from "./pointFilters";
 
-export const AnalysisPointsFilters = () => {
+export const AnalysisPointsFilters = ({
+  onApply,
+}: {
+  onApply?: (filters: PointFilters) => void;
+}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation("entities");
 
-  const [formValue, setFormValue] = useState(initialFormValue);
+  const [formValue, setFormValue] = useState(initialPointFilters);
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(getFullAnalysisPointList());
+    if (onApply) onApply(formValue);
+    else dispatch(getFullAnalysisPointList());
   };
 
   const handlerInput = ({ name, value }: { name: string; value: string }) => {
     const filtersValues = { ...formValue, [name]: value };
     setFormValue(filtersValues);
-    dispatch(setFilters(filtersValues));
+    if (!onApply) dispatch(setFilters(filtersValues));
   };
 
   const handlerClear = () => {
-    setFormValue(initialFormValue);
-    dispatch(setFilters({}));
-    dispatch(getFullAnalysisPointList());
+    setFormValue(initialPointFilters);
+    if (onApply) onApply(initialPointFilters);
+    else {
+      dispatch(setFilters({}));
+      dispatch(getFullAnalysisPointList());
+    }
   };
 
   return (
@@ -71,12 +75,17 @@ export const AnalysisPointsFilters = () => {
         className={"justify-between"}
         value={formValue.translationEn}
       />
-      <button className={"btn p-2"}>
+      <button aria-label="Применить фильтр" className={"btn p-2"}>
         <MagnifyingGlassIcon
           className={"h-5 w-5 text-white group-hover:text-orange-300"}
         />
       </button>
-      <button type={"reset"} className={"btn p-2"} onClick={handlerClear}>
+      <button
+        type={"reset"}
+        aria-label="Сбросить фильтр"
+        className={"btn p-2"}
+        onClick={handlerClear}
+      >
         <XMarkIcon
           className={"h-5 w-5 text-white group-hover:text-orange-300"}
         />

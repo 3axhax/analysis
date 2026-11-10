@@ -22,6 +22,9 @@ import { GenderService } from '../gender/gender.service';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 import { Op } from 'sequelize';
 import { unique } from 'sequelize-typescript/dist/shared/array';
+import { SourceReferenceInheritance } from '../medicalSource/source-reference-inheritance.model';
+import { AnalysisResultDescriptionCondition } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
+import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 
 export interface AnalysisPointWithTranslation {
   id: number;
@@ -171,20 +174,14 @@ export class AnalysisPointService {
         ]);
         if (age && gender && unit) {
           await Promise.all([
-            this.analysisPointMinValueService.addNewPointMinValue({
-              pointId: pointId,
-              ageId: age.id,
-              genderId: gender.id,
-              unitId: unit.id,
-              value: limit.minValue,
-            }),
-            this.analysisPointMaxValueService.addNewPointMaxValue({
-              pointId: pointId,
-              ageId: age.id,
-              genderId: gender.id,
-              unitId: unit.id,
-              value: limit.maxValue,
-            }),
+            ...(limit.minValue !== null ? [this.analysisPointMinValueService.addNewPointMinValue({
+              pointId, ageId: age.id, genderId: gender.id, unitId: unit.id,
+              value: limit.minValue, sourceId: null, lowInclusive: limit.lowInclusive ?? false,
+            })] : []),
+            ...(limit.maxValue !== null ? [this.analysisPointMaxValueService.addNewPointMaxValue({
+              pointId, ageId: age.id, genderId: gender.id, unitId: unit.id,
+              value: limit.maxValue, sourceId: null,
+            })] : []),
           ]);
         }
       }),
@@ -199,7 +196,10 @@ export class AnalysisPointService {
   }): Promise<void> {
     const existPoint = await this.analysisPointRepository.findByPk(pointId);
     if (existPoint) {
-      await existPoint.removeAllUnits();
+      const sourceBounds = await Promise.all([
+        AnalysisPointMinValue.findAll({ where: { pointId, sourceId: { [Op.ne]: null } }, attributes: ['unitId'] }),
+        AnalysisPointMaxValue.findAll({ where: { pointId, sourceId: { [Op.ne]: null } }, attributes: ['unitId'] }),
+      ]);
       const unitsIds = await Promise.all(
         limits.map(async (limit) => {
           const unit = await this.unitsService.getAnalysisPointUnitsByName(
@@ -208,7 +208,9 @@ export class AnalysisPointService {
           return unit ? unit.id : 0;
         }),
       );
-      await existPoint.addUnits(unique(unitsIds).filter((id) => id > 0));
+      const retainedUnits = sourceBounds.flat().map((bound) => bound.unitId);
+      await existPoint.removeAllUnits();
+      await existPoint.addUnits(unique([...unitsIds, ...retainedUnits]).filter((id) => id > 0));
     }
   }
 
@@ -216,9 +218,11 @@ export class AnalysisPointService {
     const [max, min] = await Promise.all([
       this.analysisPointMaxValueService.getMaxValueByParameters({
         pointId,
+        sourceId: null,
       }),
       this.analysisPointMinValueService.getMinValueByParameters({
         pointId,
+        sourceId: null,
       }),
     ]);
     return this._formatLimits(max, min);
@@ -241,7 +245,8 @@ export class AnalysisPointService {
         unit: max.unit.name,
         gender: max.gender.name,
         maxValue: max.value,
-        minValue: min ? min.value : 0,
+        minValue: min ? min.value : null,
+        lowInclusive: min?.lowInclusive ?? false,
       });
       if (min) {
         minList = minList.filter((item) => item.id !== min.id);
@@ -253,8 +258,9 @@ export class AnalysisPointService {
           age: min.age.name,
           unit: min.unit.name,
           gender: min.gender.name,
-          maxValue: 0,
+          maxValue: null,
           minValue: min.value,
+          lowInclusive: min.lowInclusive,
         });
       });
     }
@@ -388,9 +394,11 @@ export class AnalysisPointService {
     await Promise.all([
       this.analysisPointMinValueService.deletePointMinValueByParameters({
         pointId: existingPoint.id,
+        sourceId: null,
       }),
       this.analysisPointMaxValueService.deletePointMaxValueByParameters({
         pointId: existingPoint.id,
+        sourceId: null,
       }),
     ]);
 
@@ -419,6 +427,16 @@ export class AnalysisPointService {
     const existingPoint = await this.analysisPointRepository.findByPk(id);
 
     if (existingPoint) {
+      const sourceReferences = await Promise.all([
+        AnalysisPointMinValue.count({ where: { pointId: id, sourceId: { [Op.ne]: null } } }),
+        AnalysisPointMaxValue.count({ where: { pointId: id, sourceId: { [Op.ne]: null } } }),
+        SourceReferenceInheritance.count({ where: { pointId: id } }),
+        AnalysisResultDescriptionCondition.count({ where: { pointId: id } }),
+        AnalysisResultPointData.count({ where: { pointId: id } }),
+      ]);
+      if (sourceReferences.some(Boolean)) {
+        throw new HttpException('Point is used by references, descriptions or results', HttpStatus.CONFLICT);
+      }
       await Promise.all([
         this.translationService.deleteTranslationByParameters({
           lang: LangValue.RU,
@@ -434,9 +452,11 @@ export class AnalysisPointService {
         }),
         this.analysisPointMinValueService.deletePointMinValueByParameters({
           pointId: existingPoint.id,
+          sourceId: null,
         }),
         this.analysisPointMaxValueService.deletePointMaxValueByParameters({
           pointId: existingPoint.id,
+          sourceId: null,
         }),
       ]);
     }

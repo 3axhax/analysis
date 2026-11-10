@@ -59,7 +59,8 @@ export const selectAnalysisPointLimits = createSelector(
         formatedLimit.skipAge = true;
         if (
           sortLimits[i + 1].maxValue === limit.maxValue &&
-          sortLimits[i + 1].minValue === limit.minValue
+          sortLimits[i + 1].minValue === limit.minValue &&
+          sortLimits[i + 1].lowInclusive === limit.lowInclusive
         ) {
           formatedLimit.skipGender = true;
         }
@@ -87,6 +88,7 @@ export const selectAnalysisPointsEditAnalysisPointFormatLimits = createSelector(
           (exist: AnalysisPointLimit) =>
             exist.minValue === limit.minValue &&
             exist.maxValue === limit.maxValue &&
+            exist.lowInclusive === limit.lowInclusive &&
             exist.unit === limit.unit &&
             exist.gender.includes(limit.gender),
         );
@@ -109,6 +111,7 @@ export const selectAnalysisPointsEditAnalysisPointFormatLimits = createSelector(
           (exist: AnalysisPointLimit) =>
             exist.minValue === limit.minValue &&
             exist.maxValue === limit.maxValue &&
+            exist.lowInclusive === limit.lowInclusive &&
             exist.unit === limit.unit,
         );
         if (index !== -1) {
