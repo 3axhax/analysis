@@ -33,6 +33,9 @@ import {
 } from '../unitConversion/saved-measurement';
 import { UnitAliasIndex } from '../unitConversion/unit-alias-index';
 import { sourceAppliesToAge } from './source-age-scope';
+import { calculateDeRitis } from './de-ritis';
+import { calculateHoma } from './homa';
+import { DE_RITIS_RULES, DeRitisRuleContext, matchesDeRitisRule } from './de-ritis-gradations';
 
 export interface SaveResultResponse {
   resultId?: string;
@@ -155,6 +158,8 @@ export class AnalysisResultService {
               unit = allUnits.find((u) => u.name === item.units);
             if (!point || !unit)
               throw new UnitNormalizationError('unknown_point_or_unit');
+            if (['de_ritis_ratio', 'homa_ir'].includes(point.name))
+              throw new UnitNormalizationError('invalid_point_input');
             if (seen.has(point.id))
               throw new UnitNormalizationError('duplicate_point');
             seen.add(point.id);
@@ -319,13 +324,88 @@ export class AnalysisResultService {
         return response;
       }),
     );
+    let deRitisContext: DeRitisRuleContext | undefined;
+    // This is a derived point: it is never saved as an input measurement.
+    const enzymeUnit = units.find((unit) => unit.name === 'unit/l');
+    const ratioUnit = units.find((unit) => unit.name === 'без ед.');
+    const ratio = enzymeUnit && ratioUnit
+      ? calculateDeRitis(plain.analysisResultPointData, enzymeUnit.id)
+      : null;
+    if (ratio && ratioUnit) {
+      const ratioPoint = await this.analysisPointService.getAnalysisPointByName('de_ritis_ratio');
+      if (ratioPoint) {
+        let status: StatusValue | null = null;
+        let minimum: number | null = null;
+        let maximum: number | null = null;
+        let warning: string | null = null;
+        try {
+          const reference = await this.unitConversionService.normalize({
+            pointId: ratioPoint.id, ageId: plain.ageId, genderId: plain.genderId,
+            sourceUnitId: ratioUnit.id, sourceValue: ratio.sourceValue,
+          });
+          if (reference.displayMin === null || reference.displayMax === null)
+            throw new UnitNormalizationError('incomplete_or_duplicate_reference_range');
+          minimum = Number(reference.displayMin);
+          maximum = Number(reference.displayMax);
+          // Compare cross-products so rounding the quotient cannot change a boundary status.
+          status = ratio.numerator.lt(ratio.denominator.times(reference.displayMin))
+            ? StatusValue.LOW
+            : ratio.numerator.gt(ratio.denominator.times(reference.displayMax))
+              ? StatusValue.HIGH : StatusValue.NORMAL;
+        } catch (error) {
+          if (!(error instanceof UnitNormalizationError)) throw error;
+          warning = error.code;
+        }
+        deRitisContext = { pointId: ratioPoint.id, numerator: ratio.numerator, denominator: ratio.denominator, status };
+        let displayRatio = ratio.ratio.toDecimalPlaces(4);
+        const roundedContext = { numerator: displayRatio, denominator: ratio.denominator.div(ratio.denominator) };
+        if (Object.keys(DE_RITIS_RULES).some((key) => matchesDeRitisRule(key, ratio) !== matchesDeRitisRule(key, roundedContext)))
+          displayRatio = ratio.ratio.toSignificantDigits(50);
+        if (status !== null && minimum !== null && maximum !== null) {
+          const displayedStatus = displayRatio.lt(minimum) ? StatusValue.LOW : displayRatio.gt(maximum) ? StatusValue.HIGH : StatusValue.NORMAL;
+          if (displayedStatus !== status) displayRatio = ratio.ratio.toSignificantDigits(50);
+        }
+        const ratioData = {
+          id: -ratioPoint.id, pointId: ratioPoint.id,
+          point: typeof ratioPoint.get === 'function' ? ratioPoint.get({ plain: true }) : ratioPoint,
+          value: Number(ratio.ratio.toSignificantDigits(12).toString()), displayValue: displayRatio.toFixed(),
+          sourceValue: ratio.sourceValue, unitId: ratioUnit.id, sourceUnitId: ratioUnit.id,
+          sourceUnitText: ratioUnit.name, pointUnit: { id: ratioUnit.id, name: ratioUnit.name },
+          minValue: minimum, maxValue: maximum, pointDataStatus: status,
+          interpretationWarning: warning, isCalculated: true,
+        } as unknown as ResultPointView;
+        plain.analysisResultPointData.push(ratioData);
+        statuses.set(ratioPoint.id, new Set([status]));
+      }
+    }
+    const glucoseUnit = units.find((unit) => unit.name === 'mmole/l');
+    const insulinMilliUnit = units.find((unit) => unit.name === 'mUnit/l');
+    const insulinMicroUnit = units.find((unit) => unit.name === 'mkUnit/l');
+    const homa = glucoseUnit && insulinMilliUnit && insulinMicroUnit && ratioUnit
+      ? calculateHoma(plain.analysisResultPointData, glucoseUnit.id, insulinMilliUnit.id, insulinMicroUnit.id) : null;
+    if (homa && ratioUnit) {
+      const homaPoint = await this.analysisPointService.getAnalysisPointByName('homa_ir');
+      if (homaPoint) {
+        let status: StatusValue | null = null, minimum: number | null = null, maximum: number | null = null;
+        let warning: string | null = null;
+        try {
+          const ref = await this.unitConversionService.normalize({ pointId: homaPoint.id, ageId: plain.ageId, genderId: plain.genderId, sourceUnitId: ratioUnit.id, sourceValue: homa.sourceValue });
+          if (ref.displayMin === null || ref.displayMax === null) throw new UnitNormalizationError('incomplete_or_duplicate_reference_range');
+          minimum = Number(ref.displayMin); maximum = Number(ref.displayMax);
+          status = homa.numerator.lt(homa.denominator.times(ref.displayMin)) ? StatusValue.LOW : homa.numerator.gt(homa.denominator.times(ref.displayMax)) ? StatusValue.HIGH : StatusValue.NORMAL;
+        } catch (error) { if (!(error instanceof UnitNormalizationError)) throw error; warning = error.code; }
+        let display = homa.ratio.toDecimalPlaces(4);
+        if (status !== null && minimum !== null && maximum !== null && (display.lt(minimum) ? StatusValue.LOW : display.gt(maximum) ? StatusValue.HIGH : StatusValue.NORMAL) !== status) display = homa.ratio.toSignificantDigits(50);
+        plain.analysisResultPointData.push({ id: -homaPoint.id, pointId: homaPoint.id, point: typeof homaPoint.get === 'function' ? homaPoint.get({ plain: true }) : homaPoint, value: Number(homa.ratio.toSignificantDigits(12).toString()), displayValue: display.toFixed(), sourceValue: homa.sourceValue, unitId: ratioUnit.id, sourceUnitId: ratioUnit.id, sourceUnitText: ratioUnit.name, pointUnit: { id: ratioUnit.id, name: ratioUnit.name }, minValue: minimum, maxValue: maximum, pointDataStatus: status, interpretationWarning: warning, isCalculated: true } as unknown as ResultPointView);
+        statuses.set(homaPoint.id, new Set([status]));
+      }
+    }
     const conditions: Record<number, StatusValue> = {};
     for (const [id, group] of statuses)
       if (group.size === 1 && !group.has(null)) conditions[id] = [...group][0]!;
-    const descriptions =
-      await this.analysisResultDescriptionService.getDescriptionsByConditions(
-        conditions,
-      );
+    const descriptions = deRitisContext
+      ? await this.analysisResultDescriptionService.getDescriptionsByConditions(conditions, null, deRitisContext)
+      : await this.analysisResultDescriptionService.getDescriptionsByConditions(conditions);
     const sourceDescriptions: NonNullable<
       GetResultResponse['sourceDescriptions']
     > = [];

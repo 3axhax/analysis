@@ -28,3 +28,5 @@ export {
   useDescriptionsLoad,
   useDescriptionsWithTranslateLoad,
 } from "./descriptions.hooks.ts";
+
+export { deRitisRuleLabel } from "./lib/de-ritis-rule-label";

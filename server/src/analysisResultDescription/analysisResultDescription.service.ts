@@ -15,6 +15,7 @@ import {
   GetAnalysisResultDescriptionsListQueryDto,
 } from './dto/analysisResultDescriptions.dto';
 import { AnalysisResultDescriptionConditionService } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.service';
+import { DeRitisRuleContext, matchesDeRitisRule } from '../analysisResult/de-ritis-gradations';
 
 type DescriptionConditions = Record<number, StatusValue>;
 
@@ -65,20 +66,27 @@ export class AnalysisResultDescriptionService {
   getDescriptionsByConditions = async (
     conditions: DescriptionConditions,
     sourceId: number | null = null,
+    deRitis?: DeRitisRuleContext,
   ) => {
     const descriptions = await this.getAllDescription();
-
-    return descriptions.filter((description) => {
+    return descriptions.flatMap((description) => {
       const plainDescription = description.get({ plain: true });
-      if ((plainDescription.sourceId ?? null) !== sourceId) return false;
-      if (plainDescription.analysisResultDescriptionConditions.length === 0)
-        return false;
-      return !plainDescription.analysisResultDescriptionConditions.find(
-        (descriptionCondition) =>
-          !conditions[descriptionCondition.pointId] ||
-          conditions[descriptionCondition.pointId] !==
-            descriptionCondition.status,
-      );
+      if ((plainDescription.sourceId ?? null) !== sourceId) return [];
+      const ruleConditions = plainDescription.analysisResultDescriptionConditions;
+      if (ruleConditions.length === 0) return [];
+      if (plainDescription.deRitisRule) {
+        // Numerical rules are independent of the coarse LOW/NORMAL/HIGH status.
+        if (!deRitis || sourceId !== null || ruleConditions.length !== 1 ||
+            ruleConditions[0].pointId !== deRitis.pointId ||
+            !matchesDeRitisRule(plainDescription.deRitisRule, deRitis)) return [];
+        plainDescription.analysisResultDescriptionConditions = ruleConditions.map((condition) => ({
+          ...condition, status: deRitis.status,
+        })) as typeof ruleConditions;
+        return [plainDescription as unknown as AnalysisResultDescription];
+      }
+      return ruleConditions.some((condition) =>
+        !conditions[condition.pointId] || conditions[condition.pointId] !== condition.status,
+      ) ? [] : [description];
     });
   };
 
@@ -103,7 +111,7 @@ export class AnalysisResultDescriptionService {
         include: [AnalysisPoint],
       },
       distinct: true,
-      attributes: ['id', 'description_ru', 'sourceId'],
+      attributes: ['id', 'description_ru', 'sourceId', 'deRitisRule'],
     };
     const pointFilter = Number(parameters.filters?.analysisPoint);
     if (parameters.filters?.analysisPoint && (!Number.isSafeInteger(pointFilter) || pointFilter < 1)) {
@@ -175,7 +183,20 @@ export class AnalysisResultDescriptionService {
         HttpStatus.CONFLICT,
       );
     }
-    await existDescription.update(parameters);
+    if (existDescription.deRitisRule) {
+      const existing = existDescription.analysisResultDescriptionConditions;
+      const supplied = parameters.analysisResultDescriptionConditions;
+      if (existing.length !== 1 || supplied.length !== 1 ||
+          supplied[0].analysisPoint?.id !== existing[0].pointId || supplied[0].status !== existing[0].status)
+        throw new HttpException('de_ritis_rule_conditions_fixed', HttpStatus.BAD_REQUEST);
+      await existDescription.update({ description_ru: parameters.description_ru });
+      return await this.analysisResultDescriptionRepository.findOne({
+        where: { id: existDescription.id },
+        include: { model: AnalysisResultDescriptionCondition, include: [AnalysisPoint] },
+        attributes: ['id', 'description_ru', 'deRitisRule'],
+      });
+    }
+    await existDescription.update({ description_ru: parameters.description_ru });
     await this.analysisResultDescriptionConditionService.deleteConditionByDescriptionId(
       existDescription.id,
     );

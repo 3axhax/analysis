@@ -73,6 +73,91 @@ describe('startup migration ordering', () => {
       20017,
       expect.any(String),
     );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0018-cbc-missing-references',
+      20018,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0019-cbc-reference-description-correction',
+      20019,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0020-cbc-boundary-correction',
+      20020,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0021-cbc-age-groups',
+      20021,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0022-cbc-age-18-19',
+      20022,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0023-cbc-erythrocyte-mcv-description',
+      20023,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0024-bilirubin-description-correction',
+      20024,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0025-cbc-reference-and-text-cleanup',
+      20025,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0031-nitrogen-metabolism-correction',
+      20031,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0032-liver-description-cleanup',
+      20032,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(
+      expect.anything(),
+      '0033-liver-age-correction',
+      20033,
+      expect.any(String),
+    );
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0034-neonatal-bilirubin-ldh', 20034, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0035-ggtp-point-consolidation', 20035, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0036-neonatal-bilirubin-ruh', 20036, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0037-liver-enzyme-combinations', 20037, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0038-de-ritis-reference', 20038, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0039-source-description-revision', 20039, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0040-source-description-typos', 20040, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0041-source-description-concision', 20041, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0042-de-ritis-gradations', 20042, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0043-description-wording', 20043, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0044-description-wording-remaining', 20044, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0045-lipid-glucose-typos', 20045, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0046-insulin-reference-unit', 20046, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0047-homa-metabolic-combinations', 20047, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0048-insulin-unit-display', 20048, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0049-lipid-insulin-description-correction', 20049, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0050-thyroid-electrolyte-typos', 20050, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0051-thyroid-electrolyte-corrections', 20051, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0052-ionized-calcium', 20052, expect.any(String));
     expect(calls.indexOf('point-order')).toBeLessThan(calls.indexOf('0002'));
     expect(calls.indexOf('result-age')).toBeLessThan(calls.indexOf('0002'));
   });

@@ -20,17 +20,20 @@ export interface AnalysisResultDescriptionCondition {
     id: number;
     name: string;
   };
-  status: StatusValue;
+  status: StatusValue | null;
 }
 
 export interface ResultDescription {
   id: number;
   description_ru: string;
+  deRitisRule?: string | null;
   analysisResultDescriptionConditions: AnalysisResultDescriptionCondition[];
 }
 
 export interface PointData {
   id: number;
+  isCalculated?: boolean;
+  displayValue?: string;
   point: {
     id: number;
     name: string;

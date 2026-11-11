@@ -4,6 +4,7 @@ import type { SourceDescriptionGroup } from "@entities/analysisResult/model/type
 import { Table, TableData, TableDataRow } from "@shared/ui";
 import { AnalysisPointDataListStatus } from "@widgets/analysisPointdataList/ui/AnalysisPointDataListStatus.tsx";
 import { SourceInfo } from "./SourceInfo";
+import { deRitisRuleLabel } from "@entities/descriptions";
 
 export const AnalysisDescriptionList = ({
   descriptions,
@@ -59,6 +60,7 @@ export const AnalysisDescriptionList = ({
               (condition) => (
                 <li key={condition.id}>
                   {tEntities(`analysisPoint.${condition.analysisPoint.name}`)}
+                  {description.deRitisRule && condition.analysisPoint.name === "de_ritis_ratio" && ` ${deRitisRuleLabel(description.deRitisRule)}`}
                   {group &&
                     !group.inheritedPointIds.includes(
                       condition.analysisPoint.id,

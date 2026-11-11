@@ -3,6 +3,7 @@ import { useAppSelector } from "@shared/store/hooks.ts";
 import { Table, TableData, TableDataRow } from "@shared/ui";
 import {
   DescriptionsListItem,
+  deRitisRuleLabel,
   selectDescriptionsList,
 } from "@entities/descriptions";
 import { DescriptionsConditionsList } from "@widgets/Admin/descriptionsConditionsList";
@@ -44,7 +45,7 @@ export const DescriptionsList = () => {
         },
         {
           name: "conditions",
-          data: <DescriptionsConditionsList descriptionId={row.id} />,
+          data: row.deRitisRule ? `Коэффициент де Ритиса ${deRitisRuleLabel(row.deRitisRule)}` : <DescriptionsConditionsList descriptionId={row.id} />,
           className: "text-start",
         },
         {

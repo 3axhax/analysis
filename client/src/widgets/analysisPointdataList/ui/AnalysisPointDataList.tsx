@@ -30,6 +30,7 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
         data: (
           <div>
             {row.point.translationRu}
+            {row.isCalculated && <span className="text-sm text-gray-500"> (расчётный)</span>}
             {row.point.pointHintRu && (
               <InfoPopover
                 label="Информация о показателе"
@@ -59,7 +60,7 @@ export const AnalysisPointDataList = ({ resultId }: { resultId: string }) => {
                 row.pointDataStatus === StatusValue.LOW,
             })}
           >
-            {`${row.value} ${unitLabel(row.pointUnit.name, row.sourceUnitText)}`}
+            {`${row.displayValue ?? row.value} ${unitLabel(row.pointUnit.name, row.sourceUnitText)}`}
             &nbsp;
             <AnalysisPointDataListStatus status={row.pointDataStatus} />{" "}
             {row.calculation && row.calculation.unitId !== row.pointUnit.id && (

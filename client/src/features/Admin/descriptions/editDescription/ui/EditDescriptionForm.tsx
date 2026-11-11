@@ -2,6 +2,7 @@ import React from "react";
 import {
   DescriptionCondition,
   DescriptionGreatItem,
+  deRitisRuleLabel,
 } from "@entities/descriptions";
 import { DescriptionConditionsEditableList } from "./DescriptionConditionsEditableList";
 import { TextArea } from "@shared/ui";
@@ -36,12 +37,16 @@ export const EditDescriptionForm = ({
           handlerInput({ name: "description_ru", value });
         }}
       />
-      <DescriptionConditionsEditableList
-        onChange={(value) => {
-          handlerInput({ name: "analysisResultDescriptionConditions", value });
-        }}
-        conditions={values.analysisResultDescriptionConditions}
-      />
+      {values.deRitisRule ? (
+        <p>Условие: коэффициент де Ритиса {deRitisRuleLabel(values.deRitisRule)}</p>
+      ) : (
+        <DescriptionConditionsEditableList
+          onChange={(value) => {
+            handlerInput({ name: "analysisResultDescriptionConditions", value });
+          }}
+          conditions={values.analysisResultDescriptionConditions}
+        />
+      )}
     </form>
   );
 };

@@ -47,7 +47,7 @@ export class ParseFileService {
     }
     this.activeRequests += 1;
     try {
-      const points = await this.analysisPointService.getAllWithTranslation();
+      const points = (await this.analysisPointService.getAllWithTranslation()).filter((point) => !['de_ritis_ratio', 'homa_ir'].includes(point.name));
       const extraction = await this.pdfParserService.extractTables(
         file.buffer,
         {

@@ -223,6 +223,16 @@ export class PdfNameIndex {
     if (/rdw\s*[-‐‑‒–—]?\s*sd/iu.test(namePrefix))
       return { matches: [], ambiguous: false, unsupported: true };
     let matches = this.find(text);
+    // A specific ionized fraction must never be resolved as total calcium.
+    if (/иониз|ioniz|ionis/iu.test(text)) {
+      const calcium = matches.filter((match) => match.point.name === 'ionized_calcium');
+      if (!calcium.length && matches.some((match) => match.point.name === 'ca'))
+        return { matches: [], ambiguous: false, unsupported: true };
+      if (calcium.length) matches = calcium;
+    } else if (/(?:^|[^\p{L}\p{N}])ca\s*\+/iu.test(text)) {
+      // Tokenization drops '+', so Ca+ must not silently become ordinary Ca.
+      return { matches: [], ambiguous: false, unsupported: true };
+    }
     if (
       /юныенейтрофилы|палочкоядер|сегментоядер|незрел/iu.test(
         canonicalName(text).replace(/\s+/g, ''),

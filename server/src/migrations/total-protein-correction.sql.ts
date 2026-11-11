@@ -1,0 +1,47 @@
+export const TOTAL_PROTEIN_CORRECTION_SQL = String.raw`
+DO $$
+DECLARE old_age integer; new_age integer; nmin integer; nmax integer; copied integer; text60 text; text61 text; desc_id integer;
+BEGIN
+ LOCK TABLE ages, "analysisPointMinValue", "analysisPointMaxValue", "medicalSource", translation, "analysisResultDescription", "analysisResultDescriptionCondition" IN SHARE ROW EXCLUSIVE MODE;
+ SELECT id INTO STRICT old_age FROM ages WHERE name='6_12m' AND "intervalDayStart"=181 AND "intervalDayEnd"=360;
+ IF EXISTS (SELECT 1 FROM ages WHERE name IN ('6_7m','7_12m')) OR EXISTS (SELECT 1 FROM ages WHERE id<>old_age AND "intervalDayStart"<=360 AND "intervalDayEnd">=181) THEN RAISE EXCEPTION 'Unexpected age groups'; END IF;
+ IF EXISTS (SELECT 1 FROM "analysisPointMinValue" WHERE "ageId"=old_age GROUP BY "pointId","genderId","unitId","sourceId" HAVING count(*)>1) OR EXISTS (SELECT 1 FROM "analysisPointMaxValue" WHERE "ageId"=old_age GROUP BY "pointId","genderId","unitId","sourceId" HAVING count(*)>1) THEN RAISE EXCEPTION 'Duplicate reference'; END IF;
+ IF (SELECT count(*) FROM "analysisPointMinValue" WHERE "ageId"=old_age AND "pointId"=27 AND "sourceId" IS NULL AND value=51)<>2 OR (SELECT count(*) FROM "analysisPointMaxValue" WHERE "ageId"=old_age AND "pointId"=27 AND "sourceId" IS NULL AND value=73)<>2 THEN RAISE EXCEPTION 'Unexpected protein reference'; END IF;
+ IF EXISTS (SELECT 1 FROM translation WHERE namespace='entities' AND module='ages' AND submodule IN ('6_7m','7_12m')) OR EXISTS (SELECT 1 FROM translation WHERE namespace='entities' AND module='ages' AND submodule='6_12m' GROUP BY lang HAVING count(*)>1) THEN RAISE EXCEPTION 'Unexpected translations'; END IF;
+ IF EXISTS (SELECT 1 FROM "medicalSource" WHERE metadata ? 'allowedAgeIds' AND jsonb_typeof(metadata->'allowedAgeIds')<>'array') THEN RAISE EXCEPTION 'Invalid source age metadata'; END IF;
+ SELECT description_ru INTO STRICT text60 FROM "analysisResultDescription" WHERE id=60 AND "sourceId" IS NULL AND md5(description_ru)='8fa1683a475a5d978146a31965508647';
+ SELECT description_ru INTO STRICT text61 FROM "analysisResultDescription" WHERE id=61 AND "sourceId" IS NULL AND md5(description_ru)='c7cee252f50252ef4ee1f7c076186827';
+ IF (SELECT count(*) FROM "analysisResultDescriptionCondition" WHERE "descriptionId" IN (60,61))<>2 OR (SELECT count(*) FROM "analysisResultDescriptionCondition" WHERE ("descriptionId"=60 AND "pointId"=27 AND status='0') OR ("descriptionId"=61 AND "pointId"=27 AND status='1'))<>2 THEN RAISE EXCEPTION 'Unexpected description conditions'; END IF;
+ IF EXISTS (SELECT 1 FROM "analysisResultDescription" d JOIN "analysisResultDescriptionCondition" c ON c."descriptionId"=d.id WHERE d."sourceId" IS NULL GROUP BY d.id HAVING count(*)=3 AND (count(*) FILTER (WHERE (c."pointId"=27 AND c.status='0') OR (c."pointId"=4 AND c.status='0') OR (c."pointId"=28 AND c.status='0'))=3 OR count(*) FILTER (WHERE (c."pointId"=27 AND c.status='0') OR (c."pointId"=4 AND c.status='-1') OR (c."pointId"=28 AND c.status='1'))=3)) THEN RAISE EXCEPTION 'Description already exists'; END IF;
+ SELECT count(*) INTO nmin FROM "analysisPointMinValue" WHERE "ageId"=old_age;
+ SELECT count(*) INTO nmax FROM "analysisPointMaxValue" WHERE "ageId"=old_age;
+ IF nmin=0 OR nmax=0 THEN RAISE EXCEPTION 'Missing age references'; END IF;
+ UPDATE ages SET name='7_12m',"intervalDayStart"=211 WHERE id=old_age;
+ INSERT INTO ages(name,"intervalDayStart","intervalDayEnd") VALUES ('6_7m',181,210) RETURNING id INTO new_age;
+ IF EXISTS (SELECT 1 FROM "medicalSource" WHERE metadata->'allowedAgeIds' @> jsonb_build_array(new_age) AND NOT (metadata->'allowedAgeIds' @> jsonb_build_array(old_age))) THEN RAISE EXCEPTION 'New age already referenced by source'; END IF;
+ UPDATE translation SET submodule='7_12m',value=CASE WHEN lang='ru' THEN '7–12 месяцев' WHEN lang='en' THEN '7–12 months' ELSE value END WHERE namespace='entities' AND module='ages' AND submodule='6_12m';
+ INSERT INTO translation(lang,namespace,module,submodule,value) SELECT 'ru','entities','ages','7_12m','7–12 месяцев' WHERE NOT EXISTS (SELECT 1 FROM translation WHERE namespace='entities' AND module='ages' AND submodule='7_12m' AND lang='ru');
+ INSERT INTO translation(lang,namespace,module,submodule,value) SELECT 'en','entities','ages','7_12m','7–12 months' WHERE NOT EXISTS (SELECT 1 FROM translation WHERE namespace='entities' AND module='ages' AND submodule='7_12m' AND lang='en');
+ INSERT INTO translation(lang,namespace,module,submodule,value) VALUES ('ru','entities','ages','6_7m','6–7 месяцев'),('en','entities','ages','6_7m','6–7 months');
+ INSERT INTO "analysisPointMinValue" ("pointId","ageId","genderId","unitId","sourceId","lowInclusive",value) SELECT "pointId",new_age,"genderId","unitId","sourceId","lowInclusive",CASE WHEN "pointId"=27 AND "sourceId" IS NULL THEN 44 ELSE value END FROM "analysisPointMinValue" WHERE "ageId"=old_age;
+ GET DIAGNOSTICS copied=ROW_COUNT; IF copied<>nmin THEN RAISE EXCEPTION 'Min copy mismatch'; END IF;
+ INSERT INTO "analysisPointMaxValue" ("pointId","ageId","genderId","unitId","sourceId",value) SELECT "pointId",new_age,"genderId","unitId","sourceId",CASE WHEN "pointId"=27 AND "sourceId" IS NULL THEN 76 ELSE value END FROM "analysisPointMaxValue" WHERE "ageId"=old_age;
+ GET DIAGNOSTICS copied=ROW_COUNT; IF copied<>nmax THEN RAISE EXCEPTION 'Max copy mismatch'; END IF;
+ UPDATE "medicalSource" SET metadata=jsonb_set(metadata,'{allowedAgeIds}',(metadata->'allowedAgeIds') || jsonb_build_array(new_age),false) WHERE metadata->'allowedAgeIds' @> jsonb_build_array(old_age) AND NOT (metadata->'allowedAgeIds' @> jsonb_build_array(new_age));
+ text60:=regexp_replace(text60,'<li>([^<]*)<li>',E'<li>\\1</li>','g');
+ text60:=replace(text60,'подтверждается гаспропанели и гастроскопии ФГДС','подтверждается с помощью гастропанели и гастроскопии ФГДС');
+ IF (SELECT count(*) FROM regexp_matches(text60,'<li>','g'))<>15 OR (SELECT count(*) FROM regexp_matches(text60,'</li>','g'))<>15 OR position('гаспропанели' in text60)>0 THEN RAISE EXCEPTION 'Unexpected description 60'; END IF;
+ text61:=replace(text61,'антинуклеарные антитела,</li> чтобы исключить','антинуклеарные антитела, чтобы исключить');
+ text61:=replace(text61,'разрушением эритроцитов>','разрушением эритроцитов</li>');
+ text61:=replace(text61,'мышечны белков','мышечных белков');
+ text61:=replace(text61,'аллергические состояния с гистаминовыми отеками','аллергические состояния с гистаминовыми отеками (при этом прием аминокислот может усугубить отек)');
+ text61:=replace(text61,'</ul>','<li>высокая вирусная нагрузка (в методичке указаны повышение лимфоцитов и наличие антител)</li><li>потеря жидкости, сгущение крови за счет недостаточного поступления жидкости или усиленного выведения с потом, рвотой, диареей (в методичке указано повышение гематокрита и тромбоцитов)</li></ul>');
+ IF (SELECT count(*) FROM regexp_matches(text61,'<li>','g'))<>7 OR (SELECT count(*) FROM regexp_matches(text61,'</li>','g'))<>7 OR position('мышечны белков' in text61)>0 THEN RAISE EXCEPTION 'Unexpected description 61'; END IF;
+ UPDATE "analysisResultDescription" SET description_ru=text60,"updatedAt"=now() WHERE id=60;
+ UPDATE "analysisResultDescription" SET description_ru=text61,"updatedAt"=now() WHERE id=61;
+ INSERT INTO "analysisResultDescription" (description_ru,"sourceId","createdAt","updatedAt") VALUES ('В методичке указано: «Дефицит белка, искать причины, посмотреть глобулины». Это сочетание само по себе не устанавливает причину.',NULL,now(),now()) RETURNING id INTO desc_id;
+ INSERT INTO "analysisResultDescriptionCondition" ("descriptionId","pointId",status) VALUES (desc_id,27,'0'),(desc_id,4,'0'),(desc_id,28,'0');
+ INSERT INTO "analysisResultDescription" (description_ru,"sourceId","createdAt","updatedAt") VALUES ('В методичке указано: «Избыток аммиака, нарушение работы почек при повышенном креатинине». Эти три показателя сами по себе не подтверждают повышение аммиака или нарушение функции почек.',NULL,now(),now()) RETURNING id INTO desc_id;
+ INSERT INTO "analysisResultDescriptionCondition" ("descriptionId","pointId",status) VALUES (desc_id,27,'0'),(desc_id,4,'-1'),(desc_id,28,'1');
+END $$;
+`;

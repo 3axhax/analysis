@@ -25,6 +25,7 @@ export class AgesService {
   async getAll(): Promise<Age[] | null> {
     return this.agesRepository.findAll({
       include: { all: true },
+      order: [['intervalDayStart', 'ASC'], ['id', 'ASC']],
     });
   }
 
@@ -53,7 +54,7 @@ export class AgesService {
     const { count, rows } = await this.agesRepository.findAndCountAll({
       offset: (parameters.currentPage - 1) * parameters.recordPerPage,
       limit: parameters.recordPerPage,
-      order: [['id', 'ASC']],
+      order: [['intervalDayStart', 'ASC'], ['id', 'ASC']],
     });
 
     const rowsWithTranslation = await Promise.all(

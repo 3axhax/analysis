@@ -7,6 +7,7 @@ export interface DescriptionCondition {
 export interface DescriptionsListItem {
   id: number;
   description_ru: string;
+  deRitisRule?: string | null;
   analysisResultDescriptionConditions: DescriptionCondition[];
 }
 
@@ -26,5 +27,6 @@ export interface DescriptionsState {
 export interface DescriptionGreatItem {
   id: number;
   description_ru: string;
+  deRitisRule?: string | null;
   analysisResultDescriptionConditions: DescriptionCondition[];
 }
