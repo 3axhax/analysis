@@ -45,6 +45,7 @@ import { MigrationsAges } from './migrations/migrations.ages';
 import { MigrationsAnalysisResult } from './migrations/migrations.analysisResult';
 import { MigrationsAnalysisPointUnits } from './migrations/migrations.analysisPointUnits';
 import { MedicalSourceAdminModule } from './medicalSource/medical-source-admin.module';
+import { intervalModeEnabled } from './interval/interval-mode';
 
 @Module({
   imports: [
@@ -80,6 +81,9 @@ import { MedicalSourceAdminModule } from './medicalSource/medical-source-admin.m
         AnalysisResultDescriptionCondition,
       ],
       autoLoadModels: true,
+      // Legacy models remain registered for the guarded editor during transition.
+      // Do not let Sequelize recreate tables removed by the interval migration.
+      synchronize: !intervalModeEnabled(),
     }),
     MedicalSourceAdminModule,
     TranslationModule,

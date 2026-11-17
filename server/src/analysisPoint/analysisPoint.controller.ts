@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Get, Post, Query, UseGuards } fr
 import { AnalysisPointService } from './analysisPoint.service';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { LegacyIntervalWriteGuard } from '../interval/interval-mode.guard';
 import {
   AddNewAnalysisPointQueryDto,
   EditAnalysisPointQueryDto,
@@ -22,7 +23,7 @@ export class AnalysisPointController {
 
   @Get('getFullList')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async getFullAnalysisPointsList(
     @Query() query: GetAnalysisPointListQueryDto,
   ): Promise<AnalysisPointsListResponse> {
@@ -31,7 +32,7 @@ export class AnalysisPointController {
 
   @Post('add')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async addNewAnalysisPoint(
     @Body() param: AddNewAnalysisPointQueryDto,
   ): Promise<AnalysisPointResponse> {
@@ -40,7 +41,7 @@ export class AnalysisPointController {
 
   @Post('edit')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async editAnalysisPoint(
     @Body() param: EditAnalysisPointQueryDto,
   ): Promise<AnalysisPointResponse> {
@@ -49,7 +50,7 @@ export class AnalysisPointController {
 
   @Post('delete')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async deleteAnalysisPointUnits(@Body() body: { id: number; sourceId: null }): Promise<boolean> {
     if (body.sourceId !== null || !Number.isSafeInteger(body.id) || body.id < 1) throw new BadRequestException('Explicit common source and valid id required');
     return this.analysisPointService.deleteAnalysisPoint(body.id);

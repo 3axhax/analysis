@@ -12,6 +12,7 @@ export enum StatusValue {
   NORMAL = "-1",
   LOW = "0",
   HIGH = "1",
+  OPTIMUM = "2",
 }
 
 export interface AnalysisResultDescriptionCondition {
@@ -47,6 +48,30 @@ export interface PointData {
   minValue: number | null;
   maxValue: number | null;
   pointDataStatus: StatusValue | null;
+  matchingIntervals?: {
+    id: number;
+    status: "LOW" | "NORMAL" | "HIGH" | "OPTIMUM" | null;
+    sourceId: number | null;
+    source: SourceDescriptionGroup["source"] | null;
+    minValue: string | null;
+    maxValue: string | null;
+    minValueEqual: boolean | null;
+    maxValueEqual: boolean | null;
+    unit: string | null;
+    sourceName: string | null;
+  }[];
+  displayReferences?: {
+    id: number;
+    status: "NORMAL" | "OPTIMUM";
+    sourceId: number | null;
+    source: SourceDescriptionGroup["source"] | null;
+    minValue: string | null;
+    maxValue: string | null;
+    minValueEqual: boolean | null;
+    maxValueEqual: boolean | null;
+    minApproximate?: boolean;
+    maxApproximate?: boolean;
+  }[];
   sourceUnitText?: string;
   interpretationWarning?: string | null;
   calculation?: {

@@ -13,18 +13,17 @@ export const AnalysisPointDataListStatus = ({
   status: StatusValue | null;
 }) => {
   const { t } = useTranslation("common");
-  if (status === null)
-    return <span className="text-gray-500">Нет интерпретации</span>;
+  if (status === null) return null;
 
   return (
     <span
       className={cn({
-        "text-green-600 whitespace-nowrap": status === StatusValue.NORMAL,
+        "text-green-600 whitespace-nowrap": status === StatusValue.NORMAL || status === StatusValue.OPTIMUM,
         "text-red-600 whitespace-nowrap font-normal":
           status === StatusValue.HIGH || status === StatusValue.LOW,
       })}
     >
-      {status === StatusValue.NORMAL ? (
+      {status === StatusValue.NORMAL || status === StatusValue.OPTIMUM ? (
         <CheckIcon className="size-4 inline-flex mr-1 color-green-600" />
       ) : status === StatusValue.HIGH ? (
         <ArrowUpIcon className={"size-4 inline-flex mr-1 color-green-600"} />
@@ -33,7 +32,7 @@ export const AnalysisPointDataListStatus = ({
       ) : (
         ""
       )}
-      {t(`analysisDescriptionConditionStatus.${status}`)}
+      {t(`analysisDescriptionConditionStatus.${status}`, status === StatusValue.OPTIMUM ? { defaultValue: "Оптимум" } : {})}
     </span>
   );
 };

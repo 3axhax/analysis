@@ -15,11 +15,13 @@ import { AnalysisPointMaxValueModule } from '../analysisPointMaxValue/analysisPo
 import { ParseFileService } from './parseFile.service';
 import { PdfParserModule } from '../pdf-parser/pdf-parser.module';
 import { UnitConversionModule } from '../unitConversion/unit-conversion.module';
+import { IntervalModule } from '../interval/interval.module';
 
 @Module({
   providers: [AnalysisResultService, ParseFileService],
   controllers: [AnalysisResultController],
   imports: [
+    IntervalModule,
     UnitConversionModule,
     SequelizeModule.forFeature([AnalysisResult]),
     AgesModule,

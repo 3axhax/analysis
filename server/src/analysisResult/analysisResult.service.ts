@@ -3,6 +3,7 @@ import {
   Injectable,
   UnprocessableEntityException,
   ServiceUnavailableException,
+  Optional,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from 'sequelize';
@@ -36,6 +37,8 @@ import { sourceAppliesToAge } from './source-age-scope';
 import { calculateDeRitis } from './de-ritis';
 import { calculateHoma } from './homa';
 import { DE_RITIS_RULES, DeRitisRuleContext, matchesDeRitisRule } from './de-ritis-gradations';
+import { IntervalResultReadService } from '../interval/interval-result-read.service';
+import { intervalModeEnabled } from '../interval/interval-mode';
 
 export interface SaveResultResponse {
   resultId?: string;
@@ -101,6 +104,7 @@ export class AnalysisResultService {
     private analysisResultPointDataService: AnalysisResultPointDataService,
     private analysisResultDescriptionService: AnalysisResultDescriptionService,
     private unitConversionService: UnitConversionService,
+    @Optional() private intervalResultReader?: IntervalResultReadService,
   ) {}
   saveResult = async ({
     ageInDays,
@@ -233,6 +237,10 @@ export class AnalysisResultService {
     resultId: string;
   }): Promise<GetResultResponse> => {
     try {
+      if (intervalModeEnabled()) {
+        if (!this.intervalResultReader) throw new Error('interval_reader_unavailable');
+        return await this.intervalResultReader.read(resultId) as unknown as GetResultResponse;
+      }
       return await this.readResult(resultId);
     } catch {
       throw new ServiceUnavailableException('result_read_failed');

@@ -4,4 +4,5 @@
 /.idea
 /testData
 /sqlDump
+/server/.interval.local.env
 /tmp

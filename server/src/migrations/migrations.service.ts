@@ -1,3 +1,5 @@
+import { PMC_ADDITIONAL_DESCRIPTIONS_SQL } from './pmc-additional-descriptions.sql';
+import { PMC_BLOOD_DESCRIPTIONS_SQL } from './pmc-blood-descriptions.sql';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { MedicalSource } from '../medicalSource/medical-source.model';
 import { SourceReferenceInheritance } from '../medicalSource/source-reference-inheritance.model';
@@ -50,6 +52,8 @@ import { THYROID_ELECTROLYTE_TYPOS_SQL } from './thyroid-electrolyte-typos.sql';
 import { THYROID_ELECTROLYTE_CORRECTIONS_SQL } from './thyroid-electrolyte-corrections.sql';
 import { IONIZED_CALCIUM_SQL } from './ionized-calcium.sql';
 import { MigrationsAnalysisPointUnits } from './migrations.analysisPointUnits';
+import { intervalModeEnabled } from '../interval/interval-mode';
+import { prepareIntervalTransition, finishIntervalTransition } from './interval-transition';
 
 @Injectable()
 export class MigrationsService implements OnModuleInit {
@@ -319,5 +323,11 @@ export class MigrationsService implements OnModuleInit {
     await runRecordedMigration(this.sequelize, '0050-thyroid-electrolyte-typos', 20050, THYROID_ELECTROLYTE_TYPOS_SQL);
     await runRecordedMigration(this.sequelize, '0051-thyroid-electrolyte-corrections', 20051, THYROID_ELECTROLYTE_CORRECTIONS_SQL);
     await runRecordedMigration(this.sequelize, '0052-ionized-calcium', 20052, IONIZED_CALCIUM_SQL);
+    await runRecordedMigration(this.sequelize, '0053-pmc-blood-descriptions', 20053, PMC_BLOOD_DESCRIPTIONS_SQL);
+    await runRecordedMigration(this.sequelize, '0054-pmc-additional-descriptions', 20054, PMC_ADDITIONAL_DESCRIPTIONS_SQL);
+    if (intervalModeEnabled()) {
+      await prepareIntervalTransition(this.sequelize);
+      await finishIntervalTransition(this.sequelize);
+    }
   }
 }

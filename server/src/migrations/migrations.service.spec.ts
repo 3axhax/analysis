@@ -158,6 +158,8 @@ describe('startup migration ordering', () => {
     expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0050-thyroid-electrolyte-typos', 20050, expect.any(String));
     expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0051-thyroid-electrolyte-corrections', 20051, expect.any(String));
     expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0052-ionized-calcium', 20052, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0053-pmc-blood-descriptions', 20053, expect.any(String));
+    expect(runRecordedMigration).toHaveBeenCalledWith(expect.anything(), '0054-pmc-additional-descriptions', 20054, expect.any(String));
     expect(calls.indexOf('point-order')).toBeLessThan(calls.indexOf('0002'));
     expect(calls.indexOf('result-age')).toBeLessThan(calls.indexOf('0002'));
   });

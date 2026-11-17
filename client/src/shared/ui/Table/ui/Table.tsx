@@ -15,15 +15,23 @@ export interface TableData {
 interface TableProps {
   tableData: TableData;
   className?: string;
+  leadingContent?: JSX.Element;
 }
 
-export const Table = ({ tableData, className }: TableProps) => {
+export const Table = ({ tableData, className, leadingContent }: TableProps) => {
   const { t } = useTranslation("common");
   return (
     <table
       className={`m-auto w-full border border-cyan-800 dark:border-white${className ? ` ${className}` : ""}`}
     >
       <thead>
+        {leadingContent && (
+          <tr>
+            <td colSpan={tableData.header.length} className="px-4 py-3">
+              {leadingContent}
+            </td>
+          </tr>
+        )}
         <tr className="bg-cyan-800 text-white">
           {tableData.header.map((th) => (
             <th

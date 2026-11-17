@@ -1,6 +1,7 @@
 import { BadRequestException, Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { LegacyIntervalWriteGuard } from '../interval/interval-mode.guard';
 import { AnalysisResultDescriptionService } from './analysisResultDescription.service';
 import {
   AddNewAnalysisResultDescriptionsQueryDto,
@@ -28,7 +29,7 @@ export class AnalysisResultDescriptionsController {
 
   @Get('/withTranslations')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async getAnalysisResultDescriptionsList(
     @Query() query: GetAnalysisResultDescriptionsListQueryDto,
   ): Promise<AnalysisResultDescriptionsListResponse> {
@@ -39,7 +40,7 @@ export class AnalysisResultDescriptionsController {
 
   @Post('add')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async addNewAnalysisResultDescriptions(
     @Body() param: AddNewAnalysisResultDescriptionsQueryDto,
   ): Promise<AnalysisResultDescription | null> {
@@ -50,7 +51,7 @@ export class AnalysisResultDescriptionsController {
 
   @Post('edit')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async editAnalysisResultDescriptions(
     @Body() param: EditAnalysisResultDescriptionsQueryDto,
   ): Promise<AnalysisResultDescription | null> {
@@ -61,7 +62,7 @@ export class AnalysisResultDescriptionsController {
 
   @Post('delete')
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, LegacyIntervalWriteGuard)
   async deleteAnalysisResultDescriptions(
     @Body() body: { id: number; sourceId: null },
   ): Promise<boolean> {
