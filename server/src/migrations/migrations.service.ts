@@ -1,8 +1,11 @@
+import { REMOVE_LEGACY_INHERITANCE_SQL } from './remove-legacy-inheritance.sql';
+import { REMOVE_LEGACY_RULE_TRIGGER_SQL } from './remove-legacy-rule-trigger.sql';
+import { REMOVE_LEGACY_RESULT_TRIGGER_SQL } from './remove-legacy-result-trigger.sql';
+import { REMOVE_LEGACY_INTERVAL_DATA_SQL } from './remove-legacy-interval-data.sql';
 import { PMC_ADDITIONAL_DESCRIPTIONS_SQL } from './pmc-additional-descriptions.sql';
 import { PMC_BLOOD_DESCRIPTIONS_SQL } from './pmc-blood-descriptions.sql';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { MedicalSource } from '../medicalSource/medical-source.model';
-import { SourceReferenceInheritance } from '../medicalSource/source-reference-inheritance.model';
 import { Sequelize } from 'sequelize-typescript';
 import { MigrationsAnalysisPoint } from './migrations.analysisPoint';
 import { MigrationsAges } from './migrations.ages';
@@ -52,7 +55,6 @@ import { THYROID_ELECTROLYTE_TYPOS_SQL } from './thyroid-electrolyte-typos.sql';
 import { THYROID_ELECTROLYTE_CORRECTIONS_SQL } from './thyroid-electrolyte-corrections.sql';
 import { IONIZED_CALCIUM_SQL } from './ionized-calcium.sql';
 import { MigrationsAnalysisPointUnits } from './migrations.analysisPointUnits';
-import { intervalModeEnabled } from '../interval/interval-mode';
 import { prepareIntervalTransition, finishIntervalTransition } from './interval-transition';
 
 @Injectable()
@@ -68,7 +70,7 @@ export class MigrationsService implements OnModuleInit {
   async onModuleInit() {
     await this.runMigrations();
     // Register after DDL so Sequelize sync cannot create these tables before migration.
-    this.sequelize.addModels([MedicalSource, SourceReferenceInheritance]);
+    this.sequelize.addModels([MedicalSource]);
   }
 
   private async runMigrations() {
@@ -325,9 +327,11 @@ export class MigrationsService implements OnModuleInit {
     await runRecordedMigration(this.sequelize, '0052-ionized-calcium', 20052, IONIZED_CALCIUM_SQL);
     await runRecordedMigration(this.sequelize, '0053-pmc-blood-descriptions', 20053, PMC_BLOOD_DESCRIPTIONS_SQL);
     await runRecordedMigration(this.sequelize, '0054-pmc-additional-descriptions', 20054, PMC_ADDITIONAL_DESCRIPTIONS_SQL);
-    if (intervalModeEnabled()) {
-      await prepareIntervalTransition(this.sequelize);
-      await finishIntervalTransition(this.sequelize);
-    }
+    await prepareIntervalTransition(this.sequelize);
+    await finishIntervalTransition(this.sequelize);
+    await runRecordedMigration(this.sequelize, '0058-remove-legacy-interval-data', 20058, REMOVE_LEGACY_INTERVAL_DATA_SQL);
+    await runRecordedMigration(this.sequelize, '0059-remove-legacy-result-trigger', 20059, REMOVE_LEGACY_RESULT_TRIGGER_SQL);
+    await runRecordedMigration(this.sequelize, '0060-remove-legacy-rule-trigger', 20060, REMOVE_LEGACY_RULE_TRIGGER_SQL);
+    await runRecordedMigration(this.sequelize, '0061-remove-legacy-inheritance', 20061, REMOVE_LEGACY_INHERITANCE_SQL);
   }
 }

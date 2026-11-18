@@ -82,7 +82,7 @@ docker compose ps
 3. NestJS передаёт буфер в `python_pdf_parser:8000/extract-tables`; Python обрабатывает страницы 1–5 и возвращает таблицы и извлечённый текст.
 4. `ParseFileService` сопоставляет строки с `analysisPoint.translationParsing` либо RU/EN-названиями, извлекает первое положительное число меньше 3000 и возвращает найденные показатели клиенту. Автораспознавание является подсказкой: пользователь должен проверить показатели и выбрать единицы.
 5. `POST /result/save` определяет возрастной интервал и пол, создаёт `analysisResult`, затем сохраняет распознанные показатели в `analysisResultPointData`.
-6. `POST /result/get` получает результат по случайному 40-символьному hex `resultId`, вычисляет статусы `LOW`, `NORMAL`, `HIGH` по min/max и подбирает описания, все условия которых совпали.
+6. `POST /result/get` получает результат по случайному 40-символьному hex `resultId`, сопоставляет значения с интервалами и подбирает описания, все условия которых совпали.
 7. Client показывает результат на `/result/:resultId`; ссылку можно скопировать и открыть без авторизации.
 
 Никогда не трактуй результат алгоритма как медицинский диагноз. Изменения сопоставления, диапазонов, единиц и текстов интерпретации требуют предметной проверки и тестов на граничных значениях.
@@ -102,9 +102,9 @@ docker compose ps
 
 - Справочники: `ages`, `gender`, `analysisType`, `analysisPoint`, `analysisPointUnits`, `translation`.
 - Связи: `analysis_type_point`, `analysis_point_units`.
-- Нормативы: `analysisPointMinValue` и `analysisPointMaxValue`, ключ по смыслу — point + age + gender + unit.
+- Нормативы: `analysisPointIntervalValue`, интервалы с границами, включительностью, статусом и источником.
 - Результаты: `analysisResult` и дочерняя `analysisResultPointData`.
-- Интерпретации: `analysisResultDescription` и `analysisResultDescriptionCondition`.
+- Интерпретации: `analysisResultDescription`, `analysisResultDescriptionCondition` и `analysisResultIntervalDescriptionCondition`.
 - Доступ: `users`, `roles`, `users-roles`, `users-sessions`.
 - Служебная таблица `migrations` учитывает самописные startup migrations.
 
@@ -122,10 +122,10 @@ analysisResult
 analysisPoint
   <-> analysisType через analysis_type_point
   <-> analysisPointUnits через analysis_point_units
-  -> min/max по age + gender + unit
+  -> интервалы по age + gender + unit + source
 
 analysisResultDescription
-  -> conditions[]: analysisPoint + LOW/NORMAL/HIGH
+  -> conditions[]: analysisPoint + связанные интервалы
 ```
 
 Схему меняй миграциями, а не ручным SQL как способом доставки. NestJS при старте выполняет `MigrationsService.onModuleInit()`: создаёт таблицу `migrations` и запускает идемпотентные `ALTER TABLE` для известных изменений. Поэтому даже обычный запуск server-контейнера потенциально изменяет схему.
@@ -150,12 +150,12 @@ docker exec postgresAnalysis sh -lc 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" 
 ## Критически важная логика
 
 - `AnalysisResultService.saveResult()` выполняет техническую валидацию и сохраняет весь набор исходных измерений атомарно в repeatable-read транзакции. Поиск нормативов/конверсия при save запрещены: отсутствие интервала не блокирует результат и не исключает строки. Ноль разрешён; отрицательные/нечисловые значения, неизвестные point/unit и дубли point дают явную ошибку запроса, а не молчаливый пропуск.
-- Новые измерения хранят точные sourceValue/sourceUnitId/sourceUnitText без calculation/reference fields. Расчёт происходит при GET: точная source unit приоритетна, иначе выбирается согласованный конвертируемый норматив point/age/gender. Отсутствие/конфликт интервала даёт null status/bounds и предупреждение, строка остаётся видимой. Старые нормализованные снимки продолжают использовать сохранённые коэффициенты/границы; GET ничего не записывает.
-- `MigrationsService` автоматически выполняет миграции единиц/результатов в порядке0002→0003→0006 после старых entity migrations. `MigrationsAnalysisPointUnits` и `MigrationsAnalysisResult` используют прежние имена в migrations: ручные применения совместимы и не повторяются. DDL/seed/marker новых миграций атомарны и защищены advisory lock. SQL поставляется внутри dist через `src/migrations/unit-migrations.sql.ts`, отдельный ручной up не нужен.
-- Aliases — `analysisPointUnits.translationParsing` через `_`, правила — `unitConversionRule`;0006 расширяет CHECK для source-only без изменения старых строк. Down-скрипты остаются только для отдельно согласованного обслуживания и отказывают при используемых данных. Перед rollback остановить новую версию, иначе startup повторно применит удалённый marker. Не удаляй source-only строки/provenance и не переписывай использованные версии коэффициентов ради отката.
+- Измерения хранят точные sourceValue/sourceUnitId/sourceUnitText без calculation/reference fields. Расчёт при GET использует интервалы с учётом единицы, возраста и пола. Значение без подходящего интервала остаётся видимым без статуса. GET ничего не записывает.
+- `MigrationsService` запускает зарегистрированные миграции при старте, включая переход к интервальной модели и зачистку старых структур. Миграции с marker выполняются атомарно и защищены advisory lock. Исторические миграции нужны для обновления старых схем и не являются альтернативным механизмом расчёта.
+- Aliases — `analysisPointUnits.translationParsing` через `_`, правила — `unitConversionRule`. Перед rollback останови новую версию: startup повторно применит отсутствующий marker. Не удаляй исходные измерения ради отката.
 - БД проверяет отдельные FK point и unit, но не проверяет, что unit разрешена именно для point через `analysis_point_units`.
-- Lookup min/max требует unitId и однозначного полного ключа. Результат и описания используют один статус; отсутствие/конфликт норматива даёт null и предупреждение.
-- Admin-редактирование показателя удаляет старые min/max и создаёт новые без транзакции. Аналогично CRUD описаний и переводов состоит из нескольких независимых операций.
+- Интервалы могут пересекаться; условие описания выполняется при совпадении любого связанного интервала, а описание — при выполнении всех его условий.
+- Старый редактор нормативов и описаний удалён; новый редактор остаётся отдельной задачей. CRUD переводов состоит из нескольких независимых операций.
 - В `getAnalysisResultDescriptionsByQuery()` фильтр строится через `sequelize.literal`; вход типизирован как число, но любые изменения этого кода должны сохранять строгую DTO-валидацию или перейти на bind parameters.
 - Python parser возвращает полный извлечённый текст (`all_text`) в межсервисном ответе и включает детали исключений в HTTP 500. Не логируй эти payloads; ограничивай страницы, размер и время обработки.
 - Данные разбора `ParseFileService` локальны для запроса; общий счётчик ограничивает параллелизм. Не помещай request-specific findings в поля singleton provider.
@@ -254,7 +254,7 @@ docker exec pythonPDFParser curl -fsS http://localhost:8000/health
 - Нет полноценной системы миграций с `down`, блокировкой, общей транзакцией и отдельным CLI; миграции запускаются при старте приложения.
 - Нет expiration/revocation sessions, rate limiting, TTL/удаления результатов и ограничения доступа владельцем.
 - Capability-ссылки результатов публичны; privacy зависит только от энтропии `resultId` и неразглашения URL.
-- У нормативов нет уникального ограничения полного логического ключа; часть lookup игнорирует unit.
+- Интервалы могут пересекаться и учитывают единицу измерения; пересечение LOW и HIGH одного источника требует проверки данных.
 - `analysisResult.userId` и `users-sessions.userId` в локальной схеме не защищены FK, несмотря на смысловую связь моделей.
 - Нет составного FK, гарантирующего допустимость unit для point в сохранённом результате.
 - Python parser возвращает лишний полный текст; эвристическое сопоставление требует регрессионных тестов и проверки пользователем.

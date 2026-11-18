@@ -107,7 +107,7 @@ function singleStatus(intervals: readonly SourcedInterval[]): string | null {
   );
 }
 
-/** Replacement read path, activated only with the coordinated schema cutover. */
+/** Reads results through the interval model. */
 @Injectable()
 export class IntervalResultReadService {
   constructor(

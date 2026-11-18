@@ -13,12 +13,7 @@ jest.mock('../migrations/interval-transition', () => ({
 }));
 
 describe('interval startup migrations', () => {
-  const previous = process.env.INTERVAL_MODEL_ENABLED;
-  afterEach(() => {
-    jest.clearAllMocks();
-    if (previous === undefined) delete process.env.INTERVAL_MODEL_ENABLED;
-    else process.env.INTERVAL_MODEL_ENABLED = previous;
-  });
+  afterEach(() => jest.clearAllMocks());
   function service() {
     const db = {
       query: jest.fn().mockResolvedValue(undefined),
@@ -46,14 +41,7 @@ describe('interval startup migrations', () => {
       units as never,
     );
   }
-  it('does not run interval migrations by default', async () => {
-    delete process.env.INTERVAL_MODEL_ENABLED;
-    await service().onModuleInit();
-    expect(prepareIntervalTransition).not.toHaveBeenCalled();
-    expect(finishIntervalTransition).not.toHaveBeenCalled();
-  });
-  it('runs the two recorded migrations in order when explicitly enabled', async () => {
-    process.env.INTERVAL_MODEL_ENABLED = 'true';
+  it('runs the interval migrations in order without a feature flag', async () => {
     await service().onModuleInit();
     expect(prepareIntervalTransition).toHaveBeenCalledTimes(1);
     expect(finishIntervalTransition).toHaveBeenCalledTimes(1);

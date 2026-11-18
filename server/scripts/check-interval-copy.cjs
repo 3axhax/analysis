@@ -62,7 +62,6 @@ async function main() {
     phase = 'synthetic context';
     const [context] = await select(`SELECT p.id AS point_id, p.name AS point, u.name AS unit FROM "analysisPointIntervalValue" i JOIN "analysisPoint" p ON p.id=i."pointId" JOIN "analysisPointUnits" u ON u.id=i."unitId" JOIN ages a ON a.id=i."ageId" JOIN gender g ON g.id=i."genderId" WHERE i."sourceId" IS NULL AND i.status='NORMAL' AND g.name='m' AND a."intervalDayStart"<=10000 AND a."intervalDayEnd">=10000 ORDER BY p.id LIMIT 1`);
     if (!context) throw Error('Synthetic HTTP context unavailable');
-    process.env.INTERVAL_MODEL_ENABLED = 'true';
     process.env.NODE_ENV = 'interval-test';
     process.env.POSTGRES_HOST = '127.0.0.1';
     process.env.POSTGRES_PORT = '5432';
@@ -127,7 +126,7 @@ async function main() {
       const standard = await authorized(tokens.USER, `/admin/intervals/point/${context.point_id}`);
       const admin = await authorized(tokens.ADMIN, `/admin/intervals/point/${context.point_id}`);
       const legacy = await authorized(tokens.ADMIN, '/analysisPoint/getFullList');
-      if (![401, 403].includes(invalid.status) || standard.status !== 403 || admin.status !== 200 || legacy.status !== 409) throw Error('Synthetic role checks failed');
+      if (![401, 403].includes(invalid.status) || standard.status !== 403 || admin.status !== 200 || legacy.status !== 404) throw Error('Synthetic role checks failed');
       await db.query('DELETE FROM "users-sessions" WHERE token=:token', { replacements: { token: tokens.ADMIN } });
       const revoked = await authorized(tokens.ADMIN, `/admin/intervals/point/${context.point_id}`);
       if (![401, 403].includes(revoked.status)) throw Error('Revoked synthetic session was accepted');

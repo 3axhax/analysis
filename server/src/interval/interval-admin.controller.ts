@@ -14,11 +14,10 @@ import type {
   IntervalDescriptionWrite,
   IntervalWrite,
 } from './interval-admin.service';
-import { IntervalEnabledGuard } from './interval-mode.guard';
 
 @Controller('admin/intervals')
 @Roles('ADMIN')
-@UseGuards(RolesGuard, IntervalEnabledGuard)
+@UseGuards(RolesGuard)
 export class IntervalAdminController {
   constructor(private readonly intervals: IntervalAdminService) {}
 

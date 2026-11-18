@@ -8,10 +8,6 @@ import { GenderModule } from '../gender/gender.module';
 import { AnalysisPointModule } from '../analysisPoint/analysisPoint.module';
 import { AnalysisPointUnitsModule } from '../analysisPointUnits/analysisPointUnits.module';
 import { AnalysisResultPointDataModule } from '../analysisResultPointData/analysisResultPointData.module';
-import { AnalysisResultDescriptionModule } from '../analysisResultDescription/analysisResultDescription.module';
-import { AnalysisResultDescriptionConditionModule } from '../analysisResultDescriptionCondition/analysisResultDescriptionCondition.module';
-import { AnalysisPointMinValueModule } from '../analysisPointMinValue/analysisPointMinValue.module';
-import { AnalysisPointMaxValueModule } from '../analysisPointMaxValue/analysisPointMaxValue.module';
 import { ParseFileService } from './parseFile.service';
 import { PdfParserModule } from '../pdf-parser/pdf-parser.module';
 import { UnitConversionModule } from '../unitConversion/unit-conversion.module';
@@ -29,10 +25,6 @@ import { IntervalModule } from '../interval/interval.module';
     AnalysisPointModule,
     AnalysisPointUnitsModule,
     AnalysisResultPointDataModule,
-    AnalysisResultDescriptionModule,
-    AnalysisResultDescriptionConditionModule,
-    AnalysisPointMinValueModule,
-    AnalysisPointMaxValueModule,
     PdfParserModule,
   ],
   exports: [AnalysisResultService],

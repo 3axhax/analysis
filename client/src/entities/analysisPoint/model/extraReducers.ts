@@ -1,136 +1,22 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "@shared/store";
-import Request from "@shared/transport/RestAPI.ts";
-import { HandlerAxiosError } from "@shared/transport/RequestHandlersError.ts";
-import {
-  AnalysisPointFormatedLimit,
-  AnalysisPointGreatItem,
-  AnalysisPointGreatItemFormated,
-  setLoaded,
-  setPending,
-} from "@entities/analysisPoint";
-import { GenderType } from "@shared/lib/types";
+import type { RootState } from "@shared/store";
+import Request from "@shared/transport/RestAPI";
+import { HandlerAxiosError } from "@shared/transport/RequestHandlersError";
+import { setPending } from "./slice";
 
 export const getAnalysisPointList = createAsyncThunk(
   "analysisPoint/getList",
   async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
-    if (!state.analysisPoint.loaded && !state.analysisPoint.pending) {
-      dispatch(setPending(true));
-      try {
-        const response = await Request.get("/analysisPoint");
-        return response.data;
-      } catch (e) {
-        HandlerAxiosError(e);
-      } finally {
-        dispatch(setPending(false));
-      }
+    if (state.analysisPoint.loaded || state.analysisPoint.pending) return;
+    dispatch(setPending(true));
+    try {
+      const response = await Request.get("/analysisPoint");
+      return response.data;
+    } catch (error) {
+      HandlerAxiosError(error);
+    } finally {
+      dispatch(setPending(false));
     }
   },
 );
-
-export const getFullAnalysisPointList = createAsyncThunk(
-  "analysisPoint/getFullList",
-  async (_, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!state.analysisPoint.pending) {
-      dispatch(setPending(true));
-      try {
-        const response = await Request.get("/analysisPoint/getFullList", {
-          sourceId: "null",
-          currentPage: state.analysisPoint.currentPage,
-          recordPerPage: state.analysisPoint.recordPerPage,
-          filters: state.analysisPoint.filters,
-        });
-        return response.data;
-      } catch (e) {
-        HandlerAxiosError(e);
-      } finally {
-        dispatch(setPending(false));
-      }
-    }
-  },
-);
-
-export const addNewAnalysisPoint = createAsyncThunk(
-  "analysisPoint/addNew",
-  async (data: AnalysisPointGreatItem, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!state.ages.pending) {
-      dispatch(setPending(true));
-      try {
-        const response = await Request.post(
-          "/analysisPoint/add",
-          { ...formatAnalysisPointLimits(data), sourceId: null },
-        );
-        return response.data;
-      } catch (e) {
-        HandlerAxiosError(e);
-      } finally {
-        dispatch(setPending(false));
-        dispatch(setLoaded(false));
-      }
-    }
-  },
-);
-
-export const editAnalysisPoint = createAsyncThunk(
-  "analysisPoint/edit",
-  async (data: AnalysisPointGreatItem, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!state.ages.pending) {
-      dispatch(setPending(true));
-      try {
-        const response = await Request.post(
-          "/analysisPoint/edit",
-          { ...formatAnalysisPointLimits(data), sourceId: null },
-        );
-        return response.data;
-      } catch (e) {
-        HandlerAxiosError(e);
-      } finally {
-        dispatch(setPending(false));
-        dispatch(setLoaded(false));
-      }
-    }
-  },
-);
-
-export const deleteAnalysisPoint = createAsyncThunk(
-  "analysisPoint/delete",
-  async (id: number, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!state.ages.pending) {
-      dispatch(setPending(true));
-      try {
-        const response = await Request.post("/analysisPoint/delete", { id, sourceId: null });
-        return response.data;
-      } catch (e) {
-        HandlerAxiosError(e);
-      } finally {
-        dispatch(setPending(false));
-        dispatch(setLoaded(false));
-      }
-    }
-  },
-);
-
-const formatAnalysisPointLimits = (
-  data: AnalysisPointGreatItem,
-): AnalysisPointGreatItemFormated => {
-  return {
-    ...data,
-    limits: data.limits.reduce((acc, limit) => {
-      limit.age.forEach((age: string) => {
-        limit.gender.forEach((gender: GenderType) => {
-          acc.push({
-            ...limit,
-            age: age,
-            gender: gender,
-          });
-        });
-      });
-      return acc;
-    }, [] as AnalysisPointFormatedLimit[]),
-  };
-};

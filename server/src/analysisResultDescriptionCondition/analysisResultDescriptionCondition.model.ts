@@ -8,13 +8,11 @@ import {
 } from 'sequelize-typescript';
 import { AnalysisResultDescription } from '../analysisResultDescription/analysisResultDescription.model';
 import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
-import { StatusValue } from './status-value.enum';
 
 export interface AnalysisResultDescriptionConditionAttrs {
   id?: number;
   descriptionId: number;
   pointId: number;
-  status: StatusValue;
 }
 @Table({
   tableName: 'analysisResultDescriptionCondition',
@@ -45,12 +43,6 @@ export class AnalysisResultDescriptionCondition extends Model<
     allowNull: false,
   })
   declare pointId: number;
-
-  @Column({
-    type: DataType.ENUM(...Object.values(StatusValue)),
-    allowNull: false,
-  })
-  declare status: StatusValue;
 
   @BelongsTo(() => AnalysisResultDescription)
   description: AnalysisResultDescription;

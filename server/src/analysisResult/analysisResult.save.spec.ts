@@ -73,12 +73,6 @@ describe('atomic source-only result saving', () => {
         sourceValue: '12',
         sourceUnitId: 16,
         sourceUnitText: 'г/дл',
-        calculationValue: null,
-        conversionRuleId: null,
-        conversionRuleVersion: null,
-        appliedCoefficient: null,
-        referenceMin: null,
-        referenceMax: null,
       }),
       s.transaction,
     );
@@ -93,7 +87,6 @@ describe('atomic source-only result saving', () => {
         expect.objectContaining({
           value,
           sourceUnitId: 2,
-          appliedCoefficient: null,
         }),
         s.transaction,
       );
@@ -115,7 +108,6 @@ describe('atomic source-only result saving', () => {
         pointId: 2,
         sourceValue: '0',
         sourceUnitId: 2,
-        referenceMin: null,
       }),
       s.transaction,
     );

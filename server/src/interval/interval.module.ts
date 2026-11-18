@@ -9,7 +9,6 @@ import { AnalysisResult } from '../analysisResult/analysisResult.model';
 import { AnalysisPointModule } from '../analysisPoint/analysisPoint.module';
 import { AnalysisPointUnitsModule } from '../analysisPointUnits/analysisPointUnits.module';
 import { UnitConversionModule } from '../unitConversion/unit-conversion.module';
-import { IntervalEnabledGuard } from './interval-mode.guard';
 
 /** Registered together with the completed migration and result cutover. */
 @Module({
@@ -25,7 +24,6 @@ import { IntervalEnabledGuard } from './interval-mode.guard';
     IntervalReaderService,
     IntervalResultService,
     IntervalResultReadService,
-    IntervalEnabledGuard,
   ],
   exports: [
     IntervalReaderService,

@@ -5,7 +5,6 @@ export interface AnalysisResultDescriptionAttrs {
   sourceId?: number | null;
   id?: number;
   description_ru: string;
-  deRitisRule?: string | null;
 }
 @Table({
   tableName: 'analysisResultDescription',
@@ -30,9 +29,6 @@ export class AnalysisResultDescription extends Model<
     allowNull: false,
   })
   declare description_ru: string;
-
-  @Column({ type: DataType.STRING(32), allowNull: true })
-  declare deRitisRule: string | null;
 
   @HasMany(() => AnalysisResultDescriptionCondition)
   analysisResultDescriptionConditions: AnalysisResultDescriptionCondition[];

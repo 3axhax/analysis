@@ -1,4 +1,4 @@
-import { AnalysisResultDescriptionService } from './analysisResultDescription.service';
+import { DescriptionFixtureEvaluator as AnalysisResultDescriptionService } from '../interval/description-fixture.test-helper';
 import { StatusValue as S } from '../analysisResultDescriptionCondition/status-value.enum';
 
 describe('bilirubin interpretation condition alternatives', () => {

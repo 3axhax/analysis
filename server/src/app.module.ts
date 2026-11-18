@@ -20,14 +20,8 @@ import { AnalysisResultPointData } from './analysisResultPointData/analysisResul
 import { AnalysisResultPointDataModule } from './analysisResultPointData/analysisResultPointData.module';
 import { Gender } from './gender/gender.model';
 import { GenderModule } from './gender/gender.module';
-import { AnalysisPointMinValue } from './analysisPointMinValue/analysisPointMinValue.model';
-import { AnalysisPointMinValueModule } from './analysisPointMinValue/analysisPointMinValue.module';
-import { AnalysisPointMaxValue } from './analysisPointMaxValue/analysisPointMaxValue.model';
-import { AnalysisPointMaxValueModule } from './analysisPointMaxValue/analysisPointMaxValue.module';
 import { AnalysisResultDescriptionCondition } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.model';
-import { AnalysisResultDescriptionConditionModule } from './analysisResultDescriptionCondition/analysisResultDescriptionCondition.module';
 import { AnalysisResultDescription } from './analysisResultDescription/analysisResultDescription.model';
-import { AnalysisResultDescriptionModule } from './analysisResultDescription/analysisResultDescription.module';
 import { User } from './users/users.model';
 import { UsersModule } from './users/users.module';
 import { Role } from './roles/roles.model';
@@ -45,7 +39,6 @@ import { MigrationsAges } from './migrations/migrations.ages';
 import { MigrationsAnalysisResult } from './migrations/migrations.analysisResult';
 import { MigrationsAnalysisPointUnits } from './migrations/migrations.analysisPointUnits';
 import { MedicalSourceAdminModule } from './medicalSource/medical-source-admin.module';
-import { intervalModeEnabled } from './interval/interval-mode';
 
 @Module({
   imports: [
@@ -75,15 +68,12 @@ import { intervalModeEnabled } from './interval/interval-mode';
         AnalysisResult,
         AnalysisResultPointData,
         Gender,
-        AnalysisPointMinValue,
-        AnalysisPointMaxValue,
         AnalysisResultDescription,
         AnalysisResultDescriptionCondition,
       ],
       autoLoadModels: true,
-      // Legacy models remain registered for the guarded editor during transition.
-      // Do not let Sequelize recreate tables removed by the interval migration.
-      synchronize: !intervalModeEnabled(),
+      // Schema changes are managed by recorded migrations.
+      synchronize: false,
     }),
     MedicalSourceAdminModule,
     TranslationModule,
@@ -98,10 +88,6 @@ import { intervalModeEnabled } from './interval/interval-mode';
     AnalysisResultModule,
     AnalysisResultPointDataModule,
     GenderModule,
-    AnalysisPointMinValueModule,
-    AnalysisPointMaxValueModule,
-    AnalysisResultDescriptionModule,
-    AnalysisResultDescriptionConditionModule,
   ],
   controllers: [AppController],
   providers: [

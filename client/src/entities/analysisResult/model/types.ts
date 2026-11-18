@@ -27,7 +27,6 @@ export interface AnalysisResultDescriptionCondition {
 export interface ResultDescription {
   id: number;
   description_ru: string;
-  deRitisRule?: string | null;
   analysisResultDescriptionConditions: AnalysisResultDescriptionCondition[];
 }
 

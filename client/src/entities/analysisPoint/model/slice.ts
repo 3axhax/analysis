@@ -1,94 +1,18 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { WritableDraft } from "immer";
-import { ErrorActionType } from "@shared/lib/types";
-import {
-  AnalysisPointListItem,
-  AnalysisPointState,
-  getAnalysisPointList,
-} from "@entities/analysisPoint";
-import { getFullAnalysisPointList } from "./extraReducers.ts";
-import { AnalysisPointsReducers } from "./reducers";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { getAnalysisPointList } from "./extraReducers";
+import type { AnalysisPointListItem, AnalysisPointState } from "./types";
 
-const initialState: AnalysisPointState = {
-  loaded: false,
-  pending: false,
-  error: "",
-  list: [],
-  currentPage: 1,
-  totalRecord: 0,
-  recordPerPage: 20,
-  filters: {},
-  editAnalysisPointId: 0,
-  adminRequestId: null,
-};
-
+const initialState: AnalysisPointState = { loaded: false, pending: false, error: "", list: [] };
 export const analysisPointSlice = createSlice({
   name: "analysisPoint",
   initialState,
-  reducers: AnalysisPointsReducers,
+  reducers: { setPending: (state, action: PayloadAction<boolean>) => { state.pending = action.payload; } },
   extraReducers: (builder) => {
-    builder
-      .addCase(
-        getAnalysisPointList.fulfilled,
-        (
-          state: WritableDraft<AnalysisPointState>,
-          action: PayloadAction<AnalysisPointListItem[]>,
-        ) => {
-          if (action.payload) {
-            state.list = action.payload;
-            state.loaded = true;
-          }
-          state.pending = false;
-        },
-      )
-      .addCase(getFullAnalysisPointList.pending, (state, action) => {
-        if (!state.pending) state.adminRequestId = action.meta.requestId;
-      })
-      .addCase(
-        getFullAnalysisPointList.fulfilled,
-        (
-          state: WritableDraft<AnalysisPointState>,
-          action: PayloadAction<{
-            totalRecord: number;
-            currentPage: number;
-            rows: AnalysisPointListItem[];
-          }, string, { requestId: string }>,
-        ) => {
-          if (state.adminRequestId !== action.meta.requestId) return;
-          state.adminRequestId = null;
-          if (action.payload) {
-            state.list = action.payload.rows;
-            state.totalRecord = action.payload.totalRecord;
-            state.loaded = false;
-          }
-          state.pending = false;
-        },
-      )
-      .addMatcher(
-        (action) =>
-          action.type.endsWith("/rejected") &&
-          action.type.startsWith("analysisPoint"),
-        (state: WritableDraft<AnalysisPointState>, action: ErrorActionType) => {
-          state.error = action.error.message ? action.error.message : "";
-        },
-      )
-      .addMatcher(
-        (action) =>
-          action.type.endsWith("/pending") &&
-          action.type.startsWith("analysisPoint"),
-        (state: WritableDraft<AnalysisPointState>) => {
-          state.error = "";
-        },
-      );
+    builder.addCase(getAnalysisPointList.fulfilled, (state, action: PayloadAction<AnalysisPointListItem[] | undefined>) => {
+      if (action.payload) { state.list = action.payload; state.loaded = true; }
+      state.pending = false;
+    });
+    builder.addCase(getAnalysisPointList.rejected, (state, action) => { state.error = action.error.message ?? ""; state.pending = false; });
   },
 });
-
-export const {
-  resetAdminView,
-  setPending,
-  setLoaded,
-  setCurrentPage,
-  resetError,
-  setEditAnalysisPointId,
-  setFilters,
-} = analysisPointSlice.actions;
+export const { setPending } = analysisPointSlice.actions;

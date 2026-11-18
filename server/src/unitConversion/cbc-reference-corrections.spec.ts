@@ -1,6 +1,6 @@
 import { normalizeToReference, NormalizationInput } from './reference-normalization';
 import { StatusValue as S } from '../analysisResultDescriptionCondition/status-value.enum';
-import { AnalysisResultDescriptionService } from '../analysisResultDescription/analysisResultDescription.service';
+import { DescriptionFixtureEvaluator as AnalysisResultDescriptionService } from '../interval/description-fixture.test-helper';
 
 describe('CBC reference correction', () => {
   const cases = [

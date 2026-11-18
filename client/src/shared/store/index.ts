@@ -8,7 +8,6 @@ import { genderSlice } from "@entities/gender";
 import { analysisResultSlice } from "@entities/analysisResult";
 import { translationsSlice } from "@entities/translations";
 import { unitsSlice } from "@entities/units";
-import { descriptionsSlice } from "@entities/descriptions";
 import { adminAnalysisTypeSlice } from "@entities/adminAnalysisType";
 
 export const createAppStore = () =>
@@ -23,7 +22,6 @@ export const createAppStore = () =>
       analysisResult: analysisResultSlice.reducer,
       translations: translationsSlice.reducer,
       units: unitsSlice.reducer,
-      descriptions: descriptionsSlice.reducer,
       adminAnalysisType: adminAnalysisTypeSlice.reducer,
     },
   });

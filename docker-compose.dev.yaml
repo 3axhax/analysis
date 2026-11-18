@@ -7,8 +7,6 @@ services:
     env_file:
       - path: ./server/.development.env
         required: true
-      - path: ./server/.interval.local.env
-        required: false
     volumes:
       - ./server:/app/server
       - /app/server/node_modules

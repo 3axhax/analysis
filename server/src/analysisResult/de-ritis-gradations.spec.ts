@@ -1,10 +1,15 @@
-import Decimal from 'decimal.js';
-import { DE_RITIS_RULES, matchesDeRitisRule } from './de-ritis-gradations';
+import { matchesInterval } from '../interval/interval-matcher';
 
-const D = Decimal.clone({ precision: 80 });
+const limits: Record<string, [string | null, string | null, boolean | null, boolean | null]> = {
+  gte_2: ['2', null, true, null], gte_1_7: ['1.7', null, true, null],
+  eq_1_5: ['1.7', '1.7', true, true], eq_1: ['1', '1', true, true],
+  lt_1: [null, '1', null, false], lt_1_5: [null, '1.5', null, false],
+};
 function matched(numerator: string, denominator = '1') {
-  const ratio = { numerator: new D(numerator), denominator: new D(denominator) };
-  return Object.keys(DE_RITIS_RULES).filter((key) => matchesDeRitisRule(key, ratio)).sort();
+  return Object.entries(limits).filter(([, [minValue, maxValue, minValueEqual, maxValueEqual]], index) => matchesInterval(
+    { id: index + 1, pointId: 99, ageId: 1, genderId: 1, unitId: 1, minValue, maxValue, minValueEqual, maxValueEqual },
+    { pointId: 99, ageId: 1, genderId: 1, unitId: 1, value: numerator, fraction: { numerator, denominator } },
+  )).map(([key]) => key).sort();
 }
 describe('independent de Ritis gradations', () => {
   it.each([
@@ -32,10 +37,5 @@ describe('independent de Ritis gradations', () => {
     expect(matched('169999999999999999', '100000000000000000')).toEqual([]);
     expect(matched('200000000000000001', '100000000000000000')).toEqual(['gte_1_7', 'gte_2']);
     expect(matched('17', '10')).toEqual(['eq_1_5', 'gte_1_7']);
-  });
-  it('rejects invalid rules and invalid measurements', () => {
-    expect(matchesDeRitisRule('other', { numerator: new D(2), denominator: new D(1) })).toBe(false);
-    expect(matchesDeRitisRule('gte_2', { numerator: new D(2), denominator: new D(0) })).toBe(false);
-    expect(matchesDeRitisRule('lt_1', { numerator: new D(-1), denominator: new D(2) })).toBe(false);
   });
 });
