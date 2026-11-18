@@ -3,6 +3,7 @@ import { REMOVE_LEGACY_RULE_TRIGGER_SQL } from './remove-legacy-rule-trigger.sql
 import { REMOVE_LEGACY_RESULT_TRIGGER_SQL } from './remove-legacy-result-trigger.sql';
 import { REMOVE_LEGACY_INTERVAL_DATA_SQL } from './remove-legacy-interval-data.sql';
 import { PMC_ADDITIONAL_DESCRIPTIONS_SQL } from './pmc-additional-descriptions.sql';
+import { SODIUM_GRADATIONS_SQL } from './sodium-gradations.sql';
 import { PMC_BLOOD_DESCRIPTIONS_SQL } from './pmc-blood-descriptions.sql';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { MedicalSource } from '../medicalSource/medical-source.model';
@@ -329,6 +330,7 @@ export class MigrationsService implements OnModuleInit {
     await runRecordedMigration(this.sequelize, '0054-pmc-additional-descriptions', 20054, PMC_ADDITIONAL_DESCRIPTIONS_SQL);
     await prepareIntervalTransition(this.sequelize);
     await finishIntervalTransition(this.sequelize);
+    await runRecordedMigration(this.sequelize, '0057-sodium-gradations', 20057, SODIUM_GRADATIONS_SQL);
     await runRecordedMigration(this.sequelize, '0058-remove-legacy-interval-data', 20058, REMOVE_LEGACY_INTERVAL_DATA_SQL);
     await runRecordedMigration(this.sequelize, '0059-remove-legacy-result-trigger', 20059, REMOVE_LEGACY_RESULT_TRIGGER_SQL);
     await runRecordedMigration(this.sequelize, '0060-remove-legacy-rule-trigger', 20060, REMOVE_LEGACY_RULE_TRIGGER_SQL);
