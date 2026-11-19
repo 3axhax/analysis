@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { METRICA_CONSENT_EVENT } from "@shared/config/metrica";
 import { Link } from "react-router-dom";
 
 export const PoliticsAgreementBlock = () => {
@@ -8,11 +9,13 @@ export const PoliticsAgreementBlock = () => {
 
   const acceptHandler = () => {
     localStorage.setItem("accept_ym", "1");
+    window.dispatchEvent(new Event(METRICA_CONSENT_EVENT));
     setShowBlock(false);
   };
 
   const refusalHandler = () => {
     localStorage.setItem("accept_ym", "0");
+    window.dispatchEvent(new Event(METRICA_CONSENT_EVENT));
     setShowBlock(false);
   };
 
