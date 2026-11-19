@@ -1,4 +1,7 @@
 import { FISEHA_FEMALE_ALT_SQL } from './fiseha-female-alt.sql';
+import { PMC_ADDITIONAL_REFERENCE_INTERVALS_SQL } from './pmc-additional-reference-intervals.sql';
+import { PMC_REVIEWED_REFERENCE_INTERVALS_SQL } from './pmc-reviewed-reference-intervals.sql';
+import { REMOVE_REFERENCE_ONLY_DESCRIPTIONS_SQL } from './remove-reference-only-descriptions.sql';
 import { OVERLAPPING_AGE_RANGES_SQL } from './overlapping-age-ranges.sql';
 import { PMC_POPULATION_REFERENCE_INTERVALS_SQL } from './pmc-population-reference-intervals.sql';
 import { PMC_REFERENCE_INTERVALS_SQL } from './pmc-reference-intervals.sql';
@@ -383,6 +386,24 @@ export class MigrationsService implements OnModuleInit {
       '0068-fiseha-female-alt',
       20068,
       FISEHA_FEMALE_ALT_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0069-pmc-additional-reference-intervals',
+      20069,
+      PMC_ADDITIONAL_REFERENCE_INTERVALS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0070-pmc-reviewed-reference-intervals',
+      20070,
+      PMC_REVIEWED_REFERENCE_INTERVALS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0071-remove-reference-only-descriptions',
+      20071,
+      REMOVE_REFERENCE_ONLY_DESCRIPTIONS_SQL,
     );
   }
 }
