@@ -7,7 +7,7 @@ export const accordionItems: AccordionItemType[] = [
   {
     id: 1,
     icon: (
-      <SafetyIcon className={"inline size-10 text-white dark:text-white"} />
+      <SafetyIcon className={"inline size-7 text-white dark:text-white"} />
     ),
     title: "Безопасно",
     content: (
@@ -25,7 +25,7 @@ export const accordionItems: AccordionItemType[] = [
   },
   {
     id: 2,
-    icon: <SpeedIcon className={"inline size-10 text-white dark:text-white"} />,
+    icon: <SpeedIcon className={"inline size-7 text-white dark:text-white"} />,
     title: "Быстро",
     content: (
       <ul className={"list-disc p-4 space-y-3"}>
@@ -37,7 +37,7 @@ export const accordionItems: AccordionItemType[] = [
   {
     id: 3,
     icon: (
-      <ExactlyIcon className={"inline size-10 text-white dark:text-white"} />
+      <ExactlyIcon className={"inline size-7 text-white dark:text-white"} />
     ),
     title: "Точно",
     content: (
