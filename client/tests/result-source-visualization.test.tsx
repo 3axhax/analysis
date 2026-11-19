@@ -24,6 +24,27 @@ it("combines and orders descriptions, marks only source-specific parameters and 
   expect(within(rows[1]).getAllByRole("button", { name: /Информация об источнике/ })).toHaveLength(1);
 });
 
+it("uses the result catalog label when the translation key is missing", () => {
+  const label = "Процентное соотношение эозинофилов (EOS%)";
+  const description = {
+    ...common,
+    analysisResultDescriptionConditions: [
+      condition(70, "eosinophil-percentage", StatusValue.HIGH),
+    ],
+  };
+
+  render(
+    <AnalysisDescriptionList
+      descriptions={[description]}
+      sourceGroups={[]}
+      pointLabels={new Map([[70, label]])}
+    />,
+  );
+
+  expect(screen.getByText(label)).toBeTruthy();
+  expect(screen.queryByText("analysisPoint.eosinophil-percentage")).toBeNull();
+});
+
 it("shows a short hover tooltip, pins full details and closes on outside click", () => {
   render(<AnalysisDescriptionList descriptions={[]} sourceGroups={[group]} />);
   const button = screen.getByRole("button", { name: /Информация об источнике/ });

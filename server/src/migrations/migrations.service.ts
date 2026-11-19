@@ -1,3 +1,6 @@
+import { PERCENTAGE_INTERPRETATIONS_SQL } from './percentage-interpretations.sql';
+import { NEUTROPHIL_PERCENTAGE_LABEL_SQL } from './neutrophil-percentage-label.sql';
+import { REMOVE_NORMAL_UREA_CREATININE_DESCRIPTION_SQL } from './remove-normal-urea-creatinine-description.sql';
 import { REMOVE_LEGACY_INHERITANCE_SQL } from './remove-legacy-inheritance.sql';
 import { REMOVE_LEGACY_RULE_TRIGGER_SQL } from './remove-legacy-rule-trigger.sql';
 import { REMOVE_LEGACY_RESULT_TRIGGER_SQL } from './remove-legacy-result-trigger.sql';
@@ -335,5 +338,23 @@ export class MigrationsService implements OnModuleInit {
     await runRecordedMigration(this.sequelize, '0059-remove-legacy-result-trigger', 20059, REMOVE_LEGACY_RESULT_TRIGGER_SQL);
     await runRecordedMigration(this.sequelize, '0060-remove-legacy-rule-trigger', 20060, REMOVE_LEGACY_RULE_TRIGGER_SQL);
     await runRecordedMigration(this.sequelize, '0061-remove-legacy-inheritance', 20061, REMOVE_LEGACY_INHERITANCE_SQL);
+    await runRecordedMigration(
+      this.sequelize,
+      '0062-remove-common-normal-urea-creatinine-description',
+      20062,
+      REMOVE_NORMAL_UREA_CREATININE_DESCRIPTION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0063-neutrophil-percentage-label',
+      20063,
+      NEUTROPHIL_PERCENTAGE_LABEL_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0064-percentage-interpretations',
+      20064,
+      PERCENTAGE_INTERPRETATIONS_SQL,
+    );
   }
 }

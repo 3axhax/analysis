@@ -9,6 +9,7 @@ export interface ProjectionSource {
 }
 export interface ProjectionDescription extends IntervalDescription {
   description_ru: string;
+  alternativeToId?: number | null;
 }
 
 /** Preserve all matching intervals and their provenance; status display is a separate decision. */
@@ -66,11 +67,20 @@ export function projectIntervalResult(
         },
       ];
     });
+  const commonDescriptions = new Map<string, ReturnType<typeof project>>();
+  for (const description of descriptions.filter((item) => item.sourceId === null)) {
+    const projected = project(description);
+    const key = JSON.stringify([description.alternativeToId ?? description.id, description.description_ru]);
+    const existing = commonDescriptions.get(key);
+    if (existing) {
+      existing.conditions.push(...projected.conditions);
+    } else {
+      commonDescriptions.set(key, projected);
+    }
+  }
   return {
     points,
-    descriptions: descriptions
-      .filter((description) => description.sourceId === null)
-      .map(project),
+    descriptions: [...commonDescriptions.values()],
     sourceDescriptions,
   };
 }

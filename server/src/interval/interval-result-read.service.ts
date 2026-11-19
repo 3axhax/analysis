@@ -227,8 +227,8 @@ export class IntervalResultReadService {
     }
     const [sources, descriptions] = await Promise.all([
       this.conversions.sourceCatalog(),
-      this.db.query<{ id: number; description_ru: string }>(
-        'SELECT id,description_ru FROM "analysisResultDescription"',
+      this.db.query<{ id: number; description_ru: string; alternativeToId: number | null }>(
+        'SELECT id,description_ru,"alternativeToId" FROM "analysisResultDescription"',
         { type: QueryTypes.SELECT },
       ),
     ]);

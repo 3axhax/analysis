@@ -3,15 +3,18 @@ import type { ResultDescription } from "@entities/analysisResult";
 import type { SourceDescriptionGroup } from "@entities/analysisResult/model/types.ts";
 import { Table, TableData, TableDataRow } from "@shared/ui";
 import { AnalysisPointDataListStatus } from "@widgets/analysisPointdataList/ui/AnalysisPointDataListStatus.tsx";
+import { DescriptionItems } from "./DescriptionItems";
 import { SourceInfo } from "./SourceInfo";
 
 export const AnalysisDescriptionList = ({
   descriptions,
   sourceGroups,
+  pointLabels,
   className,
 }: {
   descriptions: ResultDescription[];
   sourceGroups: SourceDescriptionGroup[];
+  pointLabels?: ReadonlyMap<number, string>;
   className?: string;
 }) => {
   const { t: tWidgets } = useTranslation("widgets");
@@ -39,16 +42,22 @@ export const AnalysisDescriptionList = ({
       {
         name: "description",
         className: group ? "relative !pb-10" : undefined,
-        data: group ? (
+        data: (
           <div className="description__inner">
-            <ul><li>{description.description_ru.replace(" Статусы показателей определены по общим нормативам сервиса.", "")}</li></ul>
-            <div className="absolute bottom-2 right-3"><SourceInfo source={group.source} textTrigger /></div>
+            <DescriptionItems
+              description={group
+                ? description.description_ru.replace(
+                    " Статусы показателей определены по общим нормативам сервиса.",
+                    "",
+                  )
+                : description.description_ru}
+            />
+            {group && (
+              <div className="absolute bottom-2 right-3">
+                <SourceInfo source={group.source} textTrigger />
+              </div>
+            )}
           </div>
-        ) : (
-          <div
-            className="description__inner"
-            dangerouslySetInnerHTML={{ __html: description.description_ru }}
-          />
         ),
       },
       {
@@ -58,7 +67,10 @@ export const AnalysisDescriptionList = ({
             {description.analysisResultDescriptionConditions.map(
               (condition) => (
                 <li key={condition.id}>
-                  {tEntities(`analysisPoint.${condition.analysisPoint.name}`)}
+                  {pointLabels?.get(condition.analysisPoint.id) ||
+                    tEntities(`analysisPoint.${condition.analysisPoint.name}`, {
+                      defaultValue: condition.analysisPoint.name,
+                    })}
                   {group &&
                     !group.inheritedPointIds.includes(
                       condition.analysisPoint.id,

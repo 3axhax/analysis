@@ -13,24 +13,19 @@ export class IntervalResultService {
   async evaluate(input: {
     ageId: number;
     measurements: IntervalMeasurement[];
-    descriptions: { id: number; description_ru: string }[];
+    descriptions: { id: number; description_ru: string; alternativeToId?: number | null }[];
     sources: ProjectionSource[];
   }) {
     const matching = await this.reader.evaluate(
       input.measurements,
       input.sources,
     );
-    const text = new Map(
-      input.descriptions.map((description) => [
-        description.id,
-        description.description_ru,
-      ]),
+    const detailsById = new Map(
+      input.descriptions.map((description) => [description.id, description]),
     );
     const descriptions = matching.descriptions.flatMap((description) => {
-      const description_ru = text.get(description.id);
-      return description_ru === undefined
-        ? []
-        : [{ ...description, description_ru }];
+      const details = detailsById.get(description.id);
+      return details === undefined ? [] : [{ ...description, ...details }];
     });
     return {
       ...projectIntervalResult(

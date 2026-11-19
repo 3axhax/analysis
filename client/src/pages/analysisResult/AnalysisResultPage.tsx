@@ -174,6 +174,12 @@ export const AnalysisResultPage = () => {
                 </div>
               )}
               <AnalysisDescriptionList
+                pointLabels={new Map(
+                  analysisResult.result.analysisResultPointData.map(({ point }) => [
+                    point.id,
+                    point.translationRu,
+                  ]),
+                )}
                 descriptions={hideCommon ? [] : analysisResult.descriptions}
                 sourceGroups={sourceGroups.filter(
                   (group) => !hiddenRoots.includes(group.source.rootId),

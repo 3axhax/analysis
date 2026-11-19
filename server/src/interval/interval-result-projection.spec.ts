@@ -56,6 +56,28 @@ describe('interval result projection', () => {
         .intervals,
     ).toHaveLength(2);
   });
+  it('combines matching alternatives while preserving independent rules with the same text', () => {
+    const common = { ...description, sourceId: null };
+    const percentInterval = { ...interval, id: 12, pointId: 8 };
+    const alternative = {
+      ...common,
+      id: 11,
+      alternativeToId: common.id,
+      conditions: [{ pointId: 8, intervalIds: [12] }],
+    };
+    const independent = { ...common, id: 13 };
+    const result = projectIntervalResult(
+      5,
+      [4, 8],
+      [interval, percentInterval],
+      [common, alternative, independent],
+      sources,
+    );
+
+    expect(result.descriptions.map((item) => item.id)).toEqual([10, 13]);
+    expect(result.descriptions[0].conditions.map((condition) => condition.pointId))
+      .toEqual([4, 8]);
+  });
   it('honours a description source age restriction', () => {
     const scoped = sources.map((source) =>
       source.id === 2
