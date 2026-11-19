@@ -12,7 +12,7 @@ export const OpportunityList = () => {
         "absolute w-full bg-cyan-900 text-white rounded-b-xl z-11"
       }
       headerClassName={
-        "transition-all duration-300 ease-in-out bg-gradient-to-br from-cyan-900 via-cyan-600 to-cyan-900 bg-[length:300%_100%] hover:bg-right-top hover:shadow-lg px-4 py-6 text-4xl font-light text-white"
+        "transition-all duration-300 ease-in-out bg-gradient-to-br from-cyan-900 via-cyan-600 to-cyan-900 bg-[length:300%_100%] hover:bg-right-top hover:shadow-lg px-2 py-3 text-xl lg:text-2xl font-light text-white"
       }
       headerOpenedClassName={"rounded-b-none"}
       headerClosedClassName={"delay-300"}
