@@ -38,7 +38,7 @@ export function evaluateIntervals(
     for (const interval of intervals) {
       if (
         interval.pointId !== input.measurement.pointId ||
-        interval.ageId !== input.measurement.ageId ||
+        !input.measurement.ageIds.includes(interval.ageId) ||
         interval.genderId !== input.measurement.genderId
       )
         continue;

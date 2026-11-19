@@ -32,7 +32,7 @@ export class AnalysisPointService {
       include: { all: true },
       order: [['translationRu', 'ASC']],
     });
-    return points.filter((point) => !['de_ritis_ratio', 'homa_ir'].includes(point.name)).map((point) => {
+    return points.filter((point) => !['de_ritis_ratio', 'homa_ir', 'nlr'].includes(point.name)).map((point) => {
       return {
         id: point.id,
         name: point.name,

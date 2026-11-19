@@ -17,7 +17,7 @@ export interface Interval {
 
 export interface IntervalMeasurement {
   pointId: number;
-  ageId: number;
+  ageIds: readonly number[];
   genderId: number;
   unitId: number;
   value: string | number;
@@ -87,7 +87,7 @@ export function matchesInterval(
   validateInterval(interval);
   if (
     interval.pointId !== measurement.pointId ||
-    interval.ageId !== measurement.ageId ||
+    !measurement.ageIds.includes(interval.ageId) ||
     interval.genderId !== measurement.genderId ||
     interval.unitId !== measurement.unitId
   )

@@ -20,7 +20,7 @@ export class DescriptionFixtureEvaluator {
       });
       descriptions.push({ id: index, sourceId, conditions });
     });
-    const inputs = Object.entries(statuses).map(([pointId, status]) => ({ measurement: { pointId: Number(pointId), ageId: 1, genderId: 1, unitId: 1, value: Number(status) + 2 }, allowedUnitIds: [1], rules: [] }));
+    const inputs = Object.entries(statuses).map(([pointId, status]) => ({ measurement: { pointId: Number(pointId), ageIds: [1], genderId: 1, unitId: 1, value: Number(status) + 2 }, allowedUnitIds: [1], rules: [] }));
     const matched = evaluateIntervals(inputs, intervals, descriptions).descriptions;
     return matched.map((description) => selected[description.id]);
   }

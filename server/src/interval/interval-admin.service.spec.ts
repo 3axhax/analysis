@@ -44,11 +44,17 @@ describe('interval administration', () => {
     expect(query).toHaveBeenCalledTimes(1);
   });
   it('rejects a source outside its stated age scope before writing', async () => {
-    const { service, query } = setup([[{ metadata: { allowedAgeIds: [9] } }]]);
+    const { service, query } = setup([[{ ageIds: [9] }]]);
     await expect(
       service.save({ ...input, sourceId: 10 }, true),
     ).rejects.toThrow('source_age_not_allowed');
     expect(query).toHaveBeenCalledTimes(1);
+  });
+  it('rejects conflicting reference ranges for overlapping ages', async () => {
+    const { service, query } = setup([[{ id: 1 }], [], [{ id: 9 }]]);
+    await expect(service.save({ ...input, status: 'NORMAL' }, true))
+      .rejects.toThrow('conflicting_age_references');
+    expect(query).toHaveBeenCalledTimes(3);
   });
   it('rejects a source group where a document is required', async () => {
     const { service, query } = setup([[]]);

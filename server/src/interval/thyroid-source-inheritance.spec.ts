@@ -15,7 +15,7 @@ describe('thyroid descriptions linked to common intervals', () => {
         for (const [value, expected] of [[Number(low) - .001, 1], [Number(low), 2], [Number(high), 2], [Number(high) + .001, 3]] as const) {
           for (const unitId of [10, 11]) {
             const sourceValue = unitId === 10 ? value.toFixed(3) : (value / 1_000_000).toFixed(9);
-            const result = evaluateIntervals([{ measurement: { pointId: 1, ageId: 1, genderId, unitId, value: sourceValue }, allowedUnitIds: [10, 11], rules: [{ id: 1, fromUnitId: 11, toUnitId: 10, coefficient: '1000000', version: 1, active: true, pointId: 1 }] }], intervals, descriptions);
+            const result = evaluateIntervals([{ measurement: { pointId: 1, ageIds: [1], genderId, unitId, value: sourceValue }, allowedUnitIds: [10, 11], rules: [{ id: 1, fromUnitId: 11, toUnitId: 10, coefficient: '1000000', version: 1, active: true, pointId: 1 }] }], intervals, descriptions);
             expect(result.descriptions.map((description) => description.id)).toEqual([expected]);
           }
         }

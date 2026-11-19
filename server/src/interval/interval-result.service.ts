@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { sourceAppliesToAges } from '../analysisResult/source-age-scope';
 import { IntervalMeasurement } from './interval-matcher';
 import { IntervalReaderService } from './interval-reader.service';
 import {
@@ -11,15 +12,15 @@ export class IntervalResultService {
   constructor(private readonly reader: IntervalReaderService) {}
 
   async evaluate(input: {
-    ageId: number;
+    ageIds: readonly number[];
     measurements: IntervalMeasurement[];
     descriptions: { id: number; description_ru: string; alternativeToId?: number | null }[];
     sources: ProjectionSource[];
   }) {
-    const matching = await this.reader.evaluate(
-      input.measurements,
-      input.sources,
+    const sources = input.sources.filter((source) =>
+      sourceAppliesToAges(source.ageIds, input.ageIds),
     );
+    const matching = await this.reader.evaluate(input.measurements, sources);
     const detailsById = new Map(
       input.descriptions.map((description) => [description.id, description]),
     );
@@ -29,11 +30,11 @@ export class IntervalResultService {
     });
     return {
       ...projectIntervalResult(
-        input.ageId,
+        input.ageIds,
         input.measurements.map((measurement) => measurement.pointId),
         matching.intervals,
         descriptions,
-        input.sources,
+        sources,
       ),
       warnings: matching.warnings,
       references: matching.references,

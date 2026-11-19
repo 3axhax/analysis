@@ -49,7 +49,7 @@ describe('interval reader', () => {
       query,
     } as unknown as Sequelize);
     const result = await service.evaluate(
-      [{ pointId: 1, ageId: 2, genderId: 3, unitId: 4, value: '5' }],
+      [{ pointId: 1, ageIds: [2], genderId: 3, unitId: 4, value: '5' }],
       [{ id: 10, parentId: 1, name: 'interval', metadata: {} }],
     );
     expect(result.descriptions.map((item) => item.id)).toEqual([8]);
@@ -107,13 +107,13 @@ describe('interval reader', () => {
       query,
     } as unknown as Sequelize);
     const result = await service.evaluate(
-      [{ pointId: 1, ageId: 2, genderId: 3, unitId: 4, value: '5' }],
+      [{ pointId: 1, ageIds: [2], genderId: 3, unitId: 4, value: '5' }],
       [
         {
           id: 10,
           parentId: 1,
           name: 'interval',
-          metadata: { allowedAgeIds: [99] },
+          metadata: {}, ageIds: [99],
         },
       ],
     );

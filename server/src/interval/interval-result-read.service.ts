@@ -8,10 +8,10 @@ import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
 import { AnalysisPointService } from '../analysisPoint/analysisPoint.service';
 import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
-import { Age } from '../ages/ages.model';
 import { Gender } from '../gender/gender.model';
 import { UnitConversionService } from '../unitConversion/unit-conversion.service';
-import { calculateDeRitis } from '../analysisResult/de-ritis';
+import { sourceAppliesToAges } from '../analysisResult/source-age-scope';
+import { calculateDeRitis, calculateResultRatio } from '../analysisResult/de-ritis';
 import { calculateHoma } from '../analysisResult/homa';
 import { IntervalMeasurement } from './interval-matcher';
 import { IntervalResultService } from './interval-result.service';
@@ -33,7 +33,7 @@ interface RawPoint {
   isCalculated?: boolean;
 }
 interface RawResult {
-  ageId: number;
+  ageInDays: number;
   genderId: number;
   analysisResultPointData: RawPoint[];
 }
@@ -128,7 +128,6 @@ export class IntervalResultReadService {
           model: AnalysisResultPointData,
           include: [{ model: AnalysisPoint }, { model: AnalysisPointUnits }],
         },
-        { model: Age },
         { model: Gender },
       ],
     });
@@ -162,9 +161,22 @@ export class IntervalResultReadService {
         matchingIntervals: [],
       };
     });
+    const [sources, descriptions, matchingAges] = await Promise.all([
+      this.conversions.sourceCatalog(),
+      this.db.query<{ id: number; description_ru: string; alternativeToId: number | null }>(
+        'SELECT id,description_ru,"alternativeToId" FROM "analysisResultDescription"',
+        { type: QueryTypes.SELECT },
+      ),
+      this.db.query<{ id: number }>(
+        'SELECT id FROM ages WHERE :ageInDays BETWEEN "intervalDayStart" AND "intervalDayEnd" ORDER BY id',
+        { replacements: { ageInDays: plain.ageInDays }, type: QueryTypes.SELECT },
+      ),
+    ]);
+    const ageIds = matchingAges.map((age) => age.id);
+
     const measurements: IntervalMeasurement[] = rows.map((row) => ({
       pointId: row.pointId,
-      ageId: plain.ageId,
+      ageIds,
       genderId: plain.genderId,
       unitId: row.unitId,
       value: row.sourceValue ?? row.value,
@@ -185,9 +197,27 @@ export class IntervalResultReadService {
             insulinMicroUnit.id,
           )
         : null;
+    const countUnit = unit('10^9/l');
+    const neutrophils = rows.find(
+      (row) => (row.point as AnalysisPoint | null)?.name === 'neutrophil-count',
+    );
+    const lymphocytes = rows.find(
+      (row) => (row.point as AnalysisPoint | null)?.name === 'lymphocyte-count',
+    );
+    const hasNlrReference = sources.some(
+      (source) =>
+        source.metadata.derivedPoint === 'nlr' &&
+        sourceAppliesToAges(source.ageIds, ageIds),
+    );
+    const nlr =
+      hasNlrReference &&
+      countUnit && neutrophils && lymphocytes
+        ? calculateResultRatio(rows, neutrophils.pointId, lymphocytes.pointId, countUnit.id)
+        : null;
     for (const derived of [
       { name: 'de_ritis_ratio', value: ratio },
       { name: 'homa_ir', value: homa },
+      { name: 'nlr', value: nlr },
     ]) {
       if (!derived.value || !ratioUnit) continue;
       const point = await this.points.getAnalysisPointByName(derived.name);
@@ -215,7 +245,7 @@ export class IntervalResultReadService {
       });
       measurements.push({
         pointId: point.id,
-        ageId: plain.ageId,
+        ageIds,
         genderId: plain.genderId,
         unitId: ratioUnit.id,
         value: derived.value.sourceValue,
@@ -225,15 +255,8 @@ export class IntervalResultReadService {
         },
       });
     }
-    const [sources, descriptions] = await Promise.all([
-      this.conversions.sourceCatalog(),
-      this.db.query<{ id: number; description_ru: string; alternativeToId: number | null }>(
-        'SELECT id,description_ru,"alternativeToId" FROM "analysisResultDescription"',
-        { type: QueryTypes.SELECT },
-      ),
-    ]);
     const evaluation = await this.evaluator.evaluate({
-      ageId: plain.ageId,
+      ageIds,
       measurements,
       descriptions,
       sources,

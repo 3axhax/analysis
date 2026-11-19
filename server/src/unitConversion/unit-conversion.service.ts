@@ -11,8 +11,9 @@ export class UnitConversionService {
       parentId: number | null;
       name: string;
       metadata: Record<string, unknown>;
+      ageIds: number[] | null;
     }>(
-      'SELECT id, parent_id AS "parentId", name, metadata FROM "medicalSource" ORDER BY id',
+      'SELECT s.id, s.parent_id AS "parentId", s.name, s.metadata, scope."ageIds" FROM "medicalSource" s LEFT JOIN LATERAL (SELECT array_agg(a."ageId" ORDER BY a."ageId") AS "ageIds" FROM "medicalSourceAge" a WHERE a."sourceId"=s.id) scope ON true ORDER BY s.id',
       { type: QueryTypes.SELECT },
     );
   }

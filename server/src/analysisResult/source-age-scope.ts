@@ -1,4 +1,6 @@
-export function sourceAppliesToAge(metadata: Record<string, unknown>, ageId: number): boolean {
-  if (!('allowedAgeIds' in metadata)) return true;
-  return Array.isArray(metadata.allowedAgeIds) && metadata.allowedAgeIds.includes(ageId);
+export function sourceAppliesToAges(
+  sourceAgeIds: readonly number[] | null | undefined,
+  ageIds: readonly number[],
+): boolean {
+  return sourceAgeIds == null || sourceAgeIds.some((id) => ageIds.includes(id));
 }

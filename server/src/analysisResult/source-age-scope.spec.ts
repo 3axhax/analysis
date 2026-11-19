@@ -1,12 +1,12 @@
-import { sourceAppliesToAge } from './source-age-scope';
+import { sourceAppliesToAges } from './source-age-scope';
 
 describe('source age scope', () => {
-  it('leaves existing unrestricted sources unchanged', () => {
-    expect(sourceAppliesToAge({}, 1)).toBe(true);
+  it('allows sources with no scope restriction', () => {
+    expect(sourceAppliesToAges(null, [1])).toBe(true);
   });
-  it('accepts only the explicitly permitted age groups', () => {
-    expect(sourceAppliesToAge({ allowedAgeIds: [2] }, 2)).toBe(true);
-    expect(sourceAppliesToAge({ allowedAgeIds: [2] }, 1)).toBe(false);
-    expect(sourceAppliesToAge({ allowedAgeIds: '2' }, 2)).toBe(false);
+  it('accepts a source if at least one of the matching age groups is in its scope', () => {
+    expect(sourceAppliesToAges([2, 3], [1, 2])).toBe(true);
+    expect(sourceAppliesToAges([2, 3], [1, 4])).toBe(false);
+    expect(sourceAppliesToAges([2, 3], [])).toBe(false);
   });
 });

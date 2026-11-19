@@ -35,9 +35,9 @@ describe('interval result service', () => {
       reader as unknown as IntervalReaderService,
     );
     const result = await service.evaluate({
-      ageId: 5,
+      ageIds: [5],
       measurements: [
-        { pointId: 4, ageId: 5, genderId: 6, unitId: 7, value: '2' },
+        { pointId: 4, ageIds: [5], genderId: 6, unitId: 7, value: '2' },
       ],
       descriptions: [{ id: 8, description_ru: 'example' }],
       sources: [
@@ -51,4 +51,26 @@ describe('interval result service', () => {
       conditions: [{ id: 10, intervals: [{ sourceId: 3, status: null }] }],
     });
   });
+  it.each([[[], false], [[5], false], [[5, 9], true], [[9], true]] as const)(
+    'scopes source eligibility to matching age IDs %j',
+    async (ageIds, applicable) => {
+      const reader = {
+        evaluate: jest.fn().mockResolvedValue({
+          intervals: [], descriptions: [], warnings: [],
+          references: [], displayReferences: [],
+        }),
+      };
+      const service = new IntervalResultService(reader as unknown as IntervalReaderService);
+      const root = { id: 1, parentId: null, name: 'root', metadata: {} };
+      const newborn = {
+        id: 2, parentId: 1, name: 'newborn',
+        metadata: {}, ageIds: [9],
+      };
+      await service.evaluate({
+        ageIds, measurements: [], descriptions: [],
+        sources: [root, newborn],
+      });
+      expect(reader.evaluate).toHaveBeenCalledWith([], applicable ? [root, newborn] : [root]);
+    },
+  );
 });

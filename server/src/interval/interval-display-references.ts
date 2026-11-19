@@ -18,7 +18,7 @@ export function displayReferences(
   const candidates = intervals.filter(
     (i) =>
       i.pointId === m.pointId &&
-      i.ageId === m.ageId &&
+      m.ageIds.includes(i.ageId) &&
       i.genderId === m.genderId &&
       (i.status === 'NORMAL' || i.status === 'OPTIMUM') &&
       input.allowedUnitIds.includes(i.unitId),

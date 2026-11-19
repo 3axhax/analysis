@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { UnitConversionRule } from '../unitConversion/reference-normalization';
 import { IntervalMeasurement } from './interval-matcher';
-import { sourceAppliesToAge } from '../analysisResult/source-age-scope';
+import { sourceAppliesToAges } from '../analysisResult/source-age-scope';
 import { ProjectionSource } from './interval-result-projection';
 import { commonReference } from './interval-reference';
 import { displayReferences } from './interval-display-references';
@@ -23,7 +23,8 @@ export class IntervalReaderService {
     measurements: readonly IntervalMeasurement[],
     sources: readonly ProjectionSource[],
   ) {
-    if (!measurements.length)
+    const ageIds = [...new Set(measurements.flatMap((item) => item.ageIds))];
+    if (!measurements.length || !ageIds.length)
       return {
         intervals: [],
         descriptions: [],
@@ -41,8 +42,8 @@ export class IntervalReaderService {
     const [intervals, units, rules, descriptions, conditions] =
       await Promise.all([
         this.db.query<SourcedInterval>(
-          'SELECT id,"sourceId","pointId","ageId","genderId","unitId","minValue"::text AS "minValue","maxValue"::text AS "maxValue","minValueEqual","maxValueEqual",status FROM "analysisPointIntervalValue" WHERE "pointId" IN (:pointIds)',
-          options,
+          'SELECT id,"sourceId","pointId","ageId","genderId","unitId","minValue"::text AS "minValue","maxValue"::text AS "maxValue","minValueEqual","maxValueEqual",status FROM "analysisPointIntervalValue" WHERE "pointId" IN (:pointIds) AND "ageId" IN (:ageIds)',
+          { ...options, replacements: { pointIds, ageIds } },
         ),
         this.db.query<{ pointId: number; unitId: number }>(
           'SELECT "pointId","unitsId" AS "unitId" FROM analysis_point_units WHERE "pointId" IN (:pointIds)',
@@ -108,7 +109,7 @@ export class IntervalReaderService {
       const source = sourceById.get(interval.sourceId);
       return (
         source !== undefined &&
-        sourceAppliesToAge(source.metadata, interval.ageId)
+        sourceAppliesToAges(source.ageIds, [interval.ageId])
       );
     });
     return {

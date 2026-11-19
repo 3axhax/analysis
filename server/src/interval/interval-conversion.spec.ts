@@ -4,7 +4,7 @@ import { UnitConversionRule } from '../unitConversion/reference-normalization';
 
 const measurement = {
   pointId: 1,
-  ageId: 2,
+  ageIds: [2],
   genderId: 3,
   unitId: 4,
   value: '0.3',

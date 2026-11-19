@@ -103,7 +103,7 @@ docker compose ps
 
 - **Данные по методичке.** Изменения показателей, референсов и сочетаний, в том числе белковых фракций, ТТГ, натрия и ионизированного кальция. Для процентных показателей лейкоцитарной формулы действуют отдельные условия, включая пару NEU% ↓ и LYM% ↑. При нормальных мочевине и креатинине отдельное описание для этой пары не выводится. [0018 — сверка и миграции](tasks/0018-analyze-method-45/implementation.md), [0027 — ТТГ и электролиты](tasks/0027-thyroid-electrolyte-corrections/implementation.md), [0028 — ионизированный кальций и его распознавание](tasks/0028-ionized-calcium/implementation.md).
 - **Тексты и сочетания.** Сверены формулировки общих описаний, отредактированы вводные фразы, добавлены и уточнены сочетания показателей. [0021 — сверка текстов](tasks/0021-description-source-review/implementation.md), [0024 — редактура](tasks/0024-description-wording/implementation.md), [0025 — сочетания с инсулином](tasks/0025-insulin-and-combinations/implementation.md), [0026 — липиды и инсулин](tasks/0026-lipid-insulin-descriptions/implementation.md).
-- **Данные по внешним публикациям.** Добавлены источники и условия для показателей крови и щитовидной железы. Для натрия добавлены три градации снижения с отдельными описаниями. [0016 — первые источники PMC](tasks/0016-pmc-source-research/implementation.md), [0019 — единицы FT3 и FT4](tasks/0019-thyroid-source-units/implementation.md), [0030 — сочетания из публикаций](tasks/0030-blood-pmc-sources/implementation.md), [0033 — градации натрия](tasks/0033-sodium-intervals/implementation.md).
+- **Данные по внешним публикациям.** Добавлены источники и условия для показателей крови и щитовидной железы. Для натрия добавлены три градации снижения с отдельными описаниями. [0016 — первые источники PMC](tasks/0016-pmc-source-research/implementation.md), [0019 — единицы FT3 и FT4](tasks/0019-thyroid-source-units/implementation.md), [0030 — сочетания из публикаций](tasks/0030-blood-pmc-sources/implementation.md), [0033 — градации натрия](tasks/0033-sodium-intervals/implementation.md), [0035 — возрастные референсы, NLR и интерпретации PMC](tasks/0035-pmc-reference-intervals/implementation.md), [0036 — популяционные референсы PMC](tasks/0036-pmc-population-references/implementation.md).
 
 ### Публичный сайт и эксплуатация
 
@@ -116,8 +116,8 @@ docker compose ps
 2. Пользователь вводит показатели вручную либо отправляет PDF в `POST /result/fromFile` (лимит 10 MiB, ожидается PDF).
 3. NestJS передаёт буфер в `python_pdf_parser:8000/extract-tables`; Python обрабатывает страницы 1–5 и возвращает таблицы и извлечённый текст.
 4. `ParseFileService` сопоставляет строки с `analysisPoint.translationParsing` либо RU/EN-названиями, извлекает первое положительное число меньше 3000 и возвращает найденные показатели клиенту. Автораспознавание является подсказкой: пользователь должен проверить показатели и выбрать единицы.
-5. `POST /result/save` определяет возрастной интервал и пол, создаёт `analysisResult`, затем сохраняет распознанные показатели в `analysisResultPointData`.
-6. `POST /result/get` получает результат по случайному 40-символьному hex `resultId`, сопоставляет значения с интервалами и подбирает описания, все условия которых совпали.
+5. `POST /result/save` проверяет возраст в днях и пол, создаёт `analysisResult` с `ageInDays`, затем сохраняет распознанные показатели в `analysisResultPointData`.
+6. `POST /result/get` получает результат по случайному 40-символьному hex `resultId`, находит по `ageInDays` все применимые записи `ages`, сопоставляет значения с интервалами и подбирает описания, все условия которых совпали.
 7. Client показывает результат на `/result/:resultId`; ссылку можно скопировать и открыть без авторизации.
 
 Никогда не трактуй результат алгоритма как медицинский диагноз. Изменения сопоставления, диапазонов, единиц и текстов интерпретации требуют предметной проверки и тестов на граничных значениях.
@@ -147,7 +147,7 @@ docker compose ps
 
 ```text
 analysisResult
-  -> ages
+  -> ageInDays, по которому подбираются все применимые ages
   -> gender
   -> users (nullable; фактического FK в локальной схеме нет)
   -> analysisResultPointData[]
@@ -158,6 +158,9 @@ analysisPoint
   <-> analysisType через analysis_type_point
   <-> analysisPointUnits через analysis_point_units
   -> интервалы по age + gender + unit + source
+
+medicalSource
+  <-> ages через medicalSourceAge, если источник ограничен по возрасту
 
 analysisResultDescription
   -> conditions[]: analysisPoint + связанные интервалы

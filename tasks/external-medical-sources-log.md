@@ -23,3 +23,23 @@
 | https://pmc.ncbi.nlm.nih.gov/articles/PMC9922947/ | Не подходит по лицензии: CC BY-NC-ND. |
 | https://pmc.ncbi.nlm.nih.gov/articles/PMC11452171/ | Не подходит по лицензии: CC BY-NC. |
 | https://pmc.ncbi.nlm.nih.gov/articles/PMC12327948/ | Не подходит по лицензии: CC BY-NC. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC11042559/ | Анализ проведён — задача 0035; CC BY 4.0, три собственных неонатальных интервала, 16 проверок CALIPER. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC13550734/ | Анализ проведён — задача 0035; CC BY 4.0, сверены таблица 1, рисунок S1 и таблицы S1–S5. Сохранены интервалы основной таблицы. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC3772807/ | Анализ проведён — задача 0035; CC BY, семь референсов, маркировка ALTnp/ASTnp в таблице 4 сверена с PDF издателя. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC13691253/ | Анализ проведён — задача 0035; CC BY 4.0, восемь интервалов, приложение сверено через CDN издателя. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC11026984/ | Анализ проведён — задача 0035; CC BY 4.0, комбинации печёночных тестов, R-фактор, границы 2 и 5 в таблице 1 не покрыты. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC12227826/ | Не подходит по лицензии: CC BY-NC 4.0. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC12982192/ | Не подходит по лицензии: CC BY-NC-ND 4.0. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC7448835/ | Не подходит по лицензии: CC BY-NC-ND 4.0. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC2632744/ | Анализ проведён — задача 0036; CC BY, перенесены выбранные консенсусные референсы ОАК и биохимии. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC9629653/ | Анализ проведён — задача 0036; CC BY 4.0, для АЛТ у женщин выбрана таблица 1 (7,9–48,0 U/L), строка внесена в локальную БД миграцией 0068. Исходные данные участников не пересчитывались. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC7979267/ | Анализ проведён — задача 0036; CC BY 4.0, сверены агрегированные приложения и материалы рецензирования. Подтверждены внесённые SI-референсы. Индивидуальные данные не пересчитывались. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC5991659/ | Анализ проведён — задача 0036; CC BY 4.0, сверены все семь приложений. Перенесены выбранные авторами интервалы таблицы 3. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC2645400/ | Анализ проведён — задача 0036; CC BY 2.0, возрастные интервалы ТТГ и FT4, FT3 с года. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC7141356/ | Анализ проведён — задача 0036; CC BY 4.0, только верхняя граница ТТГ по полу и возрасту. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC13116899/ | Анализ проведён — задача 0036; CC BY 4.0, прямые CMIA-референсы ферритина 60+. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC12927209/ | Анализ проведён — задача 0036; CC BY 4.0, добавлен детский NLR, три других индекса документированы. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC8011145/ | Анализ проведён — задача 0036; CC BY 4.0, сверены таблица 3 и три приложения. Импорт отложен до учёта доношенности. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC13209222/ | Анализ проведён — задача 0036; CC BY 4.0, собственных референсов для переноса нет. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC8578761/ | Не подходит по лицензии: CC BY-NC-ND 4.0. |
+| https://pmc.ncbi.nlm.nih.gov/articles/PMC10660733/ | Не подходит по лицензии: CC BY-NC 3.0. |

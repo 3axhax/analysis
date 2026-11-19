@@ -12,7 +12,7 @@ import {
   canonicalIntervalBound,
 } from './interval-matcher';
 import { IntervalStatus } from './interval-evaluator';
-import { sourceAppliesToAge } from '../analysisResult/source-age-scope';
+import { sourceAppliesToAges } from '../analysisResult/source-age-scope';
 
 export interface IntervalWrite extends Interval {
   sourceId: number | null;
@@ -37,13 +37,13 @@ export class IntervalAdminService {
     ageId?: number,
   ) {
     if (sourceId === null) return;
-    const sources = await this.db.query<{ metadata: Record<string, unknown> }>(
-      'SELECT s.metadata FROM "medicalSource" s WHERE s.id=:sourceId AND s.parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "medicalSource" child WHERE child.parent_id=s.id) FOR KEY SHARE OF s',
+    const sources = await this.db.query<{ ageIds: number[] | null }>(
+      'SELECT (SELECT array_agg(scope."ageId") FROM "medicalSourceAge" scope WHERE scope."sourceId"=s.id) AS "ageIds" FROM "medicalSource" s WHERE s.id=:sourceId AND s.parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "medicalSource" child WHERE child.parent_id=s.id) FOR KEY SHARE OF s',
       { replacements: { sourceId }, transaction, type: QueryTypes.SELECT },
     );
     if (!sources.length)
       throw new BadRequestException('source_document_required');
-    if (ageId !== undefined && !sourceAppliesToAge(sources[0].metadata, ageId))
+    if (ageId !== undefined && !sourceAppliesToAges(sources[0].ageIds, [ageId]))
       throw new BadRequestException('source_age_not_allowed');
   }
 
@@ -176,6 +176,39 @@ export class IntervalAdminService {
         minValue: canonicalIntervalBound(input.minValue),
         maxValue: canonicalIntervalBound(input.maxValue),
       };
+      if (input.status !== null) {
+        // Serialize edits to the same point before checking overlapping age ranges.
+        await this.db.query('SELECT id FROM "analysisPoint" WHERE id=:pointId FOR UPDATE', {
+          replacements: { pointId: input.pointId }, transaction,
+        });
+        const conflicts = await this.db.query<{ id: number }>(
+          `SELECT i.id FROM "analysisPointIntervalValue" i
+           JOIN ages existing_age ON existing_age.id=i."ageId"
+           JOIN ages requested_age ON requested_age.id=:ageId
+           WHERE i."pointId"=:pointId AND i."genderId"=:genderId AND i."unitId"=:unitId
+             AND i."sourceId" IS NOT DISTINCT FROM CAST(:sourceId AS integer)
+             AND i."ageId"<>:ageId AND i.id IS DISTINCT FROM CAST(:excludeId AS integer)
+             AND existing_age."intervalDayStart"<=requested_age."intervalDayEnd"
+             AND requested_age."intervalDayStart"<=existing_age."intervalDayEnd"
+             AND (
+               (i.status=:status AND i.status IN ('NORMAL','OPTIMUM') AND
+                (i."minValue",i."maxValue",i."minValueEqual",i."maxValueEqual") IS DISTINCT FROM
+                (CAST(:minValue AS numeric),CAST(:maxValue AS numeric),
+                 CAST(:minValueEqual AS boolean),CAST(:maxValueEqual AS boolean)))
+               OR (((i.status='LOW' AND :status='HIGH') OR (i.status='HIGH' AND :status='LOW'))
+                 AND numrange(i."minValue",i."maxValue",
+                   (CASE WHEN i."minValueEqual" THEN '[' ELSE '(' END) ||
+                   (CASE WHEN i."maxValueEqual" THEN ']' ELSE ')' END))
+                 && numrange(CAST(:minValue AS numeric),CAST(:maxValue AS numeric),
+                   (CASE WHEN CAST(:minValueEqual AS boolean) THEN '[' ELSE '(' END) ||
+                   (CASE WHEN CAST(:maxValueEqual AS boolean) THEN ']' ELSE ')' END)))
+             )
+           LIMIT 1`,
+          { replacements: { ...replacements, excludeId: create ? null : input.id },
+            transaction, type: QueryTypes.SELECT },
+        );
+        if (conflicts.length) throw new ConflictException('conflicting_age_references');
+      }
       const sql = create
         ? 'INSERT INTO "analysisPointIntervalValue" ("sourceId","pointId","ageId","genderId","unitId","minValue","maxValue","minValueEqual","maxValueEqual",status) VALUES (:sourceId,:pointId,:ageId,:genderId,:unitId,:minValue,:maxValue,:minValueEqual,:maxValueEqual,:status) RETURNING id'
         : 'UPDATE "analysisPointIntervalValue" SET "sourceId"=:sourceId,"ageId"=:ageId,"genderId"=:genderId,"unitId"=:unitId,"minValue"=:minValue,"maxValue"=:maxValue,"minValueEqual"=:minValueEqual,"maxValueEqual"=:maxValueEqual,status=:status WHERE id=:id RETURNING id';

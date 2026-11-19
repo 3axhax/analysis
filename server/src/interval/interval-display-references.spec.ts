@@ -1,7 +1,7 @@
 import { displayReferences } from './interval-display-references';
 import { IntervalInput, SourcedInterval } from './interval-evaluator';
 const input: IntervalInput = {
-  measurement: { pointId: 1, ageId: 2, genderId: 3, unitId: 4, value: '100' },
+  measurement: { pointId: 1, ageIds: [2], genderId: 3, unitId: 4, value: '100' },
   allowedUnitIds: [4, 5],
   rules: [
     {

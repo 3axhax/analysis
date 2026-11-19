@@ -7,15 +7,13 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Age } from '../ages/ages.model';
 import { Gender } from '../gender/gender.model';
 import { AnalysisResultPointData } from '../analysisResultPointData/analysisResultPointData.model';
 import { User } from '../users/users.model';
 
 export interface AnalysisResultAttrs {
   resultId: string;
-  ageId: number;
-  ageInDays?: number;
+  ageInDays: number;
   genderId: number;
   userId?: number | null;
 }
@@ -37,13 +35,6 @@ export class AnalysisResult extends Model<AnalysisResult, AnalysisResultAttrs> {
     unique: true,
   })
   declare resultId: string;
-
-  @ForeignKey(() => Age)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  declare ageId: number;
 
   @Column({
     type: DataType.INTEGER,
@@ -67,9 +58,6 @@ export class AnalysisResult extends Model<AnalysisResult, AnalysisResultAttrs> {
 
   @HasMany(() => AnalysisResultPointData)
   analysisResultPointData: AnalysisResultPointData[];
-
-  @BelongsTo(() => Age)
-  Age: Age;
 
   @BelongsTo(() => Gender)
   Gender: Gender;

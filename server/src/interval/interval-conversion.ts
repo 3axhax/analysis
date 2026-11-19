@@ -37,7 +37,7 @@ export function matchConvertedIntervals(
   return intervals.filter((interval) => {
     if (
       interval.pointId !== measurement.pointId ||
-      interval.ageId !== measurement.ageId ||
+      !measurement.ageIds.includes(interval.ageId) ||
       interval.genderId !== measurement.genderId ||
       !allowedUnitIds.includes(interval.unitId)
     )

@@ -18,7 +18,7 @@ const interval: Interval = {
 };
 const measurement = {
   pointId: 2,
-  ageId: 3,
+  ageIds: [3],
   genderId: 4,
   unitId: 5,
   value: '1',
@@ -98,7 +98,7 @@ describe('interval matching', () => {
       }),
     ).toBe(false);
   });
-  it.each(['pointId', 'ageId', 'genderId', 'unitId'] as const)(
+  it.each(['pointId', 'genderId', 'unitId'] as const)(
     'requires the same %s',
     (field) => {
       expect(
@@ -110,6 +110,12 @@ describe('interval matching', () => {
       ).toBe(false);
     },
   );
+  it('matches any selected age group and rejects intervals for other ages', () => {
+    const input = { ...measurement, ageIds: [3, 7], value: '1.5' };
+    expect(matchesInterval(interval, input)).toBe(true);
+    expect(matchesInterval({ ...interval, ageId: 7 }, input)).toBe(true);
+    expect(matchesInterval({ ...interval, ageId: 8 }, input)).toBe(false);
+  });
   it('combines alternatives with OR and conditions with AND, without cross-point matches', () => {
     const conditions = [
       { pointId: 2, intervalIds: [1, 2] },

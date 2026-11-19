@@ -15,7 +15,6 @@ import { AnalysisPointService } from '../analysisPoint/analysisPoint.service';
 import { AnalysisPointUnitsService } from '../analysisPointUnits/analysisPointUnits.service';
 import { AnalysisResultPointDataService } from '../analysisResultPointData/analysisResultPointData.service';
 import { AnalysisResultDescription } from '../analysisResultDescription/analysisResultDescription.model';
-import { Age } from '../ages/ages.model';
 import { Gender } from '../gender/gender.model';
 import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 import { AnalysisPoint } from '../analysisPoint/analysisPoint.model';
@@ -149,7 +148,7 @@ export class AnalysisResultService {
               unit = allUnits.find((u) => u.name === item.units);
             if (!point || !unit)
               throw new UnitNormalizationError('unknown_point_or_unit');
-            if (['de_ritis_ratio', 'homa_ir'].includes(point.name))
+            if (['de_ritis_ratio', 'homa_ir', 'nlr'].includes(point.name))
               throw new UnitNormalizationError('invalid_point_input');
             if (seen.has(point.id))
               throw new UnitNormalizationError('duplicate_point');
@@ -178,7 +177,6 @@ export class AnalysisResultService {
           const result = await this.analysisResultRepository.create(
             {
               resultId,
-              ageId: age.id,
               ageInDays,
               genderId: gender.id,
               userId: user?.id ?? null,

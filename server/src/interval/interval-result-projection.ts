@@ -1,4 +1,4 @@
-import { sourceAppliesToAge } from '../analysisResult/source-age-scope';
+import { sourceAppliesToAges } from '../analysisResult/source-age-scope';
 import { IntervalDescription, SourcedInterval } from './interval-evaluator';
 
 export interface ProjectionSource {
@@ -6,6 +6,7 @@ export interface ProjectionSource {
   parentId: number | null;
   name: string;
   metadata: Record<string, unknown>;
+  ageIds?: readonly number[] | null;
 }
 export interface ProjectionDescription extends IntervalDescription {
   description_ru: string;
@@ -14,7 +15,7 @@ export interface ProjectionDescription extends IntervalDescription {
 
 /** Preserve all matching intervals and their provenance; status display is a separate decision. */
 export function projectIntervalResult(
-  ageId: number,
+  ageIds: readonly number[],
   pointIds: readonly number[],
   intervals: readonly SourcedInterval[],
   descriptions: readonly ProjectionDescription[],
@@ -39,7 +40,7 @@ export function projectIntervalResult(
   const sourceDescriptions = sources
     .filter(
       (source) =>
-        source.parentId !== null && sourceAppliesToAge(source.metadata, ageId),
+        source.parentId !== null && sourceAppliesToAges(source.ageIds, ageIds),
     )
     .flatMap((source) => {
       const matches = descriptions

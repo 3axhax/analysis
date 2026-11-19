@@ -1,3 +1,7 @@
+import { FISEHA_FEMALE_ALT_SQL } from './fiseha-female-alt.sql';
+import { OVERLAPPING_AGE_RANGES_SQL } from './overlapping-age-ranges.sql';
+import { PMC_POPULATION_REFERENCE_INTERVALS_SQL } from './pmc-population-reference-intervals.sql';
+import { PMC_REFERENCE_INTERVALS_SQL } from './pmc-reference-intervals.sql';
 import { PERCENTAGE_INTERPRETATIONS_SQL } from './percentage-interpretations.sql';
 import { NEUTROPHIL_PERCENTAGE_LABEL_SQL } from './neutrophil-percentage-label.sql';
 import { REMOVE_NORMAL_UREA_CREATININE_DESCRIPTION_SQL } from './remove-normal-urea-creatinine-description.sql';
@@ -355,6 +359,30 @@ export class MigrationsService implements OnModuleInit {
       '0064-percentage-interpretations',
       20064,
       PERCENTAGE_INTERPRETATIONS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0065-pmc-reference-intervals',
+      20065,
+      PMC_REFERENCE_INTERVALS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0066-pmc-population-reference-intervals',
+      20066,
+      PMC_POPULATION_REFERENCE_INTERVALS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0067-overlapping-age-ranges',
+      20067,
+      OVERLAPPING_AGE_RANGES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0068-fiseha-female-alt',
+      20068,
+      FISEHA_FEMALE_ALT_SQL,
     );
   }
 }

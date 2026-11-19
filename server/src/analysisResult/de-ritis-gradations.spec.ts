@@ -8,7 +8,7 @@ const limits: Record<string, [string | null, string | null, boolean | null, bool
 function matched(numerator: string, denominator = '1') {
   return Object.entries(limits).filter(([, [minValue, maxValue, minValueEqual, maxValueEqual]], index) => matchesInterval(
     { id: index + 1, pointId: 99, ageId: 1, genderId: 1, unitId: 1, minValue, maxValue, minValueEqual, maxValueEqual },
-    { pointId: 99, ageId: 1, genderId: 1, unitId: 1, value: numerator, fraction: { numerator, denominator } },
+    { pointId: 99, ageIds: [1], genderId: 1, unitId: 1, value: numerator, fraction: { numerator, denominator } },
   )).map(([key]) => key).sort();
 }
 describe('independent de Ritis gradations', () => {

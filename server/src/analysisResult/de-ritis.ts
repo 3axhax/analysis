@@ -9,13 +9,22 @@ export interface RatioInput {
   sourceUnitId?: number | null;
 }
 export function calculateDeRitis(points: RatioInput[], enzymeUnitId: number) {
-  const alt = points.filter((p) => p.pointId === 32);
-  const ast = points.filter((p) => p.pointId === 33);
-  if (alt.length !== 1 || ast.length !== 1) return null;
-  if ((alt[0].sourceUnitId ?? alt[0].unitId) !== enzymeUnitId || (ast[0].sourceUnitId ?? ast[0].unitId) !== enzymeUnitId) return null;
+  return calculateResultRatio(points, 33, 32, enzymeUnitId);
+}
+
+export function calculateResultRatio(
+  points: RatioInput[],
+  numeratorId: number,
+  denominatorId: number,
+  unitId: number,
+) {
+  const numerators = points.filter((point) => point.pointId === numeratorId);
+  const denominators = points.filter((point) => point.pointId === denominatorId);
+  if (numerators.length !== 1 || denominators.length !== 1) return null;
+  if ((denominators[0].sourceUnitId ?? denominators[0].unitId) !== unitId || (numerators[0].sourceUnitId ?? numerators[0].unitId) !== unitId) return null;
   try {
-    const denominator = new D(alt[0].sourceValue ?? alt[0].value);
-    const numerator = new D(ast[0].sourceValue ?? ast[0].value);
+    const denominator = new D(denominators[0].sourceValue ?? denominators[0].value);
+    const numerator = new D(numerators[0].sourceValue ?? numerators[0].value);
     if (!denominator.isFinite() || !numerator.isFinite() || denominator.lte(0) || numerator.lt(0)) return null;
     const ratio = numerator.div(denominator);
     return { numerator, denominator, ratio, sourceValue: ratio.toFixed(18) };

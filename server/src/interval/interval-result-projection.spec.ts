@@ -32,7 +32,7 @@ const description: ProjectionDescription = {
 describe('interval result projection', () => {
   it('keeps matching interval provenance independent of the description source', () => {
     const result = projectIntervalResult(
-      5,
+      [5],
       [4, 8],
       [interval],
       [description],
@@ -52,7 +52,7 @@ describe('interval result projection', () => {
   it('does not collapse overlapping statuses into an arbitrary single status', () => {
     const other = { ...interval, id: 11, status: 'NORMAL' as const };
     expect(
-      projectIntervalResult(5, [4], [interval, other], [], sources).points[0]
+      projectIntervalResult([5], [4], [interval, other], [], sources).points[0]
         .intervals,
     ).toHaveLength(2);
   });
@@ -67,7 +67,7 @@ describe('interval result projection', () => {
     };
     const independent = { ...common, id: 13 };
     const result = projectIntervalResult(
-      5,
+      [5],
       [4, 8],
       [interval, percentInterval],
       [common, alternative, independent],
@@ -81,18 +81,18 @@ describe('interval result projection', () => {
   it('honours a description source age restriction', () => {
     const scoped = sources.map((source) =>
       source.id === 2
-        ? { ...source, metadata: { allowedAgeIds: [99] } }
+        ? { ...source, ageIds: [99] }
         : source,
     );
     expect(
-      projectIntervalResult(5, [4], [interval], [description], scoped)
+      projectIntervalResult([5], [4], [interval], [description], scoped)
         .sourceDescriptions,
     ).toEqual([]);
   });
   it('rejects a cyclic source hierarchy', () => {
     const cyclic = [{ ...sources[0], parentId: 2 }, sources[1], sources[2]];
     expect(() =>
-      projectIntervalResult(5, [4], [interval], [description], cyclic),
+      projectIntervalResult([5], [4], [interval], [description], cyclic),
     ).toThrow('invalid_source_hierarchy');
   });
 });

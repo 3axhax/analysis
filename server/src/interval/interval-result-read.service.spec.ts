@@ -7,7 +7,7 @@ import { Sequelize } from 'sequelize-typescript';
 describe('interval result read path', () => {
   function setup(intervals: SourcedInterval[] = []) {
     const plain = {
-      ageId: 1,
+      ageInDays: 365,
       genderId: 2,
       analysisResultPointData: [
         {
@@ -47,7 +47,7 @@ describe('interval result read path', () => {
       units,
       conversions,
       evaluator,
-      { query: jest.fn().mockResolvedValue([]) },
+      { query: jest.fn().mockImplementation((sql: string) => Promise.resolve(sql.includes('FROM ages') ? [{ id: 1 }] : [])) },
     ] as unknown as ConstructorParameters<typeof IntervalResultReadService>;
     return {
       service: new IntervalResultReadService(...args),
@@ -221,6 +221,7 @@ describe('interval result read path', () => {
           return Promise.resolve([{ id: 10, description_ru: 'example text' }]);
         if (sql.includes('FROM "analysisResultDescription"'))
           return Promise.resolve([{ id: 10, sourceId: 8 }]);
+        if (sql.includes('FROM ages')) return Promise.resolve([{ id: 1 }, { id: 2 }]);
         throw new Error('unexpected query');
       }),
     };
