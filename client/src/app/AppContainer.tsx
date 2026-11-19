@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
+import { PoliticsAgreementBlock } from "@features/politicsAgreementBlock";
 import { InfoModal } from "@features/infoModal";
 import { Navigation } from "@widgets/navigation";
 import { NotFoundPage } from "@pages/404";
@@ -79,6 +80,7 @@ function AppContainer() {
       <Basement />
       <ClientOnly>
         <InfoModal />
+        <PoliticsAgreementBlock />
       </ClientOnly>
     </div>
   );

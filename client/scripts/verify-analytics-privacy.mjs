@@ -8,5 +8,4 @@ for (const file of [...htmlFiles, ...assets]) {
   const text = readFileSync(new URL(file, root), 'utf8');
   assert.ok(!/mc\.yandex\.|metrika\/tag|webvisor\s*:\s*true|initYM/.test(text), 'External collector returned in ' + file);
 }
-assert.ok(!readFileSync(new URL('../src/app/AppContainer.tsx', import.meta.url), 'utf8').includes('PoliticsAgreementBlock'), 'Disabled analytics must not offer a consent prompt');
 console.log('Privacy build checks passed: public/service/result/error HTML and JS assets contain no legacy collector');

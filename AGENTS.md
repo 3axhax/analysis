@@ -107,6 +107,7 @@ docker compose ps
 
 ### Публичный сайт и эксплуатация
 
+- **Cookie-блок.** При отсутствии сохранённого выбора показывает кнопки «Принять» и «Отказаться», сохраняет ответ в LocalStorage; Метрика отключена. [0038 — возврат блока cookie](tasks/0038-restore-cookie-banner/implementation.md).
 - **Индексация публичных страниц.** Настроены правила индексации, canonical URL и метаданные страниц. [0009 — GEO и SEO](tasks/0009-geo-seo-optimization/implementation.md).
 - **Запуск и поставка.** Миграции запускаются при старте backend и регистрируются в журнале. Рабочий стек использует единый checkout и Compose-конфигурацию. [0007 — запуск миграций](tasks/0007-startup-migrations/implementation.md), [0034 — миграции интервальной модели](tasks/0034-interval-only-logic/implementation.md), [0017 — устройство рабочего стека](tasks/0017-consolidate-production/implementation.md).
 

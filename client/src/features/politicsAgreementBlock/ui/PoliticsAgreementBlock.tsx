@@ -19,35 +19,24 @@ export const PoliticsAgreementBlock = () => {
   return showBlock ? (
     <div
       className={
-        "w-full lg:w-9/12 mx-auto fixed left-0 right-0 z-100 bottom-0 max-h-[80dvh] overflow-y-auto bg-cyan-600 text-white bg-gradient-to-r from-cyan-800 via-cyan-500 to-cyan-800 bg-[length:300%_100%]dark:shadow-white/20 rounded-t-xl lg:rounded-t-3xl shadow-xl py-4 px-8"
+        "w-full lg:w-9/12 mx-auto fixed left-0 right-0 z-100 bottom-0 max-h-[80dvh] overflow-y-auto bg-cyan-600 text-white bg-gradient-to-r from-cyan-800 via-cyan-500 to-cyan-800 bg-[length:300%_100%] dark:shadow-white/20 rounded-t-xl lg:rounded-t-3xl shadow-xl py-4 px-8"
       }
     >
       <p className={"pb-2"}>
-        Мы используем файлы cookie и сервис «Яндекс.Метрика». Это помогает нам
-        анализировать трафик и улучшать работу сайта.
+        Сайт сохраняет настройки в LocalStorage вашего браузера. Вы можете
+        сохранить выбор использования статистических cookie кнопками ниже.
       </p>
       <p className={"pb-2"}>
-        Статистические cookie и Яндекс.Метрика собирают IP‑адрес, тип браузера и
-        действия на сайте. Они включаются только после вашего разрешения.
-        Передача данных в ООО «ЯНДЕКС» осуществляется на основании{" "}
-        <Link
-          to={"consent-personal-data"}
-          className={"bg-underline-hover text-cyan-100"}
-        >
-          Согласия на обработку ПДн
-        </Link>
-        .
+        Сейчас Яндекс Метрика и статистические cookie отключены. Ваш выбор
+        сохраняется в браузере; сбор статистики сейчас не запускается.
       </p>
       <p className={"pb-2"}>
-        Нажимая «Принять», вы подтверждаете, что ознакомлены с{" "}
-        <Link
-          to={"privacy-policy"}
-          className={"bg-underline-hover text-cyan-100"}
-        >
-          Политикой обработки ПДн
-        </Link>{" "}
-        (сроки хранения до 5 лет) и даёте согласие на передачу данных в
-        Яндекс.Метрику.
+        Подробнее: <Link to={"/privacy-policy"} className={"bg-underline-hover text-cyan-100"}>
+          Политика обработки ПДн
+        </Link>{" и "}
+        <Link to={"/consent-personal-data"} className={"bg-underline-hover text-cyan-100"}>
+          Согласие на обработку ПДн
+        </Link>.
       </p>
       <div className={"flex justify-center gap-5 mt-3"}>
         <button
