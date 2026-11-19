@@ -7,10 +7,10 @@ import { PoliticsAgreementBlock } from '../src/features/politicsAgreementBlock/u
 afterEach(() => { cleanup(); localStorage.clear(); });
 const mount = () => render(<MemoryRouter><PoliticsAgreementBlock /></MemoryRouter>);
 
-it('shows the banner on first visit with current analytics information', () => {
+it('shows the banner on first visit with the requested original text', () => {
   mount();
-  expect(screen.getByText(/Сейчас Яндекс Метрика и статистические cookie отключены/)).toBeTruthy();
-  expect(screen.getByRole('link', { name: 'Политика обработки ПДн' }).getAttribute('href')).toBe('/privacy-policy');
+  expect(screen.getByText(/Мы используем файлы cookie и сервис «Яндекс.Метрика»/)).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'Политикой обработки ПДн' }).getAttribute('href')).toBe('/privacy-policy');
 });
 
 for (const [label, value] of [['Принять', '1'], ['Отказаться', '0']]) {

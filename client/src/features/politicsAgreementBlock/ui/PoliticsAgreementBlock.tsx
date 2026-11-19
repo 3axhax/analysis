@@ -23,20 +23,31 @@ export const PoliticsAgreementBlock = () => {
       }
     >
       <p className={"pb-2"}>
-        Сайт сохраняет настройки в LocalStorage вашего браузера. Вы можете
-        сохранить выбор использования статистических cookie кнопками ниже.
+        Мы используем файлы cookie и сервис «Яндекс.Метрика». Это помогает нам
+        анализировать трафик и улучшать работу сайта.
       </p>
       <p className={"pb-2"}>
-        Сейчас Яндекс Метрика и статистические cookie отключены. Ваш выбор
-        сохраняется в браузере; сбор статистики сейчас не запускается.
+        Статистические cookie и Яндекс.Метрика собирают IP‑адрес, тип браузера и
+        действия на сайте. Они включаются только после вашего разрешения.
+        Передача данных в ООО «ЯНДЕКС» осуществляется на основании{" "}
+        <Link
+          to={"/consent-personal-data"}
+          className={"bg-underline-hover text-cyan-100"}
+        >
+          Согласия на обработку ПДн
+        </Link>
+        .
       </p>
       <p className={"pb-2"}>
-        Подробнее: <Link to={"/privacy-policy"} className={"bg-underline-hover text-cyan-100"}>
-          Политика обработки ПДн
-        </Link>{" и "}
-        <Link to={"/consent-personal-data"} className={"bg-underline-hover text-cyan-100"}>
-          Согласие на обработку ПДн
-        </Link>.
+        Нажимая «Принять», вы подтверждаете, что ознакомлены с{" "}
+        <Link
+          to={"/privacy-policy"}
+          className={"bg-underline-hover text-cyan-100"}
+        >
+          Политикой обработки ПДн
+        </Link>{" "}
+        (сроки хранения до 5 лет) и даёте согласие на передачу данных в
+        Яндекс.Метрику.
       </p>
       <div className={"flex justify-center gap-5 mt-3"}>
         <button
