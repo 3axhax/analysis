@@ -247,6 +247,18 @@ export class PdfNameIndex {
     const forms = resolveCatalogForms(text, matches, this.points);
     if (forms.ambiguous || forms.unsupported) return forms;
     matches = forms.matches;
+    // In a qualified biomarker name RBC identifies the specimen, not a cell count.
+    matches = matches.filter(
+      (match) =>
+        match.point.name !== 'erythrocyte' ||
+        !forms.matches.some(
+          (other) =>
+            (other.point.name === 'erythrocyte-folate' ||
+              other.point.name === 'erythrocyte-glutathione-peroxidase-activity') &&
+            other.start <= match.start &&
+            other.end >= match.end,
+        ),
+    );
     const codes = matches.filter((m) => m.code);
     if (codes.length)
       matches = codes.filter(

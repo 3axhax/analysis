@@ -2,6 +2,11 @@ import { FISEHA_FEMALE_ALT_SQL } from './fiseha-female-alt.sql';
 import { PMC_ADDITIONAL_REFERENCE_INTERVALS_SQL } from './pmc-additional-reference-intervals.sql';
 import { PMC_REVIEWED_REFERENCE_INTERVALS_SQL } from './pmc-reviewed-reference-intervals.sql';
 import { REMOVE_REFERENCE_ONLY_DESCRIPTIONS_SQL } from './remove-reference-only-descriptions.sql';
+import { NUTRITIONAL_ASSESSMENT_SOURCES_SQL } from './nutritional-assessment-sources.sql';
+import { NUTRITIONAL_ASSESSMENT_MICRONUTRIENTS_SQL } from './nutritional-assessment-micronutrients.sql';
+import { NUTRITIONAL_BIOMARKER_CATALOG_SQL } from './nutritional-biomarker-catalog.sql';
+import { NUTRITIONAL_ADULT_THRESHOLDS_SQL } from './nutritional-adult-thresholds.sql';
+import { NUTRITIONAL_THRESHOLD_EXTENSIONS_SQL } from './nutritional-threshold-extensions.sql';
 import { OVERLAPPING_AGE_RANGES_SQL } from './overlapping-age-ranges.sql';
 import { PMC_POPULATION_REFERENCE_INTERVALS_SQL } from './pmc-population-reference-intervals.sql';
 import { PMC_REFERENCE_INTERVALS_SQL } from './pmc-reference-intervals.sql';
@@ -404,6 +409,36 @@ export class MigrationsService implements OnModuleInit {
       '0071-remove-reference-only-descriptions',
       20071,
       REMOVE_REFERENCE_ONLY_DESCRIPTIONS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0072-nutritional-assessment-sources',
+      20072,
+      NUTRITIONAL_ASSESSMENT_SOURCES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0073-nutritional-assessment-micronutrients',
+      20073,
+      NUTRITIONAL_ASSESSMENT_MICRONUTRIENTS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0074-nutritional-biomarker-catalog',
+      20074,
+      NUTRITIONAL_BIOMARKER_CATALOG_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0075-nutritional-adult-thresholds',
+      20075,
+      NUTRITIONAL_ADULT_THRESHOLDS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0076-nutritional-threshold-extensions',
+      20076,
+      NUTRITIONAL_THRESHOLD_EXTENSIONS_SQL,
     );
   }
 }

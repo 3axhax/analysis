@@ -1,5 +1,29 @@
 import { recognizePdfUnit } from './pdf-unit-parser';
 
+describe('nutritional biomarker units', () => {
+  it.each([
+    ['нмоль/л', 'nmol/l'],
+    ['мкмоль/ммоль', 'µmol/mmol'],
+    ['пмоль/л', 'pmol/l'],
+    ['мкг/мл', 'mg/l'],
+    ['мкг/дл', 'µg/dl'],
+    ['мкг/мг', 'mg/g'],
+    ['мг/г креатинина', 'mg/g creat'],
+    ['Ед/г гемоглобина', 'U/g Hb'],
+  ])('recognizes %s as %s', (text, name) => {
+    expect(recognizePdfUnit(text, [{ id: 1, name }]).unit).toBe(name);
+  });
+
+  it('keeps creatinine-normalized values distinct from unqualified mass ratios', () => {
+    expect(
+      recognizePdfUnit('mg/g creatinine', [{ id: 1, name: 'mg/g' }]).unitId,
+    ).toBeNull();
+    expect(
+      recognizePdfUnit('mg/g', [{ id: 2, name: 'mg/g creat' }]).unitId,
+    ).toBeNull();
+  });
+});
+
 describe('explicit result-adjacent unit recognition', () => {
   const allowed = [
     { id: 1, name: '%' },

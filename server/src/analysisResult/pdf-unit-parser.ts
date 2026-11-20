@@ -24,6 +24,14 @@ const aliases: Record<string, string[]> = {
   'mkUnit/l': ['mkunit/l', 'µu/l', 'uiu/l', 'мкед/л', 'мкме/л'],
   'ng/ml': ['ng/ml', 'нг/мл', 'µg/l', 'мкг/л'],
   'mUnit/l': ['munit/l', 'mu/l', 'miu/l', 'мед/л', 'мме/л', 'мкме/мл'],
+  'pmol/l': ['pmol/l', 'пмоль/л'],
+  'nmol/l': ['nmol/l', 'нмоль/л'],
+  'µmol/mmol': ['µmol/mmol', 'мкмоль/ммоль'],
+  'mg/l': ['mg/l', 'мг/л', 'µg/ml', 'мкг/мл'],
+  'µg/dl': ['µg/dl', 'mcg/dl', 'мкг/дл'],
+  'mg/g': ['mg/g', 'мг/г', 'µg/mg', 'мкг/мг'],
+  'mg/g creat': ['mg/g creat', 'mg/g creatinine', 'мг/г креатинина'],
+  'U/g Hb': ['u/g hb', 'iu/g hb', 'u/g hemoglobin', 'ед/г hb', 'ед/г гемоглобина'],
 };
 const normalize = (text: string) =>
   text

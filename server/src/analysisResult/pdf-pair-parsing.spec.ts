@@ -21,6 +21,18 @@ const row = (cells: string[]) =>
   rowEvidence(cells, { page: 1, table: 0, row: 0, method: 'text' });
 
 describe('deterministic name and value parsing', () => {
+  it('treats RBC inside a qualified folate or GPx label as the specimen', () => {
+    const index = new PdfNameIndex([
+      point(1, 'RBC', 'erythrocyte'),
+      point(2, 'RBC folate_Folate, RBC', 'erythrocyte-folate'),
+      point(3, 'RBC GPx activity', 'erythrocyte-glutathione-peroxidase-activity'),
+    ]);
+    expect(index.select('RBC folate 430').matches[0]?.point.id).toBe(2);
+    expect(index.select('Folate, RBC 430').matches[0]?.point.id).toBe(2);
+    expect(index.select('RBC GPx activity 42').matches[0]?.point.id).toBe(3);
+    expect(index.select('RBC 4.2').matches[0]?.point.id).toBe(1);
+  });
+
   it.each(['12', '0', '0,5'])(
     'isolates scalar %s with unit before demographic references in a ruled grid',
     (value) => {
