@@ -110,6 +110,8 @@ docker compose ps
 
 - **Нутриционные показатели и источники.** Для источника Principles of Nutritional Assessment добавлены возрастные референсы и пороги, интерпретации и новые лабораторные показатели с единицами и фразами PDF-парсинга. Показатели без применимого референса доступны для ввода. [0041 — источники и референсы](tasks/0041-nutritional-assessment-sources/implementation.md), [каталог](tasks/0041-nutritional-assessment-sources/biomarker-catalog.md).
 
+- **Данные Oxford Academic.** Доступны возрастные интервалы ТТГ, свободных Т3 и Т4 для Siemens Atellica и интервалы пролактина у мужчин для Roche и Siemens с указанием метода в источнике. Кальций в суточной моче можно ввести и распознать из PDF. [0043 — публикации и референсы Oxford Academic](tasks/0043-oxford-academic-sources/implementation.md).
+
 ### Публичный сайт и эксплуатация
 
 - **Локальная эксплуатация.** Восстановление dev-стека и обновление локальной БД описаны в задачах эксплуатации. [0007 — восстановление сервисов](tasks/0007-restore-local-services/implementation.md), [0035 — обновление локальной БД](tasks/0035-refresh-local-database/implementation.md).
