@@ -228,6 +228,38 @@ describe('LegacyPdfFindingMatcher characterization', () => {
     expect(result.findings).toHaveLength(0);
     expect(result.warnings).toContain('conflicting_values');
   });
+  it.each(['RDW-SD', 'RDW SD', 'RDWSD'])(
+    'keeps %s in femtolitres separate from percentage RDW-CV',
+    (label) => {
+      const result = new LegacyPdfFindingMatcher().match(
+        extraction([
+          {
+            page: 1,
+            tables: [table([[label, '42', 'fl'], ['RDW-CV', '12', '%']])],
+          },
+        ]),
+        [
+          point(1, {
+            name: 'rdw',
+            parsingWords: 'RDW',
+            units: [{ id: 1, name: '%' }],
+          }),
+          point(2, {
+            name: 'rdw-sd',
+            parsingWords: 'RDW-SD_RDW SD_RDWSD',
+            units: [{ id: 2, name: 'fl' }],
+          }),
+        ],
+      );
+      expect(result.findings).toHaveLength(2);
+      expect(result.findings).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: 1, value: 12, unitId: 1 }),
+          expect.objectContaining({ id: 2, value: 42, unitId: 2 }),
+        ]),
+      );
+    },
+  );
   it('parses a name across cells while keeping decimal result fragments together', () => {
     const result = new LegacyPdfFindingMatcher().match(
       extraction([

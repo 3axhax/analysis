@@ -2,6 +2,8 @@ import { MEDICAL_SOURCE_ANALYSIS_LOG_SQL } from './medical-source-analysis-log.s
 import { MEDICAL_SOURCE_PARENT_ANALYSIS_STATUS_SQL } from './medical-source-parent-analysis-status.sql';
 import { MEDICAL_SOURCE_REFERENCE_SET_STATUS_SQL } from './medical-source-reference-set-status.sql';
 import { OXFORD_ACADEMIC_SOURCES_SQL } from './oxford-academic-sources.sql';
+import { RUSSIAN_LANGUAGE_SOURCES_SQL } from './russian-language-sources.sql';
+import { RUSSIAN_JOURNAL_CANDIDATES_SQL } from './russian-journal-candidates.sql';
 import { FISEHA_FEMALE_ALT_SQL } from './fiseha-female-alt.sql';
 import { PMC_ADDITIONAL_REFERENCE_INTERVALS_SQL } from './pmc-additional-reference-intervals.sql';
 import { PMC_REVIEWED_REFERENCE_INTERVALS_SQL } from './pmc-reviewed-reference-intervals.sql';
@@ -467,6 +469,18 @@ export class MigrationsService implements OnModuleInit {
       '0080-oxford-academic-sources',
       20080,
       OXFORD_ACADEMIC_SOURCES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0081-russian-language-sources',
+      20081,
+      RUSSIAN_LANGUAGE_SOURCES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0082-russian-journal-candidates',
+      20082,
+      RUSSIAN_JOURNAL_CANDIDATES_SQL,
     );
   }
 }

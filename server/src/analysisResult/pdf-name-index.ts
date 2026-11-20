@@ -220,9 +220,12 @@ export class PdfNameIndex {
     unsupported?: boolean;
   } {
     const namePrefix = text.split(/\d|референ|reference|комментар/iu)[0];
-    if (/rdw\s*[-‐‑‒–—]?\s*sd/iu.test(namePrefix))
-      return { matches: [], ambiguous: false, unsupported: true };
     let matches = this.find(text);
+    if (/rdw\s*[-‐‑‒–—]?\s*sd/iu.test(namePrefix)) {
+      matches = matches.filter((match) => match.point.name === 'rdw-sd');
+      if (!matches.length)
+        return { matches: [], ambiguous: false, unsupported: true };
+    }
     // A specific ionized fraction must never be resolved as total calcium.
     if (/иониз|ioniz|ionis/iu.test(text)) {
       const calcium = matches.filter((match) => match.point.name === 'ionized_calcium');
