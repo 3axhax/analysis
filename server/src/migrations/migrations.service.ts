@@ -1,4 +1,6 @@
 import { MEDICAL_SOURCE_ANALYSIS_LOG_SQL } from './medical-source-analysis-log.sql';
+import { MEDICAL_SOURCE_PARENT_ANALYSIS_STATUS_SQL } from './medical-source-parent-analysis-status.sql';
+import { MEDICAL_SOURCE_REFERENCE_SET_STATUS_SQL } from './medical-source-reference-set-status.sql';
 import { FISEHA_FEMALE_ALT_SQL } from './fiseha-female-alt.sql';
 import { PMC_ADDITIONAL_REFERENCE_INTERVALS_SQL } from './pmc-additional-reference-intervals.sql';
 import { PMC_REVIEWED_REFERENCE_INTERVALS_SQL } from './pmc-reviewed-reference-intervals.sql';
@@ -446,6 +448,18 @@ export class MigrationsService implements OnModuleInit {
       '0077-medical-source-analysis-log',
       20077,
       MEDICAL_SOURCE_ANALYSIS_LOG_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0078-medical-source-parent-analysis-status',
+      20078,
+      MEDICAL_SOURCE_PARENT_ANALYSIS_STATUS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0079-medical-source-reference-set-status',
+      20079,
+      MEDICAL_SOURCE_REFERENCE_SET_STATUS_SQL,
     );
   }
 }
