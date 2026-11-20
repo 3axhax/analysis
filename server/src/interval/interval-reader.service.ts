@@ -75,9 +75,12 @@ export class IntervalReaderService {
         .map((unit) => unit.unitId),
       rules,
     }));
+    const publishedSourceIds = new Set(sources.map((source) => source.id));
     const byDescription = new Map<number, IntervalDescription>();
-    for (const description of descriptions)
-      byDescription.set(description.id, { ...description, conditions: [] });
+    for (const description of descriptions) {
+      if (description.sourceId === null || publishedSourceIds.has(description.sourceId))
+        byDescription.set(description.id, { ...description, conditions: [] });
+    }
     const byCondition = new Map<
       number,
       {

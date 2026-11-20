@@ -9,7 +9,7 @@ afterEach(cleanup);
 const condition = (id: number, name: string, status: StatusValue) => ({ id, analysisPoint: { id, name }, status });
 const common: ResultDescription = { id: 1, description_ru: "Общее описание", analysisResultDescriptionConditions: [condition(1, "common", StatusValue.HIGH)] };
 const group: SourceDescriptionGroup = {
-  source: { id: 2, name: "Публикация", rootId: 1, rootName: "Библиотека", metadata: { title: "Название", authors: "Автор", year: 2018, url: "https://example.org/article", license: "CC BY 4.0", licenseUrl: "https://creativecommons.org/licenses/by/4.0/", translation: "Адаптировано", underlyingSource: "Первичная публикация", underlyingSourceUrl: "https://example.org/original" } },
+  source: { id: 2, name: "Публикация", rootId: 1, rootName: "Библиотека", year: 2018, url: "https://example.org/article", metadata: { title: "Название", authors: "Автор", license: "CC BY 4.0", licenseUrl: "https://creativecommons.org/licenses/by/4.0/", translation: "Адаптировано", underlyingSource: "Первичная публикация", underlyingSourceUrl: "https://example.org/original" } },
   inheritedPointIds: [3],
   descriptions: [{ id: 2, description_ru: "Описание источника", analysisResultDescriptionConditions: [condition(2, "external", StatusValue.LOW), condition(3, "inherited", StatusValue.NORMAL)] }],
 };

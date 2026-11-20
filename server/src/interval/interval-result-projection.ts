@@ -5,6 +5,8 @@ export interface ProjectionSource {
   id: number;
   parentId: number | null;
   name: string;
+  url?: string | null;
+  year?: number | null;
   metadata: Record<string, unknown>;
   ageIds?: readonly number[] | null;
 }
@@ -60,6 +62,8 @@ export function projectIntervalResult(
           source: {
             id: source.id,
             name: source.name,
+            url: source.url ?? null,
+            year: source.year ?? null,
             metadata: source.metadata,
             rootId: root.id,
             rootName: root.name,

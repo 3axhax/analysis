@@ -11,7 +11,7 @@ export const SourceInfo = ({
   source: SourceDescriptionGroup["source"];
   textTrigger?: boolean;
 }) => {
-  const url = safeUrl(source.metadata.url);
+  const url = safeUrl(source.url);
   const licenseUrl = safeUrl(source.metadata.licenseUrl);
   const underlyingSourceUrl = safeUrl(source.metadata.underlyingSourceUrl);
   return (
@@ -23,12 +23,10 @@ export const SourceInfo = ({
       {typeof source.metadata.title === "string" && (
         <span className="block">{source.metadata.title}</span>
       )}
-      {typeof source.metadata.authors === "string" && (
+      {(typeof source.metadata.authors === "string" || source.year != null) && (
         <span className="block">
-          {source.metadata.authors}
-          {typeof source.metadata.year === "number"
-            ? `, ${source.metadata.year}`
-            : ""}
+          {[typeof source.metadata.authors === "string" ? source.metadata.authors : null, source.year]
+            .filter((value) => value != null).join(", ")}
         </span>
       )}
       {typeof source.metadata.translation === "string" && (

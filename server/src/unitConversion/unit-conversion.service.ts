@@ -10,10 +10,12 @@ export class UnitConversionService {
       id: number;
       parentId: number | null;
       name: string;
+      url: string | null;
+      year: number | null;
       metadata: Record<string, unknown>;
       ageIds: number[] | null;
     }>(
-      'SELECT s.id, s.parent_id AS "parentId", s.name, s.metadata, scope."ageIds" FROM "medicalSource" s LEFT JOIN LATERAL (SELECT array_agg(a."ageId" ORDER BY a."ageId") AS "ageIds" FROM "medicalSourceAge" a WHERE a."sourceId"=s.id) scope ON true ORDER BY s.id',
+      'SELECT s.id, s.parent_id AS "parentId", s.name, s.url, s.year, s.metadata, scope."ageIds" FROM "medicalSource" s LEFT JOIN LATERAL (SELECT array_agg(a."ageId" ORDER BY a."ageId") AS "ageIds" FROM "medicalSourceAge" a WHERE a."sourceId"=s.id) scope ON true WHERE s.published = true ORDER BY s.id',
       { type: QueryTypes.SELECT },
     );
   }

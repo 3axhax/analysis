@@ -24,6 +24,7 @@ describe('interval reader', () => {
       [
         { id: 8, sourceId: 20 },
         { id: 9, sourceId: 20 },
+        { id: 11, sourceId: 30 },
       ],
       [
         {
@@ -40,6 +41,13 @@ describe('interval reader', () => {
           pointName: 'example',
           intervalId: null,
         },
+        {
+          descriptionId: 11,
+          conditionId: 14,
+          pointId: 1,
+          pointName: 'example',
+          intervalId: 1,
+        },
       ],
     ];
     const query = jest
@@ -50,7 +58,10 @@ describe('interval reader', () => {
     } as unknown as Sequelize);
     const result = await service.evaluate(
       [{ pointId: 1, ageIds: [2], genderId: 3, unitId: 4, value: '5' }],
-      [{ id: 10, parentId: 1, name: 'interval', metadata: {} }],
+      [
+        { id: 10, parentId: 1, name: 'interval', metadata: {} },
+        { id: 20, parentId: 1, name: 'description', metadata: {} },
+      ],
     );
     expect(result.descriptions.map((item) => item.id)).toEqual([8]);
     expect(result.intervals[0].status).toBeNull();

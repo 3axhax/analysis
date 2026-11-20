@@ -4,9 +4,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MedicalSource } from './medical-source.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class MedicalSourceAdminService {
+  listAnalysisLog() {
+    return MedicalSource.findAll({
+      attributes: ['id', 'parentId', 'name', 'url', 'year', 'status', 'comment', 'published'],
+      where: { status: { [Op.ne]: null } },
+      order: [['id', 'ASC']],
+    });
+  }
+
   async listSources() {
     const sources = await MedicalSource.findAll({ order: [['name', 'ASC']] });
     return sources.map(({ id, parentId, name }) => ({ id, parentId, name }));

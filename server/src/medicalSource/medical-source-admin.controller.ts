@@ -31,4 +31,9 @@ export class MedicalSourceAdminController {
     return this.crud.dictionaries();
   }
 
+  @Get('analysis-log')
+  listAnalysisLog() {
+    return this.sources.listAnalysisLog();
+  }
+
 }

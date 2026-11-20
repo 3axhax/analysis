@@ -82,6 +82,8 @@ function sourceDetails(
   return {
     id: source.id,
     name: source.name,
+    url: source.url ?? null,
+    year: source.year ?? null,
     metadata: source.metadata,
     rootId: root.id,
     rootName: root.name,

@@ -92,7 +92,7 @@ interface Result {
 }
 
 export interface SourceDescriptionGroup {
-  source: { id: number; name: string; metadata: Record<string, unknown>; rootId: number; rootName: string };
+  source: { id: number; name: string; url: string | null; year: number | null; metadata: Record<string, unknown>; rootId: number; rootName: string };
   descriptions: ResultDescription[];
   inheritedPointIds: number[];
 }
