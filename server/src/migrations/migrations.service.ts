@@ -4,6 +4,20 @@ import { MEDICAL_SOURCE_REFERENCE_SET_STATUS_SQL } from './medical-source-refere
 import { OXFORD_ACADEMIC_SOURCES_SQL } from './oxford-academic-sources.sql';
 import { RUSSIAN_LANGUAGE_SOURCES_SQL } from './russian-language-sources.sql';
 import { RUSSIAN_JOURNAL_CANDIDATES_SQL } from './russian-journal-candidates.sql';
+import { PARTIAL_CATALOG_REVIEW_SQL } from './partial-catalog-review.sql';
+import { THREE_JOURNALS_REVIEW_SQL } from './three-journals-review.sql';
+import { KUZBASS_OPEN_ARTICLES_SQL } from './kuzbass-open-articles.sql';
+import { KUZBASS_REVIEW_COMPLETION_SQL } from './kuzbass-review-completion.sql';
+import { PAVLOV_REVIEW_COMPLETION_SQL } from './pavlov-review-completion.sql';
+import { MOLECULAR_MEDICINE_REVIEW_COMPLETION_SQL } from './molecular-medicine-review-completion.sql';
+import { CALIPER_PEDIATRIC_REFERENCES_SQL } from './caliper-pediatric-references.sql';
+import { CALIPER_REVIEW_COMPLETION_SQL } from './caliper-review-completion.sql';
+import { IOWA_HANDBOOK_REVIEW_COMPLETION_SQL } from './iowa-handbook-review-completion.sql';
+import { POMPH_REVIEW_COMPLETION_SQL } from './pomph-review-completion.sql';
+import { OXFORD_REFERENCE_REVIEW_SQL } from './oxford-reference-review.sql';
+import { OXFORD_CHILD_REVIEW_SQL } from './oxford-child-review.sql';
+import { OXFORD_OPEN_REVIEW_COMPLETION_SQL } from './oxford-open-review-completion.sql';
+import { PMC_LIVER_REVIEW_COMPLETION_SQL } from './pmc-liver-review-completion.sql';
 import { FISEHA_FEMALE_ALT_SQL } from './fiseha-female-alt.sql';
 import { PMC_ADDITIONAL_REFERENCE_INTERVALS_SQL } from './pmc-additional-reference-intervals.sql';
 import { PMC_REVIEWED_REFERENCE_INTERVALS_SQL } from './pmc-reviewed-reference-intervals.sql';
@@ -481,6 +495,90 @@ export class MigrationsService implements OnModuleInit {
       '0082-russian-journal-candidates',
       20082,
       RUSSIAN_JOURNAL_CANDIDATES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0083-partial-catalog-review',
+      20083,
+      PARTIAL_CATALOG_REVIEW_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0084-three-journals-review',
+      20084,
+      THREE_JOURNALS_REVIEW_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0085-kuzbass-open-articles',
+      20085,
+      KUZBASS_OPEN_ARTICLES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0086-kuzbass-review-completion',
+      20086,
+      KUZBASS_REVIEW_COMPLETION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0087-pavlov-review-completion',
+      20087,
+      PAVLOV_REVIEW_COMPLETION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0088-molecular-medicine-review-completion',
+      20088,
+      MOLECULAR_MEDICINE_REVIEW_COMPLETION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0089-caliper-pediatric-references',
+      20089,
+      CALIPER_PEDIATRIC_REFERENCES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0090-caliper-review-completion',
+      20090,
+      CALIPER_REVIEW_COMPLETION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0091-iowa-handbook-review-completion',
+      20091,
+      IOWA_HANDBOOK_REVIEW_COMPLETION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0092-pomph-review-completion',
+      20092,
+      POMPH_REVIEW_COMPLETION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0093-oxford-reference-review',
+      20093,
+      OXFORD_REFERENCE_REVIEW_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0094-oxford-child-review',
+      20094,
+      OXFORD_CHILD_REVIEW_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0095-oxford-open-review-completion',
+      20095,
+      OXFORD_OPEN_REVIEW_COMPLETION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0096-pmc-liver-review-completion',
+      20096,
+      PMC_LIVER_REVIEW_COMPLETION_SQL,
     );
   }
 }
