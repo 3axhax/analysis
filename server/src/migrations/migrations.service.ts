@@ -1,3 +1,9 @@
+import { POINT_TITLE_CAPITALIZATION_SQL } from './point-title-capitalization.sql';
+import { POINT_DESCRIPTIONS_LONG_FORM_SQL } from './point-descriptions-long-form.sql';
+import { PROLACTIN_DESCRIPTION_SQL } from './prolactin-description.sql';
+import { REMAINING_POINT_TEXTS_SQL } from './remaining-point-texts.sql';
+import { CBC_POINT_DESCRIPTIONS_EXPANDED_SQL } from './cbc-point-descriptions-expanded.sql';
+import { CBC_POINT_TEXTS_SQL } from './cbc-point-texts.sql';
 import { ARTICLES_CATALOG_SQL } from './articles-catalog.sql';
 import { MEDICAL_SOURCE_ANALYSIS_LOG_SQL } from './medical-source-analysis-log.sql';
 import { MEDICAL_SOURCE_PARENT_ANALYSIS_STATUS_SQL } from './medical-source-parent-analysis-status.sql';
@@ -589,5 +595,41 @@ export class MigrationsService implements OnModuleInit {
       PMC_LIVER_REVIEW_COMPLETION_SQL,
     );
     await runRecordedMigration(this.sequelize, '0097-articles-catalog', 20097, ARTICLES_CATALOG_SQL);
+    await runRecordedMigration(
+      this.sequelize,
+      '0098-cbc-point-texts',
+      20098,
+      CBC_POINT_TEXTS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0099-cbc-point-descriptions-expanded',
+      20099,
+      CBC_POINT_DESCRIPTIONS_EXPANDED_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0100-remaining-point-texts',
+      20100,
+      REMAINING_POINT_TEXTS_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0101-prolactin-description',
+      20101,
+      PROLACTIN_DESCRIPTION_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0102-point-descriptions-long-form',
+      20102,
+      POINT_DESCRIPTIONS_LONG_FORM_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0103-point-title-capitalization',
+      20103,
+      POINT_TITLE_CAPITALIZATION_SQL,
+    );
   }
 }

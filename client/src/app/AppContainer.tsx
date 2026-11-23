@@ -46,20 +46,37 @@ function AppContainer({ initialCatalog }: { initialCatalog?: ArticleCatalog }) {
   usePageMetadata(pathname, title, description);
 
   useEffect(() => {
-    if (!needsCatalog || catalog) return;
-    const controller = new AbortController();
+    if (!needsCatalog) return;
+
     const url = `${import.meta.env.VITE_BASE_API_URL}/analysisType?view=articles`;
-    fetch(url, { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error("Catalog unavailable");
-        return response.json();
-      })
-      .then((data: ArticleCatalog) => setCatalog(data))
-      .catch(() => {
-        if (!controller.signal.aborted) setFailed(true);
-      });
-    return () => controller.abort();
-  }, [needsCatalog, catalog]);
+    let request: AbortController | undefined;
+
+    function refreshCatalog() {
+      request?.abort();
+      const controller = new AbortController();
+      request = controller;
+      fetch(url, { signal: controller.signal, cache: "no-store" })
+        .then((response) => {
+          if (!response.ok) throw new Error("Catalog unavailable");
+          return response.json();
+        })
+        .then((data: ArticleCatalog) => {
+          if (controller.signal.aborted) return;
+          setCatalog(data);
+          setFailed(false);
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) setFailed(true);
+        });
+    }
+
+    refreshCatalog();
+    window.addEventListener("focus", refreshCatalog);
+    return () => {
+      window.removeEventListener("focus", refreshCatalog);
+      request?.abort();
+    };
+  }, [needsCatalog, pathname]);
 
   useEffect(() => {
     dispatch(checkLSUser());
