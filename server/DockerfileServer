@@ -12,7 +12,12 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+ARG BUILD_AFTER_TYPECHECK=0
+RUN if [ "$BUILD_AFTER_TYPECHECK" = "1" ]; then \
+      ./node_modules/.bin/tsc --project tsconfig.build.json --noCheck; \
+    else \
+      npm run build; \
+    fi
 
 FROM node:${NODE_VERSION}-alpine
 
