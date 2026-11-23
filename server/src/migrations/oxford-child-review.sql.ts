@@ -1,14 +1,13 @@
 export const OXFORD_CHILD_REVIEW_SQL = `
 DO $$
 DECLARE
+  root_id integer;
   reviewed_count integer;
 BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM "medicalSource"
-    WHERE id=310 AND parent_id IS NULL AND url='https://academic.oup.com/'
-  ) THEN
-    RAISE EXCEPTION 'Expected Oxford Academic catalog';
-  END IF;
+  SELECT id INTO STRICT root_id
+  FROM "medicalSource"
+  WHERE parent_id IS NULL AND url='https://academic.oup.com/'
+  FOR UPDATE;
 
   WITH decisions(url, finished, note) AS (
     VALUES
@@ -28,7 +27,7 @@ BEGIN
       comment=CASE WHEN decisions.finished THEN decisions.note
            ELSE concat_ws(' ', source.comment, decisions.note) END
   FROM decisions
-  WHERE source.parent_id=310 AND source.url=decisions.url AND source.status='PARTIAL';
+  WHERE source.parent_id=root_id AND source.url=decisions.url AND source.status='PARTIAL';
 
   GET DIAGNOSTICS reviewed_count=ROW_COUNT;
   IF reviewed_count<>9 THEN
@@ -37,6 +36,6 @@ BEGIN
 
   UPDATE "medicalSource" SET
     comment='Сверена профильная выборка шести журналов по тематическому запросу PubMed за 2020–2026 годы. Корень частичный до проверки оставшихся открытых материалов, перечисленных в дочерних записях.'
-  WHERE id=310 AND status='PARTIAL';
+  WHERE id=root_id AND status='PARTIAL';
 END $$;
 `;
