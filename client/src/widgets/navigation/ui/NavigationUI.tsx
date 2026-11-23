@@ -23,7 +23,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   return (
-    <header className="header bg-cyan-600 shadow-lg dark:bg-cyan-950 dark:shadow-white/20">
+    <header className="header bg-cyan-800 shadow-lg dark:bg-cyan-950 dark:shadow-white/20">
       <Logo />
       <BurgerButton
         isOpen={isMobileMenuOpen}
@@ -44,7 +44,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
           />
         </div>
         <ul
-          className={`bg-cyan-600 dark:bg-cyan-950 py-4 lg:py-0 flex flex-col lg:justify-start lg:flex-row lg:inline-flex z-40 lg:bg-transparent fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:px-0 ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+          className={`bg-cyan-800 dark:bg-cyan-950 py-4 lg:py-0 flex flex-col lg:justify-start lg:flex-row lg:inline-flex z-40 lg:bg-transparent fixed inset-y-0 right-0 w-80 transition-transform duration-300 transform lg:relative lg:right-auto lg:translate-x-0 lg:w-auto lg:px-0 ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}
         >
           {navItems.map((item) => (
             <li
@@ -63,7 +63,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                   >
                     <span
                       className={
-                        "hover:cursor-pointer w-full transition-colors duration-200 group text-orange-50 hover:text-orange-300 hover:border-orange-300 py-2 lg:py-6 px-3 flex items-center bg-cyan-600 dark:bg-cyan-950 lg:w-50 z-2"
+                        "hover:cursor-pointer w-full transition-colors duration-200 group text-orange-50 hover:text-orange-300 hover:border-orange-300 py-2 lg:py-6 px-3 flex items-center bg-cyan-800 dark:bg-cyan-950 lg:w-50 z-2"
                       }
                     >
                       {item.iconLink && item.iconLink}
@@ -131,7 +131,7 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                 <a
                   href={item.path.startsWith("/") ? item.path : "/#" + item.key}
                   className={`relative flex w-full overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
-                          flex-gap-2 pr-10 pl-3 lg:pl-0 py-2 lg:py-6 bg-cyan-600 dark:bg-cyan-950 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
+                          flex-gap-2 pr-10 pl-3 lg:pl-0 py-2 lg:py-6 bg-cyan-800 dark:bg-cyan-950 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
                             location.pathname === item.path
                               ? " text-orange-200"
                               : " text-orange-50"

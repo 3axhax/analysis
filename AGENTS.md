@@ -114,6 +114,8 @@ docker compose ps
 
 ### Публичный сайт и эксплуатация
 
+- **Оформление шапки.** Светлая шапка и меню используют bg-cyan-800; отступы главной адаптированы для мобильного и широкого экрана. [0045 — оформление шапки](tasks/0045-header-cyan-800/implementation.md).
+
 - **Локальная эксплуатация.** Восстановление dev-стека и обновление локальной БД описаны в задачах эксплуатации. [0007 — восстановление сервисов](tasks/0007-restore-local-services/implementation.md), [0035 — обновление локальной БД](tasks/0035-refresh-local-database/implementation.md).
 - **Cookie-блок и статистика.** Выбор «Принять»/«Отказаться» хранится в LocalStorage. Метрика 109419092 подключается после согласия только на разрешённых публичных production-страницах без query/hash. Ручные просмотры; Вебвизор, карты кликов и отслеживание ссылок отключены, результаты/admin исключены. [0038 — баннер](tasks/0038-restore-cookie-banner/implementation.md), [0039 — текст](tasks/0039-restore-cookie-text/implementation.md), [0040 — Метрика](tasks/0040-consent-metrica/implementation.md).
 - **Индексация публичных страниц.** Настроены правила индексации, canonical URL и метаданные страниц. [0009 — GEO и SEO](tasks/0009-geo-seo-optimization/implementation.md).
