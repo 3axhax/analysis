@@ -18,6 +18,7 @@ import { OXFORD_REFERENCE_REVIEW_SQL } from './oxford-reference-review.sql';
 import { OXFORD_CHILD_REVIEW_SQL } from './oxford-child-review.sql';
 import { OXFORD_OPEN_REVIEW_COMPLETION_SQL } from './oxford-open-review-completion.sql';
 import { PMC_LIVER_REVIEW_COMPLETION_SQL } from './pmc-liver-review-completion.sql';
+import { EXTERNAL_REVIEW_PREREQUISITES_SQL } from './external-review-prerequisites.sql';
 import { FISEHA_FEMALE_ALT_SQL } from './fiseha-female-alt.sql';
 import { PMC_ADDITIONAL_REFERENCE_INTERVALS_SQL } from './pmc-additional-reference-intervals.sql';
 import { PMC_REVIEWED_REFERENCE_INTERVALS_SQL } from './pmc-reviewed-reference-intervals.sql';
@@ -495,6 +496,12 @@ export class MigrationsService implements OnModuleInit {
       '0082-russian-journal-candidates',
       20082,
       RUSSIAN_JOURNAL_CANDIDATES_SQL,
+    );
+    await runRecordedMigration(
+      this.sequelize,
+      '0083-external-review-prerequisites',
+      20830,
+      EXTERNAL_REVIEW_PREREQUISITES_SQL,
     );
     await runRecordedMigration(
       this.sequelize,
