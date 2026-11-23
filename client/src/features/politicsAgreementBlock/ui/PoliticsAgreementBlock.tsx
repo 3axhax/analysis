@@ -22,7 +22,7 @@ export const PoliticsAgreementBlock = () => {
   return showBlock ? (
     <div
       className={
-        "w-full lg:w-9/12 mx-auto fixed left-0 right-0 z-100 bottom-0 max-h-[80dvh] overflow-y-auto bg-cyan-600 text-white bg-gradient-to-r from-cyan-800 via-cyan-500 to-cyan-800 bg-[length:300%_100%] dark:shadow-white/20 rounded-t-xl lg:rounded-t-3xl shadow-xl py-4 px-8"
+        "w-full lg:w-9/12 mx-auto fixed left-0 right-0 z-100 bottom-0 max-h-[80dvh] overflow-y-auto bg-cyan-600 text-white leading-tight bg-gradient-to-r from-cyan-800 via-cyan-500 to-cyan-800 bg-[length:300%_100%] dark:shadow-white/20 rounded-t-xl lg:rounded-t-3xl shadow-xl py-3 px-3 lg:py-4 lg:px-8"
       }
     >
       <p className={"pb-2"}>
@@ -52,7 +52,7 @@ export const PoliticsAgreementBlock = () => {
         (сроки хранения до 5 лет) и даёте согласие на передачу данных в
         Яндекс.Метрику.
       </p>
-      <div className={"flex justify-center gap-5 mt-3"}>
+      <div className={"flex justify-center gap-5 mt-3 mb-2"}>
         <button
           className={"btn btn-light h-10 leading-10 py-0.5"}
           onClick={acceptHandler}

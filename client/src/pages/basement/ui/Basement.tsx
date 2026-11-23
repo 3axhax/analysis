@@ -3,24 +3,24 @@ import { MailIcon } from "@shared/ui/Icons/MailIcon.tsx";
 
 export const Basement = () => {
   return (
-    <div className="border-t-2 border-cyan-600 py-4 px-8 mt-auto text-center">
+    <div className="border-t-2 bg-cyan-600 border-cyan-600 py-4 px-8 mt-auto text-center">
       <ul
         className={"grid grid-cols-1 lg:flex mx-auto justify-center gap-x-4 gap-y-2 lg:gap-5 max-lg:[overflow-wrap:anywhere] [&>li]:min-w-0"}
       >
         <li>
-          <Link to="/about" className="bg-underline-hover text-cyan-600">
+          <Link to="/about" className="bg-underline-hover text-white">
             О проекте
           </Link>
         </li>
         <li>
-          <Link to="/contacts" className="bg-underline-hover text-cyan-600">
+          <Link to="/contacts" className="bg-underline-hover text-white">
             Контакты
           </Link>
         </li>
         <li>
           <Link
             to={"privacy-policy"}
-            className={"bg-underline-hover text-cyan-600"}
+            className={"bg-underline-hover text-white"}
           >
             Политика обработки персональных данных
           </Link>
@@ -28,13 +28,13 @@ export const Basement = () => {
         <li>
           <Link
             to={"consent-personal-data"}
-            className={"bg-underline-hover text-cyan-600"}
+            className={"bg-underline-hover text-white"}
           >
             Согласие на обработку персональных данных
           </Link>
         </li>
         <li>
-          <a href={"mailto:proanalize@yandex.ru "} className={"text-cyan-600"}>
+          <a href={"mailto:proanalize@yandex.ru "} className={"text-white"}>
             <MailIcon className={"inline size-5 mr-1"} />
             <span className={"bg-underline-hover"}>proanalize@yandex.ru</span>
           </a>
