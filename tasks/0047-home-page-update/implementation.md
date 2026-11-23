@@ -30,3 +30,14 @@ API, БД, медицинская логика и конфигурация не 
 Иконка «Статьи» заменена геометрией и viewBox из Tilda_Icons_12ft_timetabl2.svg; классы навигации и анимация сохранены.
 
 По запросу пользователя размер иконки рядом с заголовком «Список расшифровываемых анализов» установлен в 28×28px на всех экранах. git diff --check успешен.
+
+## Поставка 2026-11-23
+Изменения задачи: 578ca8a; merge в main: 0a10753. Перед поставкой получен актуальный origin/main, конфликтов нет; объединённый клиент прошёл build/postbuild и lint. Рабочая ветка и main отправлены в origin.
+
+Checkout сервера: /var/analysis/analysis, main; pull --ff-only, HEAD и origin/main совпали (0a10753). Существующие локальные env, сертификаты и Nginx-конфиги сохранены. Build context клиента проверен: /var/analysis/analysis/client, DockerfileClient. Публичный каталог получен через внутренний API в игнорируемый client/.article-catalog.json. Образ analysis-client_analysis:0a10753 собран из checkout, пересоздан только clientAnalysis. Backend image остался analysis-server_analysis:2e7e1ff. Времена запуска backend/PostgreSQL/PDF/Nginx не изменились. Лимит builder остался 512 MiB.
+
+Compose project analysis; manifests docker-compose.yaml, runtime/compose.production.yaml, runtime/compose.release-f9209ea.yaml, runtime/compose.client-81a67c4.yaml, runtime/compose.backend-63f2ff1.yaml, runtime/compose.release-2e7e1ff.yaml и новый runtime/compose.client-0a10753.yaml.
+
+Nginx -t/reload успешны. Публичный HTTPS с проверкой сертификата: главная, /articles, /api/health и assets — 200. В HTML подтверждены фон orange-400/10, размеры 24px и 28px, отсутствие заголовка «Введите данные» и ссылки /contacts в шапке. Визуальная браузерная проверка не выполнялась.
+
+Откат клиента: исключить последний client override, выполнить up --no-deps --no-build только client_analysis и reload Nginx. Предыдущий образ сохранён. Дополнительные backup и очистка не выполнялись.
