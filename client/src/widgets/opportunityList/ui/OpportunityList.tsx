@@ -7,7 +7,7 @@ export const OpportunityList = () => {
       items={accordionItems}
       itemClassName={"relative"}
       multiple={true}
-      className={"grid grid-cols-1 md:grid-cols-3 gap-4 mb-5"}
+      className={"grid grid-cols-1 md:grid-cols-3 gap-4"}
       contentClassName={
         "absolute w-full bg-cyan-900 text-white rounded-b-xl z-11"
       }
