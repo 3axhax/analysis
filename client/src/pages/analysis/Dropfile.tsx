@@ -31,7 +31,7 @@ export const DropFile = () => {
     <div className={"mx-auto text-left relative w-full"}>
       <div
         {...getRootProps()}
-        className={`rounded-3xl border-3 border-[var(--border)] border-dashed p-4 lg:p-8 cursor-grab mb-5 ${isDragActive ? "bg-gray-10 dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-950"}`}
+        className={`rounded-[calc(var(--border-radius)*1px)] border-3 border-orange-600 border-dashed p-4 lg:p-8 cursor-grab mb-5 ${isDragActive ? "bg-orange-600/40" : "bg-orange-400/10"}`}
       >
         {error !== "" ? (
           <div className={"bg-red-300 mb-2 p-2 rounded-lg"}>{error}</div>

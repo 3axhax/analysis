@@ -12,6 +12,7 @@ export interface NavItem {
   iconLink?: JSX.Element;
   isDropdown?: boolean;
   isButton?: boolean;
+  isCallToAction?: boolean;
   onClick?: () => void;
   setIsBurgerOpen?: () => void;
   items?: { path: string; label?: string; iconLink?: JSX.Element }[];
@@ -130,17 +131,23 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
               ) : (
                 <a
                   href={item.path.startsWith("/") ? item.path : "/#" + item.key}
-                  className={`relative flex w-full overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968] 
+                  className={
+                    item.isCallToAction
+                      ? "relative flex items-center justify-center rounded-full bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 mx-3 my-2 lg:ml-0 lg:mr-6 uppercase whitespace-nowrap transition-colors"
+                      : `relative flex w-full overflow-hidden items-center hover:text-shadow-[0_0px_.5px_#faa968]
                           flex-gap-2 pr-10 pl-3 lg:pl-0 py-2 lg:py-6 bg-cyan-800 dark:bg-cyan-950 z-2 uppercase group lg:whitespace-pre hover:text-orange-50  ${
                             location.pathname === item.path
                               ? " text-orange-200"
                               : " text-orange-50"
-                          }`}
+                          }`
+                  }
                 >
                   {item.iconLink && item.iconLink}
                   <span
                     className={
-                      "group-hover:translate-x-6  transition-transform duration-200 ease-linear"
+                      item.isCallToAction
+                        ? ""
+                        : "group-hover:translate-x-6 transition-transform duration-200 ease-linear"
                     }
                   >
                     {item.label}

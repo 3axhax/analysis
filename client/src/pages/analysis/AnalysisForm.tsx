@@ -17,6 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { GenderType } from "@shared/lib/types";
 import { DropFile } from "@pages/analysis/Dropfile.tsx";
+import { OpportunityList } from "@widgets/opportunityList";
 import { AgeInDaysSelector } from "@features/ageInDaysSelector";
 
 export const AnalysisForm = () => {
@@ -66,44 +67,42 @@ export const AnalysisForm = () => {
   };
 
   return (
-    <>
-      <DropFile />
-      <div className="mx-auto text-left relative overflow-hidden">
-        <div className="b-border">
-          <div className="trail"></div>
-        </div>
-        <div className="b-border__content p-4 lg:p-8">
-          <h2 className="font-light text-2xl text-center text-gray-900 dark:text-white mb-4">
-            Введите данные
-          </h2>
-          <form
-            className="space-y-2 text-gray-600 dark:text-gray-300"
-            onSubmit={handlerSubmit}
+    <div className="mx-auto text-left relative">
+      <div className="b-border">
+        <div className="trail"></div>
+      </div>
+      <div className="b-border__content p-4 lg:p-8">
+        <DropFile />
+        <form
+          className="space-y-2 text-gray-600 dark:text-gray-300"
+          onSubmit={handlerSubmit}
+        >
+          <div
+            className={
+              "flex gap:2 flex-col lg:flex-row justify-between lg:gap-8"
+            }
           >
-            <div
-              className={
-                "flex gap:2 flex-col lg:flex-row justify-between lg:gap-8"
-              }
-            >
-              <GenderSelector gender={gender} setGender={handlerGenderSelect} />
-              <AgeInDaysSelector
-                ageInDays={ageInDays}
-                setAgeInDays={handlerAgeSelect}
-              />
+            <GenderSelector gender={gender} setGender={handlerGenderSelect} />
+            <AgeInDaysSelector
+              ageInDays={ageInDays}
+              setAgeInDays={handlerAgeSelect}
+            />
+          </div>
+          {error !== "" ? (
+            <div className={"bg-red-300 mb-2 p-2 rounded-lg text-center"}>
+              {error}
             </div>
-            {error !== "" ? (
-              <div className={"bg-red-300 mb-2 p-2 rounded-lg text-center"}>
-                {error}
-              </div>
-            ) : null}
-            <AnalysisPointList />
+          ) : null}
+          <AnalysisPointList />
 
-            <button type={"submit"} className={"btn w-full"} disabled={pending}>
-              Расшифровать
-            </button>
-          </form>
+          <button type={"submit"} className={"btn w-full"} disabled={pending}>
+            Расшифровать
+          </button>
+        </form>
+        <div className="mt-6">
+          <OpportunityList />
         </div>
       </div>
-    </>
+    </div>
   );
 };
