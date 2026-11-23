@@ -36,6 +36,12 @@ export class AnalysisType extends Model<
   })
   declare name: string;
 
+  @Column({ type: DataType.STRING, unique: true })
+  declare urlAlias: string | null;
+
+  @Column(DataType.INTEGER)
+  declare articleOrder: number | null;
+
   @BelongsToMany(() => AnalysisPoint, () => AnalysisTypePoint)
   analysisPoint: AnalysisPoint[];
 }

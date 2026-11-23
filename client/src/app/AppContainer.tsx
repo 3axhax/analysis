@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@shared/store/hooks.ts";
 import { PoliticsAgreementBlock } from "@features/politicsAgreementBlock";
@@ -12,6 +12,7 @@ import { ContactsPage } from "@pages/contacts";
 import { AnalysisGroupPage } from "@pages/analysis/AnalysisGroupPage";
 import { AnalysisPage } from "@pages/analysis";
 import { ArticlesPage } from "@pages/articles/ArticlesPage";
+import { AnalysisPointArticlePage } from "@pages/articles/AnalysisPointArticlePage";
 import { AnalysisResultPage } from "@pages/analysisResult";
 import { LogoutPage } from "@pages/logout";
 import { checkLSUser, selectIsUserAdmin } from "@entities/user";
@@ -28,13 +29,37 @@ import { usePageCanonical } from "@shared/hooks/usePageCanonical.ts";
 import { usePageMetadata } from "@shared/hooks/usePageMetadata.ts";
 import { ClientOnly } from "@shared/ui/ClientOnly.tsx";
 import { PublicNavigation } from "@widgets/navigation/ui/PublicNavigation.tsx";
+import { ArticleCatalogContext, type ArticleCatalog } from "@shared/catalog/article-catalog";
+import { getArticleRoute, isArticleCatalogPath } from "@shared/catalog/article-routes.mjs";
 
-function AppContainer() {
+function AppContainer({ initialCatalog }: { initialCatalog?: ArticleCatalog }) {
   const dispatch = useAppDispatch();
   const isUserAdmin = useAppSelector(selectIsUserAdmin);
   const { pathname, search, hash } = useLocation();
-  usePageCanonical(pathname);
-  usePageMetadata(pathname);
+  const [catalog, setCatalog] = useState(initialCatalog);
+  const [failed, setFailed] = useState(false);
+  const needsCatalog = pathname === "/" || isArticleCatalogPath(pathname);
+  const article = getArticleRoute(pathname, catalog);
+  const title = article?.title;
+  const description = article?.description;
+  usePageCanonical(pathname, title);
+  usePageMetadata(pathname, title, description);
+
+  useEffect(() => {
+    if (!needsCatalog || catalog) return;
+    const controller = new AbortController();
+    const url = `${import.meta.env.VITE_BASE_API_URL}/analysisType?view=articles`;
+    fetch(url, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("Catalog unavailable");
+        return response.json();
+      })
+      .then((data: ArticleCatalog) => setCatalog(data))
+      .catch(() => {
+        if (!controller.signal.aborted) setFailed(true);
+      });
+    return () => controller.abort();
+  }, [needsCatalog, catalog]);
 
   useEffect(() => {
     dispatch(checkLSUser());
@@ -45,39 +70,42 @@ function AppContainer() {
       <ClientOnly fallback={<PublicNavigation />}>
         <Navigation />
       </ClientOnly>
-      <Routes>
-        <Route path="/" element={<AnalysisPage />} />
-        <Route path="/analizy/:slug" element={<AnalysisGroupPage />} />
-        <Route path="/articles" element={<ArticlesPage />} />
-        <Route path="/test" element={<TestPage />} />
-        <Route
-          path="/analysis"
-          element={<Navigate to={{ pathname: "/", search, hash }} replace />}
-        />
-        <Route path="/result/:resultId" element={<AnalysisResultPage />} />
-        <Route path="/logout" element={<LogoutPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contacts" element={<ContactsPage />} />
-        <Route
-          path="/consent-personal-data"
-          element={<ConsentPersonalData />}
-        />
-        <Route path="/privacy-policy" element={<PolicyPersonalData />} />
-        {isUserAdmin && (
-          <>
-            <Route path="/admin/translations" element={<TranslationsPage />} />
-            <Route path="/admin/units" element={<UnitsPage />} />
-            <Route path="/admin/ages" element={<AgesPage />} />
-            <Route path="/admin/descriptions" element={<DescriptionsPage />} />
-            <Route
-              path="/admin/analysisPoints"
-              element={<AnalysisPointsPage />}
-            />
-            <Route path="/admin/analysisType" element={<AnalysisTypePage />} />
-          </>
-        )}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <ArticleCatalogContext.Provider value={{ catalog, failed }}>
+        <Routes>
+          <Route path="/" element={<AnalysisPage />} />
+          <Route path="/analizy/:slug" element={<AnalysisGroupPage />} />
+          <Route path="/pokazateli/:slug" element={<AnalysisPointArticlePage />} />
+          <Route path="/articles" element={<ArticlesPage />} />
+          <Route path="/test" element={<TestPage />} />
+          <Route
+            path="/analysis"
+            element={<Navigate to={{ pathname: "/", search, hash }} replace />}
+          />
+          <Route path="/result/:resultId" element={<AnalysisResultPage />} />
+          <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
+          <Route
+            path="/consent-personal-data"
+            element={<ConsentPersonalData />}
+          />
+          <Route path="/privacy-policy" element={<PolicyPersonalData />} />
+          {isUserAdmin && (
+            <>
+              <Route path="/admin/translations" element={<TranslationsPage />} />
+              <Route path="/admin/units" element={<UnitsPage />} />
+              <Route path="/admin/ages" element={<AgesPage />} />
+              <Route path="/admin/descriptions" element={<DescriptionsPage />} />
+              <Route
+                path="/admin/analysisPoints"
+                element={<AnalysisPointsPage />}
+              />
+              <Route path="/admin/analysisType" element={<AnalysisTypePage />} />
+            </>
+          )}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </ArticleCatalogContext.Provider>
       <Basement />
       <ClientOnly>
         <Metrica />

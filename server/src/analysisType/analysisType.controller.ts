@@ -21,8 +21,10 @@ export interface AnalysisTypeListResponse {
 export class AnalysisTypeController {
   constructor(private analysisTypeService: AnalysisTypeService) {}
   @Get()
-  getAll() {
-    return this.analysisTypeService.getAll();
+  getAll(@Query('view') view?: string) {
+    return view === 'articles'
+      ? this.analysisTypeService.getArticleCatalog()
+      : this.analysisTypeService.getAll();
   }
 
   @Get('/getFullList')

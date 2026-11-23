@@ -62,6 +62,9 @@ services:
     build:
       context: ./client
       dockerfile: DockerfileClient
+      args:
+        ARTICLE_CATALOG_FILE: ${ARTICLE_CATALOG_FILE:-}
+        ARTICLE_CATALOG_URL: ${ARTICLE_CATALOG_URL:-}
     expose:
       - "80"
     networks:

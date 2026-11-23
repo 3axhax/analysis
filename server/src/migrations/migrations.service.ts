@@ -1,3 +1,4 @@
+import { ARTICLES_CATALOG_SQL } from './articles-catalog.sql';
 import { MEDICAL_SOURCE_ANALYSIS_LOG_SQL } from './medical-source-analysis-log.sql';
 import { MEDICAL_SOURCE_PARENT_ANALYSIS_STATUS_SQL } from './medical-source-parent-analysis-status.sql';
 import { MEDICAL_SOURCE_REFERENCE_SET_STATUS_SQL } from './medical-source-reference-set-status.sql';
@@ -587,5 +588,6 @@ export class MigrationsService implements OnModuleInit {
       20096,
       PMC_LIVER_REVIEW_COMPLETION_SQL,
     );
+    await runRecordedMigration(this.sequelize, '0097-articles-catalog', 20097, ARTICLES_CATALOG_SQL);
   }
 }

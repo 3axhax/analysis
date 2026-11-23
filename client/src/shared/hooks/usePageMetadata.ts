@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { getPageMetadata } from "@shared/lib/seo/page-metadata.mjs";
 
-export function usePageMetadata(pathname: string) {
+export function usePageMetadata(pathname: string, articleTitle?: string, articleDescription?: string) {
   useEffect(() => {
-    const metadata = getPageMetadata(pathname);
+    const metadata = getPageMetadata(pathname, articleTitle, articleDescription);
     document.documentElement.lang = metadata.lang;
     document.title = metadata.title;
 
@@ -35,5 +35,5 @@ export function usePageMetadata(pathname: string) {
     structuredData.type = "application/ld+json";
     structuredData.textContent = JSON.stringify(metadata.structuredData).replace(/</g, "\\u003c");
     if (!structuredData.isConnected) document.head.appendChild(structuredData);
-  }, [pathname]);
+  }, [pathname, articleTitle, articleDescription]);
 }

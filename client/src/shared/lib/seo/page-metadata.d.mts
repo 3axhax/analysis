@@ -10,5 +10,5 @@ export interface PageMetadata {
 
 export const publicPaths: string[];
 export const servicePaths: string[];
-export function getPageMetadata(pathname: string): PageMetadata;
-export function renderPageHead(html: string, pathname: string): string;
+export function getPageMetadata(pathname: string, articleTitle?: string, articleDescription?: string): PageMetadata;
+export function renderPageHead(html: string, pathname: string, articleTitle?: string, articleDescription?: string): string;

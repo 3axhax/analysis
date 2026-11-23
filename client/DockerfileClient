@@ -5,7 +5,9 @@ WORKDIR /app/client
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+ARG ARTICLE_CATALOG_FILE=
+ARG ARTICLE_CATALOG_URL=
+RUN REQUIRE_ARTICLE_CATALOG=1 npm run build
 
 FROM nginx:alpine
 COPY --from=builder /app/client/dist /usr/share/nginx/html

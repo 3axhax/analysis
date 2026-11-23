@@ -9,6 +9,8 @@ import {
 import { AnalysisPointsUnits } from './analysisPoint-Units.model';
 import { AnalysisPointUnits } from '../analysisPointUnits/analysisPointUnits.model';
 
+export const calculatedAnalysisPointNames = ['de_ritis_ratio', 'homa_ir', 'nlr'];
+
 export interface AnalysisPointCreationAttrs {
   name: string;
   id?: number;
@@ -18,6 +20,9 @@ export interface AnalysisPointCreationAttrs {
   pointHintRu?: string;
   pointHintEn?: string;
   parsingOrder?: number;
+  urlAlias?: string;
+  pointDescriptionRu?: string;
+  pointDescriptionEn?: string;
 }
 
 @Table({
@@ -79,6 +84,15 @@ export class AnalysisPoint extends Model<
     defaultValue: 0,
   })
   declare parsingOrder: number;
+
+  @Column({ type: DataType.STRING, unique: true })
+  declare urlAlias: string | null;
+
+  @Column(DataType.TEXT)
+  declare pointDescriptionRu: string | null;
+
+  @Column(DataType.TEXT)
+  declare pointDescriptionEn: string | null;
 
   @BelongsToMany(() => AnalysisPointUnits, () => AnalysisPointsUnits)
   declare units: AnalysisPointUnits[];

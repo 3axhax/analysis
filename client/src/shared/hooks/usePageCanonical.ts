@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { getCanonicalUrl } from "@shared/lib/seo/canonical.ts";
 
-export function usePageCanonical(pathname: string) {
+export function usePageCanonical(pathname: string, articleTitle?: string) {
   useEffect(() => {
-    const href = getCanonicalUrl(pathname);
+    const href = getCanonicalUrl(pathname, articleTitle);
     const links = [...document.head.querySelectorAll<HTMLLinkElement>('link[rel="canonical"]')];
     const link = links.shift();
     links.forEach((duplicate) => duplicate.remove());
@@ -17,5 +17,5 @@ export function usePageCanonical(pathname: string) {
     canonical.rel = "canonical";
     canonical.href = href;
     if (!link) document.head.appendChild(canonical);
-  }, [pathname]);
+  }, [pathname, articleTitle]);
 }

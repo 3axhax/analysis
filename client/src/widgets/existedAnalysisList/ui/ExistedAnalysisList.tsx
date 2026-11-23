@@ -1,10 +1,40 @@
 import { Accordion } from "@shared/ui/Accordion";
-import { accordionItems } from "../data/accordion.data";
+import { Link } from "react-router-dom";
+import { useArticleCatalog } from "@shared/catalog/article-catalog";
+import { pointPath } from "@shared/catalog/article-routes.mjs";
+import { CheckCircleIcon } from "@shared/ui/Icons/CheckCircleIcon.tsx";
 
 export const ExistedAnalysisList = () => {
+  const { catalog, failed } = useArticleCatalog();
+  if (!catalog) {
+    return <p role="status">{failed ? "Не удалось загрузить список анализов." : "Загрузка списка анализов…"}</p>;
+  }
+
+  const points = new Map(catalog.points.map((point) => [point.id, point]));
+  const items = catalog.groups.filter((group) => group.pointIds.length > 0).map((group) => ({
+    id: group.alias,
+    title: group.title,
+    icon: <CheckCircleIcon className="inline size-5 text-cyan-600 dark:text-white" />,
+    content: (
+      <ul className="space-y-2">
+        {group.pointIds.map((id) => {
+          const point = points.get(id);
+          if (!point) return null;
+          return (
+            <li key={id}>
+              <Link className="underline hover:text-cyan-700 dark:hover:text-cyan-200" to={pointPath(point.alias)}>
+                {point.name}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    ),
+  }));
   return (
     <Accordion
-      items={accordionItems}
+      items={items}
+      closeOnOutsideClick
       itemClassName={"relative"}
       className={"grid grid-cols-1 md:grid-cols-3 gap-4 mb-5"}
       contentClassName={

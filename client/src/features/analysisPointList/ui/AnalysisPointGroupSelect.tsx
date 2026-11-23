@@ -36,7 +36,7 @@ export const AnalysisPointGroupSelect = () => {
 
   // Обработчик изменения выбора
   const handleChange = (selected: MultiValue<SelectUIOption<number>>) => {
-    dispatch(setSelectedPoint(selected.map((option) => option.value)));
+    dispatch(setSelectedPoint([...new Set(selected.map((option) => option.value))]));
   };
 
   const groupClick = (label: string | undefined) => {
@@ -92,6 +92,7 @@ export const AnalysisPointGroupSelect = () => {
           name={"analysisPoints"}
           menuPortalTarget={typeof document === "undefined" ? undefined : document.body}
           isMulti
+          hideSelectedOptions={false}
           options={groupedOptions}
           value={selectedOptions}
           onChange={handleChange}

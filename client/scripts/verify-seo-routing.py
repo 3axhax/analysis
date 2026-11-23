@@ -82,7 +82,10 @@ class PageHead(HTMLParser):
 class RoutingChecks(unittest.TestCase):
     def test_public_body_without_javascript(self):
         headings = {
-            "/": "Мгновенная расшифровка анализов",
+            "/": "Мгновенная расшифровка анализа крови онлайн",
+            "/articles": "Статьи",
+            "/analizy/obshchiy-analiz-krovi/": "Общий анализ крови",
+            "/pokazateli/reticulocytes/": "Ретикулоциты (RET)",
             "/about": "О проекте",
             "/contacts": "Контакты",
             "/privacy-policy": "Политика обработки персональных данных",
@@ -95,7 +98,8 @@ class RoutingChecks(unittest.TestCase):
                 self.assertEqual(status, 200)
                 self.assertIn('data-prerendered="true"', html)
                 self.assertRegex(html, r'<h1\b')
-                self.assertIn(heading, html)
+                primary_heading = re.search(r"<h1\b[^>]*>(.*?)</h1>", html, re.S)
+                self.assertIn(heading, re.sub(r"<[^>]+>", "", primary_heading.group(1)))
                 self.assertIn('href="/privacy-policy"', html)
                 self.assertIn('href="/about"', html)
                 self.assertIn('href="/contacts"', html)
@@ -107,6 +111,12 @@ class RoutingChecks(unittest.TestCase):
                     self.assertIn('type="file"', html)
                     self.assertIn('<form', html)
                     self.assertNotIn('data-client-placeholder', html)
+                elif path == "/analizy/obshchiy-analiz-krovi/":
+                    self.assertIn('href="/pokazateli/reticulocytes/"', html)
+                    self.assertNotIn("Описания приведены из справочника сервиса", html)
+                elif path == "/pokazateli/reticulocytes/":
+                    self.assertIn("Ретикулоциты — незрелые эритроциты.", html)
+                    self.assertNotIn("Характеризует степень разжижения крови", html)
 
     def test_no_prerender_on_private_or_error(self):
         for path in ["/result/synthetic", "/admin/units", "/test", "/logout", "/seo-missing"]:
@@ -282,11 +292,11 @@ class RoutingChecks(unittest.TestCase):
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         self.assertEqual(document.tag, ns + "urlset")
         urls = [node.text for node in document.iter(ns + "loc")]
-        groups = json.loads((ROOT / "client/src/shared/config/analysis-groups.json").read_text())
-        expected = {"https://proanalize.ru/", "https://proanalize.ru/articles"}
-        expected.update("https://proanalize.ru" + group["path"] for group in groups)
         self.assertEqual(len(urls), len(set(urls)))
-        self.assertEqual(set(urls), expected)
+        self.assertIn("https://proanalize.ru/", urls)
+        self.assertIn("https://proanalize.ru/articles", urls)
+        self.assertIn("https://proanalize.ru/analizy/obshchiy-analiz-krovi/", urls)
+        self.assertIn("https://proanalize.ru/pokazateli/hemoglobin/", urls)
         for url in urls:
             path = url.removeprefix("https://proanalize.ru") or "/"
             status, _, body = self.get(path)

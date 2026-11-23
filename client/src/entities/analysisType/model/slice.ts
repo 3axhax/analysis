@@ -115,20 +115,20 @@ const analysisPointsList = (state: RootState) => state.analysisPoint.list;
 export const selectAnalysisTypeListForMultiSelect = createSelector(
   [selectAnalysisTypeList, analysisPointsList],
   (analysisTypeList, analysisPointsList): SelectMultiUIOption<number>[] => {
-    const groupedPointIds: number[] = [];
+    const groupedPointIds = new Set<number>();
     const result = analysisTypeList.map((item) => ({
       label: item.name,
       options: item.analysisPoint.map((point) => {
-        groupedPointIds.push(point.id);
+        groupedPointIds.add(point.id);
         return {
           value: point.id,
           label: point.translationRu,
           group: item.name,
         };
       }),
-    }));
+    })).filter((group) => group.options.length > 0);
     const ungroupedPoints = analysisPointsList.filter(
-      (point) => !groupedPointIds.includes(point.id),
+      (point) => !groupedPointIds.has(point.id),
     );
     if (ungroupedPoints.length === 0) {
       return result;

@@ -5,15 +5,20 @@ import canonical from '../../config/canonical-pages.json' with { type: 'json' };
 export const publicPaths = canonical.paths;
 export const servicePaths = Object.keys(config.servicePages);
 
-export function getPageMetadata(pathname) {
+export function getPageMetadata(pathname, articleTitle, articleDescription) {
   let path = pathname.replace(/\/+$/, '') || '/';
   if (path === '/analysis') path = '/';
-  const isPublic = publicPaths.includes(path);
+  const isArticle = !!articleTitle && /^\/(analizy|pokazateli)\/[a-z0-9-]+$/.test(path);
+  const isPublic = isArticle || publicPaths.includes(path);
   const isResult = /^\/result\/[^/]+$/.test(path);
   const service = config.servicePages[path];
-  const entry = isPublic ? config.pages[path] : service ?? (isResult ? config.result : config.notFound);
+  const entry = isArticle ? {
+    title: `${articleTitle} — Проанализируй`,
+    description: articleDescription ?? articleTitle,
+    schemaType: 'WebPage',
+  } : isPublic ? config.pages[path] : service ?? (isResult ? config.result : config.notFound);
   if (!entry) throw new Error('Missing public page metadata');
-  const url = isPublic ? `${canonical.origin}${path}${path.startsWith('/analizy/') ? '/' : ''}` : null;
+  const url = isPublic ? `${canonical.origin}${path}${isArticle ? '/' : ''}` : null;
   const organizationId = `${canonical.origin}/#organization`;
   const websiteId = `${canonical.origin}/#website`;
   const structuredData = isPublic ? {
@@ -42,8 +47,8 @@ export function getPageMetadata(pathname) {
 
 const escapeHtml = (value) => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-export function renderPageHead(html, pathname) {
-  const metadata = getPageMetadata(pathname);
+export function renderPageHead(html, pathname, articleTitle, articleDescription) {
+  const metadata = getPageMetadata(pathname, articleTitle, articleDescription);
   const shell = html
     .replace(/<title\b[^>]*>[\s\S]*?<\/title>\s*/gi, '')
     .replace(/<meta\b(?=[^>]*\bname=["']description["'])[^>]*>\s*/gi, '')

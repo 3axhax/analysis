@@ -163,3 +163,27 @@ it("keeps selected IDs while the catalog is loading and resolves them afterwards
   });
   expect(screen.getByTestId("selection").textContent).toBe("101");
 });
+
+it("keeps one selected ID and counts it in both overlapping groups", () => {
+  const store = setup(false);
+  store.dispatch(getAnalysisTypeList.fulfilled([
+    catalog[0],
+    {
+      ...catalog[0],
+      id: 2,
+      name: "overlapping",
+      analysisPoint: [catalog[0].analysisPoint[1]],
+    },
+  ], "synthetic"));
+  render(
+    <Provider store={store}>
+      <AnalysisPointGroupSelect />
+    </Provider>,
+  );
+  fireEvent.click(screen.getByText("analysisType.synthetic"));
+  expect(screen.getByText("(1/1)")).toBeTruthy();
+  fireEvent.click(screen.getByText("analysisType.overlapping"));
+  expect(store.getState().analysisResult.selectedList).toEqual([101, 102]);
+  expect(screen.getByText("(2/2)")).toBeTruthy();
+  expect(screen.getByText("(1/1)")).toBeTruthy();
+});

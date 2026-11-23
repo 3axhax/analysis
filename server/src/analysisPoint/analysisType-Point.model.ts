@@ -34,4 +34,7 @@ export class AnalysisTypePoint extends Model<
     allowNull: false,
   })
   declare pointId: number;
+
+  @Column(DataType.INTEGER)
+  declare articleOrder: number | null;
 }

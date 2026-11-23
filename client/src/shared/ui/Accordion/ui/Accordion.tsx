@@ -1,4 +1,4 @@
-import { useId, useState, ReactNode, FC, JSX } from "react";
+import { useEffect, useId, useRef, useState, ReactNode, FC, JSX } from "react";
 
 export interface AccordionItemType {
   id: string | number;
@@ -11,6 +11,7 @@ export interface AccordionItemType {
 interface AccordionContainerProps {
   items: AccordionItemType[];
   multiple?: boolean;
+  closeOnOutsideClick?: boolean;
   className?: string;
   itemClassName?: string;
   headerClassName?: string;
@@ -25,6 +26,7 @@ interface AccordionContainerProps {
 export const Accordion: FC<AccordionContainerProps> = ({
   items,
   multiple = false,
+  closeOnOutsideClick = false,
   className = "",
   itemClassName = "",
   headerClassName = "",
@@ -37,9 +39,25 @@ export const Accordion: FC<AccordionContainerProps> = ({
 }) => {
   const [openIds, setOpenIds] = useState<(string | number)[]>(defaultOpenIds);
   const groupName = useId();
+  const listRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (!closeOnOutsideClick) return;
+
+    function closeOutside(event: PointerEvent) {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      listRef.current?.querySelectorAll<HTMLDetailsElement>("details[open]").forEach((details) => {
+        if (!details.contains(target)) details.open = false;
+      });
+    }
+
+    document.addEventListener("pointerdown", closeOutside, true);
+    return () => document.removeEventListener("pointerdown", closeOutside, true);
+  }, [closeOnOutsideClick]);
 
   return (
-    <ul className={` ${className}`}>
+    <ul ref={listRef} className={` ${className}`}>
       {items.map((item) => {
         const isOpen = openIds.includes(item.id);
 

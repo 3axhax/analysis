@@ -6,15 +6,6 @@
     "/contacts",
     "/articles",
     "/privacy-policy",
-    "/consent-personal-data",
-    "/analizy/obshchiy-analiz-krovi",
-    "/analizy/anemiya-i-zhelezo",
-    "/analizy/pechen",
-    "/analizy/gormony",
-    "/analizy/pochki",
-    "/analizy/uglevodnyy-obmen",
-    "/analizy/lipidnyy-obmen",
-    "/analizy/belkovyy-obmen",
-    "/analizy/elektrolity"
+    "/consent-personal-data"
   ]
 }

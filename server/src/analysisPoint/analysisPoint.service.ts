@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AnalysisPoint } from './analysisPoint.model';
+import { AnalysisPoint, calculatedAnalysisPointNames } from './analysisPoint.model';
 import { LangValue } from '../gender/lang-value.enum';
 import { TranslationService } from '../translation/translation.service';
 export interface AnalysisPointWithTranslation {
@@ -32,7 +32,7 @@ export class AnalysisPointService {
       include: { all: true },
       order: [['translationRu', 'ASC']],
     });
-    return points.filter((point) => !['de_ritis_ratio', 'homa_ir', 'nlr'].includes(point.name)).map((point) => {
+    return points.filter((point) => !calculatedAnalysisPointNames.includes(point.name)).map((point) => {
       return {
         id: point.id,
         name: point.name,
