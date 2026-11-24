@@ -4,6 +4,7 @@ import { useArticleCatalog } from "@shared/catalog/article-catalog";
 import { groupPath } from "@shared/catalog/article-routes.mjs";
 import { ArticleBreadcrumbs } from "./ArticleBreadcrumbs";
 import { ArticleCatalogState } from "./ArticleCatalogState";
+import { ArticleInterpretations } from "./ArticleInterpretations";
 
 export function AnalysisPointArticlePage() {
   const { slug } = useParams();
@@ -67,6 +68,7 @@ export function AnalysisPointArticlePage() {
           </ul>
         </section>
       )}
+      <ArticleInterpretations key={point.id} pointId={point.id} points={catalog.points} />
       {groups.length > 0 && (
         <nav aria-label="Разделы показателя" className="mt-6">
           <ul className="space-y-2">

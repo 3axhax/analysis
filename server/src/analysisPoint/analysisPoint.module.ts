@@ -9,8 +9,11 @@ import { AgesModule } from '../ages/ages.module';
 import { GenderModule } from '../gender/gender.module';
 import { AnalysisPointUnitsModule } from '../analysisPointUnits/analysisPointUnits.module';
 
+import { ArticleInterpretationsService } from './article-interpretations.service';
+import { UnitConversionModule } from '../unitConversion/unit-conversion.module';
+
 @Module({
-  providers: [AnalysisPointService],
+  providers: [AnalysisPointService, ArticleInterpretationsService],
   controllers: [AnalysisPointController],
   imports: [
     SequelizeModule.forFeature([
@@ -18,6 +21,7 @@ import { AnalysisPointUnitsModule } from '../analysisPointUnits/analysisPointUni
       AnalysisPointUnits,
       AnalysisPointsUnits,
     ]),
+    UnitConversionModule,
     AgesModule,
     GenderModule,
     AnalysisPointUnitsModule,
