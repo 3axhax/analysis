@@ -5,6 +5,7 @@ export const OpportunityList = () => {
   return (
     <Accordion
       items={accordionItems}
+      closeOnOutsideClick
       itemClassName={"relative"}
       multiple={true}
       className={"grid grid-cols-1 md:grid-cols-3 gap-4"}
