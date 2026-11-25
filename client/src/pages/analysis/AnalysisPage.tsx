@@ -3,6 +3,7 @@ import { Donwload, ListsIcon } from "@shared/ui/Icons";
 import { AnalysisIntroduction } from "./AnalysisIntroduction";
 import { AnalysisForm } from "./AnalysisForm";
 import { AnalysisFaq } from "./AnalysisFaq";
+import { AnalysisArticleList } from "./AnalysisArticleList";
 
 export const AnalysisPage = () => (
   <div className="app w-full">
@@ -27,5 +28,6 @@ export const AnalysisPage = () => (
       </div>
     </section>
     <AnalysisFaq />
+    <AnalysisArticleList />
   </div>
 );

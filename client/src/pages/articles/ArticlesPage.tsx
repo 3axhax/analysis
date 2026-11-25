@@ -3,20 +3,7 @@ import { useArticleCatalog } from "@shared/catalog/article-catalog";
 import { groupPath } from "@shared/catalog/article-routes.mjs";
 import { ArticleCatalogState } from "./ArticleCatalogState";
 
-const imageFiles = import.meta.glob<string>(
-  "../../shared/assets/article-groups/*.jpg",
-  { eager: true, import: "default", query: "?url" },
-);
-const groupImages: Record<string, string> = Object.fromEntries(
-  Object.entries(imageFiles).map(([path, url]) => [
-    path
-      .split("/")
-      .pop()!
-      .replace(/(?:-v1)?\.jpg$/, ""),
-    url,
-  ]),
-);
-groupImages["obshchiy-analiz-krovi"] = groupImages["complete-blood-count"];
+import { groupImages } from "@shared/catalog/article-group-images";
 
 export function ArticlesPage() {
   const { catalog, failed } = useArticleCatalog();
