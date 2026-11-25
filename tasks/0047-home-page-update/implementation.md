@@ -103,3 +103,10 @@ Compose project analysis: прежняя цепочка manifests дополне
 Список статей переведён на masonry с независимыми стабильными колонками: 1/2/3/6 по текущим breakpoint. useSyncExternalStore синхронизирует число колонок с media queries, SSR получает стабильное значение; карточки распределены по индексу и не перемещаются между колонками при открытии details.
 
 По уточнению пользователя раскрываемый список статей размещён absolute под заголовком карточки, поверх соседних блоков без изменения высоты masonry. Открытая карточка получает повышенный z-index; убрано обрезание overflow, скругление перенесено на изображение и summary.
+
+## Поставка 2026-11-25: список статей на главной
+Код 3c12a0e закоммичен в ветке задачи, main актуализирован из origin и объединён fast-forward; обе ветки отправлены. Build/postbuild с публичным каталогом, lint и diff --check успешны. Серверный checkout /var/analysis/analysis main обновлён pull --ff-only, HEAD совпал с origin/main. Проверены context клиента, DockerfileClient и действующие Compose overrides; добавлен runtime/compose.client-3c12a0e.yaml (project analysis).
+
+Собран и запущен только analysis-client_analysis:3c12a0e. Backend image 961f716 и время старта backend/PostgreSQL/PDF/Nginx сохранены. Конфиги, secrets, uploads и сертификаты не менялись, миграций и очистки нет. Nginx -t/reload успешны. Публичный HTTPS главной, статей, API и всех assets — 200. Во встроенном браузере проверены новый H1, порядок ссылок шапки, 6 колонок на широком экране, переход по названию и раскрытие по стрелке. DOM-проверка подтвердила absolute-позиционирование списка и неизменность координат/высот всех карточек при раскрытии.
+
+Откат: исключить runtime/compose.client-3c12a0e.yaml из действующей цепочки, пересоздать только client_analysis с --no-deps --no-build и reload Nginx. Прежний образ c9d02c0 сохранён.
