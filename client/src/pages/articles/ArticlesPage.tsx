@@ -10,7 +10,7 @@ export function ArticlesPage() {
   if (!catalog) return <ArticleCatalogState failed={failed} />;
 
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
+    <main className="mx-auto w-full max-w-5xl flex-1 px-6 pb-8">
       <h1 className="mb-4 text-3xl lg:text-4xl">Статьи</h1>
       <p className="mb-6">
         Узнайте, какие показатели входят в разные группы анализов.

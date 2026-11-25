@@ -2,6 +2,7 @@ import { ExistedAnalysisList } from "@widgets/existedAnalysisList";
 import { Donwload, ListsIcon } from "@shared/ui/Icons";
 import { AnalysisIntroduction } from "./AnalysisIntroduction";
 import { AnalysisForm } from "./AnalysisForm";
+import { AnalysisAdvantages } from "./AnalysisAdvantages";
 import { AnalysisFaq } from "./AnalysisFaq";
 import { AnalysisArticleList } from "./AnalysisArticleList";
 
@@ -15,6 +16,7 @@ export const AnalysisPage = () => (
       </h2>
       <AnalysisForm />
     </div>
+    <AnalysisAdvantages />
     <section
       className="mb-5 w-[calc(100%+3rem)] bg-gradient-to-br from-cyan-900 via-cyan-600 to-cyan-900 bg-[length:300%_100%] px-6 py-8"
       id="list"

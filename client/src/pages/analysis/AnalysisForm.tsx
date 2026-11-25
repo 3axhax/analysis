@@ -17,7 +17,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { GenderType } from "@shared/lib/types";
 import { DropFile } from "@pages/analysis/Dropfile.tsx";
-import { OpportunityList } from "@widgets/opportunityList";
 import { AgeInDaysSelector } from "@features/ageInDaysSelector";
 
 export const AnalysisForm = () => {
@@ -99,9 +98,6 @@ export const AnalysisForm = () => {
             Расшифровать
           </button>
         </form>
-        <div className="mt-6">
-          <OpportunityList />
-        </div>
       </div>
     </div>
   );

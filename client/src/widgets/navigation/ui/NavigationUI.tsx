@@ -95,7 +95,10 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                               >
                                 <Link
                                   to={dropdownItem.path}
-                                  onClick={() => setIsDropdownOpen("")}
+                                  onClick={() => {
+                                    setIsDropdownOpen("");
+                                    setIsMobileMenuOpen(false);
+                                  }}
                                   className={`group group-hover:text-cyan-950 inline-flex text-white justify-start mx-4 py-1 text-sm font-normal transition-colors`}
                                 >
                                   {dropdownItem.iconLink &&
@@ -123,13 +126,17 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
                     "cursor-pointer flex justify-center items-center text-white transition-colors h-10 ml-3 lg:ml-0 lg:mr-6 group"
                   }
                   key={item.key}
-                  onClick={item.onClick}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    item.onClick?.();
+                  }}
                 >
                   <LoginIcon className="inline-flex h-5 w-5 mr-2" />
                   {item.label}
                 </button>
               ) : (
                 <a
+                  onClick={() => setIsMobileMenuOpen(false)}
                   href={item.path.startsWith("/") ? item.path : "/#" + item.key}
                   className={
                     item.isCallToAction
@@ -160,7 +167,10 @@ export const NavigationUI = ({ navItems }: { navItems: NavItem[] }) => {
         {isDropdownOpen !== "" && (
           <div
             className="fixed inset-0 z-0"
-            onClick={() => setIsDropdownOpen("")}
+            onClick={() => {
+              setIsDropdownOpen("");
+              setIsMobileMenuOpen(false);
+            }}
           />
         )}
       </nav>
